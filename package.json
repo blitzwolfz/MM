@@ -1,0 +1,30 @@
+{
+  "name": "aceroyale",
+  "version": "0.0.1",
+  "description": "It's a bot for fun",
+  "main": "index.ts",
+  "scripts": {
+    "test": "tsc && node dist/index.js",
+    "testrun": "tsc && node dist/index.js",
+    "start": "node dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blitzwolfz/ACERoyale.git"
+  },
+  "author": "blitzwolfz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/blitzwolfz/ACERoyale/issues"
+  },
+  "homepage": "https://github.com/blitzwolfz/ACERoyale#readme",
+  "dependencies": {
+    "@types/dotenv": "^8.2.0",
+    "@types/mongodb": "^3.5.23",
+    "canvas": "^2.6.0",
+    "discord.js": "^11.5.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongodb": "^3.5.9"
+  }
+}
