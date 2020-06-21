@@ -11,7 +11,6 @@ import { connectToDB, getQuals, getActive, updateActive} from "./misc/db";
 import { template } from "./commands/template";
 //import data from "../match.json"
 //const fs = require('fs');
-//"NzE2NDQ1NjQ3MDk1NDYzOTQ3.XumM6Q.5qGptdBSGBIkBY4M5f-c2_A26fo"
 console.log("Hello World, bot has begun life");
 
 // let matches:activematch[] = matchdata
