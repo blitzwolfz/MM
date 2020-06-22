@@ -42,8 +42,8 @@ export async function vs(message: Discord.Message, client: Discord.Client, users
     // console.log(args)
 
     // console.log(users)
-    let user1 = (await client.fetchUser(users[0]))
-    let user2 = (await client.fetchUser(users[1]))
+    let user1 = (await client.users.fetch(users[0]))
+    let user2 = (await client.users.fetch(users[1]))
 
 	// // Slightly smaller text placed above the member's display name
 	// ctx.font = '28px sans-serif';

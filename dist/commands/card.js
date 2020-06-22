@@ -44,8 +44,8 @@ async function vs(message, client, users) {
     ctx.drawImage(await Canvas.loadImage("firecard.jpg"), 0, 0, canvas.width, canvas.height);
     ctx.strokeStyle = '#74037b';
     ctx.strokeRect(0, 0, canvas.width, canvas.height);
-    let user1 = (await client.fetchUser(users[0]));
-    let user2 = (await client.fetchUser(users[1]));
+    let user1 = (await client.users.fetch(users[0]));
+    let user2 = (await client.users.fetch(users[1]));
     ctx.font = await applyText(canvas, `VS`);
     ctx.fillStyle = '#ffffff';
     await ctx.fillText(`VS`, canvas.width / 2 - 35, canvas.height / 2 + 10);

@@ -148,7 +148,7 @@ client.on("message", async (message) => {
     ;
     if (command === "ping") {
         const m = await message.channel.send("Ping?");
-        await m.edit(`Latency is ${m.createdTimestamp - message.createdTimestamp}ms. Discord API Latency is ${Math.round(client.ping)}ms`);
+        await m.edit(`Latency is ${m.createdTimestamp - message.createdTimestamp}ms. Discord API Latency is ${Math.round(client.ws.ping)}ms`);
     }
     else if (command === "submit") {
         await submit_1.submit(message, client);
@@ -160,7 +160,7 @@ client.on("message", async (message) => {
         await template_1.template(message, client);
     }
     else if (command === "start") {
-        if (!message.member.roles.has('719936221572235295'))
+        if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
         await start_1.start(message, client);
     }
@@ -174,12 +174,12 @@ client.on("message", async (message) => {
         await start_1.splitqual(client, message);
     }
     else if (command === "qualend") {
-        if (!message.member.roles.has('719936221572235295'))
+        if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
         await winner_1.qualend(client, message);
     }
     else if (command === "end") {
-        if (!message.member.roles.has('719936221572235295'))
+        if (message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
         await winner_1.endmatch(message, client);
     }
