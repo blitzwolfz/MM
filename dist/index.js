@@ -1,9 +1,21 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -18,8 +30,6 @@ const help_1 = require("./commands/help");
 const db_1 = require("./misc/db");
 const template_1 = require("./commands/template");
 console.log("Hello World, bot has begun life");
-let matches;
-let qualmatches;
 const express = require('express');
 const app = express();
 app.use(express.static('public'));
@@ -39,15 +49,15 @@ client.on('ready', async () => {
     console.log(`Logged in as ${(_a = client.user) === null || _a === void 0 ? void 0 : _a.tag}`);
     console.log("OK");
     await db_1.connectToDB();
-    matches = await db_1.getActive();
-    qualmatches = await db_1.getQuals();
-    await start_1.running(matches, client);
+    await start_1.running(client);
+    await start_1.qualrunning(client);
 });
 client.on("messageReactionAdd", async function (messageReaction, user) {
     var _a;
     console.log(`a reaction is added to a message`);
     if (user.bot)
         return;
+    let matches = await db_1.getActive();
     if (matches) {
         for (const match of matches) {
             console.log(match.p1.voters);
@@ -117,17 +127,15 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
 });
 client.on("message", async (message) => {
     var _a;
-    if (message.author.bot) {
-        return;
-    }
     const prefix = process.env.PREFIX;
-    console.log(matches);
-    console.log(qualmatches);
-    if (message.content.indexOf(prefix) !== 0 || message.author.bot && message.author.id !== "688558229646475344") {
-        return;
+    console.log(await db_1.getActive());
+    console.log(await db_1.getQuals());
+    if (message.content.indexOf(prefix) !== 0 || message.author.bot) {
+        if (message.author.id !== "688558229646475344")
+            return;
     }
-    await start_1.running(matches, client);
-    await start_1.qualrunning(qualmatches, client);
+    await start_1.running(client);
+    await start_1.qualrunning(client);
     var args = message.content.slice(prefix.length).trim().split(/ +/g);
     if (!args || args.length === 0) {
         return;
@@ -140,15 +148,13 @@ client.on("message", async (message) => {
     ;
     if (command === "ping") {
         const m = await message.channel.send("Ping?");
-        await m.edit(`Latency is ${m.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(client.ping)}ms`);
+        await m.edit(`Latency is ${m.createdTimestamp - message.createdTimestamp}ms. Discord API Latency is ${Math.round(client.ping)}ms`);
     }
     else if (command === "submit") {
-        await submit_1.submit(message, matches, client);
-        if (!matches)
-            await start_1.running(matches, client);
+        await submit_1.submit(message, client);
     }
     else if (command === "qualsubmit") {
-        await submit_1.qualsubmit(message, qualmatches, client);
+        await submit_1.qualsubmit(message, client);
     }
     else if (command === "submittemplate" || command === "template") {
         await template_1.template(message, client);
@@ -165,17 +171,17 @@ client.on("message", async (message) => {
         await start_1.startmodqual(message);
     }
     else if (command === "startsplit") {
-        await start_1.splitqual(qualmatches, client, message);
+        await start_1.splitqual(client, message);
     }
     else if (command === "qualend") {
         if (!message.member.roles.has('719936221572235295'))
             return message.reply("You don't have those premissions");
-        await winner_1.qualend(qualmatches, client, message);
+        await winner_1.qualend(client, message);
     }
     else if (command === "end") {
         if (!message.member.roles.has('719936221572235295'))
             return message.reply("You don't have those premissions");
-        await winner_1.endmatch(message, matches, client);
+        await winner_1.endmatch(message, client);
     }
     else if (command === "modhelp") {
         await message.channel.send({ embed: help_1.ModHelp });
@@ -193,7 +199,5 @@ client.on("message", async (message) => {
         }
         await card_1.vs(message, client, users);
     }
-    matches = await db_1.getActive();
-    qualmatches = await db_1.getQuals();
 });
 client.login(process.env.TOKEN);

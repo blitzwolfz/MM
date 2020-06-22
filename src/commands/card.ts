@@ -2,7 +2,7 @@
 const Canvas = require('canvas');
 
 import * as Discord from "discord.js"
-const prefix = process.env.DBURL!
+const prefix = process.env.PREFIX!
 
 function applyText(canvas: any, text: string){
     const ctx = canvas.getContext('2d');
@@ -21,11 +21,12 @@ function applyText(canvas: any, text: string){
 };
 
 export async function vs(message: Discord.Message, client: Discord.Client, users: string[]){
-    //let users:string[] = []
+	//let users:string[] = []
+	console.log(prefix)
     var args: Array<string> = message.content.slice(prefix.length).trim().split(/ +/g)
-
-    if (args.length < 3) {
-        return message.reply("invalid response. Command is `.vs @user1 @user2 `")
+	console.log(args)
+    if (args.length < 2) {
+        return message.reply("invalid response. Command is `!vs @user1 @user2 `")
     }
 
     const canvas = Canvas.createCanvas(700, 250);

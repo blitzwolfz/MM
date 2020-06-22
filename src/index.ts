@@ -1,6 +1,6 @@
 import * as Discord from "discord.js";
 require("dotenv").config();
-import {activematch, qualmatch} from "./misc/struct"
+import {activematch} from "./misc/struct"
 import {submit, qualsubmit} from "./commands/submit"
 import { start, running, qualrunning, startqual, startmodqual, splitqual } from "./commands/start";
 import { endmatch, qualend } from "./commands/winner";
@@ -18,10 +18,7 @@ console.log("Hello World, bot has begun life");
 // connectToDB()
 
 // //await insertActive(matches)
-let matches:activematch[];
 
-// //await insertQuals(qualmatches)
-let qualmatches:qualmatch[];
 
 
 const express = require('express');
@@ -44,21 +41,16 @@ const listener = app.listen(process.env.PORT, () => {
 });
 
 client.on('ready', async () => {
-    console.log(`Logged in as ${client.user?.tag}`);
-    console.log("OK")
-    // for(let i = 0; i < 2; i++) console.log(i)
+  console.log(`Logged in as ${client.user?.tag}`);
+  console.log("OK")
+  // for(let i = 0; i < 2; i++) console.log(i)
 
-    await connectToDB()
+  await connectToDB()
 
-    matches = await getActive()
+  await running(client)
+  await qualrunning(client)
 
-    //await insertQuals(qualmatches)
-    qualmatches = await getQuals()
-
-    await running(matches, client)
-
-
-    //console.log(await getActive())
+  //console.log(await getActive())
 
 });
 
@@ -68,6 +60,10 @@ client.on("messageReactionAdd", async function(messageReaction, user){
   console.log(`a reaction is added to a message`);
   //console.log(messageReaction, user)
   if(user.bot) return;
+  let matches:activematch[] = await getActive();
+
+  // // //await insertQuals(qualmatches)
+  // let qualmatches:qualmatch[];
 
   if(matches){
     for (const match of matches){
@@ -152,21 +148,18 @@ client.on("messageReactionAdd", async function(messageReaction, user){
 
 client.on("message", async message => {
   //const gamemaster = message.guild.roles.get("719936221572235295");
-  if (message.author.bot){
-    return;
-  }
   
   const prefix = process.env.PREFIX!;
-  console.log(matches)
-  console.log(qualmatches) 
+  console.log(await getActive())
+  console.log(await getQuals()) 
   
 
-  if (message.content.indexOf(prefix) !== 0 || message.author.bot && message.author.id !== "688558229646475344"){
-    return;
+  if (message.content.indexOf(prefix) !== 0 || message.author.bot){
+    if(message.author.id !== "688558229646475344") return;
   }
 
-  await running(matches, client)
-  await qualrunning(qualmatches, client);
+  await running(client)
+  await qualrunning(client);
   
   var args: Array<string> = message.content.slice(prefix.length).trim().split(/ +/g);
   
@@ -182,16 +175,15 @@ client.on("message", async message => {
   
   if (command === "ping") {
     const m: Discord.Message = await message.channel.send("Ping?") as Discord.Message;
-    await m.edit(`Latency is ${m.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(client.ping)}ms`);
+    await m.edit(`Latency is ${m.createdTimestamp - message.createdTimestamp}ms. Discord API Latency is ${Math.round(client.ping)}ms`);
   }
 
   else if(command === "submit"){
-    await submit(message, matches, client)
-    if(!matches) await running(matches, client)
+    await submit(message, client)
   }
 
   else if(command === "qualsubmit"){
-    await qualsubmit(message, qualmatches, client)
+    await qualsubmit(message, client)
   }
 
   else if(command === "submittemplate" || command === "template"){
@@ -212,12 +204,12 @@ client.on("message", async message => {
   }
 
   else if (command === "startsplit"){
-    await splitqual(qualmatches, client, message)
+    await splitqual(client, message)
   }
 
   else if(command === "qualend"){
     if (!message.member.roles.has('719936221572235295')) return message.reply("You don't have those premissions")
-    await qualend(qualmatches, client, message)
+    await qualend(client, message)
   }
 
   else if(command === "end"){
@@ -225,7 +217,7 @@ client.on("message", async message => {
     //   return
     // }
     if (!message.member.roles.has('719936221572235295')) return message.reply("You don't have those premissions")
-    await endmatch(message, matches, client)
+    await endmatch(message, client)
   }
 
   else if(command === "modhelp"){
@@ -247,9 +239,9 @@ client.on("message", async message => {
     }
     await vs(message, client, users)
   }
-  matches = await getActive()
+  // matches = await getActive()
 
-  qualmatches = await getQuals()
+  // qualmatches = await getQuals()
   
 });
 

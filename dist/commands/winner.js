@@ -1,15 +1,29 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.qualend = exports.end = exports.endmatch = void 0;
 const discord = __importStar(require("discord.js"));
 const db_1 = require("../misc/db");
-async function endmatch(message, matches, client) {
+async function endmatch(message, client) {
+    let matches = await db_1.getActive();
     for (const match of matches) {
         let user1 = (await client.fetchUser(match.p1.userid));
         let user2 = (await client.fetchUser(match.p2.userid));
@@ -53,7 +67,8 @@ async function endmatch(message, matches, client) {
     }
 }
 exports.endmatch = endmatch;
-async function end(matches, client) {
+async function end(client) {
+    let matches = await db_1.getActive();
     for (const match of matches) {
         let channelid = client.channels.get(match.channelid);
         let user1 = (await client.fetchUser(match.p1.userid));
@@ -111,7 +126,8 @@ async function end(matches, client) {
     }
 }
 exports.end = end;
-async function qualend(matches, client, message) {
+async function qualend(client, message) {
+    let matches = await db_1.getQuals();
     for (let match of matches) {
         let channelid = client.channels.get(match.channelid);
         if (message.channel.id === match.channelid) {

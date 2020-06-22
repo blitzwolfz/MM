@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.UserHelp = exports.ModHelp = void 0;
 exports.ModHelp = {
     title: "Mod help menu",
     fields: [

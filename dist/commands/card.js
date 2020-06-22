@@ -1,15 +1,28 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.p1 = exports.vs = void 0;
 const Canvas = require('canvas');
 const Discord = __importStar(require("discord.js"));
-const prefix = process.env.DBURL;
+const prefix = process.env.PREFIX;
 function applyText(canvas, text) {
     const ctx = canvas.getContext('2d');
     let fontSize = 70;
@@ -20,9 +33,11 @@ function applyText(canvas, text) {
 }
 ;
 async function vs(message, client, users) {
+    console.log(prefix);
     var args = message.content.slice(prefix.length).trim().split(/ +/g);
-    if (args.length < 3) {
-        return message.reply("invalid response. Command is `.vs @user1 @user2 `");
+    console.log(args);
+    if (args.length < 2) {
+        return message.reply("invalid response. Command is `!vs @user1 @user2 `");
     }
     const canvas = Canvas.createCanvas(700, 250);
     const ctx = canvas.getContext('2d');

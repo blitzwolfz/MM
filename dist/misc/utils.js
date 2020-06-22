@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getUser = void 0;
 async function getUser(mention) {
     const matches = mention.match(/^<@!?(\d+)>$/);
     if (!matches)

@@ -2,10 +2,11 @@ import * as discord from "discord.js"
 // import {getUser} from "../misc/utils"
 // import {prefix} from "../misc/config.json"
 import {activematch, qualmatch} from "../misc/struct"
-import { deleteActive, deleteQuals } from "../misc/db"
+import { deleteActive, deleteQuals, getQuals, getActive } from "../misc/db"
 
-export async function endmatch(message: discord.Message, matches: activematch[], client: discord.Client){
-    
+export async function endmatch(message: discord.Message, client: discord.Client){
+    let matches:activematch[] = await getActive()
+
     for (const match of matches){
         let user1 = (await client.fetchUser(match.p1.userid))
         let user2 = (await client.fetchUser(match.p2.userid))
@@ -64,7 +65,9 @@ export async function endmatch(message: discord.Message, matches: activematch[],
 }
 
 
-export async function end(matches: activematch[], client: discord.Client){
+export async function end(client: discord.Client){
+    let matches:activematch[] = await getActive()
+
     for (const match of matches){
         let channelid = <discord.TextChannel>client.channels.get(match.channelid)
         let user1 = (await client.fetchUser(match.p1.userid))
@@ -143,7 +146,9 @@ export async function end(matches: activematch[], client: discord.Client){
 }
 
 
-export async function qualend(matches: qualmatch[], client: discord.Client, message: discord.Message){
+export async function qualend(client: discord.Client, message: discord.Message){
+    let matches:qualmatch[] = await getQuals()
+
     for(let match of matches){
         let channelid = <discord.TextChannel>client.channels.get(match.channelid)
         

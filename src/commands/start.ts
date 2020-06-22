@@ -4,7 +4,7 @@ const prefix = process.env.PREFIX!
 import {activematch, qualmatch, players} from "../misc/struct"
 import { end } from "./winner"
 import { vs } from "./card"
-import { updateActive, deleteActive, insertActive, insertQuals, updateQuals, deleteQuals } from "../misc/db"
+import { updateActive, deleteActive, insertActive, insertQuals, updateQuals, deleteQuals, getActive, getQuals } from "../misc/db"
 //const Canvas = require('canvas');
 
 export async function start(message: discord.Message, client: discord.Client){
@@ -14,7 +14,7 @@ export async function start(message: discord.Message, client: discord.Client){
     var args: Array<string> = message.content.slice(prefix.length).trim().split(/ +/g)
     
     if (args.length < 3) {
-        return message.reply("invalid response. Command is `!start @user1 @user2 template link`\n or `.start @user1 @user2 theme description`")
+        return message.reply("invalid response. Command is `!start @user1 @user2 template link`\n or `!start @user1 @user2 theme description`")
     }
     
     //console.log(args)
@@ -231,7 +231,8 @@ export async function startmodqual(message: discord.Message){
     // return qualmatches;
 }
 
-export async function running(matches: activematch[], client: discord.Client):Promise<void>{
+export async function running(client: discord.Client):Promise<void>{
+    let matches: activematch[] = await getActive()
     for (const match of matches){
         console.log(Math.floor(Date.now() / 1000) - match.votetime)
         console.log((Math.floor(Date.now() / 1000) - match.votetime) >= 1800)
@@ -362,13 +363,14 @@ export async function running(matches: activematch[], client: discord.Client):Pr
         if(match.votingperiod === true){
             //7200
             if ((Math.floor(Date.now() / 1000) - match.votetime > 7200)){
-                await end(matches, client)
+                await end(client)
             }
         }
     }
 }
 
-export async function qualrunning(qualmatches: qualmatch[], client: discord.Client){
+export async function qualrunning(client: discord.Client){
+    let qualmatches:qualmatch[] = await getQuals()
     for(let match of qualmatches){
         let channelid = <discord.TextChannel>client.channels.get(match.channelid)
 
@@ -418,8 +420,9 @@ export async function qualrunning(qualmatches: qualmatch[], client: discord.Clie
     }
 }
 
-export async function splitqual(qualmatches:qualmatch[], client:discord.Client, message: discord.Message){
+export async function splitqual(client:discord.Client, message: discord.Message){
     let user = await (client.fetchUser(message.mentions.users.first().id));
+    let qualmatches:qualmatch[] = await getQuals()
 
     for(let match of qualmatches){
         let channelid = <discord.TextChannel>client.channels.get(match.channelid)
