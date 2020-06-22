@@ -1,5 +1,6 @@
 export const ModHelp = {
     title: "Mod help menu",
+    color:"#d7be26",
     fields: [
         {
             name: '`!start @user1 @user2 <template | theme>`',
@@ -8,7 +9,7 @@ export const ModHelp = {
 
         {
             name: '`!end`',
-            value: `This will end any match in the channel which this command is used`,
+            value: `This will end any match in the channel which this command is used.\nIf you end a match before voting period, the stats of a user won't change.`,
         },
 
         {
@@ -37,6 +38,7 @@ export const ModHelp = {
 
 export const UserHelp = {
     title: "Mod help menu",
+    color:"#d7be26",
     fields: [
         {
             name: '`!submit`',
@@ -50,6 +52,15 @@ export const UserHelp = {
             name: '`!template` or `!submittemplate`',
             value: `This will let you submit templates`,
         },
+        {
+            name: '`!stats',
+            value: `This will let you see your user stats`
+        },
+        {
+            name: '`!create',
+            value: `This will let you create a profile.\nIf you participate in a match, an account.\nAn account will automatically be made.`
+        },
+
     ],
     timestamp: new Date()
 };

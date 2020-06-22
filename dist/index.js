@@ -47,6 +47,7 @@ const listener = app.listen(process.env.PORT, () => {
 });
 client.on('ready', async () => {
     var _a;
+    client.user.setActivity(`Warming up`);
     console.log(`Logged in as ${(_a = client.user) === null || _a === void 0 ? void 0 : _a.tag}`);
     console.log("OK");
     await db_1.connectToDB();
@@ -65,6 +66,7 @@ client.on('ready', async () => {
     }
     await start_1.running(client);
     await start_1.qualrunning(client);
+    client.user.setActivity(`We da best in the game`);
 });
 client.on("messageReactionAdd", async function (messageReaction, user) {
     var _a;

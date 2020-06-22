@@ -1,5 +1,6 @@
 export declare const ModHelp: {
     title: string;
+    color: string;
     fields: {
         name: string;
         value: string;
@@ -8,6 +9,7 @@ export declare const ModHelp: {
 };
 export declare const UserHelp: {
     title: string;
+    color: string;
     fields: {
         name: string;
         value: string;

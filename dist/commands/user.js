@@ -36,7 +36,7 @@ async function stats(message, client) {
             .setTitle(`${user.name}`)
             .setThumbnail(`${user.img}`)
             .setColor("#d7be26")
-            .addFields({ name: 'Total wins', value: `${user.wins}` }, { name: 'Total loss', value: `${user.loss}` }, { name: 'Win/Loss Ratio', value: `${((user.wins / user.loss) * 100 === Infinity ? 1 : (user.wins / user.loss))} W/L` });
+            .addFields({ name: 'Total wins', value: `${user.wins}` }, { name: 'Total loss', value: `${user.loss}` }, { name: 'Win/Loss Ratio', value: `${((user.wins / user.loss) * 100 === Infinity ? 1 : (Math.floor(user.wins / user.loss)))} W/L` });
         await message.channel.send(UserEmbed);
     }
 }

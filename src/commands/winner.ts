@@ -136,6 +136,9 @@ export async function end(client: discord.Client){
             .setDescription(`<@${user1.id}> has won!\n The final votes where ${match.p1.votes} to ${match.p2.votes}\n${user1.username} won with image A`)
             .setTimestamp()
 
+            updateProfile(user1.id, "wins", 1)
+            updateProfile(user2.id, "loss", 1)
+
             await channelid.send(embed)
 
 
@@ -148,6 +151,9 @@ export async function end(client: discord.Client){
             .setDescription(`<@${user2.id}> has won!\n The final votes where ${match.p1.votes} to ${match.p2.votes}\n${user2.username} won with image B`)
             .setTimestamp()
             
+            updateProfile(user1.id, "loss", 1)
+            updateProfile(user2.id, "wins", 1)
+
             await channelid.send(embed)
         }
 

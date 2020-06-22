@@ -42,6 +42,7 @@ const listener = app.listen(process.env.PORT, () => {
 });
 
 client.on('ready', async () => {
+  client.user!.setActivity(`Warming up`);
   console.log(`Logged in as ${client.user?.tag}`);
   console.log("OK")
   // for(let i = 0; i < 2; i++) console.log(i)
@@ -66,7 +67,8 @@ client.on('ready', async () => {
 
   await running(client)
   await qualrunning(client)
-
+  client.user!.setActivity(`Meme Mania Season 0`);
+  // client.user!.setPresence({ activity: { name: "Testing", type: "CUSTOM_STATUS" }, status: "online" })
   //console.log(await getActive())
 
 });
