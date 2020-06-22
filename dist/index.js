@@ -29,6 +29,7 @@ const utils_1 = require("./misc/utils");
 const help_1 = require("./commands/help");
 const db_1 = require("./misc/db");
 const template_1 = require("./commands/template");
+const user_1 = require("./commands/user");
 console.log("Hello World, bot has begun life");
 const express = require('express');
 const app = express();
@@ -188,6 +189,12 @@ client.on("message", async (message) => {
     }
     else if (command === "startmodqual") {
         await start_1.startmodqual(message);
+    }
+    else if (command === "create") {
+        await user_1.createrUser(message);
+    }
+    else if (command === "stats") {
+        await user_1.stats(message, client);
     }
     else if (command === "startsplit") {
         await start_1.splitqual(client, message);

@@ -19,11 +19,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteQuals = exports.deleteActive = exports.addUser = exports.getUserProfile = exports.getQuals = exports.getActive = exports.updateQuals = exports.insertQuals = exports.updateActive = exports.insertActive = exports.connectToDB = void 0;
+exports.deleteQuals = exports.deleteActive = exports.addUser = exports.getProfile = exports.addProfile = exports.getQuals = exports.getActive = exports.updateQuals = exports.insertQuals = exports.updateActive = exports.insertActive = exports.connectToDB = void 0;
 const mongo = __importStar(require("mongodb"));
 require("dotenv").config();
 const MongoClient = mongo.MongoClient;
-const client = new MongoClient(process.env.DBURL);
+const client = new MongoClient(process.env.DBURL, { useUnifiedTopology: true });
 async function connectToDB() {
     return new Promise(resolve => {
         client.connect(async (err) => {
@@ -70,10 +70,14 @@ async function getQuals() {
     return await client.db(process.env.DBNAME).collection("quals").find({}, { projection: { _id: 0 } }).toArray();
 }
 exports.getQuals = getQuals;
-async function getUserProfile(_id) {
-    return client.db(process.env.DBNAME).collection("users").findOne({ _id });
+async function addProfile(User) {
+    await client.db(process.env.DBNAME).collection("users").insertOne(User);
 }
-exports.getUserProfile = getUserProfile;
+exports.addProfile = addProfile;
+async function getProfile(userid) {
+    return await client.db(process.env.DBNAME).collection("users").findOne({ _id: userid });
+}
+exports.getProfile = getProfile;
 async function addUser(user) {
     await client.db(process.env.DBNAME).collection("users").insertOne(user);
 }

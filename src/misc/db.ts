@@ -7,7 +7,7 @@ import { activematch, qualmatch, user } from "./struct";
 const MongoClient = mongo.MongoClient
 //const assert = require("assert")
 
-const client = new MongoClient(process.env.DBURL!)
+const client = new MongoClient(process.env.DBURL!, { useUnifiedTopology: true })
 
 export async function connectToDB(): Promise<void> {
     return new Promise(resolve => {
@@ -55,8 +55,12 @@ export async function getQuals(): Promise<qualmatch[]>{
     return await client.db(process.env.DBNAME).collection("quals").find({}, {projection:{ _id: 0 }}).toArray();
 }
 
-export async function getUserProfile(_id: string): Promise<user> {
-    return client.db(process.env.DBNAME).collection("users").findOne({ _id })!;
+export async function addProfile(User:user): Promise<void> {
+    await client.db(process.env.DBNAME).collection("users").insertOne(User)!;
+}
+
+export async function getProfile(userid: string): Promise<user> {
+    return await client.db(process.env.DBNAME).collection("users").findOne({_id:userid})!;
 }
 
 export async function addUser(user:user): Promise<void> {

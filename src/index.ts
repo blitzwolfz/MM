@@ -9,6 +9,7 @@ import { getUser } from "./misc/utils";
 import { ModHelp, UserHelp } from "./commands/help";
 import { connectToDB, getQuals, getActive, updateActive} from "./misc/db";
 import { template } from "./commands/template";
+import { createrUser, stats } from "./commands/user";
 //import data from "../match.json"
 //const fs = require('fs');
 console.log("Hello World, bot has begun life");
@@ -229,6 +230,14 @@ client.on("message", async message => {
     await startmodqual(message)
   }
 
+  else if (command === "create"){
+    await createrUser(message)
+  }
+
+  else if (command === "stats"){
+    await stats(message, client)
+  }
+
   else if (command === "startsplit"){
     await splitqual(client, message)
   }
@@ -295,6 +304,3 @@ client.login(process.env.TOKEN);
 
 // let data2 = fs.readFileSync('./qualmatch.json');
 // let qualmatchdata = JSON.parse(data2);
-
-
-

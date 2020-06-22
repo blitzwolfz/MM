@@ -43,4 +43,5 @@ export interface user {
     wins: number;
     loss: number;
     WL: number;
+    img: string;
 }
