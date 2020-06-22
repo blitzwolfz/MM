@@ -31,6 +31,7 @@ export async function start(message: discord.Message, client: discord.Client){
     let newmatch:activematch = {
         _id:message.channel.id,
         channelid:message.channel.id,
+        messageID: "",
         p1:{
             userid: user1.id,
             memedone: false,
@@ -338,6 +339,7 @@ export async function running(client: discord.Client):Promise<void>{
                 //await channelid.send(embed3)
     
                 await channelid.send(embed3).then(async msg => {
+                    match.messageID = msg.id
                     await (msg as discord.Message).react("🅰️")
                     await (msg as discord.Message).react("🅱️")
                 })

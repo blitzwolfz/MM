@@ -43,6 +43,7 @@ async function start(message, client) {
     let newmatch = {
         _id: message.channel.id,
         channelid: message.channel.id,
+        messageID: "",
         p1: {
             userid: user1.id,
             memedone: false,
@@ -231,6 +232,7 @@ async function running(client) {
                 await channelid.send(embed1);
                 await channelid.send(embed2);
                 await channelid.send(embed3).then(async (msg) => {
+                    match.messageID = msg.id;
                     await msg.react("🅰️");
                     await msg.react("🅱️");
                 });

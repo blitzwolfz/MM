@@ -2,6 +2,7 @@
 export interface activematch{
     _id: string;
     channelid:string;
+    messageID:string;
     p1:{
         userid: string;
         memedone: boolean;

@@ -47,6 +47,22 @@ client.on('ready', async () => {
 
   await connectToDB()
 
+  let matches:activematch[] = await getActive();
+  
+  if(matches){
+    for(const match of matches){
+      if(match.votingperiod){
+        let channel = <Discord.TextChannel>client.channels.cache.get(match.channelid)
+        
+        channel.messages.fetch(match.messageID).then(async msg => {
+          if(msg.partial){
+            await msg.fetch();
+          }
+        })
+      }
+    }
+  }
+
   await running(client)
   await qualrunning(client)
 
@@ -69,8 +85,8 @@ client.on("messageReactionAdd", async function(messageReaction, user){
     for (const match of matches){
       console.log(match.p1.voters)
       console.log(match.p2.voters)
-      if (messageReaction.partial) await messageReaction.fetch();
-      if (messageReaction.message.partial) await messageReaction.message.fetch();
+      // if (messageReaction.partial) await messageReaction.fetch();
+      // if (messageReaction.message.partial) await messageReaction.message.fetch();
 
       if(user.id === match.p1.userid || user.id === match.p2.userid){
         if(messageReaction.emoji.name === "🅱️") {

@@ -49,6 +49,19 @@ client.on('ready', async () => {
     console.log(`Logged in as ${(_a = client.user) === null || _a === void 0 ? void 0 : _a.tag}`);
     console.log("OK");
     await db_1.connectToDB();
+    let matches = await db_1.getActive();
+    if (matches) {
+        for (const match of matches) {
+            if (match.votingperiod) {
+                let channel = client.channels.cache.get(match.channelid);
+                channel.messages.fetch(match.messageID).then(async (msg) => {
+                    if (msg.partial) {
+                        await msg.fetch();
+                    }
+                });
+            }
+        }
+    }
     await start_1.running(client);
     await start_1.qualrunning(client);
 });
@@ -62,10 +75,6 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
         for (const match of matches) {
             console.log(match.p1.voters);
             console.log(match.p2.voters);
-            if (messageReaction.partial)
-                await messageReaction.fetch();
-            if (messageReaction.message.partial)
-                await messageReaction.message.fetch();
             if (user.id === match.p1.userid || user.id === match.p2.userid) {
                 if (messageReaction.emoji.name === "🅱️") {
                     await messageReaction.message.react("🅱️");
