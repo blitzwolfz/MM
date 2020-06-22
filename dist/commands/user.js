@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createrUser = exports.stats = void 0;
+exports.createAtUsermatch = exports.createrUser = exports.stats = void 0;
 const discord = __importStar(require("discord.js"));
 const db_1 = require("../misc/db");
 async function stats(message, client) {
@@ -33,10 +33,10 @@ async function stats(message, client) {
     }
     else if (user) {
         let UserEmbed = new discord.MessageEmbed()
-            .setTitle(`${message.author.username}`)
+            .setTitle(`${user.name}`)
             .setThumbnail(`${user.img}`)
             .setColor("#d7be26")
-            .addFields({ name: 'Total wins', value: `${user.wins}` }, { name: 'Total loss', value: `${user.loss}` }, { name: 'Win/Loss Ratio', value: `${(user.WL) * 100}` });
+            .addFields({ name: 'Total wins', value: `${user.wins}` }, { name: 'Total loss', value: `${user.loss}` }, { name: 'Win/Loss Ratio', value: `${((user.wins / user.loss) * 100 === Infinity ? 1 : (user.wins / user.loss))} W/L` });
         await message.channel.send(UserEmbed);
     }
 }
@@ -49,9 +49,9 @@ async function createrUser(message) {
     else if (!user) {
         let NewUser = {
             _id: message.author.id,
+            name: message.author.username,
             wins: 0,
             loss: 0,
-            WL: 0,
             img: message.author.displayAvatarURL({ format: 'png', dynamic: true, size: 1024 })
         };
         db_1.addProfile(NewUser);
@@ -63,3 +63,21 @@ async function createrUser(message) {
     }
 }
 exports.createrUser = createrUser;
+async function createAtUsermatch(User) {
+    let newuser = await db_1.getProfile(User.id);
+    if (newuser) {
+        return;
+    }
+    else if (!newuser) {
+        let NewUser = {
+            _id: User.id,
+            name: User.username,
+            wins: 0,
+            loss: 0,
+            img: User.displayAvatarURL({ format: 'png', dynamic: true, size: 1024 })
+        };
+        console.log("Added a new user profile");
+        await db_1.addProfile(NewUser);
+    }
+}
+exports.createAtUsermatch = createAtUsermatch;

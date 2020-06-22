@@ -26,6 +26,7 @@ const prefix = process.env.PREFIX;
 const winner_1 = require("./winner");
 const card_1 = require("./card");
 const db_1 = require("../misc/db");
+const user_1 = require("./user");
 async function start(message, client) {
     let users = [];
     var args = message.content.slice(prefix.length).trim().split(/ +/g);
@@ -40,6 +41,8 @@ async function start(message, client) {
     }
     let user1 = (await client.users.fetch(users[0]));
     let user2 = (await client.users.fetch(users[1]));
+    user_1.createAtUsermatch(user1);
+    user_1.createAtUsermatch(user2);
     let newmatch = {
         _id: message.channel.id,
         channelid: message.channel.id,
@@ -107,6 +110,9 @@ async function startqual(message, client) {
             x += i;
         }
     }
+    for (const u of users) {
+        user_1.createAtUsermatch(await client.users.fetch(u.userid));
+    }
     let newmatch = {
         _id: message.channel.id,
         split: false,
@@ -138,7 +144,7 @@ async function startqual(message, client) {
     await db_1.insertQuals(newmatch);
 }
 exports.startqual = startqual;
-async function startmodqual(message) {
+async function startmodqual(message, client) {
     let users = [];
     var args = message.content.slice(prefix.length).trim().split(/ +/g);
     let x = 0;
@@ -160,6 +166,9 @@ async function startmodqual(message) {
             users.push(player);
             x += i;
         }
+    }
+    for (const u of users) {
+        user_1.createAtUsermatch(await client.users.fetch(u.userid));
     }
     let newmatch = {
         _id: message.channel.id,

@@ -5,6 +5,7 @@ import {activematch, qualmatch, players} from "../misc/struct"
 import { end } from "./winner"
 import { vs } from "./card"
 import { updateActive, deleteActive, insertActive, insertQuals, updateQuals, deleteQuals, getActive, getQuals } from "../misc/db"
+import { createAtUsermatch } from "./user"
 //const Canvas = require('canvas');
 
 export async function start(message: discord.Message, client: discord.Client){
@@ -27,6 +28,9 @@ export async function start(message: discord.Message, client: discord.Client){
     }
     let user1 = (await client.users.fetch(users[0]))
     let user2 = (await client.users.fetch(users[1]))
+
+    createAtUsermatch(user1)
+    createAtUsermatch(user2)
 
     let newmatch:activematch = {
         _id:message.channel.id,
@@ -119,6 +123,9 @@ export async function startqual(message: discord.Message, client: discord.Client
             x += i
         }
     }
+    for (const u of users){
+        createAtUsermatch(await client.users.fetch(u.userid))
+    }
 
     let newmatch:qualmatch = {
         _id:message.channel.id,
@@ -166,7 +173,7 @@ export async function startqual(message: discord.Message, client: discord.Client
     // return qualmatches;
 }
 
-export async function startmodqual(message: discord.Message){
+export async function startmodqual(message: discord.Message, client: discord.Client){
     //.start @user1 @user2
 
     let users:players[] = []
@@ -193,6 +200,10 @@ export async function startmodqual(message: discord.Message){
             users.push(player)
             x += i
         }
+    }
+
+    for (const u of users){
+        createAtUsermatch(await client.users.fetch(u.userid))
     }
 
     let newmatch:qualmatch = {

@@ -39,8 +39,8 @@ export interface players {
 }
 export interface user {
     _id: string;
+    name: string;
     wins: number;
     loss: number;
-    WL: number;
     img: string;
 }

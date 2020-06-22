@@ -2,7 +2,7 @@ import * as discord from "discord.js"
 // import {getUser} from "../misc/utils"
 // import {prefix} from "../misc/config.json"
 import {activematch, qualmatch} from "../misc/struct"
-import { deleteActive, deleteQuals, getQuals, getActive } from "../misc/db"
+import { deleteActive, deleteQuals, getQuals, getActive, updateProfile } from "../misc/db"
 
 export async function endmatch(message: discord.Message, client: discord.Client){
     let matches:activematch[] = await getActive()
@@ -21,6 +21,9 @@ export async function endmatch(message: discord.Message, client: discord.Client)
                     .setTitle(`Match between ${user1.username} and ${user2.username}`)
                     .setDescription(`<@${user1.id}> has won!\n The final votes where ${match.p1.votes} to ${match.p2.votes}\n${user1.username} won with image A`)
                     .setTimestamp()
+
+                    updateProfile(user1.id, "wins", 1)
+                    updateProfile(user2.id, "loss", 1)
         
                     channelid.send(embed)
         
@@ -33,6 +36,9 @@ export async function endmatch(message: discord.Message, client: discord.Client)
                     .setDescription(`<@${user2.id}> has won!\n The final votes where ${match.p1.votes} to ${match.p2.votes}\n${user2.username} won with image B`)
                     .setTimestamp()
                     
+                    updateProfile(user2.id, "wins", 1)
+                    updateProfile(user1.id, "loss", 1)
+
                     channelid.send(embed)
                 }
 
@@ -88,6 +94,9 @@ export async function end(client: discord.Client){
             .setDescription(`<@${user2.id}> has won!`)
             .setTimestamp()
 
+            updateProfile(user2.id, "wins", 1)
+            updateProfile(user1.id, "loss", 1)
+
             await channelid.send(embed)
         }
 
@@ -100,6 +109,9 @@ export async function end(client: discord.Client){
             .setColor("#d7be26")
             .setDescription(`<@${user1.id}> has won!`)
             .setTimestamp()
+
+            updateProfile(user1.id, "wins", 1)
+            updateProfile(user2.id, "loss", 1)
 
             await channelid.send(embed)
         }

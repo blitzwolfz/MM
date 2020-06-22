@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteQuals = exports.deleteActive = exports.addUser = exports.getProfile = exports.addProfile = exports.getQuals = exports.getActive = exports.updateQuals = exports.insertQuals = exports.updateActive = exports.insertActive = exports.connectToDB = void 0;
+exports.deleteQuals = exports.deleteActive = exports.addUser = exports.updateProfile = exports.getProfile = exports.addProfile = exports.getQuals = exports.getActive = exports.updateQuals = exports.insertQuals = exports.updateActive = exports.insertActive = exports.connectToDB = void 0;
 const mongo = __importStar(require("mongodb"));
 require("dotenv").config();
 const MongoClient = mongo.MongoClient;
@@ -75,11 +75,18 @@ async function addProfile(User) {
 }
 exports.addProfile = addProfile;
 async function getProfile(_id) {
-    let x = await client.db(process.env.DBNAME).collection("users").findOne({ _id: _id });
-    console.log(`This is x\n ${x}`);
-    return x;
+    return client.db(process.env.DBNAME).collection("users").findOne({ _id: _id });
 }
 exports.getProfile = getProfile;
+async function updateProfile(_id, field, num) {
+    if (field === "wins") {
+        client.db(process.env.DBNAME).collection("users").updateOne({ _id: _id }, { $inc: { "wins": num } });
+    }
+    else {
+        client.db(process.env.DBNAME).collection("users").updateOne({ _id: _id }, { $inc: { "loss": num } });
+    }
+}
+exports.updateProfile = updateProfile;
 async function addUser(user) {
     await client.db(process.env.DBNAME).collection("users").insertOne(user);
 }

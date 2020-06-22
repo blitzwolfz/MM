@@ -60,9 +60,18 @@ export async function addProfile(User:user): Promise<void> {
 }
 
 export async function getProfile(_id: string): Promise<user> {
-    let x = await client.db(process.env.DBNAME).collection("users").findOne({_id:_id})!;
-    console.log(`This is x\n ${x}`)
-    return x
+    return client.db(process.env.DBNAME).collection("users").findOne({_id:_id})!;
+}
+
+export async function updateProfile(_id:string, field:string, num: number): Promise<void> {
+    if(field === "wins"){
+        client.db(process.env.DBNAME).collection("users").updateOne({_id:_id}, {$inc:{"wins":num}})!;
+    }
+
+    else{
+        client.db(process.env.DBNAME).collection("users").updateOne({_id:_id}, {$inc:{"loss":num}})!;
+    }
+    
 }
 
 export async function addUser(user:user): Promise<void> {

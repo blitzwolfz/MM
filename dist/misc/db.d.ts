@@ -8,6 +8,7 @@ export declare function getActive(): Promise<activematch[]>;
 export declare function getQuals(): Promise<qualmatch[]>;
 export declare function addProfile(User: user): Promise<void>;
 export declare function getProfile(_id: string): Promise<user>;
+export declare function updateProfile(_id: string, field: string, num: number): Promise<void>;
 export declare function addUser(user: user): Promise<void>;
 export declare function deleteActive(match: activematch): Promise<void>;
 export declare function deleteQuals(match: qualmatch): Promise<void>;

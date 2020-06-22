@@ -14,13 +14,13 @@ export async function stats(message: discord.Message, client: discord.Client){
 
     else if(user){
         let UserEmbed = new discord.MessageEmbed()
-            .setTitle(`${message.author.username}`)
+            .setTitle(`${user.name}`)
             .setThumbnail(`${user.img}`)
             .setColor("#d7be26")
             .addFields(
                 { name: 'Total wins', value: `${user.wins}` },
                 { name: 'Total loss', value: `${user.loss}`  },
-                { name: 'Win/Loss Ratio', value: `${(user.WL)*100}` },
+                { name: 'Win/Loss Ratio', value: `${((user.wins/user.loss)*100 === Infinity ? 1 : (Math.floor(user.wins/user.loss)))} W/L` },
             )
         
         await message.channel.send(UserEmbed)
@@ -37,9 +37,9 @@ export async function createrUser(message: discord.Message){
     else if(!user){
         let NewUser:user = {
             _id: message.author.id,
+            name:message.author.username,
             wins: 0,
             loss: 0,
-            WL: 0,
             img:message.author.displayAvatarURL({ format: 'png', dynamic: true, size: 1024 })
         }
 
@@ -55,5 +55,25 @@ export async function createrUser(message: discord.Message){
             { name: 'Total loss', value: `${0}`  },
             { name: 'Win/Loss Ratio', value: `${0}` },
         ))
+    }
+}
+
+export async function createAtUsermatch(User: discord.User){
+    let newuser:user = await getProfile(User.id)
+    
+    if(newuser){
+        return;
+    }
+
+    else if(!newuser){
+        let NewUser:user = {
+            _id: User.id,
+            name:User.username,
+            wins: 0,
+            loss: 0,
+            img:User.displayAvatarURL({ format: 'png', dynamic: true, size: 1024 })
+        }
+        console.log("Added a new user profile")
+        await addProfile(NewUser)
     }
 }

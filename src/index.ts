@@ -89,19 +89,19 @@ client.on("messageReactionAdd", async function(messageReaction, user){
       // if (messageReaction.partial) await messageReaction.fetch();
       // if (messageReaction.message.partial) await messageReaction.message.fetch();
 
-      if(user.id === match.p1.userid || user.id === match.p2.userid){
-        if(messageReaction.emoji.name === "🅱️") {
-          await messageReaction.message.react("🅱️")
-          await messageReaction.users.remove(user.id)
-          return await user.send("Can't vote on your own match")
-        }
+      // if(user.id === match.p1.userid || user.id === match.p2.userid){
+      //   if(messageReaction.emoji.name === "🅱️") {
+      //     await messageReaction.message.react("🅱️")
+      //     await messageReaction.users.remove(user.id)
+      //     return await user.send("Can't vote on your own match")
+      //   }
 
-        if(messageReaction.emoji.name === "🅰️") {
-          await messageReaction.message.react("🅰️")
-          await messageReaction.users.remove(user.id)
-          return await user.send("Can't vote on your own match")
-        }
-      }
+      //   if(messageReaction.emoji.name === "🅰️") {
+      //     await messageReaction.message.react("🅰️")
+      //     await messageReaction.users.remove(user.id)
+      //     return await user.send("Can't vote on your own match")
+      //   }
+      // }
       
       let id = client.channels.cache.get(messageReaction.message.channel.id)?.id
 
@@ -227,7 +227,7 @@ client.on("message", async message => {
   }
 
   else if (command === "startmodqual"){
-    await startmodqual(message)
+    await startmodqual(message, client)
   }
 
   else if (command === "create"){
