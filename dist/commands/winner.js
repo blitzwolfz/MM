@@ -9,7 +9,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord = __importStar(require("discord.js"));
 const db_1 = require("../misc/db");
-async function endmatch(message, matches, client) {
+async function endmatch(message, client) {
+    let matches = await db_1.getActive();
     for (const match of matches) {
         let user1 = (await client.fetchUser(match.p1.userid));
         let user2 = (await client.fetchUser(match.p2.userid));
@@ -53,7 +54,8 @@ async function endmatch(message, matches, client) {
     }
 }
 exports.endmatch = endmatch;
-async function end(matches, client) {
+async function end(client) {
+    let matches = await db_1.getActive();
     for (const match of matches) {
         let channelid = client.channels.get(match.channelid);
         let user1 = (await client.fetchUser(match.p1.userid));
@@ -111,7 +113,8 @@ async function end(matches, client) {
     }
 }
 exports.end = end;
-async function qualend(matches, client, message) {
+async function qualend(client, message) {
+    let matches = await db_1.getQuals();
     for (let match of matches) {
         let channelid = client.channels.get(match.channelid);
         if (message.channel.id === match.channelid) {

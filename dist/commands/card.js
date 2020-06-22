@@ -9,7 +9,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const Canvas = require('canvas');
 const Discord = __importStar(require("discord.js"));
-const prefix = process.env.DBURL;
+const prefix = process.env.PREFIX;
 function applyText(canvas, text) {
     const ctx = canvas.getContext('2d');
     let fontSize = 70;
@@ -20,9 +20,11 @@ function applyText(canvas, text) {
 }
 ;
 async function vs(message, client, users) {
+    console.log(prefix);
     var args = message.content.slice(prefix.length).trim().split(/ +/g);
-    if (args.length < 3) {
-        return message.reply("invalid response. Command is `.vs @user1 @user2 `");
+    console.log(args);
+    if (args.length < 2) {
+        return message.reply("invalid response. Command is `!vs @user1 @user2 `");
     }
     const canvas = Canvas.createCanvas(700, 250);
     const ctx = canvas.getContext('2d');

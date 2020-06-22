@@ -17,7 +17,7 @@ async function start(message, client) {
     let users = [];
     var args = message.content.slice(prefix.length).trim().split(/ +/g);
     if (args.length < 3) {
-        return message.reply("invalid response. Command is `!start @user1 @user2 template link`\n or `.start @user1 @user2 theme description`");
+        return message.reply("invalid response. Command is `!start @user1 @user2 template link`\n or `!start @user1 @user2 theme description`");
     }
     for (let i = 0; i < args.length; i++) {
         let userid = await utils_1.getUser(args[i]);
@@ -164,7 +164,8 @@ async function startmodqual(message) {
     await db_1.insertQuals(newmatch);
 }
 exports.startmodqual = startmodqual;
-async function running(matches, client) {
+async function running(client) {
+    let matches = await db_1.getActive();
     for (const match of matches) {
         console.log(Math.floor(Date.now() / 1000) - match.votetime);
         console.log((Math.floor(Date.now() / 1000) - match.votetime) >= 1800);
@@ -227,13 +228,14 @@ async function running(matches, client) {
         }
         if (match.votingperiod === true) {
             if ((Math.floor(Date.now() / 1000) - match.votetime > 7200)) {
-                await winner_1.end(matches, client);
+                await winner_1.end(client);
             }
         }
     }
 }
 exports.running = running;
-async function qualrunning(qualmatches, client) {
+async function qualrunning(client) {
+    let qualmatches = await db_1.getQuals();
     for (let match of qualmatches) {
         let channelid = client.channels.get(match.channelid);
         for (let u of match.players) {
@@ -277,8 +279,9 @@ async function qualrunning(qualmatches, client) {
     }
 }
 exports.qualrunning = qualrunning;
-async function splitqual(qualmatches, client, message) {
+async function splitqual(client, message) {
     let user = await (client.fetchUser(message.mentions.users.first().id));
+    let qualmatches = await db_1.getQuals();
     for (let match of qualmatches) {
         let channelid = client.channels.get(match.channelid);
         if (match.channelid === message.channel.id) {

@@ -1,9 +1,10 @@
 import * as Discord from "discord.js";
 import { activematch, qualmatch } from "../misc/struct";
-import { updateQuals, updateActive } from "../misc/db";
+import { updateQuals, updateActive, getActive, getQuals } from "../misc/db";
 
 
-export async function submit(message: Discord.Message, matches: activematch[], client: Discord.Client) {
+export async function submit(message: Discord.Message, client: Discord.Client) {
+    let matches: activematch[] = await getActive()
     if (message.attachments.size > 1){
         return message.reply("You can't submit more than one image")
     }
@@ -47,7 +48,10 @@ export async function submit(message: Discord.Message, matches: activematch[], c
     }
 }
 
-export async function qualsubmit(message: Discord.Message, matches: qualmatch[], client: Discord.Client) {
+export async function qualsubmit(message: Discord.Message, client: Discord.Client) {
+
+    let matches: qualmatch[] = await getQuals()
+
     if (message.attachments.size > 1){
         return message.reply("You can't submit more than one image")
     }

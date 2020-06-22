@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const db_1 = require("../misc/db");
-async function submit(message, matches, client) {
+async function submit(message, client) {
+    let matches = await db_1.getActive();
     if (message.attachments.size > 1) {
         return message.reply("You can't submit more than one image");
     }
@@ -41,7 +42,8 @@ async function submit(message, matches, client) {
     }
 }
 exports.submit = submit;
-async function qualsubmit(message, matches, client) {
+async function qualsubmit(message, client) {
+    let matches = await db_1.getQuals();
     if (message.attachments.size > 1) {
         return message.reply("You can't submit more than one image");
     }
