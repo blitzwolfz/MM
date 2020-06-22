@@ -22,7 +22,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.template = void 0;
 const discord = __importStar(require("discord.js"));
 async function template(message, client) {
-    let channel = client.channels.get("722291683030466621");
+    let channel = client.channels.cache.get("722291683030466621");
     if (message.attachments.size > 1) {
         return message.reply("You can't submit more than one image");
     }
@@ -36,7 +36,7 @@ async function template(message, client) {
                 timestamp: new Date()
             }
         });
-        await channel.send(new discord.Attachment(message.attachments.array()[0].url));
+        await channel.send({ files: [new discord.MessageAttachment(message.attachments.array()[0].url)] });
     }
 }
 exports.template = template;

@@ -25,7 +25,7 @@ export async function vs(message: Discord.Message, client: Discord.Client, users
 	console.log(prefix)
     var args: Array<string> = message.content.slice(prefix.length).trim().split(/ +/g)
 	console.log(args)
-    if (args.length < 2) {
+    if (args.length < 3) {
         return message.reply("invalid response. Command is `!vs @user1 @user2 `")
     }
 
@@ -62,8 +62,8 @@ export async function vs(message: Discord.Message, client: Discord.Client, users
 	await ctx.closePath();
 	await ctx.clip();
 
-    const avatar = await Canvas.loadImage(user1.displayAvatarURL);
-    const avatar2 = await Canvas.loadImage(user2.displayAvatarURL);
+    const avatar = await Canvas.loadImage(user1.displayAvatarURL({ format: 'png'}));
+    const avatar2 = await Canvas.loadImage(user2.displayAvatarURL({ format: 'png'}));
     
 	await ctx.drawImage(avatar, 25, 25, 200, 200);
 	await ctx.restore();
@@ -78,9 +78,9 @@ export async function vs(message: Discord.Message, client: Discord.Client, users
 	await ctx.drawImage(avatar2, 475, 25, 200, 200);
 	//ctx.globalCompositeOperation='source-over';
     
-	const attachment = new Discord.Attachment(canvas.toBuffer(), 'welcome-image.png');
-
-	await message.channel.send(attachment);
+	const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'welcome-image.png');
+	//await message.channel.send({ files: [attachment]})
+	await message.channel.send(attachment)
 }
 
 export async function p1(message: Discord.Message, client: Discord.Client, users: string[]){
@@ -104,8 +104,8 @@ export async function p1(message: Discord.Message, client: Discord.Client, users
     // console.log(args)
 
     // console.log(users)
-    let user1 = (await client.fetchUser(users[0]))
-    let user2 = (await client.fetchUser(users[1]))
+    let user1 = (await client.users.fetch(users[0]))
+    let user2 = (await client.users.fetch(users[1]))
 
 	// // Slightly smaller text placed above the member's display name
 	// ctx.font = '28px sans-serif';
@@ -124,8 +124,8 @@ export async function p1(message: Discord.Message, client: Discord.Client, users
 	await ctx.closePath();
 	await ctx.clip();
 
-    const avatar = await Canvas.loadImage(user1.displayAvatarURL);
-	const avatar2 = await Canvas.loadImage(user2.displayAvatarURL);
+    const avatar = await Canvas.loadImage(user1.displayAvatarURL({ format: 'png'}));
+	const avatar2 = await Canvas.loadImage(user2.displayAvatarURL({ format: 'png'}));
 	const up = await Canvas.loadImage("upvote.png");
     const down = await Canvas.loadImage("downvote.png");
     
@@ -147,7 +147,7 @@ export async function p1(message: Discord.Message, client: Discord.Client, users
 	await ctx.restore();
 	//ctx.globalCompositeOperation='source-over';
     
-	const attachment = new Discord.Attachment(canvas.toBuffer(), 'welcome-image.png');
+	const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'welcome-image.png');
 
-	await message.channel.send(attachment);
+	await message.channel.send({ files: [attachment]})
 }

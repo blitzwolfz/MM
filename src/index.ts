@@ -27,7 +27,7 @@ app.use(express.static('public'));
 const http = require('http');
 //@ts-ignore
 var _server = http.createServer(app);
-const client = new Discord.Client();
+const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
 
 app.get('/', (_request: any, response: any) => {
     response.sendFile(__dirname + "/index.html");
@@ -69,14 +69,24 @@ client.on("messageReactionAdd", async function(messageReaction, user){
     for (const match of matches){
       console.log(match.p1.voters)
       console.log(match.p2.voters)
+      if (messageReaction.partial) await messageReaction.fetch();
+      if (messageReaction.message.partial) await messageReaction.message.fetch();
+
       if(user.id === match.p1.userid || user.id === match.p2.userid){
-        if(messageReaction.emoji.name === "🅱️" || messageReaction.emoji.name === "🅰️") {
-        await messageReaction.remove(user.id)
-        return await user.send("Can't vote on your own match")
+        if(messageReaction.emoji.name === "🅱️") {
+          await messageReaction.message.react("🅱️")
+          await messageReaction.users.remove(user.id)
+          return await user.send("Can't vote on your own match")
+        }
+
+        if(messageReaction.emoji.name === "🅰️") {
+          await messageReaction.message.react("🅰️")
+          await messageReaction.users.remove(user.id)
+          return await user.send("Can't vote on your own match")
         }
       }
       
-      let id = client.channels.get(messageReaction.message.channel.id)?.id
+      let id = client.channels.cache.get(messageReaction.message.channel.id)?.id
 
       if(match.channelid === id){
         
@@ -85,7 +95,7 @@ client.on("messageReactionAdd", async function(messageReaction, user){
             match.p2.votes += 1
             match.p2.voters.push(user.id)
             await user.send("Vote counted for meme B") 
-            await messageReaction.remove(user.id)
+            await messageReaction.users.remove(user.id)
             await messageReaction.message.react("🅱️")
           }
   
@@ -93,7 +103,7 @@ client.on("messageReactionAdd", async function(messageReaction, user){
             match.p1.votes += 1
             match.p1.voters.push(user.id)
             await user.send("Vote counted for meme A") 
-            await messageReaction.remove(user.id)
+            await messageReaction.users.remove(user.id)
             await messageReaction.message.react("🅱️")
           }
         }
@@ -106,13 +116,13 @@ client.on("messageReactionAdd", async function(messageReaction, user){
             match.p1.votes -= 1
             match.p1.voters.splice(match.p1.voters.indexOf(user.id), 1)
 
-            await messageReaction.remove(user.id)
+            await messageReaction.users.remove(user.id)
             await messageReaction.message.react("🅱️")
           }
   
           else if (messageReaction.emoji.name === "🅰️"){
             await user.send("You can't vote on the same meme twice") 
-            await messageReaction.remove(user.id)
+            await messageReaction.users.remove(user.id)
             await messageReaction.message.react("🅱️")
           }
         }
@@ -120,7 +130,7 @@ client.on("messageReactionAdd", async function(messageReaction, user){
         else if(match.p2.voters.includes(user.id)){
           if (messageReaction.emoji.name === "🅱️"){
             await user.send("You can't vote on the same meme twice") 
-            await messageReaction.remove(user.id)
+            await messageReaction.users.remove(user.id)
             await messageReaction.message.react("🅱️")
 
           }
@@ -132,7 +142,7 @@ client.on("messageReactionAdd", async function(messageReaction, user){
             match.p2.votes -= 1
             match.p2.voters.splice(match.p1.voters.indexOf(user.id), 1)
 
-            await messageReaction.remove(user.id)
+            await messageReaction.users.remove(user.id)
             await messageReaction.message.react("🅰️")
           }
         }
@@ -191,7 +201,7 @@ client.on("message", async message => {
   }
 
   else if(command === "start"){
-    if (!message.member.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await start(message, client)
   }
 
@@ -208,7 +218,7 @@ client.on("message", async message => {
   }
 
   else if(command === "qualend"){
-    if (!message.member.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await qualend(client, message)
   }
 
@@ -216,7 +226,7 @@ client.on("message", async message => {
     // if (message.author.id !== "239516219445608449"){
     //   return
     // }
-    if (message.member.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await endmatch(message, client)
   }
 

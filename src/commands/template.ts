@@ -1,7 +1,7 @@
 import * as discord from "discord.js"
 
 export async function template(message: discord.Message, client:discord.Client){
-    let channel = <discord.TextChannel>client.channels.get("722291683030466621")
+    let channel = <discord.TextChannel>client.channels.cache.get("722291683030466621")
 
     if (message.attachments.size > 1){
         return message.reply("You can't submit more than one image")
@@ -19,7 +19,7 @@ export async function template(message: discord.Message, client:discord.Client){
                         timestamp: new Date()
                     }
                 })
-
-        await channel.send(new discord.Attachment(message.attachments.array()[0].url))
+                
+        await channel.send({ files: [new discord.MessageAttachment(message.attachments.array()[0].url)]})
     }
 }

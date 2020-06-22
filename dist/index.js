@@ -35,7 +35,7 @@ const app = express();
 app.use(express.static('public'));
 const http = require('http');
 var _server = http.createServer(app);
-const client = new Discord.Client();
+const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
 app.get('/', (_request, response) => {
     response.sendFile(__dirname + "/index.html");
     console.log(Date.now() + " Ping Received");
@@ -62,27 +62,37 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
         for (const match of matches) {
             console.log(match.p1.voters);
             console.log(match.p2.voters);
+            if (messageReaction.partial)
+                await messageReaction.fetch();
+            if (messageReaction.message.partial)
+                await messageReaction.message.fetch();
             if (user.id === match.p1.userid || user.id === match.p2.userid) {
-                if (messageReaction.emoji.name === "🅱️" || messageReaction.emoji.name === "🅰️") {
-                    await messageReaction.remove(user.id);
+                if (messageReaction.emoji.name === "🅱️") {
+                    await messageReaction.message.react("🅱️");
+                    await messageReaction.users.remove(user.id);
+                    return await user.send("Can't vote on your own match");
+                }
+                if (messageReaction.emoji.name === "🅰️") {
+                    await messageReaction.message.react("🅰️");
+                    await messageReaction.users.remove(user.id);
                     return await user.send("Can't vote on your own match");
                 }
             }
-            let id = (_a = client.channels.get(messageReaction.message.channel.id)) === null || _a === void 0 ? void 0 : _a.id;
+            let id = (_a = client.channels.cache.get(messageReaction.message.channel.id)) === null || _a === void 0 ? void 0 : _a.id;
             if (match.channelid === id) {
                 if (!match.p1.voters.includes(user.id) && !match.p2.voters.includes(user.id)) {
                     if (messageReaction.emoji.name === "🅱️") {
                         match.p2.votes += 1;
                         match.p2.voters.push(user.id);
                         await user.send("Vote counted for meme B");
-                        await messageReaction.remove(user.id);
+                        await messageReaction.users.remove(user.id);
                         await messageReaction.message.react("🅱️");
                     }
                     else if (messageReaction.emoji.name === "🅰️") {
                         match.p1.votes += 1;
                         match.p1.voters.push(user.id);
                         await user.send("Vote counted for meme A");
-                        await messageReaction.remove(user.id);
+                        await messageReaction.users.remove(user.id);
                         await messageReaction.message.react("🅱️");
                     }
                 }
@@ -93,19 +103,19 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
                         await user.send("Vote counted for meme B");
                         match.p1.votes -= 1;
                         match.p1.voters.splice(match.p1.voters.indexOf(user.id), 1);
-                        await messageReaction.remove(user.id);
+                        await messageReaction.users.remove(user.id);
                         await messageReaction.message.react("🅱️");
                     }
                     else if (messageReaction.emoji.name === "🅰️") {
                         await user.send("You can't vote on the same meme twice");
-                        await messageReaction.remove(user.id);
+                        await messageReaction.users.remove(user.id);
                         await messageReaction.message.react("🅱️");
                     }
                 }
                 else if (match.p2.voters.includes(user.id)) {
                     if (messageReaction.emoji.name === "🅱️") {
                         await user.send("You can't vote on the same meme twice");
-                        await messageReaction.remove(user.id);
+                        await messageReaction.users.remove(user.id);
                         await messageReaction.message.react("🅱️");
                     }
                     else if (messageReaction.emoji.name === "🅰️") {
@@ -114,7 +124,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
                         await user.send("Vote counted for meme A");
                         match.p2.votes -= 1;
                         match.p2.voters.splice(match.p1.voters.indexOf(user.id), 1);
-                        await messageReaction.remove(user.id);
+                        await messageReaction.users.remove(user.id);
                         await messageReaction.message.react("🅰️");
                     }
                 }
@@ -179,7 +189,7 @@ client.on("message", async (message) => {
         await winner_1.qualend(client, message);
     }
     else if (command === "end") {
-        if (message.member.roles.cache.has('719936221572235295'))
+        if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
         await winner_1.endmatch(message, client);
     }

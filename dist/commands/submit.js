@@ -19,7 +19,7 @@ async function submit(message, client) {
                 match.p1.memedone = true;
                 match.p1.memelink = message.attachments.array()[0].url;
                 await db_1.updateActive(match);
-                await client.channels.get(match.channelid).send({
+                await client.channels.cache.get(match.channelid).send({
                     embed: {
                         description: `<@${message.author.id}> has submitted their meme`,
                         timestamp: new Date()
@@ -31,7 +31,7 @@ async function submit(message, client) {
                 match.p2.memedone = true;
                 match.p2.memelink = message.attachments.array()[0].url;
                 await db_1.updateActive(match);
-                await client.channels.get(match.channelid).send({
+                await client.channels.cache.get(match.channelid).send({
                     embed: {
                         description: `<@${message.author.id}> has submitted their meme`,
                         timestamp: new Date()
@@ -67,7 +67,7 @@ async function qualsubmit(message, client) {
                         match.split = false;
                     }
                     await message.reply("You meme has been attached!");
-                    await client.channels.get(match.channelid).send({
+                    await client.channels.cache.get(match.channelid).send({
                         embed: {
                             description: `<@${message.author.id}> has submitted their meme`,
                             timestamp: new Date()

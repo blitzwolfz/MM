@@ -38,8 +38,8 @@ async function start(message, client) {
             users.push(userid);
         }
     }
-    let user1 = (await client.fetchUser(users[0]));
-    let user2 = (await client.fetchUser(users[1]));
+    let user1 = (await client.users.fetch(users[0]));
+    let user2 = (await client.users.fetch(users[1]));
     let newmatch = {
         _id: message.channel.id,
         channelid: message.channel.id,
@@ -63,13 +63,13 @@ async function start(message, client) {
         votingperiod: false,
     };
     await card_1.vs(message, client, users);
-    let embed = new discord.RichEmbed()
+    let embed = new discord.MessageEmbed()
         .setTitle(`Match between ${user1.username} and ${user2.username}`)
         .setDescription(`<@${user1.id}> and <@${user2.id}> both have 30 mins to complete your memes.\n Contact admins if you have an issue.`)
         .setTimestamp();
     message.channel.send({ embed });
     if (["t", "template"].includes(args[3])) {
-        let att = new discord.Attachment(message.attachments.array()[0].url);
+        let att = new discord.MessageAttachment(message.attachments.array()[0].url);
         await user1.send("Here is your template:");
         await user1.send(att);
         await user2.send("Here is your template:");
@@ -113,22 +113,22 @@ async function startqual(message, client) {
         template: "",
         octime: Math.floor(Date.now() / 1000),
     };
-    let embed = new discord.RichEmbed()
+    let embed = new discord.MessageEmbed()
         .setTitle(`Qualifiying match`)
         .setDescription(`All players have 30 mins to complete your memes.\n Contact admins if you have an issue.`)
         .setTimestamp();
     message.channel.send({ embed });
     if (["t", "template"].includes(args[x])) {
-        let att = new discord.Attachment(message.attachments.array()[0].url);
+        let att = new discord.MessageAttachment(message.attachments.array()[0].url);
         for (let u of users) {
-            let user = await client.fetchUser(u.userid);
+            let user = await client.users.fetch(u.userid);
             await user.send("Here is your template:");
             await user.send(att);
         }
     }
     else if (["th", "theme"].includes(args[x])) {
         for (let u of users) {
-            let user = await client.fetchUser(u.userid);
+            let user = await client.users.fetch(u.userid);
             await user.send(`Your theme is: ${args.splice(x + 1).join(" ")}`);
         }
     }
@@ -166,7 +166,7 @@ async function startmodqual(message) {
         octime: 0,
         template: "",
     };
-    let embed = new discord.RichEmbed()
+    let embed = new discord.MessageEmbed()
         .setTitle(`Qualifiying match`)
         .setDescription(`This match has been split. Please contact mods to start your portion`)
         .setTimestamp();
@@ -182,14 +182,14 @@ async function running(client) {
     for (const match of matches) {
         console.log(Math.floor(Date.now() / 1000) - match.votetime);
         console.log((Math.floor(Date.now() / 1000) - match.votetime) >= 1800);
-        let channelid = client.channels.get(match.channelid);
-        let user1 = (await client.fetchUser(match.p1.userid));
-        let user2 = (await client.fetchUser(match.p2.userid));
+        let channelid = client.channels.cache.get(match.channelid);
+        let user1 = (await client.users.fetch(match.p1.userid));
+        let user2 = (await client.users.fetch(match.p2.userid));
         if (match.votingperiod === false) {
             if (((Math.floor(Date.now() / 1000) - match.p2.time > 1800) && match.p2.memedone === false) && ((Math.floor(Date.now() / 1000) - match.p1.time > 1800) && match.p1.memedone === false)) {
                 user1.send("You have failed to submit your meme");
                 user2.send("You have failed to submit your meme");
-                let embed = new discord.RichEmbed()
+                let embed = new discord.MessageEmbed()
                     .setTitle(`Match between ${user1.username} and ${user2.username}`)
                     .setDescription(`<@${user1.id}> & <@${user2.id}> have lost\n for not submitting meme on time`)
                     .setTimestamp();
@@ -199,7 +199,7 @@ async function running(client) {
             }
             else if ((Math.floor(Date.now() / 1000) - match.p1.time > 1800) && match.p1.memedone === false) {
                 user1.send("You have failed to submit your meme, your opponet is the winner.");
-                let embed = new discord.RichEmbed()
+                let embed = new discord.MessageEmbed()
                     .setTitle(`Match between ${user1.username} and ${user2.username}`)
                     .setDescription(`<@${user2.id}> has won!`)
                     .setTimestamp();
@@ -210,7 +210,7 @@ async function running(client) {
             else if ((Math.floor(Date.now() / 1000) - match.p2.time > 1800) && match.p2.memedone === false) {
                 console.log(Date.now() - match.p2.time);
                 user2.send("You have failed to submit your meme, your opponet is the winner.");
-                let embed = new discord.RichEmbed()
+                let embed = new discord.MessageEmbed()
                     .setTitle(`Match between ${user1.username} and ${user2.username}`)
                     .setDescription(`<@${user1.id}> has won!`)
                     .setTimestamp();
@@ -219,13 +219,13 @@ async function running(client) {
                 break;
             }
             else if (((Math.floor(Date.now() / 1000) - match.p2.time < 1800) && match.p2.memedone === true) && ((Math.floor(Date.now() / 1000) - match.p2.time < 1800) && match.p1.memedone === true)) {
-                var embed1 = new discord.RichEmbed()
+                var embed1 = new discord.MessageEmbed()
                     .setImage(match.p1.memelink)
                     .setTimestamp();
-                var embed2 = new discord.RichEmbed()
+                var embed2 = new discord.MessageEmbed()
                     .setImage(match.p2.memelink)
                     .setTimestamp();
-                let embed3 = new discord.RichEmbed()
+                let embed3 = new discord.MessageEmbed()
                     .setTitle("Please vote")
                     .setDescription("Vote for Meme 1 reacting with 🅰️\nMeme 2 by reacting with 🅱️");
                 await channelid.send(embed1);
@@ -250,19 +250,19 @@ exports.running = running;
 async function qualrunning(client) {
     let qualmatches = await db_1.getQuals();
     for (let match of qualmatches) {
-        let channelid = client.channels.get(match.channelid);
+        let channelid = client.channels.cache.get(match.channelid);
         for (let u of match.players) {
             console.log(u);
             console.log(match.players.length);
             if (Math.floor(Date.now() / 1000) - match.octime > 1800 && match.split === false) {
                 if (!u.failed || u.memedone) {
-                    let embed = new discord.RichEmbed()
+                    let embed = new discord.MessageEmbed()
                         .setImage(u.memelink)
                         .setTimestamp();
                     await channelid.send(embed);
                 }
                 else {
-                    let embed = new discord.RichEmbed()
+                    let embed = new discord.MessageEmbed()
                         .setDescription("Player failed to submit meme on time")
                         .setTimestamp();
                     await channelid.send(embed);
@@ -270,13 +270,13 @@ async function qualrunning(client) {
             }
             if (match.split) {
                 if (Math.floor(Date.now() / 1000) - u.time > 1800 && u.failed === false && u.split === true) {
-                    let embed = new discord.RichEmbed()
+                    let embed = new discord.MessageEmbed()
                         .setDescription("You failed to submit meme on time")
                         .setTimestamp();
                     u.failed = true;
                     match.octime += 1;
                     await db_1.updateQuals(match);
-                    await (await client.fetchUser(u.userid)).send(embed);
+                    await (await client.users.fetch(u.userid)).send(embed);
                 }
             }
             if (match.split) {
@@ -293,27 +293,27 @@ async function qualrunning(client) {
 }
 exports.qualrunning = qualrunning;
 async function splitqual(client, message) {
-    let user = await (client.fetchUser(message.mentions.users.first().id));
+    let user = await (client.users.fetch(message.mentions.users.first().id));
     let qualmatches = await db_1.getQuals();
     for (let match of qualmatches) {
-        let channelid = client.channels.get(match.channelid);
+        let channelid = client.channels.cache.get(match.channelid);
         if (match.channelid === message.channel.id) {
             for (let u of match.players) {
                 console.log(u);
                 if (u.userid === user.id && u.memedone === false && u.split === false) {
                     u.time = Math.floor(Date.now() / 1000);
-                    await channelid.send(new discord.RichEmbed()
+                    await channelid.send(new discord.MessageEmbed()
                         .setDescription(`${user.username} your match has been split.\nYou have 30 mins\nto complete your memes`)
                         .setTimestamp());
                     u.split = true;
                     if (match.template.length > 0) {
                         await user.send("Here is your template:");
-                        await user.send(new discord.Attachment(match.template));
+                        await user.send({ files: [new discord.MessageAttachment(match.template)] });
                     }
                     await db_1.updateQuals(match);
                 }
                 else if (u.split === true && u.userid === user.id) {
-                    await channelid.send(new discord.RichEmbed()
+                    await channelid.send(new discord.MessageEmbed()
                         .setDescription(`${user.username} has completed their portion`)
                         .setTimestamp());
                     await db_1.updateQuals(match);

@@ -23,7 +23,7 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
                 match.p1.memedone = true
                 match.p1.memelink = message.attachments.array()[0].url
                 await updateActive(match)
-                await (<Discord.TextChannel>client.channels.get(match.channelid)).send({
+                await (<Discord.TextChannel>client.channels.cache.get(match.channelid)).send({
                     embed:{
                         description: `<@${message.author.id}> has submitted their meme`,
                         timestamp: new Date()
@@ -36,7 +36,7 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
                 match.p2.memedone = true
                 match.p2.memelink = message.attachments.array()[0].url
                 await updateActive(match)
-                await (<Discord.TextChannel>client.channels.get(match.channelid)).send({
+                await (<Discord.TextChannel>client.channels.cache.get(match.channelid)).send({
                     embed:{
                         description: `<@${message.author.id}> has submitted their meme`,
                         timestamp: new Date()
@@ -77,7 +77,7 @@ export async function qualsubmit(message: Discord.Message, client: Discord.Clien
                         match.split = false
                     }
                     await message.reply("You meme has been attached!")
-                    await (<Discord.TextChannel>client.channels.get(match.channelid)).send({
+                    await (<Discord.TextChannel>client.channels.cache.get(match.channelid)).send({
                         embed:{
                             description: `<@${message.author.id}> has submitted their meme`,
                             timestamp: new Date()
