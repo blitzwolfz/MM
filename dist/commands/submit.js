@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.qualsubmit = exports.submit = void 0;
 const db_1 = require("../misc/db");
 async function submit(message, client) {
     let matches = await db_1.getActive();
