@@ -2,7 +2,7 @@ import * as mongo from "mongodb"
 
 require("dotenv").config();
 
-import { activematch, qualmatch } from "./struct";
+import { activematch, qualmatch, user } from "./struct";
 
 const MongoClient = mongo.MongoClient
 //const assert = require("assert")
@@ -16,6 +16,7 @@ export async function connectToDB(): Promise<void> {
             console.log("Successfully connected");
             client.db(process.env.DBNAME).createCollection("activematch");
             client.db(process.env.DBNAME).createCollection("quals");
+            client.db(process.env.DBNAME).createCollection("users");
             resolve();
         });
     });
@@ -52,6 +53,14 @@ export async function getActive(): Promise<activematch[]>{
 export async function getQuals(): Promise<qualmatch[]>{
     console.log("Getting Quals!")
     return await client.db(process.env.DBNAME).collection("quals").find({}, {projection:{ _id: 0 }}).toArray();
+}
+
+export async function getUserProfile(_id: string): Promise<user> {
+    return client.db(process.env.DBNAME).collection("users").findOne({ _id })!;
+}
+
+export async function addUser(user:user): Promise<void> {
+    await client.db(process.env.DBNAME).collection("users").insertOne(user)!;
 }
 
 export async function deleteActive(match: activematch): Promise<void>{
