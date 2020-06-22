@@ -66,6 +66,7 @@ async function start(message, client) {
     await card_1.vs(message, client, users);
     let embed = new discord.MessageEmbed()
         .setTitle(`Match between ${user1.username} and ${user2.username}`)
+        .setColor("#d7be26")
         .setDescription(`<@${user1.id}> and <@${user2.id}> both have 30 mins to complete your memes.\n Contact admins if you have an issue.`)
         .setTimestamp();
     message.channel.send({ embed });
@@ -116,6 +117,7 @@ async function startqual(message, client) {
     };
     let embed = new discord.MessageEmbed()
         .setTitle(`Qualifiying match`)
+        .setColor("#d7be26")
         .setDescription(`All players have 30 mins to complete your memes.\n Contact admins if you have an issue.`)
         .setTimestamp();
     message.channel.send({ embed });
@@ -169,6 +171,7 @@ async function startmodqual(message) {
     };
     let embed = new discord.MessageEmbed()
         .setTitle(`Qualifiying match`)
+        .setColor("#d7be26")
         .setDescription(`This match has been split. Please contact mods to start your portion`)
         .setTimestamp();
     message.channel.send({ embed });
@@ -191,6 +194,7 @@ async function running(client) {
                 user1.send("You have failed to submit your meme");
                 user2.send("You have failed to submit your meme");
                 let embed = new discord.MessageEmbed()
+                    .setColor("#d7be26")
                     .setTitle(`Match between ${user1.username} and ${user2.username}`)
                     .setDescription(`<@${user1.id}> & <@${user2.id}> have lost\n for not submitting meme on time`)
                     .setTimestamp();
@@ -201,6 +205,7 @@ async function running(client) {
             else if ((Math.floor(Date.now() / 1000) - match.p1.time > 1800) && match.p1.memedone === false) {
                 user1.send("You have failed to submit your meme, your opponet is the winner.");
                 let embed = new discord.MessageEmbed()
+                    .setColor("#d7be26")
                     .setTitle(`Match between ${user1.username} and ${user2.username}`)
                     .setDescription(`<@${user2.id}> has won!`)
                     .setTimestamp();
@@ -214,6 +219,7 @@ async function running(client) {
                 let embed = new discord.MessageEmbed()
                     .setTitle(`Match between ${user1.username} and ${user2.username}`)
                     .setDescription(`<@${user1.id}> has won!`)
+                    .setColor("#d7be26")
                     .setTimestamp();
                 channelid.send(embed);
                 await db_1.deleteActive(match);
@@ -222,12 +228,15 @@ async function running(client) {
             else if (((Math.floor(Date.now() / 1000) - match.p2.time < 1800) && match.p2.memedone === true) && ((Math.floor(Date.now() / 1000) - match.p2.time < 1800) && match.p1.memedone === true)) {
                 var embed1 = new discord.MessageEmbed()
                     .setImage(match.p1.memelink)
+                    .setColor("#d7be26")
                     .setTimestamp();
                 var embed2 = new discord.MessageEmbed()
                     .setImage(match.p2.memelink)
+                    .setColor("#d7be26")
                     .setTimestamp();
                 let embed3 = new discord.MessageEmbed()
                     .setTitle("Please vote")
+                    .setColor("#d7be26")
                     .setDescription("Vote for Meme 1 reacting with 🅰️\nMeme 2 by reacting with 🅱️");
                 await channelid.send(embed1);
                 await channelid.send(embed2);
@@ -259,6 +268,7 @@ async function qualrunning(client) {
             if (Math.floor(Date.now() / 1000) - match.octime > 1800 && match.split === false) {
                 if (!u.failed || u.memedone) {
                     let embed = new discord.MessageEmbed()
+                        .setColor("#d7be26")
                         .setImage(u.memelink)
                         .setTimestamp();
                     await channelid.send(embed);
@@ -266,6 +276,7 @@ async function qualrunning(client) {
                 else {
                     let embed = new discord.MessageEmbed()
                         .setDescription("Player failed to submit meme on time")
+                        .setColor("#d7be26")
                         .setTimestamp();
                     await channelid.send(embed);
                 }
@@ -274,6 +285,7 @@ async function qualrunning(client) {
                 if (Math.floor(Date.now() / 1000) - u.time > 1800 && u.failed === false && u.split === true) {
                     let embed = new discord.MessageEmbed()
                         .setDescription("You failed to submit meme on time")
+                        .setColor("#d7be26")
                         .setTimestamp();
                     u.failed = true;
                     match.octime += 1;
@@ -306,6 +318,7 @@ async function splitqual(client, message) {
                     u.time = Math.floor(Date.now() / 1000);
                     await channelid.send(new discord.MessageEmbed()
                         .setDescription(`${user.username} your match has been split.\nYou have 30 mins\nto complete your memes`)
+                        .setColor("#d7be26")
                         .setTimestamp());
                     u.split = true;
                     if (match.template.length > 0) {
@@ -317,6 +330,7 @@ async function splitqual(client, message) {
                 else if (u.split === true && u.userid === user.id) {
                     await channelid.send(new discord.MessageEmbed()
                         .setDescription(`${user.username} has completed their portion`)
+                        .setColor("#d7be26")
                         .setTimestamp());
                     await db_1.updateQuals(match);
                 }

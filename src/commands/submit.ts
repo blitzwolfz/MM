@@ -10,7 +10,7 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
     }
     
     else if(message.attachments.size <= 0){
-        return message.reply("Your image was not submitted properly. Contact a mode")
+        return message.reply("Your image was not submitted properly. Contact a mod")
     }
 
     else if(message.channel.type !== "dm"){
@@ -26,6 +26,7 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
                 await (<Discord.TextChannel>client.channels.cache.get(match.channelid)).send({
                     embed:{
                         description: `<@${message.author.id}> has submitted their meme`,
+                        color: "#d7be26",
                         timestamp: new Date()
                     }
                 });
@@ -39,6 +40,7 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
                 await (<Discord.TextChannel>client.channels.cache.get(match.channelid)).send({
                     embed:{
                         description: `<@${message.author.id}> has submitted their meme`,
+                        color: "#d7be26",
                         timestamp: new Date()
                     }
                 });
@@ -80,6 +82,7 @@ export async function qualsubmit(message: Discord.Message, client: Discord.Clien
                     await (<Discord.TextChannel>client.channels.cache.get(match.channelid)).send({
                         embed:{
                             description: `<@${message.author.id}> has submitted their meme`,
+                            color:"#d7be26",
                             timestamp: new Date()
                         }
                     });

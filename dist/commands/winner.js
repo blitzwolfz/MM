@@ -32,6 +32,7 @@ async function endmatch(message, client) {
             if (match.votingperiod) {
                 if (match.p1.votes > match.p2.votes) {
                     let embed = new discord.MessageEmbed()
+                        .setColor("#d7be26")
                         .setTitle(`Match between ${user1.username} and ${user2.username}`)
                         .setDescription(`<@${user1.id}> has won!\n The final votes where ${match.p1.votes} to ${match.p2.votes}\n${user1.username} won with image A`)
                         .setTimestamp();
@@ -40,12 +41,14 @@ async function endmatch(message, client) {
                 else if (match.p1.votes < match.p2.votes) {
                     let embed = new discord.MessageEmbed()
                         .setTitle(`Match between ${user1.username} and ${user2.username}`)
+                        .setColor("#d7be26")
                         .setDescription(`<@${user2.id}> has won!\n The final votes where ${match.p1.votes} to ${match.p2.votes}\n${user2.username} won with image B`)
                         .setTimestamp();
                     channelid.send(embed);
                 }
                 else if (match.p1.votes === match.p2.votes) {
                     let embed = new discord.MessageEmbed()
+                        .setColor("#d7be26")
                         .setTitle(`Match between ${user1.username} and ${user2.username}`)
                         .setDescription(`Both users have come to a draw.\nPlease find a new time for your rematch.`)
                         .setTimestamp();
@@ -57,6 +60,7 @@ async function endmatch(message, client) {
             else {
                 let embed = new discord.MessageEmbed()
                     .setTitle(`Match between ${user1.username} and ${user2.username}`)
+                    .setColor("#d7be26")
                     .setDescription(`Match has ended early before voting period.\nPlease contact mod for information`)
                     .setTimestamp();
                 channelid.send(embed);
@@ -79,6 +83,7 @@ async function end(client) {
             user1.send("You have failed to submit your meme, your opponet is the winner.");
             let embed = new discord.MessageEmbed()
                 .setTitle(`Match between ${user1.username} and ${user2.username}`)
+                .setColor("#d7be26")
                 .setDescription(`<@${user2.id}> has won!`)
                 .setTimestamp();
             await channelid.send(embed);
@@ -88,6 +93,7 @@ async function end(client) {
             user2.send("You have failed to submit your meme, your opponet is the winner.");
             let embed = new discord.MessageEmbed()
                 .setTitle(`Match between ${user1.username} and ${user2.username}`)
+                .setColor("#d7be26")
                 .setDescription(`<@${user1.id}> has won!`)
                 .setTimestamp();
             await channelid.send(embed);
@@ -97,6 +103,7 @@ async function end(client) {
             user2.send("You have failed to submit your meme");
             let embed = new discord.MessageEmbed()
                 .setTitle(`Match between ${user1.username} and ${user2.username}`)
+                .setColor("#d7be26")
                 .setDescription(`<@${user1.id}> & ${user2.id}have lost\n for not submitting meme on time`)
                 .setTimestamp();
             await channelid.send(embed);
@@ -104,6 +111,7 @@ async function end(client) {
         else if (match.p1.votes > match.p2.votes) {
             let embed = new discord.MessageEmbed()
                 .setTitle(`Match between ${user1.username} and ${user2.username}`)
+                .setColor("#d7be26")
                 .setDescription(`<@${user1.id}> has won!\n The final votes where ${match.p1.votes} to ${match.p2.votes}\n${user1.username} won with image A`)
                 .setTimestamp();
             await channelid.send(embed);
@@ -111,12 +119,14 @@ async function end(client) {
         else if (match.p1.votes < match.p2.votes) {
             let embed = new discord.MessageEmbed()
                 .setTitle(`Match between ${user1.username} and ${user2.username}`)
+                .setColor("#d7be26")
                 .setDescription(`<@${user2.id}> has won!\n The final votes where ${match.p1.votes} to ${match.p2.votes}\n${user2.username} won with image B`)
                 .setTimestamp();
             await channelid.send(embed);
         }
         else if (match.p1.votes === match.p2.votes) {
             let embed = new discord.MessageEmbed()
+                .setColor("#d7be26")
                 .setTitle(`Match between ${user1.username} and ${user2.username}`)
                 .setDescription(`Both users have come to a draw.\nPlease find a new time for your rematch.`)
                 .setTimestamp();
@@ -134,12 +144,14 @@ async function qualend(client, message) {
             for (let u of match.players) {
                 if (u.memedone) {
                     let embed = new discord.MessageEmbed()
+                        .setColor("#d7be26")
                         .setImage(u.memelink)
                         .setTimestamp();
                     await channelid.send(embed);
                 }
                 else {
                     let embed = new discord.MessageEmbed()
+                        .setColor("#d7be26")
                         .setDescription("Player failed to submit meme on time")
                         .setTimestamp();
                     await channelid.send(embed);

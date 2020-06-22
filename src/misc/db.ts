@@ -59,8 +59,10 @@ export async function addProfile(User:user): Promise<void> {
     await client.db(process.env.DBNAME).collection("users").insertOne(User)!;
 }
 
-export async function getProfile(userid: string): Promise<user> {
-    return await client.db(process.env.DBNAME).collection("users").findOne({_id:userid})!;
+export async function getProfile(_id: string): Promise<user> {
+    let x = await client.db(process.env.DBNAME).collection("users").findOne({_id:_id})!;
+    console.log(`This is x\n ${x}`)
+    return x
 }
 
 export async function addUser(user:user): Promise<void> {

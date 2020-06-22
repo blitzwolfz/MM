@@ -8,7 +8,7 @@ async function submit(message, client) {
         return message.reply("You can't submit more than one image");
     }
     else if (message.attachments.size <= 0) {
-        return message.reply("Your image was not submitted properly. Contact a mode");
+        return message.reply("Your image was not submitted properly. Contact a mod");
     }
     else if (message.channel.type !== "dm") {
         return message.reply("You didn't not submit this in the DM with the bot.\nPlease delete and try again.");
@@ -22,6 +22,7 @@ async function submit(message, client) {
                 await client.channels.cache.get(match.channelid).send({
                     embed: {
                         description: `<@${message.author.id}> has submitted their meme`,
+                        color: "#d7be26",
                         timestamp: new Date()
                     }
                 });
@@ -34,6 +35,7 @@ async function submit(message, client) {
                 await client.channels.cache.get(match.channelid).send({
                     embed: {
                         description: `<@${message.author.id}> has submitted their meme`,
+                        color: "#d7be26",
                         timestamp: new Date()
                     }
                 });
@@ -70,6 +72,7 @@ async function qualsubmit(message, client) {
                     await client.channels.cache.get(match.channelid).send({
                         embed: {
                             description: `<@${message.author.id}> has submitted their meme`,
+                            color: "#d7be26",
                             timestamp: new Date()
                         }
                     });

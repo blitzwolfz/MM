@@ -39,7 +39,6 @@ export interface players {
 }
 export interface user {
     _id: string;
-    userid: string;
     wins: number;
     loss: number;
     WL: number;

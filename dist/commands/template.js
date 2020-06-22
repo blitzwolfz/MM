@@ -33,6 +33,7 @@ async function template(message, client) {
         await channel.send({
             embed: {
                 description: `${message.author.username} has submitted a new template`,
+                color: "#d7be26",
                 timestamp: new Date()
             }
         });
