@@ -66,7 +66,7 @@ client.on('ready', async () => {
     }
     await start_1.running(client);
     await start_1.qualrunning(client);
-    client.user.setActivity(`We da best in the game`);
+    client.user.setActivity(`Meme Mania Season 0`);
 });
 client.on("messageReactionAdd", async function (messageReaction, user) {
     var _a;
