@@ -74,6 +74,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
     if (user.bot)
         return;
     let matches = await db_1.getActive();
+    let quals = await db_1.getQuals();
     if (matches) {
         for (const match of matches) {
             console.log(match.p1.voters);
@@ -84,7 +85,6 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
                 await messageReaction.message.fetch();
             if (user.id === match.p1.userid || user.id === match.p2.userid) {
                 if (messageReaction.emoji.name === "🅱️") {
-                    await messageReaction.message.react("🅱️");
                     await messageReaction.users.remove(user.id);
                     return await user.send("Can't vote on your own match");
                 }
@@ -150,6 +150,27 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             await db_1.updateActive(match);
         }
     }
+    if (quals) {
+        for (const match of quals) {
+            utils_1.hasthreevotes(match.votes, user.id);
+            if (messageReaction.partial)
+                await messageReaction.fetch();
+            if (messageReaction.message.partial)
+                await messageReaction.message.fetch();
+            if (utils_1.emojis.includes(messageReaction.emoji.name)) {
+                let i = utils_1.emojis.indexOf(messageReaction.emoji.name);
+                if (match.nonvoteable.includes(i)) {
+                    await messageReaction.users.remove(user.id);
+                    return user.send("You can't for a non meme");
+                }
+                else {
+                    match.votes[i].push(user.id);
+                    await messageReaction.users.remove(user.id);
+                    await db_1.updateQuals(match);
+                }
+            }
+        }
+    }
 });
 client.on("message", async (message) => {
     var _a;
@@ -204,6 +225,11 @@ client.on("message", async (message) => {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
         await start_1.startregularsplit(message, client);
+    }
+    else if (command === "approve") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
+        await template_1.approvetemplate(message, client);
     }
     else if (command === "create") {
         await user_1.createrUser(message);

@@ -28,9 +28,15 @@ export interface qualmatch {
     _id: string;
     channelid: string;
     players: Array<players>;
+    playerids: Array<string>;
     octime: number;
     template: string;
     split: boolean;
+    votes: Array<Array<string>>;
+    nonvoteable: Array<number>;
+    playersdone: Array<string>;
+    messageid: string;
+    votingperiod: boolean;
 }
 export interface players {
     userid: string;

@@ -1,14 +1,14 @@
 import * as Discord from "discord.js";
 require("dotenv").config();
-import {activematch} from "./misc/struct"
+import {activematch, qualmatch} from "./misc/struct"
 import {submit, qualsubmit} from "./commands/submit"
 import { start, running, qualrunning, startqual, startmodqual, splitqual, startregularsplit, splitregular } from "./commands/start";
 import { endmatch, qualend } from "./commands/winner";
 import { vs } from "./commands/card";
-import { getUser } from "./misc/utils";
+import { getUser, hasthreevotes, emojis} from "./misc/utils";
 import { ModHelp, UserHelp } from "./commands/help";
-import { connectToDB, getQuals, getActive, updateActive} from "./misc/db";
-import { template } from "./commands/template";
+import { connectToDB, getQuals, getActive, updateActive, updateQuals} from "./misc/db";
+import { template, approvetemplate } from "./commands/template";
 import { createrUser, stats } from "./commands/user";
 //import data from "../match.json"
 //const fs = require('fs');
@@ -81,6 +81,8 @@ client.on("messageReactionAdd", async function(messageReaction, user){
   if(user.bot) return;
   let matches:activematch[] = await getActive();
 
+  let quals:qualmatch[] = await getQuals()
+
   // // //await insertQuals(qualmatches)
   // let qualmatches:qualmatch[];
 
@@ -93,7 +95,7 @@ client.on("messageReactionAdd", async function(messageReaction, user){
 
       if(user.id === match.p1.userid || user.id === match.p2.userid){
         if(messageReaction.emoji.name === "🅱️") {
-          await messageReaction.message.react("🅱️")
+          //await messageReaction.message.react("🅱️")
           await messageReaction.users.remove(user.id)
           return await user.send("Can't vote on your own match")
         }
@@ -172,6 +174,34 @@ client.on("messageReactionAdd", async function(messageReaction, user){
     }
   }
 
+  if(quals){
+    for (const match of quals){
+      hasthreevotes(match.votes, user.id)
+      if (messageReaction.partial) await messageReaction.fetch();
+      if (messageReaction.message.partial) await messageReaction.message.fetch();
+
+      // if(match.playerids.includes(user.id)){
+      //   await messageReaction.users.remove(user.id)
+      //   return user.send("You can't vote in your own qualifers")
+      // }
+      
+      if (emojis.includes(messageReaction.emoji.name)){
+        let i = emojis.indexOf(messageReaction.emoji.name)
+        if(match.nonvoteable.includes(i)){
+          await messageReaction.users.remove(user.id)
+          return user.send("You can't for a non meme")
+        }
+        else{
+          match.votes[i].push(user.id)
+          await messageReaction.users.remove(user.id)
+          await updateQuals(match)
+        }
+      }
+
+    }
+    
+  }
+
 });
 
 
@@ -237,6 +267,11 @@ client.on("message", async message => {
   else if (command === "startmodmatch" || command === "splitmatch"){
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await startregularsplit(message, client)
+  }
+
+  else if(command === "approve"){
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
+    await approvetemplate(message, client)
   }
 
   else if (command === "create"){

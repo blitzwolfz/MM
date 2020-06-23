@@ -94,9 +94,11 @@ async function startqual(message, client) {
     let users = [];
     var args = message.content.slice(prefix.length).trim().split(/ +/g);
     let x = 0;
+    let plyerids = [];
+    let votearray = [];
     console.log(args);
     if (args.length < 3) {
-        return message.reply("Invalid response. Command is `!start @user1 @user2 @user3 @user4 <@user5 @user6> template link`\n or `.start @user1 @user2 theme description`");
+        return message.reply("Invalid response. Command is `!startqual @user1 @user2 @user3 @user4 <@user5 @user6> template link`\n or `!startqual @user1 @user2 theme description`");
     }
     for (let i = 0; i < args.length; i++) {
         let userid = await utils_1.getUser(args[i]);
@@ -110,6 +112,8 @@ async function startqual(message, client) {
                 failed: false
             };
             users.push(player);
+            plyerids.push(userid);
+            votearray.push([]);
             x += i;
         }
     }
@@ -121,8 +125,14 @@ async function startqual(message, client) {
         split: false,
         channelid: message.channel.id,
         players: users,
+        playerids: plyerids,
         template: "",
+        votes: votearray,
+        nonvoteable: [],
         octime: Math.floor(Date.now() / 1000),
+        messageid: "",
+        playersdone: [],
+        votingperiod: false
     };
     let embed = new discord.MessageEmbed()
         .setTitle(`Qualifiying match`)
@@ -151,9 +161,11 @@ async function startmodqual(message, client) {
     let users = [];
     var args = message.content.slice(prefix.length).trim().split(/ +/g);
     let x = 0;
+    let plyerids = [];
+    let votearray = [];
     console.log(args);
     if (args.length < 3) {
-        return message.reply("invalid response. Command is `!start @user1 @user2 @user3 @user4 <@user5 @user6> template link`\n or `.start @user1 @user2 theme description`");
+        return message.reply("invalid response. Command is `!splitqual @user1 @user2 @user3 @user4 <@user5 @user6> template link`\n or `!splitqual @user1 @user2 @user3 @user4 <@user5 @user6> theme description`");
     }
     for (let i = 0; i < args.length; i++) {
         let userid = await utils_1.getUser(args[i]);
@@ -167,6 +179,8 @@ async function startmodqual(message, client) {
                 failed: false
             };
             users.push(player);
+            plyerids.push(userid);
+            votearray.push([]);
             x += i;
         }
     }
@@ -176,10 +190,16 @@ async function startmodqual(message, client) {
     let newmatch = {
         _id: message.channel.id,
         split: true,
+        playerids: plyerids,
         channelid: message.channel.id,
         players: users,
         octime: 0,
+        votes: votearray,
+        nonvoteable: [],
         template: "",
+        messageid: "",
+        playersdone: [],
+        votingperiod: false
     };
     let embed = new discord.MessageEmbed()
         .setTitle(`Qualifiying match`)
@@ -202,8 +222,8 @@ async function running(client) {
         let user1 = (await client.users.fetch(match.p1.userid));
         let user2 = (await client.users.fetch(match.p2.userid));
         if (match.votingperiod === false) {
-            if (!(match.split) && ((Math.floor(Date.now() / 1000) - match.p2.time > 1800) && match.p2.memedone === false)
-                && ((Math.floor(Date.now() / 1000) - match.p1.time > 1800) && match.p1.memedone === false)) {
+            if (!(match.split) && ((Math.floor(Date.now() / 1000) - match.p2.time > 2400) && match.p2.memedone === false)
+                && ((Math.floor(Date.now() / 1000) - match.p1.time > 2400) && match.p1.memedone === false)) {
                 user1.send("You have failed to submit your meme");
                 user2.send("You have failed to submit your meme");
                 let embed = new discord.MessageEmbed()
@@ -215,7 +235,7 @@ async function running(client) {
                 await db_1.deleteActive(match);
                 break;
             }
-            else if ((Math.floor(Date.now() / 1000) - match.p1.time > 1800)
+            else if ((Math.floor(Date.now() / 1000) - match.p1.time > 2400)
                 && match.p1.memedone === false && match.p1.donesplit) {
                 user1.send("You have failed to submit your meme, your opponet is the winner.");
                 let embed = new discord.MessageEmbed()
@@ -226,7 +246,7 @@ async function running(client) {
                 channelid.send(embed);
                 await db_1.deleteActive(match);
             }
-            else if ((Math.floor(Date.now() / 1000) - match.p2.time > 1800)
+            else if ((Math.floor(Date.now() / 1000) - match.p2.time > 2400)
                 && match.p2.memedone === false && match.p2.donesplit) {
                 console.log(Date.now() - match.p2.time);
                 user2.send("You have failed to submit your meme, your opponet is the winner.");
@@ -238,8 +258,8 @@ async function running(client) {
                 channelid.send(embed);
                 await db_1.deleteActive(match);
             }
-            else if (!(match.split) && ((Math.floor(Date.now() / 1000) - match.p2.time < 1800) && match.p2.memedone === true)
-                && ((Math.floor(Date.now() / 1000) - match.p2.time < 1800) && match.p1.memedone === true)) {
+            else if (!(match.split) && ((Math.floor(Date.now() / 1000) - match.p2.time < 2400) && match.p2.memedone === true)
+                && ((Math.floor(Date.now() / 1000) - match.p2.time < 2400) && match.p1.memedone === true)) {
                 var embed1 = new discord.MessageEmbed()
                     .setImage(match.p1.memelink)
                     .setColor("#d7be26")
@@ -276,46 +296,65 @@ async function qualrunning(client) {
     let qualmatches = await db_1.getQuals();
     for (let match of qualmatches) {
         let channelid = client.channels.cache.get(match.channelid);
-        for (let u of match.players) {
-            console.log(u);
-            console.log(match.players.length);
+        if (match.votingperiod === false) {
+            for (let u of match.players) {
+                console.log(u);
+                console.log(match.players.length);
+                if (Math.floor(Date.now() / 1000) - match.octime > 1800 && match.split === false) {
+                    if (!u.failed || u.memedone) {
+                        let embed = new discord.MessageEmbed()
+                            .setColor("#d7be26")
+                            .setImage(u.memelink)
+                            .setTimestamp();
+                        await channelid.send(embed);
+                    }
+                    else {
+                        let embed = new discord.MessageEmbed()
+                            .setDescription("Player failed to submit meme on time")
+                            .setColor("#d7be26")
+                            .setTimestamp();
+                        await channelid.send(embed);
+                        match.nonvoteable.push(match.playerids.indexOf(u.userid));
+                    }
+                }
+                if (match.split) {
+                    if (Math.floor(Date.now() / 1000) - u.time > 1800 && u.failed === false && u.split === true) {
+                        let embed = new discord.MessageEmbed()
+                            .setDescription("You failed to submit meme on time")
+                            .setColor("#d7be26")
+                            .setTimestamp();
+                        u.failed = true;
+                        if (!match.playersdone.includes(u.userid)) {
+                            match.playersdone.push(u.userid);
+                        }
+                        await db_1.updateQuals(match);
+                        await (await client.users.fetch(u.userid)).send(embed);
+                    }
+                }
+                if (match.split) {
+                    if (match.playersdone.length === match.players.length) {
+                        match.split = false;
+                        match.octime = Math.floor(Date.now() / 1000) - 1800;
+                        await db_1.updateQuals(match);
+                    }
+                }
+            }
             if (Math.floor(Date.now() / 1000) - match.octime > 1800 && match.split === false) {
-                if (!u.failed || u.memedone) {
-                    let embed = new discord.MessageEmbed()
-                        .setColor("#d7be26")
-                        .setImage(u.memelink)
-                        .setTimestamp();
-                    await channelid.send(embed);
-                }
-                else {
-                    let embed = new discord.MessageEmbed()
-                        .setDescription("Player failed to submit meme on time")
-                        .setColor("#d7be26")
-                        .setTimestamp();
-                    await channelid.send(embed);
-                }
+                let em = new discord.MessageEmbed()
+                    .setDescription("Please vote")
+                    .setColor("#d7be26")
+                    .setTimestamp();
+                channelid.send(em).then(async (msg) => {
+                    match.messageid = msg.id;
+                    for (let i = 0; i < match.playerids.length; i++) {
+                        await msg.react(utils_1.emojis[i]);
+                    }
+                    await msg.react(utils_1.emojis[6]);
+                });
+                match.votingperiod = true;
+                await db_1.updateQuals(match);
+                return;
             }
-            if (match.split) {
-                if (Math.floor(Date.now() / 1000) - u.time > 1800 && u.failed === false && u.split === true) {
-                    let embed = new discord.MessageEmbed()
-                        .setDescription("You failed to submit meme on time")
-                        .setColor("#d7be26")
-                        .setTimestamp();
-                    u.failed = true;
-                    match.octime += 1;
-                    await db_1.updateQuals(match);
-                    await (await client.users.fetch(u.userid)).send(embed);
-                }
-            }
-            if (match.split) {
-                if (match.octime === match.players.length) {
-                    match.split = false;
-                    match.octime = Math.floor(Date.now() / 1000) - 1800;
-                }
-            }
-        }
-        if (Math.floor(Date.now() / 1000) - match.octime > 1800 && match.split === false) {
-            await db_1.deleteQuals(match);
         }
     }
 }

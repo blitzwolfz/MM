@@ -1,5 +1,5 @@
 import * as discord from "discord.js"
-import {getUser} from "../misc/utils"
+import {getUser, emojis} from "../misc/utils"
 const prefix = process.env.PREFIX!
 import {activematch, qualmatch, players} from "../misc/struct"
 import { end } from "./winner"
@@ -104,9 +104,11 @@ export async function startqual(message: discord.Message, client: discord.Client
     let users:players[] = []
     var args: Array<string> = message.content.slice(prefix.length).trim().split(/ +/g)
     let x:number = 0;
+    let plyerids:Array<string> = []
+    let votearray = []
     console.log(args)
     if (args.length < 3) {
-        return message.reply("Invalid response. Command is `!start @user1 @user2 @user3 @user4 <@user5 @user6> template link`\n or `.start @user1 @user2 theme description`")
+        return message.reply("Invalid response. Command is `!startqual @user1 @user2 @user3 @user4 <@user5 @user6> template link`\n or `!startqual @user1 @user2 theme description`")
     }
     
     //console.log(args)
@@ -123,6 +125,8 @@ export async function startqual(message: discord.Message, client: discord.Client
                 failed:false
             }
             users.push(player)
+            plyerids.push(userid)
+            votearray.push([])
             x += i
         }
     }
@@ -135,8 +139,14 @@ export async function startqual(message: discord.Message, client: discord.Client
         split: false,
         channelid: message.channel.id,
         players:users,
+        playerids: plyerids,
         template:"",
+        votes:votearray,
+        nonvoteable:[],
         octime: Math.floor(Date.now() / 1000),
+        messageid:"",
+        playersdone: [],
+        votingperiod: false
 
     }
 
@@ -182,9 +192,11 @@ export async function startmodqual(message: discord.Message, client: discord.Cli
     let users:players[] = []
     var args: Array<string> = message.content.slice(prefix.length).trim().split(/ +/g)
     let x:number = 0;
+    let plyerids:Array<string> = []
+    let votearray = []
     console.log(args)
     if (args.length < 3) {
-        return message.reply("invalid response. Command is `!start @user1 @user2 @user3 @user4 <@user5 @user6> template link`\n or `.start @user1 @user2 theme description`")
+        return message.reply("invalid response. Command is `!splitqual @user1 @user2 @user3 @user4 <@user5 @user6> template link`\n or `!splitqual @user1 @user2 @user3 @user4 <@user5 @user6> theme description`")
     }
     
     //console.log(args)
@@ -201,6 +213,8 @@ export async function startmodqual(message: discord.Message, client: discord.Cli
                 failed:false
             }
             users.push(player)
+            plyerids.push(userid)
+            votearray.push([])
             x += i
         }
     }
@@ -212,10 +226,16 @@ export async function startmodqual(message: discord.Message, client: discord.Cli
     let newmatch:qualmatch = {
         _id:message.channel.id,
         split: true,
+        playerids:plyerids,
         channelid: message.channel.id,
         players:users,
         octime: 0,
+        votes:votearray,
+        nonvoteable:[],
         template:"",
+        messageid:"",
+        playersdone: [],
+        votingperiod:false
 
     }
 
@@ -273,8 +293,8 @@ export async function running(client: discord.Client):Promise<void>{
 
         if(match.votingperiod === false){
 
-            if( !(match.split) && ((Math.floor(Date.now() / 1000) - match.p2.time > 1800) && match.p2.memedone === false) 
-            && ((Math.floor(Date.now() / 1000) - match.p1.time > 1800) && match.p1.memedone === false)){
+            if( !(match.split) && ((Math.floor(Date.now() / 1000) - match.p2.time > 2400) && match.p2.memedone === false) 
+            && ((Math.floor(Date.now() / 1000) - match.p1.time > 2400) && match.p1.memedone === false)){
                 user1.send("You have failed to submit your meme")
                 user2.send("You have failed to submit your meme")
 
@@ -290,7 +310,7 @@ export async function running(client: discord.Client):Promise<void>{
                 break
             }
 
-            else if((Math.floor(Date.now() / 1000) - match.p1.time > 1800) 
+            else if((Math.floor(Date.now() / 1000) - match.p1.time > 2400) 
             && match.p1.memedone === false && match.p1.donesplit){
                 user1.send("You have failed to submit your meme, your opponet is the winner.")
 
@@ -305,7 +325,7 @@ export async function running(client: discord.Client):Promise<void>{
                 await deleteActive(match)
             }
 
-            else if((Math.floor(Date.now() / 1000) - match.p2.time > 1800) 
+            else if((Math.floor(Date.now() / 1000) - match.p2.time > 2400) 
             && match.p2.memedone === false && match.p2.donesplit){
                 console.log(Date.now() - match.p2.time)
                 user2.send("You have failed to submit your meme, your opponet is the winner.")
@@ -323,8 +343,8 @@ export async function running(client: discord.Client):Promise<void>{
 
          
             
-            else if( !(match.split) && ((Math.floor(Date.now() / 1000) - match.p2.time < 1800) && match.p2.memedone === true) 
-            && ((Math.floor(Date.now() / 1000) - match.p2.time < 1800) && match.p1.memedone === true)){
+            else if( !(match.split) && ((Math.floor(Date.now() / 1000) - match.p2.time < 2400) && match.p2.memedone === true) 
+            && ((Math.floor(Date.now() / 1000) - match.p2.time < 2400) && match.p1.memedone === true)){
                 
                 var embed1 = new discord.MessageEmbed()
                 .setImage(match.p1.memelink)
@@ -372,53 +392,81 @@ export async function qualrunning(client: discord.Client){
     let qualmatches:qualmatch[] = await getQuals()
     for(let match of qualmatches){
         let channelid = <discord.TextChannel>client.channels.cache.get(match.channelid)
-
-            for (let u of match.players){
+        if(match.votingperiod === false){
+            for (let u of match.players) {
                 console.log(u)
                 console.log(match.players.length)
-                if(Math.floor(Date.now() / 1000) - match.octime > 1800 && match.split === false){
-                    if(!u.failed || u.memedone){
+                if (Math.floor(Date.now() / 1000) - match.octime > 1800 && match.split === false) {
+                    if (!u.failed || u.memedone) {
                         let embed = new discord.MessageEmbed()
-                        .setColor("#d7be26")
-                        .setImage(u.memelink)
-                        .setTimestamp()
-                        
+                            .setColor("#d7be26")
+                            .setImage(u.memelink)
+                            .setTimestamp()
+    
                         await channelid.send(embed)
                     }
     
-                    else{
+                    else {
                         let embed = new discord.MessageEmbed()
-                        .setDescription("Player failed to submit meme on time")
-                        .setColor("#d7be26")
-                        .setTimestamp()  
+                            .setDescription("Player failed to submit meme on time")
+                            .setColor("#d7be26")
+                            .setTimestamp()
                         await channelid.send(embed)
+                        match.nonvoteable.push(match.playerids.indexOf(u.userid))
                     }
                 }
-
-                if(match.split){
-                    if(Math.floor(Date.now() / 1000) - u.time > 1800 && u.failed === false && u.split === true){
+    
+                if (match.split) {
+                    if (Math.floor(Date.now() / 1000) - u.time > 1800 && u.failed === false && u.split === true) {
                         let embed = new discord.MessageEmbed()
-                        .setDescription("You failed to submit meme on time")
-                        .setColor("#d7be26")
-                        .setTimestamp()
+                            .setDescription("You failed to submit meme on time")
+                            .setColor("#d7be26")
+                            .setTimestamp()
                         u.failed = true
-                        match.octime += 1
+                        if (!match.playersdone.includes(u.userid)) {
+                            match.playersdone.push(u.userid)
+                        }
                         await updateQuals(match)
                         await (await client.users.fetch(u.userid)).send(embed)
                     }
                 }
-
-                if(match.split){
-                    if(match.octime === match.players.length){
-                            match.split = false
-                            match.octime = Math.floor(Date.now() / 1000) - 1800
-                        }
+    
+                if (match.split) {
+                    if (match.playersdone.length === match.players.length) {
+                        match.split = false
+                        match.octime = Math.floor(Date.now() / 1000) - 1800
+                        await updateQuals(match)
+                    }
+    
                 }
             }
-            
-            if(Math.floor(Date.now() / 1000) - match.octime > 1800 && match.split === false){
-                await deleteQuals(match)
-            }    
+    
+    
+    
+            if (Math.floor(Date.now() / 1000) - match.octime > 1800 && match.split === false) {
+                //await deleteQuals(match)
+                let em = new discord.MessageEmbed()
+                    .setDescription("Please vote")
+                    .setColor("#d7be26")
+                    .setTimestamp()
+    
+                channelid.send(em).then(async msg => {
+                    match.messageid = msg.id
+                    for (let i = 0; i < match.playerids.length; i++) {
+                        await msg.react(emojis[i])
+                    }
+                    await msg.react(emojis[6])
+                })
+                match.votingperiod = true
+                await updateQuals(match)
+                return;
+            }
+
+            // else if(match.votingperiod){
+
+            // }
+        }
+    
     }
 }
 
@@ -597,16 +645,3 @@ export async function startregularsplit(message: discord.Message, client: discor
     // return matches;
 }
 
-
-// async function GetImgur(link: string){
-//     var img = await Canvas.loadImage(link)
-
-//     const attachment = new discord.Attachment(img.toBuffer(), 'welcome-image.png');
-
-//     let embed = new discord.RichEmbed()
-//     .setImage(attachment)
-//     .setTimestamp()
-
-//     return embed    
-
-// }

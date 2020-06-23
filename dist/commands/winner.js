@@ -153,22 +153,6 @@ async function qualend(client, message) {
     for (let match of matches) {
         let channelid = client.channels.cache.get(match.channelid);
         if (message.channel.id === match.channelid) {
-            for (let u of match.players) {
-                if (u.memedone) {
-                    let embed = new discord.MessageEmbed()
-                        .setColor("#d7be26")
-                        .setImage(u.memelink)
-                        .setTimestamp();
-                    await channelid.send(embed);
-                }
-                else {
-                    let embed = new discord.MessageEmbed()
-                        .setColor("#d7be26")
-                        .setDescription("Player failed to submit meme on time")
-                        .setTimestamp();
-                    await channelid.send(embed);
-                }
-            }
             await db_1.deleteQuals(match);
         }
     }

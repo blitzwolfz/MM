@@ -91,8 +91,12 @@ export async function qualsubmit(message: Discord.Message, client: Discord.Clien
                     player.memedone = true;
                     player.memelink = message.attachments.array()[0].url;
                     player.split = false
-                    match.octime += 1
-                    if(match.octime >= match.players.length){
+                    
+                    if(!match.playersdone.includes(message.author.id)){
+                        match.playersdone.push(message.author.id)
+                    }
+                    
+                    if(match.playersdone.length == match.players.length){
                         match.octime = Math.floor(Date.now() / 1000) - 1800
                         match.split = false
                     }
@@ -105,7 +109,6 @@ export async function qualsubmit(message: Discord.Message, client: Discord.Clien
                         }
                     });
                     await updateQuals(match)
-
                 }
             }
         }
