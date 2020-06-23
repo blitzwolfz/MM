@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserHelp = exports.ModHelp = void 0;
+const utils_1 = require("../misc/utils");
 exports.ModHelp = {
     title: "Mod help menu",
     color: "#d7be26",
@@ -67,6 +68,10 @@ exports.UserHelp = {
         {
             name: '`!create`',
             value: `This will let you create a profile.\nIf you participate in a match,\nan account will automatically be made.`
+        },
+        {
+            name: 'Voting in qualifiers',
+            value: `When voting in qualifiers, and you used up all 3 votes,\nclick on the ${utils_1.emojis[6]} to reset your votes`
         },
     ],
     timestamp: new Date()

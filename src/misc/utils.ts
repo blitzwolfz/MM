@@ -42,3 +42,13 @@ export function hasthreevotes(arr:Array<Array<string>>, search:string) {
   });
   return x++;
 }
+
+export function removethreevotes(arr:Array<Array<string>>, search:string){
+  arr.some((row:Array<string>) => {
+    if (row.includes(search)){
+      row.pop()
+    }
+  });
+
+  return arr;
+}

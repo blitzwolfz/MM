@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
+exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
 async function getUser(mention) {
     const matches = mention.match(/^<@!?(\d+)>$/);
     if (!matches)
@@ -27,3 +27,12 @@ function hasthreevotes(arr, search) {
     return x++;
 }
 exports.hasthreevotes = hasthreevotes;
+function removethreevotes(arr, search) {
+    arr.some((row) => {
+        if (row.includes(search)) {
+            row.pop();
+        }
+    });
+    return arr;
+}
+exports.removethreevotes = removethreevotes;

@@ -108,7 +108,7 @@ async function startqual(message, client) {
                 memedone: false,
                 memelink: "",
                 time: 0,
-                split: true,
+                split: false,
                 failed: false
             };
             users.push(player);
@@ -128,11 +128,10 @@ async function startqual(message, client) {
         playerids: plyerids,
         template: "",
         votes: votearray,
-        nonvoteable: [],
         octime: Math.floor(Date.now() / 1000),
-        messageid: "",
         playersdone: [],
-        votingperiod: false
+        votingperiod: false,
+        votetime: 0
     };
     let embed = new discord.MessageEmbed()
         .setTitle(`Qualifiying match`)
@@ -195,11 +194,10 @@ async function startmodqual(message, client) {
         players: users,
         octime: 0,
         votes: votearray,
-        nonvoteable: [],
         template: "",
-        messageid: "",
         playersdone: [],
-        votingperiod: false
+        votingperiod: false,
+        votetime: 0
     };
     let embed = new discord.MessageEmbed()
         .setTitle(`Qualifiying match`)
@@ -301,59 +299,60 @@ async function qualrunning(client) {
                 console.log(u);
                 console.log(match.players.length);
                 if (Math.floor(Date.now() / 1000) - match.octime > 1800 && match.split === false) {
-                    if (!u.failed || u.memedone) {
-                        let embed = new discord.MessageEmbed()
-                            .setColor("#d7be26")
-                            .setImage(u.memelink)
-                            .setTimestamp();
-                        await channelid.send(embed);
+                    for (let x of match.players) {
+                        if (x.memedone) {
+                            let embed = new discord.MessageEmbed()
+                                .setColor("#d7be26")
+                                .setImage(u.memelink)
+                                .setTimestamp();
+                            if (!match.playersdone.includes(u.userid)) {
+                                match.playersdone.push(u.userid);
+                            }
+                            await channelid.send(embed);
+                        }
+                        else {
+                            let embed2 = new discord.MessageEmbed()
+                                .setDescription("Player failed to submit meme on time")
+                                .setColor("#d7be26")
+                                .setTimestamp();
+                            await channelid.send(embed2);
+                        }
                     }
-                    else {
-                        let embed = new discord.MessageEmbed()
-                            .setDescription("Player failed to submit meme on time")
-                            .setColor("#d7be26")
-                            .setTimestamp();
-                        await channelid.send(embed);
-                        match.nonvoteable.push(match.playerids.indexOf(u.userid));
-                    }
+                    let em = new discord.MessageEmbed()
+                        .setDescription("Please vote")
+                        .setColor("#d7be26")
+                        .setTimestamp();
+                    channelid.send(em).then(async (msg) => {
+                        for (let i = 0; i < match.playerids.length; i++) {
+                            await msg.react(utils_1.emojis[i]);
+                        }
+                        await msg.react(utils_1.emojis[6]);
+                    });
+                    match.votingperiod = true;
+                    await db_1.updateQuals(match);
+                    return;
                 }
                 if (match.split) {
-                    if (Math.floor(Date.now() / 1000) - u.time > 1800 && u.failed === false && u.split === true) {
-                        let embed = new discord.MessageEmbed()
+                    if (Math.floor(Date.now() / 1000) - u.time > 1800 && u.split === true) {
+                        let embed3 = new discord.MessageEmbed()
                             .setDescription("You failed to submit meme on time")
                             .setColor("#d7be26")
                             .setTimestamp();
-                        u.failed = true;
-                        if (!match.playersdone.includes(u.userid)) {
-                            match.playersdone.push(u.userid);
-                        }
                         await db_1.updateQuals(match);
-                        await (await client.users.fetch(u.userid)).send(embed);
+                        await (await client.users.fetch(u.userid)).send(embed3);
                     }
-                }
-                if (match.split) {
                     if (match.playersdone.length === match.players.length) {
                         match.split = false;
-                        match.octime = Math.floor(Date.now() / 1000) - 1800;
+                        match.votingperiod = true;
+                        match.votetime = Math.floor(Date.now() / 1000);
                         await db_1.updateQuals(match);
                     }
                 }
             }
-            if (Math.floor(Date.now() / 1000) - match.octime > 1800 && match.split === false) {
-                let em = new discord.MessageEmbed()
-                    .setDescription("Please vote")
-                    .setColor("#d7be26")
-                    .setTimestamp();
-                channelid.send(em).then(async (msg) => {
-                    match.messageid = msg.id;
-                    for (let i = 0; i < match.playerids.length; i++) {
-                        await msg.react(utils_1.emojis[i]);
-                    }
-                    await msg.react(utils_1.emojis[6]);
-                });
-                match.votingperiod = true;
-                await db_1.updateQuals(match);
-                return;
+            if (match.votingperiod) {
+                if ((Math.floor(Date.now() / 1000) - match.votetime > 7200) || match.playersdone.length <= 2) {
+                    await winner_1.qualend(client, channelid.id);
+                }
             }
         }
     }

@@ -33,10 +33,9 @@ export interface qualmatch {
     template: string;
     split: boolean;
     votes: Array<Array<string>>;
-    nonvoteable: Array<number>;
     playersdone: Array<string>;
-    messageid: string;
     votingperiod: boolean;
+    votetime: number;
 }
 export interface players {
     userid: string;

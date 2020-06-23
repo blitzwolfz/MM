@@ -5,7 +5,7 @@ import {submit, qualsubmit} from "./commands/submit"
 import { start, running, qualrunning, startqual, startmodqual, splitqual, startregularsplit, splitregular } from "./commands/start";
 import { endmatch, qualend } from "./commands/winner";
 import { vs } from "./commands/card";
-import { getUser, hasthreevotes, emojis} from "./misc/utils";
+import { getUser, hasthreevotes, emojis, removethreevotes} from "./misc/utils";
 import { ModHelp, UserHelp } from "./commands/help";
 import { connectToDB, getQuals, getActive, updateActive, updateQuals} from "./misc/db";
 import { template, approvetemplate } from "./commands/template";
@@ -67,7 +67,7 @@ client.on('ready', async () => {
 
   await running(client)
   await qualrunning(client)
-  client.user!.setActivity(`Meme Mania Season 0`);
+  client.user!.setActivity(`We da best in the game`);
   // client.user!.setPresence({ activity: { name: "Testing", type: "CUSTOM_STATUS" }, status: "online" })
   //console.log(await getActive())
 
@@ -187,14 +187,29 @@ client.on("messageReactionAdd", async function(messageReaction, user){
       
       if (emojis.includes(messageReaction.emoji.name)){
         let i = emojis.indexOf(messageReaction.emoji.name)
-        if(match.nonvoteable.includes(i)){
+        console.log(messageReaction.emoji.name, emojis[6])
+
+        if(messageReaction.emoji.name === emojis[6]){
+          match.votes = removethreevotes(match.votes, user.id)
+          await updateQuals(match)
+          await messageReaction.users.remove(user.id)
+          return user.send("Your votes have been reset")
+        }
+
+        if(!match.playersdone.includes(match.playerids[i])){
           await messageReaction.users.remove(user.id)
           return user.send("You can't for a non meme")
+        }
+
+        else if(match.votes[i].includes(user.id)){
+          await messageReaction.users.remove(user.id)
+          return user.send("You can't for a meme twice. Hit the recycle emote to reset your votes")
         }
         else{
           match.votes[i].push(user.id)
           await messageReaction.users.remove(user.id)
           await updateQuals(match)
+          return user.send("You vote has been counted.");
         }
       }
 
@@ -294,7 +309,8 @@ client.on("message", async message => {
 
   else if(command === "qualend"){
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
-    await qualend(client, message)
+    
+    await qualend(client, message.channel.id)
   }
 
   else if(command === "end"){

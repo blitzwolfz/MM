@@ -87,28 +87,33 @@ export async function qualsubmit(message: Discord.Message, client: Discord.Clien
     else{
         for (const match of matches){
             for(let player of match.players){
-                if(player.userid === message.author.id){
-                    player.memedone = true;
-                    player.memelink = message.attachments.array()[0].url;
-                    player.split = false
-                    
-                    if(!match.playersdone.includes(message.author.id)){
-                        match.playersdone.push(message.author.id)
-                    }
-                    
-                    if(match.playersdone.length == match.players.length){
-                        match.octime = Math.floor(Date.now() / 1000) - 1800
-                        match.split = false
-                    }
-                    await message.reply("You meme has been attached!")
-                    await (<Discord.TextChannel>client.channels.cache.get(match.channelid)).send({
-                        embed:{
-                            description: `<@${message.author.id}> has submitted their meme`,
-                            color:"#d7be26",
-                            timestamp: new Date()
+                if(player.split === true || match.split === false){
+                    if(player.userid === message.author.id){
+                        player.memedone = true;
+                        player.memelink = message.attachments.array()[0].url;
+                        player.split = false
+                        
+                        if(!match.playersdone.includes(message.author.id)){
+                            match.playersdone.push(message.author.id)
                         }
-                    });
-                    await updateQuals(match)
+                        
+                        // if(match.playersdone.length == match.players.length){
+                        //     match.split = false
+                        //     match.votingperiod = true
+                        //     match.votetime = Math.floor(Date.now() / 1000)
+                        // }
+                        await message.reply("You meme has been attached!")
+                        await (<Discord.TextChannel>client.channels.cache.get(match.channelid)).send({
+                            embed:{
+                                description: `<@${message.author.id}> has submitted their meme`,
+                                color:"#d7be26",
+                                timestamp: new Date()
+                            }
+                        });
+                        player.memedone = true
+                        await updateQuals(match)
+                        return;
+                    }
                 }
             }
         }
