@@ -3,9 +3,11 @@ export interface activematch{
     _id: string;
     channelid:string;
     messageID:string;
+    split:boolean;
     p1:{
         userid: string;
         memedone: boolean;
+        donesplit:boolean;
         time: number;
         memelink: string;
         votes: number;
@@ -14,6 +16,7 @@ export interface activematch{
     p2:{
         userid: string;
         memedone: boolean;
+        donesplit:boolean;
         time: number;
         memelink: string;
         votes: number;

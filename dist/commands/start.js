@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.splitqual = exports.qualrunning = exports.running = exports.startmodqual = exports.startqual = exports.start = void 0;
+exports.startregularsplit = exports.splitregular = exports.splitqual = exports.qualrunning = exports.running = exports.startmodqual = exports.startqual = exports.start = void 0;
 const discord = __importStar(require("discord.js"));
 const utils_1 = require("../misc/utils");
 const prefix = process.env.PREFIX;
@@ -46,10 +46,12 @@ async function start(message, client) {
     let newmatch = {
         _id: message.channel.id,
         channelid: message.channel.id,
+        split: false,
         messageID: "",
         p1: {
             userid: user1.id,
             memedone: false,
+            donesplit: true,
             time: Math.floor(Date.now() / 1000),
             memelink: "",
             votes: 0,
@@ -58,6 +60,7 @@ async function start(message, client) {
         p2: {
             userid: user2.id,
             memedone: false,
+            donesplit: true,
             time: Math.floor(Date.now() / 1000),
             memelink: "",
             votes: 0,
@@ -199,7 +202,8 @@ async function running(client) {
         let user1 = (await client.users.fetch(match.p1.userid));
         let user2 = (await client.users.fetch(match.p2.userid));
         if (match.votingperiod === false) {
-            if (((Math.floor(Date.now() / 1000) - match.p2.time > 1800) && match.p2.memedone === false) && ((Math.floor(Date.now() / 1000) - match.p1.time > 1800) && match.p1.memedone === false)) {
+            if (!(match.split) && ((Math.floor(Date.now() / 1000) - match.p2.time > 1800) && match.p2.memedone === false)
+                && ((Math.floor(Date.now() / 1000) - match.p1.time > 1800) && match.p1.memedone === false)) {
                 user1.send("You have failed to submit your meme");
                 user2.send("You have failed to submit your meme");
                 let embed = new discord.MessageEmbed()
@@ -211,7 +215,8 @@ async function running(client) {
                 await db_1.deleteActive(match);
                 break;
             }
-            else if ((Math.floor(Date.now() / 1000) - match.p1.time > 1800) && match.p1.memedone === false) {
+            else if ((Math.floor(Date.now() / 1000) - match.p1.time > 1800)
+                && match.p1.memedone === false && match.p1.donesplit) {
                 user1.send("You have failed to submit your meme, your opponet is the winner.");
                 let embed = new discord.MessageEmbed()
                     .setColor("#d7be26")
@@ -222,7 +227,8 @@ async function running(client) {
                 await db_1.deleteActive(match);
                 break;
             }
-            else if ((Math.floor(Date.now() / 1000) - match.p2.time > 1800) && match.p2.memedone === false) {
+            else if ((Math.floor(Date.now() / 1000) - match.p2.time > 1800)
+                && match.p2.memedone === false && match.p2.donesplit) {
                 console.log(Date.now() - match.p2.time);
                 user2.send("You have failed to submit your meme, your opponet is the winner.");
                 let embed = new discord.MessageEmbed()
@@ -234,7 +240,8 @@ async function running(client) {
                 await db_1.deleteActive(match);
                 break;
             }
-            else if (((Math.floor(Date.now() / 1000) - match.p2.time < 1800) && match.p2.memedone === true) && ((Math.floor(Date.now() / 1000) - match.p2.time < 1800) && match.p1.memedone === true)) {
+            else if (!(match.split) && ((Math.floor(Date.now() / 1000) - match.p2.time < 1800) && match.p2.memedone === true)
+                && ((Math.floor(Date.now() / 1000) - match.p2.time < 1800) && match.p1.memedone === true)) {
                 var embed1 = new discord.MessageEmbed()
                     .setImage(match.p1.memelink)
                     .setColor("#d7be26")
@@ -348,3 +355,91 @@ async function splitqual(client, message) {
     }
 }
 exports.splitqual = splitqual;
+async function splitregular(message, client) {
+    let user = await (client.users.fetch(message.mentions.users.first().id));
+    let matches = await db_1.getActive();
+    for (let match of matches) {
+        if (match.split) {
+            if (match.channelid === message.channel.id) {
+                if (user.id === match.p1.userid) {
+                    if (!(match.p1.donesplit)) {
+                        match.p1.donesplit = true;
+                        match.p1.time = Math.floor(Date.now() / 1000);
+                        await db_1.updateActive(match);
+                    }
+                }
+                else if (user.id === match.p2.userid) {
+                    if (!(match.p2.donesplit)) {
+                        match.p2.donesplit = true;
+                        match.p2.time = Math.floor(Date.now() / 1000);
+                        await db_1.updateActive(match);
+                    }
+                }
+            }
+        }
+    }
+}
+exports.splitregular = splitregular;
+async function startregularsplit(message, client) {
+    let users = [];
+    var args = message.content.slice(prefix.length).trim().split(/ +/g);
+    if (args.length < 3) {
+        return message.reply("invalid response. Command is `!start @user1 @user2 template link`\n or `!start @user1 @user2 theme description`");
+    }
+    for (let i = 0; i < args.length; i++) {
+        let userid = await utils_1.getUser(args[i]);
+        if (userid) {
+            users.push(userid);
+        }
+    }
+    let user1 = (await client.users.fetch(users[0]));
+    let user2 = (await client.users.fetch(users[1]));
+    user_1.createAtUsermatch(user1);
+    user_1.createAtUsermatch(user2);
+    let newmatch = {
+        _id: message.channel.id,
+        channelid: message.channel.id,
+        split: true,
+        messageID: "",
+        p1: {
+            userid: user1.id,
+            memedone: false,
+            donesplit: false,
+            time: Math.floor(Date.now() / 1000),
+            memelink: "",
+            votes: 0,
+            voters: [],
+        },
+        p2: {
+            userid: user2.id,
+            memedone: false,
+            donesplit: false,
+            time: Math.floor(Date.now() / 1000),
+            memelink: "",
+            votes: 0,
+            voters: [],
+        },
+        votetime: Math.floor(Date.now() / 1000),
+        votingperiod: false,
+    };
+    await card_1.vs(message, client, users);
+    let embed = new discord.MessageEmbed()
+        .setTitle(`Match between ${user1.username} and ${user2.username}`)
+        .setColor("#d7be26")
+        .setDescription(`<@${user1.id}> and <@${user2.id}> your match has been split.\nContact mods to start your portion`)
+        .setTimestamp();
+    message.channel.send({ embed });
+    if (["t", "template"].includes(args[3])) {
+        let att = new discord.MessageAttachment(message.attachments.array()[0].url);
+        await user1.send("Here is your template:");
+        await user1.send(att);
+        await user2.send("Here is your template:");
+        await user2.send(att);
+    }
+    else if (["th", "theme"].includes(args[3])) {
+        await user1.send(`Your theme is: ${args.splice(4).join(" ")}`);
+        await user2.send(`Your theme is: ${args.splice(4).join(" ")}`);
+    }
+    await db_1.insertActive(newmatch);
+}
+exports.startregularsplit = startregularsplit;

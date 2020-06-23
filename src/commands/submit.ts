@@ -22,7 +22,9 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
             if(match.p1.userid === message.author.id && !match.p1.memedone){
                 match.p1.memedone = true
                 match.p1.memelink = message.attachments.array()[0].url
-                await updateActive(match)
+                if(match.split){
+                    match.p1.donesplit = true
+                }
                 await (<Discord.TextChannel>client.channels.cache.get(match.channelid)).send({
                     embed:{
                         description: `<@${message.author.id}> has submitted their meme`,
@@ -30,13 +32,17 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
                         timestamp: new Date()
                     }
                 });
-                return message.reply("Your meme has been attached!")
+                message.reply("Your meme has been attached!")
             }
 
             if(match.p2.userid === message.author.id && !match.p2.memedone){
                 match.p2.memedone = true
                 match.p2.memelink = message.attachments.array()[0].url
-                await updateActive(match)
+
+                if(match.split){
+                    match.p2.donesplit = true
+                }
+                
                 await (<Discord.TextChannel>client.channels.cache.get(match.channelid)).send({
                     embed:{
                         description: `<@${message.author.id}> has submitted their meme`,
@@ -44,8 +50,13 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
                         timestamp: new Date()
                     }
                 });
-                return message.reply("Your meme has been attached!")
+                message.reply("Your meme has been attached!")
             }
+
+            if(match.p1.donesplit && match.p2.donesplit){
+                match.split = false
+            }
+            await updateActive(match)
         }
     }
 }

@@ -5,3 +5,5 @@ export declare function startmodqual(message: discord.Message, client: discord.C
 export declare function running(client: discord.Client): Promise<void>;
 export declare function qualrunning(client: discord.Client): Promise<void>;
 export declare function splitqual(client: discord.Client, message: discord.Message): Promise<void>;
+export declare function splitregular(message: discord.Message, client: discord.Client): Promise<void>;
+export declare function startregularsplit(message: discord.Message, client: discord.Client): Promise<discord.Message | undefined>;

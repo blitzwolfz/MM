@@ -2,7 +2,7 @@ import * as Discord from "discord.js";
 require("dotenv").config();
 import {activematch} from "./misc/struct"
 import {submit, qualsubmit} from "./commands/submit"
-import { start, running, qualrunning, startqual, startmodqual, splitqual } from "./commands/start";
+import { start, running, qualrunning, startqual, startmodqual, splitqual, startregularsplit } from "./commands/start";
 import { endmatch, qualend } from "./commands/winner";
 import { vs } from "./commands/card";
 import { getUser } from "./misc/utils";
@@ -88,22 +88,22 @@ client.on("messageReactionAdd", async function(messageReaction, user){
     for (const match of matches){
       console.log(match.p1.voters)
       console.log(match.p2.voters)
-      // if (messageReaction.partial) await messageReaction.fetch();
-      // if (messageReaction.message.partial) await messageReaction.message.fetch();
+      if (messageReaction.partial) await messageReaction.fetch();
+      if (messageReaction.message.partial) await messageReaction.message.fetch();
 
-      // if(user.id === match.p1.userid || user.id === match.p2.userid){
-      //   if(messageReaction.emoji.name === "🅱️") {
-      //     await messageReaction.message.react("🅱️")
-      //     await messageReaction.users.remove(user.id)
-      //     return await user.send("Can't vote on your own match")
-      //   }
+      if(user.id === match.p1.userid || user.id === match.p2.userid){
+        if(messageReaction.emoji.name === "🅱️") {
+          await messageReaction.message.react("🅱️")
+          await messageReaction.users.remove(user.id)
+          return await user.send("Can't vote on your own match")
+        }
 
-      //   if(messageReaction.emoji.name === "🅰️") {
-      //     await messageReaction.message.react("🅰️")
-      //     await messageReaction.users.remove(user.id)
-      //     return await user.send("Can't vote on your own match")
-      //   }
-      // }
+        if(messageReaction.emoji.name === "🅰️") {
+          await messageReaction.message.react("🅰️")
+          await messageReaction.users.remove(user.id)
+          return await user.send("Can't vote on your own match")
+        }
+      }
       
       let id = client.channels.cache.get(messageReaction.message.channel.id)?.id
 
@@ -228,8 +228,12 @@ client.on("message", async message => {
     await startqual(message, client)
   }
 
-  else if (command === "startmodqual"){
+  else if (command === "startmodqual" || command === "splitqual"){
     await startmodqual(message, client)
+  }
+
+  else if (command === "startmodmatch" || command === "splitmatch"){
+    await startregularsplit(message, client)
   }
 
   else if (command === "create"){
@@ -240,8 +244,12 @@ client.on("message", async message => {
     await stats(message, client)
   }
 
-  else if (command === "startsplit"){
+  else if (command === "startqualsplit"){
     await splitqual(client, message)
+  }
+
+  else if(command === "startsplit"){
+    await startregularsplit(message, client)
   }
 
   else if(command === "qualend"){

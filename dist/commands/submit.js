@@ -18,7 +18,9 @@ async function submit(message, client) {
             if (match.p1.userid === message.author.id && !match.p1.memedone) {
                 match.p1.memedone = true;
                 match.p1.memelink = message.attachments.array()[0].url;
-                await db_1.updateActive(match);
+                if (match.split) {
+                    match.p1.donesplit = true;
+                }
                 await client.channels.cache.get(match.channelid).send({
                     embed: {
                         description: `<@${message.author.id}> has submitted their meme`,
@@ -26,12 +28,14 @@ async function submit(message, client) {
                         timestamp: new Date()
                     }
                 });
-                return message.reply("Your meme has been attached!");
+                message.reply("Your meme has been attached!");
             }
             if (match.p2.userid === message.author.id && !match.p2.memedone) {
                 match.p2.memedone = true;
                 match.p2.memelink = message.attachments.array()[0].url;
-                await db_1.updateActive(match);
+                if (match.split) {
+                    match.p2.donesplit = true;
+                }
                 await client.channels.cache.get(match.channelid).send({
                     embed: {
                         description: `<@${message.author.id}> has submitted their meme`,
@@ -39,8 +43,12 @@ async function submit(message, client) {
                         timestamp: new Date()
                     }
                 });
-                return message.reply("Your meme has been attached!");
+                message.reply("Your meme has been attached!");
             }
+            if (match.p1.donesplit && match.p2.donesplit) {
+                match.split = false;
+            }
+            await db_1.updateActive(match);
         }
     }
 }

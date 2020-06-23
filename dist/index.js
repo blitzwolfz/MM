@@ -78,6 +78,22 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
         for (const match of matches) {
             console.log(match.p1.voters);
             console.log(match.p2.voters);
+            if (messageReaction.partial)
+                await messageReaction.fetch();
+            if (messageReaction.message.partial)
+                await messageReaction.message.fetch();
+            if (user.id === match.p1.userid || user.id === match.p2.userid) {
+                if (messageReaction.emoji.name === "🅱️") {
+                    await messageReaction.message.react("🅱️");
+                    await messageReaction.users.remove(user.id);
+                    return await user.send("Can't vote on your own match");
+                }
+                if (messageReaction.emoji.name === "🅰️") {
+                    await messageReaction.message.react("🅰️");
+                    await messageReaction.users.remove(user.id);
+                    return await user.send("Can't vote on your own match");
+                }
+            }
             let id = (_a = client.channels.cache.get(messageReaction.message.channel.id)) === null || _a === void 0 ? void 0 : _a.id;
             if (match.channelid === id) {
                 if (!match.p1.voters.includes(user.id) && !match.p2.voters.includes(user.id)) {
@@ -177,8 +193,11 @@ client.on("message", async (message) => {
     else if (command === "startqual") {
         await start_1.startqual(message, client);
     }
-    else if (command === "startmodqual") {
+    else if (command === "startmodqual" || command === "splitqual") {
         await start_1.startmodqual(message, client);
+    }
+    else if (command === "startmodmatch" || command === "splitmatch") {
+        await start_1.startregularsplit(message, client);
     }
     else if (command === "create") {
         await user_1.createrUser(message);
@@ -186,8 +205,11 @@ client.on("message", async (message) => {
     else if (command === "stats") {
         await user_1.stats(message, client);
     }
-    else if (command === "startsplit") {
+    else if (command === "startqualsplit") {
         await start_1.splitqual(client, message);
+    }
+    else if (command === "startsplit") {
+        await start_1.startregularsplit(message, client);
     }
     else if (command === "qualend") {
         if (!message.member.roles.cache.has('719936221572235295'))
