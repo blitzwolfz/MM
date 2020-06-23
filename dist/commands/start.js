@@ -97,7 +97,7 @@ async function startqual(message, client) {
     let plyerids = [];
     let votearray = [];
     console.log(args);
-    if (args.length < 3) {
+    if (args.length < 4) {
         return message.reply("Invalid response. Command is `!startqual @user1 @user2 @user3 @user4 <@user5 @user6> template link`\n or `!startqual @user1 @user2 theme description`");
     }
     for (let i = 0; i < args.length; i++) {
@@ -163,7 +163,7 @@ async function startmodqual(message, client) {
     let plyerids = [];
     let votearray = [];
     console.log(args);
-    if (args.length < 3) {
+    if (args.length < 4) {
         return message.reply("invalid response. Command is `!splitqual @user1 @user2 @user3 @user4 <@user5 @user6> template link`\n or `!splitqual @user1 @user2 @user3 @user4 <@user5 @user6> theme description`");
     }
     for (let i = 0; i < args.length; i++) {
