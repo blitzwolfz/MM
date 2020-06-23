@@ -191,12 +191,18 @@ client.on("message", async (message) => {
         await start_1.start(message, client);
     }
     else if (command === "startqual") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
         await start_1.startqual(message, client);
     }
     else if (command === "startmodqual" || command === "splitqual") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
         await start_1.startmodqual(message, client);
     }
     else if (command === "startmodmatch" || command === "splitmatch") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
         await start_1.startregularsplit(message, client);
     }
     else if (command === "create") {
@@ -205,11 +211,15 @@ client.on("message", async (message) => {
     else if (command === "stats") {
         await user_1.stats(message, client);
     }
-    else if (command === "startqualsplit") {
+    else if (command === "startsplitqual") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
         await start_1.splitqual(client, message);
     }
     else if (command === "startsplit") {
-        await start_1.startregularsplit(message, client);
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
+        await start_1.splitregular(message, client);
     }
     else if (command === "qualend") {
         if (!message.member.roles.cache.has('719936221572235295'))

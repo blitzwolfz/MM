@@ -29,6 +29,11 @@ async function submit(message, client) {
                     }
                 });
                 message.reply("Your meme has been attached!");
+                if (match.p1.donesplit && match.p2.donesplit) {
+                    match.split = false;
+                }
+                await db_1.updateActive(match);
+                return;
             }
             if (match.p2.userid === message.author.id && !match.p2.memedone) {
                 match.p2.memedone = true;
@@ -44,11 +49,12 @@ async function submit(message, client) {
                     }
                 });
                 message.reply("Your meme has been attached!");
+                if (match.p1.donesplit && match.p2.donesplit) {
+                    match.split = false;
+                }
+                await db_1.updateActive(match);
+                return;
             }
-            if (match.p1.donesplit && match.p2.donesplit) {
-                match.split = false;
-            }
-            await db_1.updateActive(match);
         }
     }
 }

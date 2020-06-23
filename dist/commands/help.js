@@ -22,12 +22,20 @@ exports.ModHelp = {
             value: `Starts a regular qualifier.\nMatch runs like a normal match where they have 30 mins to make a meme.\nJust like regular matches you can pass temp and theme flags`,
         },
         {
-            name: '`!startmodqual`',
+            name: '`!splitqual`',
             value: `Creates a split qualifier. The memes will be sent once all the players have finised their portion.`,
         },
         {
-            name: '`!startsplit @mention`',
+            name: '`!startsplitqual @mention`',
             value: `This is to start a split match for a user who is competing in qualifiers.`,
+        },
+        {
+            name: '`!splitmatch`',
+            value: `Creates a split regular match.\nThe memes will be sent once all the players have finised their portion.`,
+        },
+        {
+            name: '`!startsplit @mention`',
+            value: `This is to start a split match for a user who is competing in a regular mathc.`,
         },
         {
             name: '`!qualend`',
@@ -42,7 +50,7 @@ exports.UserHelp = {
     fields: [
         {
             name: '`!submit`',
-            value: `Pass a image/gif with the message or it will not be submitted :)`,
+            value: `Pass a image/gif with the message or it will not be submitted :)\nNote this command works regardless of split or unsplit match`,
         },
         {
             name: '`!qualsubmit`',
@@ -53,12 +61,12 @@ exports.UserHelp = {
             value: `This will let you submit templates`,
         },
         {
-            name: '`!stats',
+            name: '`!stats`',
             value: `This will let you see your user stats`
         },
         {
-            name: '`!create',
-            value: `This will let you create a profile.\nIf you participate in a match, an account.\nAn account will automatically be made.`
+            name: '`!create`',
+            value: `This will let you create a profile.\nIf you participate in a match,\nan account will automatically be made.`
         },
     ],
     timestamp: new Date()

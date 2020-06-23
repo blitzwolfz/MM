@@ -303,7 +303,6 @@ export async function running(client: discord.Client):Promise<void>{
                 channelid.send(embed)
                 // matches.splice(matches.indexOf(match), 1)
                 await deleteActive(match)
-                break
             }
 
             else if((Math.floor(Date.now() / 1000) - match.p2.time > 1800) 
@@ -320,7 +319,6 @@ export async function running(client: discord.Client):Promise<void>{
                 channelid.send(embed)
                 // matches.splice(matches.indexOf(match), 1)
                 await deleteActive(match)
-                break
             }
 
          
@@ -477,17 +475,31 @@ export async function splitregular(message: discord.Message, client: discord.Cli
             if(match.channelid === message.channel.id){
                 if(user.id === match.p1.userid){
                     if(!(match.p1.donesplit)){
+
+                        await message.channel.send(new discord.MessageEmbed()
+                        .setDescription(`${user.username} your match has been split.\nYou have 30 mins\nto complete your memes`)
+                        .setColor("#d7be26")
+                        .setTimestamp())
+                        
                         match.p1.donesplit = true
                         match.p1.time = Math.floor(Date.now() / 1000)
                         await updateActive(match)
+                        return;
                     }
                 }
     
-                else if(user.id === match.p2.userid){
+                if(user.id === match.p2.userid){
                     if(!(match.p2.donesplit)){
+
+                        await message.channel.send(new discord.MessageEmbed()
+                        .setDescription(`${user.username} your match has been split.\nYou have 30 mins\nto complete your memes`)
+                        .setColor("#d7be26")
+                        .setTimestamp())
+
                         match.p2.donesplit = true
                         match.p2.time = Math.floor(Date.now() / 1000)
                         await updateActive(match)
+                        return;
                     }
                 }
             } 

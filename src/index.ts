@@ -2,7 +2,7 @@ import * as Discord from "discord.js";
 require("dotenv").config();
 import {activematch} from "./misc/struct"
 import {submit, qualsubmit} from "./commands/submit"
-import { start, running, qualrunning, startqual, startmodqual, splitqual, startregularsplit } from "./commands/start";
+import { start, running, qualrunning, startqual, startmodqual, splitqual, startregularsplit, splitregular } from "./commands/start";
 import { endmatch, qualend } from "./commands/winner";
 import { vs } from "./commands/card";
 import { getUser } from "./misc/utils";
@@ -225,14 +225,17 @@ client.on("message", async message => {
   }
 
   else if (command === "startqual"){
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await startqual(message, client)
   }
 
   else if (command === "startmodqual" || command === "splitqual"){
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await startmodqual(message, client)
   }
 
   else if (command === "startmodmatch" || command === "splitmatch"){
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await startregularsplit(message, client)
   }
 
@@ -244,12 +247,14 @@ client.on("message", async message => {
     await stats(message, client)
   }
 
-  else if (command === "startqualsplit"){
+  else if (command === "startsplitqual"){
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await splitqual(client, message)
   }
 
   else if(command === "startsplit"){
-    await startregularsplit(message, client)
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
+    await splitregular(message, client)
   }
 
   else if(command === "qualend"){

@@ -33,6 +33,12 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
                     }
                 });
                 message.reply("Your meme has been attached!")
+
+                if(match.p1.donesplit && match.p2.donesplit){
+                    match.split = false
+                }
+                await updateActive(match)
+                return;
             }
 
             if(match.p2.userid === message.author.id && !match.p2.memedone){
@@ -51,12 +57,13 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
                     }
                 });
                 message.reply("Your meme has been attached!")
-            }
 
-            if(match.p1.donesplit && match.p2.donesplit){
-                match.split = false
+                if(match.p1.donesplit && match.p2.donesplit){
+                    match.split = false
+                }
+                await updateActive(match)
+                return;
             }
-            await updateActive(match)
         }
     }
 }

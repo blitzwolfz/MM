@@ -225,7 +225,6 @@ async function running(client) {
                     .setTimestamp();
                 channelid.send(embed);
                 await db_1.deleteActive(match);
-                break;
             }
             else if ((Math.floor(Date.now() / 1000) - match.p2.time > 1800)
                 && match.p2.memedone === false && match.p2.donesplit) {
@@ -238,7 +237,6 @@ async function running(client) {
                     .setTimestamp();
                 channelid.send(embed);
                 await db_1.deleteActive(match);
-                break;
             }
             else if (!(match.split) && ((Math.floor(Date.now() / 1000) - match.p2.time < 1800) && match.p2.memedone === true)
                 && ((Math.floor(Date.now() / 1000) - match.p2.time < 1800) && match.p1.memedone === true)) {
@@ -363,16 +361,26 @@ async function splitregular(message, client) {
             if (match.channelid === message.channel.id) {
                 if (user.id === match.p1.userid) {
                     if (!(match.p1.donesplit)) {
+                        await message.channel.send(new discord.MessageEmbed()
+                            .setDescription(`${user.username} your match has been split.\nYou have 30 mins\nto complete your memes`)
+                            .setColor("#d7be26")
+                            .setTimestamp());
                         match.p1.donesplit = true;
                         match.p1.time = Math.floor(Date.now() / 1000);
                         await db_1.updateActive(match);
+                        return;
                     }
                 }
-                else if (user.id === match.p2.userid) {
+                if (user.id === match.p2.userid) {
                     if (!(match.p2.donesplit)) {
+                        await message.channel.send(new discord.MessageEmbed()
+                            .setDescription(`${user.username} your match has been split.\nYou have 30 mins\nto complete your memes`)
+                            .setColor("#d7be26")
+                            .setTimestamp());
                         match.p2.donesplit = true;
                         match.p2.time = Math.floor(Date.now() / 1000);
                         await db_1.updateActive(match);
+                        return;
                     }
                 }
             }
