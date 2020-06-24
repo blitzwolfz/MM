@@ -46,7 +46,7 @@ exports.ModHelp = {
     timestamp: new Date()
 };
 exports.UserHelp = {
-    title: "Mod help menu",
+    title: "User help menu",
     color: "#d7be26",
     fields: [
         {

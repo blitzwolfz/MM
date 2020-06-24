@@ -68,6 +68,7 @@ client.on('ready', async () => {
   await running(client)
   await qualrunning(client)
   client.user!.setActivity(`Meme Mania Season 0 | !help`);
+  //client.user!.setActivity(`Anyone below me has small pp`);
   // client.user!.setPresence({ activity: { name: "Testing", type: "CUSTOM_STATUS" }, status: "online" })
   //console.log(await getActive())
 

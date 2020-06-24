@@ -389,6 +389,11 @@ export async function qualrunning(client: discord.Client) {
                 console.log(match.players.length)
 
                 if (Math.floor(Date.now() / 1000) - match.octime > 1800 && match.split === false) {
+
+                    // if (match.playersdone.length <= 2) {
+                    //     return await qualend(client, channelid.id)
+                    // }
+
                     for (let x of match.players) {
                         if (x.memedone || u.failed === false) {
                             let embed = new discord.MessageEmbed()
@@ -448,14 +453,13 @@ export async function qualrunning(client: discord.Client) {
 
                 }
             }
+        }
 
-            if (match.votingperiod) {
-                //7200
-                if ((Math.floor(Date.now() / 1000) - match.votetime > 7200) || match.playersdone.length <= 2) {
-                    await qualend(client, channelid.id)
-                }
+        if (match.votingperiod) {
+            //7200
+            if ((Math.floor(Date.now() / 1000) - match.votetime > 7200) || match.playersdone.length <= 2) {
+                await qualend(client, channelid.id)
             }
-
         }
     }
 }

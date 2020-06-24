@@ -350,10 +350,10 @@ async function qualrunning(client) {
                     }
                 }
             }
-            if (match.votingperiod) {
-                if ((Math.floor(Date.now() / 1000) - match.votetime > 7200) || match.playersdone.length <= 2) {
-                    await winner_1.qualend(client, channelid.id);
-                }
+        }
+        if (match.votingperiod) {
+            if ((Math.floor(Date.now() / 1000) - match.votetime > 7200) || match.playersdone.length <= 2) {
+                await winner_1.qualend(client, channelid.id);
             }
         }
     }

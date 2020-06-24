@@ -47,7 +47,7 @@ export const ModHelp = {
 };
 
 export const UserHelp = {
-    title: "Mod help menu",
+    title: "User help menu",
     color:"#d7be26",
     fields: [
         {

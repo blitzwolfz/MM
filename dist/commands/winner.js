@@ -201,5 +201,11 @@ async function qualend(client, id) {
             }
         }
     }
+    let channel = await client.channels.fetch(id);
+    return channel.send(new discord.MessageEmbed()
+        .setTitle(`Qualifier match`)
+        .setColor("#d7be26")
+        .setDescription(`No match is running in this channel`)
+        .setTimestamp());
 }
 exports.qualend = qualend;

@@ -234,5 +234,16 @@ export async function qualend(client: discord.Client, id: string) {
             }
         }
     }
+
+    let channel = <discord.TextChannel>await client.channels.fetch(id)
+
+    return channel.send(
+        new discord.MessageEmbed()
+        .setTitle(`Qualifier match`)
+        .setColor("#d7be26")
+        .setDescription(`No match is running in this channel`)
+        .setTimestamp()
+    )
+
 }
 
