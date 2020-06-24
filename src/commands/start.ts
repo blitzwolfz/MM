@@ -275,19 +275,7 @@ export async function running(client: discord.Client): Promise<void> {
         let channelid = <discord.TextChannel>client.channels.cache.get(match.channelid)
         let user1 = (await client.users.fetch(match.p1.userid))
         let user2 = (await client.users.fetch(match.p2.userid))
-        // if((match.p2.memedone === true) && (match.p1.memedone === true)){
-        //     console.log("Hello")
-        //     let embed1 = new discord.RichEmbed()
-        //     .setImage(match.p1.memelink)
-        //     .setTimestamp()
 
-        //     let embed2 = new discord.RichEmbed()
-        //     .setImage(match.p1.memelink)
-        //     .setTimestamp()
-
-        //     channel.send(embed1)
-        //     channel.send(embed2)
-        // }
 
         if (match.votingperiod === false) {
 
@@ -484,7 +472,7 @@ export async function splitqual(client: discord.Client, message: discord.Message
                 if (u.userid === user.id && u.memedone === false && u.split === false) {
                     u.time = Math.floor(Date.now() / 1000)
                     await channelid.send(new discord.MessageEmbed()
-                        .setDescription(`${user.username} your match has been split.\nYou have 30 mins\nto complete your memes`)
+                        .setDescription(`<@${user.id}> your match has been split.\nYou have 30 mins to complete your memes\nUse ${`!qualsubmit`} to submit`)
                         .setColor("#d7be26")
                         .setTimestamp())
                     u.split = true
@@ -498,7 +486,7 @@ export async function splitqual(client: discord.Client, message: discord.Message
                 }
                 else if (u.split === true && u.userid === user.id) {
                     await channelid.send(new discord.MessageEmbed()
-                        .setDescription(`${user.username} has completed their portion`)
+                        .setDescription(`<@${user.id}> has completed their portion`)
                         .setColor("#d7be26")
                         .setTimestamp())
                     await updateQuals(match)
@@ -526,7 +514,7 @@ export async function splitregular(message: discord.Message, client: discord.Cli
                     if (!(match.p1.donesplit)) {
 
                         await message.channel.send(new discord.MessageEmbed()
-                            .setDescription(`${user.username} your match has been split.\nYou have 30 mins\nto complete your memes`)
+                            .setDescription(`<@${user.id}> your match has been split.\nYou have 40 mins to complete your memes\nUse ${`!submit`} to submit`)
                             .setColor("#d7be26")
                             .setTimestamp())
 
@@ -541,7 +529,7 @@ export async function splitregular(message: discord.Message, client: discord.Cli
                     if (!(match.p2.donesplit)) {
 
                         await message.channel.send(new discord.MessageEmbed()
-                            .setDescription(`${user.username} your match has been split.\nYou have 30 mins\nto complete your memes`)
+                            .setDescription(`<@${user.id}> your match has been split.\nYou have 40 mins to complete your memes`)
                             .setColor("#d7be26")
                             .setTimestamp())
 
@@ -613,7 +601,7 @@ export async function startregularsplit(message: discord.Message, client: discor
     let embed = new discord.MessageEmbed()
         .setTitle(`Match between ${user1.username} and ${user2.username}`)
         .setColor("#d7be26")
-        .setDescription(`<@${user1.id}> and <@${user2.id}> your match has been split.\nContact mods to start your portion`)
+        .setDescription(`<@${user1.id}> and <@${user2.id}> your match has been split.\nContact mods to start your portion\nUse ${`!submit`} to submit`)
         .setTimestamp()
 
 
