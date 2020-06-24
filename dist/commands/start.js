@@ -300,7 +300,7 @@ async function qualrunning(client) {
                 console.log(match.players.length);
                 if (Math.floor(Date.now() / 1000) - match.octime > 1800 && match.split === false) {
                     for (let x of match.players) {
-                        if (x.memedone) {
+                        if (x.memedone || u.failed === false) {
                             let embed = new discord.MessageEmbed()
                                 .setColor("#d7be26")
                                 .setImage(u.memelink)
@@ -310,7 +310,7 @@ async function qualrunning(client) {
                             }
                             await channelid.send(embed);
                         }
-                        else {
+                        else if (x.memedone === false || x.failed === true) {
                             let embed2 = new discord.MessageEmbed()
                                 .setDescription("Player failed to submit meme on time")
                                 .setColor("#d7be26")
@@ -333,11 +333,12 @@ async function qualrunning(client) {
                     return;
                 }
                 if (match.split) {
-                    if (Math.floor(Date.now() / 1000) - u.time > 1800 && u.split === true) {
+                    if (Math.floor(Date.now() / 1000) - u.time > 1800 && u.split === true && u.failed === false) {
                         let embed3 = new discord.MessageEmbed()
                             .setDescription("You failed to submit meme on time")
                             .setColor("#d7be26")
                             .setTimestamp();
+                        u.failed = true;
                         await db_1.updateQuals(match);
                         await (await client.users.fetch(u.userid)).send(embed3);
                     }
