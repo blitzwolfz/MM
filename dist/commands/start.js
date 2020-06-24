@@ -269,13 +269,13 @@ async function running(client) {
                 let embed3 = new discord.MessageEmbed()
                     .setTitle("Please vote")
                     .setColor("#d7be26")
-                    .setDescription("Vote for Meme 1 reacting with 🅰️\nMeme 2 by reacting with 🅱️");
+                    .setDescription(`Vote for Meme 1 reacting with ${utils_1.emojis[0]}\nMeme 2 by reacting with ${utils_1.emojis[1]}`);
                 await channelid.send(embed1);
                 await channelid.send(embed2);
                 await channelid.send(embed3).then(async (msg) => {
                     match.messageID = msg.id;
-                    await msg.react("🅰️");
-                    await msg.react("🅱️");
+                    await msg.react(utils_1.emojis[0]);
+                    await msg.react(utils_1.emojis[1]);
                 });
                 match.votingperiod = true;
                 match.votetime = (Math.floor(Date.now() / 1000));

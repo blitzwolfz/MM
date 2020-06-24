@@ -115,6 +115,10 @@ export async function qualsubmit(message: Discord.Message, client: Discord.Clien
                         return;
                     }
                 }
+
+                else{
+                    await message.reply("You can't submit a meme for a qualifier. If your match is split, contact a mod to start your portion!")
+                }
             }
         }
     }

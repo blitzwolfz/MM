@@ -67,7 +67,7 @@ client.on('ready', async () => {
 
   await running(client)
   await qualrunning(client)
-  client.user!.setActivity(`We da best in the game`);
+  client.user!.setActivity(`Meme Mania Season 0 | !help`);
   // client.user!.setPresence({ activity: { name: "Testing", type: "CUSTOM_STATUS" }, status: "online" })
   //console.log(await getActive())
 
@@ -94,14 +94,14 @@ client.on("messageReactionAdd", async function(messageReaction, user){
       if (messageReaction.message.partial) await messageReaction.message.fetch();
 
       if(user.id === match.p1.userid || user.id === match.p2.userid){
-        if(messageReaction.emoji.name === "🅱️") {
-          //await messageReaction.message.react("🅱️")
+        if(messageReaction.emoji.name === emojis[1]) {
+          //await messageReaction.message.react(emojis[1])
           await messageReaction.users.remove(user.id)
           return await user.send("Can't vote on your own match")
         }
 
-        if(messageReaction.emoji.name === "🅰️") {
-          await messageReaction.message.react("🅰️")
+        if(messageReaction.emoji.name === emojis[0]) {
+          await messageReaction.message.react(emojis[0])
           await messageReaction.users.remove(user.id)
           return await user.send("Can't vote on your own match")
         }
@@ -112,59 +112,59 @@ client.on("messageReactionAdd", async function(messageReaction, user){
       if(match.channelid === id){
         
         if(!match.p1.voters.includes(user.id) && !match.p2.voters.includes(user.id)){
-          if (messageReaction.emoji.name === "🅱️"){
+          if (messageReaction.emoji.name === emojis[1]){
             match.p2.votes += 1
             match.p2.voters.push(user.id)
-            await user.send("Vote counted for meme B") 
+            await user.send("Vote counted for meme 2") 
             await messageReaction.users.remove(user.id)
-            await messageReaction.message.react("🅱️")
+            await messageReaction.message.react(emojis[1])
           }
   
-          else if (messageReaction.emoji.name === "🅰️"){
+          else if (messageReaction.emoji.name === emojis[0]){
             match.p1.votes += 1
             match.p1.voters.push(user.id)
-            await user.send("Vote counted for meme A") 
+            await user.send("Vote counted for meme 1") 
             await messageReaction.users.remove(user.id)
-            await messageReaction.message.react("🅱️")
+            await messageReaction.message.react(emojis[1])
           }
         }
 
         else if(match.p1.voters.includes(user.id)){
-          if (messageReaction.emoji.name === "🅱️"){
+          if (messageReaction.emoji.name === emojis[1]){
             match.p2.votes += 1
             match.p2.voters.push(user.id)
-            await user.send("Vote counted for meme B") 
+            await user.send("Vote counted for meme 2") 
             match.p1.votes -= 1
             match.p1.voters.splice(match.p1.voters.indexOf(user.id), 1)
 
             await messageReaction.users.remove(user.id)
-            await messageReaction.message.react("🅱️")
+            await messageReaction.message.react(emojis[1])
           }
   
-          else if (messageReaction.emoji.name === "🅰️"){
+          else if (messageReaction.emoji.name === emojis[0]){
             await user.send("You can't vote on the same meme twice") 
             await messageReaction.users.remove(user.id)
-            await messageReaction.message.react("🅱️")
+            await messageReaction.message.react(emojis[0])
           }
         }
 
         else if(match.p2.voters.includes(user.id)){
-          if (messageReaction.emoji.name === "🅱️"){
+          if (messageReaction.emoji.name === emojis[1]){
             await user.send("You can't vote on the same meme twice") 
             await messageReaction.users.remove(user.id)
-            await messageReaction.message.react("🅱️")
+            await messageReaction.message.react(emojis[1])
 
           }
   
-          else if (messageReaction.emoji.name === "🅰️"){
+          else if (messageReaction.emoji.name === emojis[0]){
             match.p1.votes += 1
             match.p1.voters.push(user.id)
-            await user.send("Vote counted for meme A") 
+            await user.send("Vote counted for meme 1") 
             match.p2.votes -= 1
             match.p2.voters.splice(match.p1.voters.indexOf(user.id), 1)
 
             await messageReaction.users.remove(user.id)
-            await messageReaction.message.react("🅰️")
+            await messageReaction.message.react(emojis[0])
           }
         }
         console.log(match.p1.voters)

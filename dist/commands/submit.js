@@ -94,6 +94,9 @@ async function qualsubmit(message, client) {
                         return;
                     }
                 }
+                else {
+                    await message.reply("You can't submit a meme for a qualifier. If your match is split, contact a mod to start your portion!");
+                }
             }
         }
     }
