@@ -179,8 +179,7 @@ export async function qualend(client: discord.Client, id: string) {
     let matches: qualmatch[] = await getQuals()
 
     for (const match of matches) {
-        
-        
+
         if (id === match.channelid) {
             let channel = <discord.TextChannel>await client.channels.fetch(match.channelid)
 
@@ -203,37 +202,36 @@ export async function qualend(client: discord.Client, id: string) {
                         }
                     });
                 }
-            }
 
-            else {
-                const fields = [];
-                for (let i = 0; i < match.votes.length; i++)
-                    fields.push({
-                        name: `${await (await client.users.fetch(match.players[i].userid)).username}`,
-                        value: `${match.votes[i].length > 0 ? `Came in with ${match.votes[i].length} vote(s)` : `Failed to submit meme`}`
+                else {
+                    const fields = [];
+                    for (let i = 0; i < match.votes.length; i++)
+                        fields.push({
+                            name: `${await (await client.users.fetch(match.players[i].userid)).username}`,
+                            value: `${match.votes[i].length > 0 ? `Came in with ${match.votes[i].length} vote(s)` : `Failed to submit meme`}`
+                        });
+                    await deleteQuals(match)
+                    return channel.send({
+                        embed: {
+                            title: `Votes for this qualifier are in!`,
+                            fields,
+                            color: "#d7be26",
+                            timestamp: new Date()
+                        }
                     });
-                await deleteQuals(match)
-                return channel.send({
-                    embed: {
-                        title: `Votes for this qualifier are in!`,
-                        fields,
-                        color: "#d7be26",
-                        timestamp: new Date()
-                    }
-                });
+                }
             }
-        }
 
-
-        else {
-            let channel = <discord.TextChannel>await client.channels.fetch(match.channelid)
-            let em = new discord.MessageEmbed()
-                .setTitle(`Qualifier match`)
-                .setColor("#d7be26")
-                .setDescription(`Match has ended early before voting period.\nPlease contact mod for information`)
-                .setTimestamp()
-            await deleteQuals(match)
-            return channel.send(em)
+            else if(!match.votingperiod){
+                let channel = <discord.TextChannel>await client.channels.fetch(match.channelid)
+                let em = new discord.MessageEmbed()
+                    .setTitle(`Qualifier match`)
+                    .setColor("#d7be26")
+                    .setDescription(`Match has ended early before voting period.\nPlease contact mod for information`)
+                    .setTimestamp()
+                await deleteQuals(match)
+                return channel.send(em)
+            }
         }
     }
 }
