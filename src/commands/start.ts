@@ -384,7 +384,7 @@ export async function qualrunning(client: discord.Client) {
         if (match.votingperiod === false) {
 
             for (let u of match.players) {
-                
+
                 if (match.playersdone.length === match.players.length) {
                     match.split = false
                     match.votingperiod = true
@@ -396,7 +396,7 @@ export async function qualrunning(client: discord.Client) {
                 console.log(match.players.length)
 
 
-                if (Math.floor(Date.now() / 1000) - match.octime > 1800 && match.split === false) {
+                if (Math.floor(Date.now() / 1000) - match.octime > 1800  || match.playersdone.length === match.players.length && match.split === false) {
 
                     // if (match.playersdone.length <= 2) {
                     //     return await qualend(client, channelid.id)
@@ -448,6 +448,7 @@ export async function qualrunning(client: discord.Client) {
                             .setColor("#d7be26")
                             .setTimestamp()
                         u.failed = true
+                        match.playersdone.push(u.userid)
                         await updateQuals(match)
                         await (await client.users.fetch(u.userid)).send(embed3)
                     }

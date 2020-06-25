@@ -304,7 +304,7 @@ async function qualrunning(client) {
                 }
                 console.log(u);
                 console.log(match.players.length);
-                if (Math.floor(Date.now() / 1000) - match.octime > 1800 && match.split === false) {
+                if (Math.floor(Date.now() / 1000) - match.octime > 1800 || match.playersdone.length === match.players.length && match.split === false) {
                     for (let x of match.players) {
                         if (x.memedone || x.failed === false) {
                             let embed = new discord.MessageEmbed()
@@ -345,6 +345,7 @@ async function qualrunning(client) {
                             .setColor("#d7be26")
                             .setTimestamp();
                         u.failed = true;
+                        match.playersdone.push(u.userid);
                         await db_1.updateQuals(match);
                         await (await client.users.fetch(u.userid)).send(embed3);
                     }
