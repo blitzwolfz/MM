@@ -154,7 +154,6 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
         for (const match of quals) {
             let id = (_b = client.channels.cache.get(messageReaction.message.channel.id)) === null || _b === void 0 ? void 0 : _b.id;
             if (match.channelid === id) {
-                utils_1.hasthreevotes(match.votes, user.id);
                 if (messageReaction.partial)
                     await messageReaction.fetch();
                 if (messageReaction.message.partial)
@@ -167,6 +166,14 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
                         await db_1.updateQuals(match);
                         await messageReaction.users.remove(user.id);
                         return user.send("Your votes have been reset");
+                    }
+                    if (utils_1.hasthreevotes(match.votes, user.id)) {
+                        await messageReaction.users.remove(user.id);
+                        return user.send("You used up all your votes. Please hit the recycle emote to reset your votes");
+                    }
+                    if (match.playerids.includes(user.id)) {
+                        await messageReaction.users.remove(user.id);
+                        return user.send("You can't vote in your own qualifers");
                     }
                     if (!match.playersdone.includes(match.playerids[i])) {
                         await messageReaction.users.remove(user.id);

@@ -24,7 +24,10 @@ function hasthreevotes(arr, search) {
         if (row.includes(search))
             x++;
     });
-    return x++;
+    if (x >= 3) {
+        return true;
+    }
+    return false;
 }
 exports.hasthreevotes = hasthreevotes;
 function removethreevotes(arr, search) {

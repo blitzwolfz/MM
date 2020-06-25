@@ -300,13 +300,13 @@ async function qualrunning(client) {
                 console.log(match.players.length);
                 if (Math.floor(Date.now() / 1000) - match.octime > 1800 && match.split === false) {
                     for (let x of match.players) {
-                        if (x.memedone || u.failed === false) {
+                        if (x.memedone || x.failed === false) {
                             let embed = new discord.MessageEmbed()
                                 .setColor("#d7be26")
-                                .setImage(u.memelink)
+                                .setImage(x.memelink)
                                 .setTimestamp();
-                            if (!match.playersdone.includes(u.userid)) {
-                                match.playersdone.push(u.userid);
+                            if (!match.playersdone.includes(x.userid)) {
+                                match.playersdone.push(x.userid);
                             }
                             await channelid.send(embed);
                         }
@@ -319,7 +319,7 @@ async function qualrunning(client) {
                         }
                     }
                     let em = new discord.MessageEmbed()
-                        .setDescription("Please vote")
+                        .setDescription("Please vote by clicking the number emotes.\nHit the recycle emote to reset votes")
                         .setColor("#d7be26")
                         .setTimestamp();
                     channelid.send(em).then(async (msg) => {

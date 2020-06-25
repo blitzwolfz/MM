@@ -40,7 +40,12 @@ export function hasthreevotes(arr:Array<Array<string>>, search:string) {
   arr.some((row:Array<string>) => {
     if (row.includes(search)) x++;
   });
-  return x++;
+
+  if(x >= 3){
+    return true;
+  }
+  return false;
+  
 }
 
 export function removethreevotes(arr:Array<Array<string>>, search:string){
