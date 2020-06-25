@@ -94,23 +94,24 @@ client.on("messageReactionAdd", async function(messageReaction, user){
       if (messageReaction.partial) await messageReaction.fetch();
       if (messageReaction.message.partial) await messageReaction.message.fetch();
 
-      if(user.id === match.p1.userid || user.id === match.p2.userid){
-        if(messageReaction.emoji.name === emojis[1]) {
-          //await messageReaction.message.react(emojis[1])
-          await messageReaction.users.remove(user.id)
-          return await user.send("Can't vote on your own match")
-        }
-
-        if(messageReaction.emoji.name === emojis[0]) {
-          await messageReaction.message.react(emojis[0])
-          await messageReaction.users.remove(user.id)
-          return await user.send("Can't vote on your own match")
-        }
-      }
       
       let id = client.channels.cache.get(messageReaction.message.channel.id)?.id
 
       if(match.channelid === id){
+
+        if(user.id === match.p1.userid || user.id === match.p2.userid){
+          if(messageReaction.emoji.name === emojis[1]) {
+            //await messageReaction.message.react(emojis[1])
+            await messageReaction.users.remove(user.id)
+            return await user.send("Can't vote on your own match")
+          }
+  
+          if(messageReaction.emoji.name === emojis[0]) {
+            await messageReaction.message.react(emojis[0])
+            await messageReaction.users.remove(user.id)
+            return await user.send("Can't vote on your own match")
+          }
+        }
         
         if(!match.p1.voters.includes(user.id) && !match.p2.voters.includes(user.id)){
           if (messageReaction.emoji.name === emojis[1]){
