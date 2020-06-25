@@ -59,6 +59,11 @@ export async function getQuals(): Promise<qualmatch[]>{
     return await client.db(process.env.DBNAME).collection("quals").find({}, {projection:{ _id: 0 }}).toArray();
 }
 
+export async function getSingularQuals(_id:string): Promise<qualmatch>{
+    console.log("Getting Quals!")
+    return await client.db(process.env.DBNAME).collection("quals").findOne({_id}, {projection:{ _id: 0 }})!;
+}
+
 export async function addProfile(User:user): Promise<void> {
     await client.db(process.env.DBNAME).collection("users").insertOne(User)!;
 }

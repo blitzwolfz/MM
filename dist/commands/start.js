@@ -27,6 +27,7 @@ const winner_1 = require("./winner");
 const card_1 = require("./card");
 const db_1 = require("../misc/db");
 const user_1 = require("./user");
+const qualrunn_1 = require("./qualrunn");
 async function start(message, client) {
     let users = [];
     var args = message.content.slice(prefix.length).trim().split(/ +/g);
@@ -293,76 +294,7 @@ exports.running = running;
 async function qualrunning(client) {
     let qualmatches = await db_1.getQuals();
     for (let match of qualmatches) {
-        let channelid = client.channels.cache.get(match.channelid);
-        if (match.votingperiod === false) {
-            for (let u of match.players) {
-                if (match.playersdone.length === match.players.length) {
-                    match.split = false;
-                    match.votingperiod = true;
-                    match.votetime = Math.floor(Date.now() / 1000);
-                    await db_1.updateQuals(match);
-                }
-                console.log(u);
-                console.log(match.players.length);
-                if (Math.floor(Date.now() / 1000) - match.octime > 1800 || match.playersdone.length === match.players.length && match.split === false) {
-                    for (let x of match.players) {
-                        if (x.memedone || x.failed === false) {
-                            let embed = new discord.MessageEmbed()
-                                .setColor("#d7be26")
-                                .setImage(x.memelink)
-                                .setTimestamp();
-                            if (!match.playersdone.includes(x.userid)) {
-                                match.playersdone.push(x.userid);
-                            }
-                            await channelid.send(embed);
-                        }
-                        else if (x.memedone === false || x.failed === true) {
-                            let embed2 = new discord.MessageEmbed()
-                                .setDescription("Player failed to submit meme on time")
-                                .setColor("#d7be26")
-                                .setTimestamp();
-                            await channelid.send(embed2);
-                        }
-                    }
-                    let em = new discord.MessageEmbed()
-                        .setDescription("Please vote by clicking the number emotes.\nHit the recycle emote to reset votes")
-                        .setColor("#d7be26")
-                        .setTimestamp();
-                    channelid.send(em).then(async (msg) => {
-                        for (let i = 0; i < match.playerids.length; i++) {
-                            await msg.react(utils_1.emojis[i]);
-                        }
-                        await msg.react(utils_1.emojis[6]);
-                    });
-                    match.votingperiod = true;
-                    await db_1.updateQuals(match);
-                    return;
-                }
-                if (match.split) {
-                    if (Math.floor(Date.now() / 1000) - u.time > 1800 && u.split === true && u.failed === false) {
-                        let embed3 = new discord.MessageEmbed()
-                            .setDescription("You failed to submit meme on time")
-                            .setColor("#d7be26")
-                            .setTimestamp();
-                        u.failed = true;
-                        match.playersdone.push(u.userid);
-                        await db_1.updateQuals(match);
-                        await (await client.users.fetch(u.userid)).send(embed3);
-                    }
-                    if (match.playersdone.length === match.players.length) {
-                        match.split = false;
-                        match.votingperiod = true;
-                        match.votetime = Math.floor(Date.now() / 1000);
-                        await db_1.updateQuals(match);
-                    }
-                }
-            }
-        }
-        if (match.votingperiod) {
-            if ((Math.floor(Date.now() / 1000) - match.votetime > 7200) || match.playersdone.length <= 2) {
-                await winner_1.qualend(client, channelid.id);
-            }
-        }
+        await qualrunn_1.qualrunn(match, match.channelid, client);
     }
 }
 exports.qualrunning = qualrunning;

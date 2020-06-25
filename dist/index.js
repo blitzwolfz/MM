@@ -66,7 +66,7 @@ client.on('ready', async () => {
     }
     await start_1.running(client);
     await start_1.qualrunning(client);
-    client.user.setActivity(`Meme Mania Season 0 | !help`);
+    client.user.setActivity(`Anyone below me has small pp`);
 });
 client.on("messageReactionAdd", async function (messageReaction, user) {
     var _a, _b;

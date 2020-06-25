@@ -1,8 +1,8 @@
 import * as discord from "discord.js"
 // import {getUser} from "../misc/utils"
 // import {prefix} from "../misc/config.json"
-import { activematch, qualmatch } from "../misc/struct"
-import { deleteActive, deleteQuals, getQuals, getActive, updateProfile } from "../misc/db"
+import { activematch} from "../misc/struct"
+import { deleteActive, deleteQuals, getActive, updateProfile, getSingularQuals } from "../misc/db"
 
 export async function endmatch(message: discord.Message, client: discord.Client) {
     let matches: activematch[] = await getActive()
@@ -176,74 +176,143 @@ export async function end(client: discord.Client) {
 
 export async function qualend(client: discord.Client, id: string) {
 
-    let matches: qualmatch[] = await getQuals()
+    const match = await getSingularQuals(id)
+    let channel = <discord.TextChannel>client.channels.cache.get(id)
 
-    for (const match of matches) {
+    if (match.votingperiod) {
 
-        if (id === match.channelid) {
-            let channel = <discord.TextChannel>await client.channels.fetch(match.channelid)
+        if (match.playersdone.length <= 2 && match.playersdone.length >= 1) {
 
-            if (match.votingperiod) {
-
-                if (match.playersdone.length <= 2) {
-                    const fields = [];
-                    for (let i = 0; i < match.votes.length; i++)
-                        fields.push({
-                            name: `${await (await client.users.fetch(match.players[i].userid)).username}`,
-                            value: `Has automatically won!`
-                        });
-                    await deleteQuals(match)
-                    return channel.send({
-                        embed: {
-                            title: `Qualifier has ended`,
-                            fields,
-                            color: "#d7be26",
-                            timestamp: new Date()
-                        }
-                    });
+            let fields = [];
+            for (let i = 0; i < match.votes.length; i++)
+                fields.push({
+                    name: `${await (await client.users.fetch(match.players[i].userid)).username}`,
+                    value: `Has automatically won!`
                 }
-
-                else {
-                    const fields = [];
-                    for (let i = 0; i < match.votes.length; i++)
-                        fields.push({
-                            name: `${await (await client.users.fetch(match.players[i].userid)).username}`,
-                            value: `${match.votes[i].length > 0 ? `Came in with ${match.votes[i].length} vote(s)` : `Failed to submit meme`}`
-                        });
-                    await deleteQuals(match)
-                    return channel.send({
-                        embed: {
-                            title: `Votes for this qualifier are in!`,
-                            fields,
-                            color: "#d7be26",
-                            timestamp: new Date()
-                        }
-                    });
+                );
+            await deleteQuals(match)
+            return channel.send({
+                embed: {
+                    title: `Qualifier has ended`,
+                    fields,
+                    color: "#d7be26",
+                    timestamp: new Date()
                 }
-            }
+            });
+        }
 
-            else if(!match.votingperiod){
-                let channel = <discord.TextChannel>await client.channels.fetch(match.channelid)
-                let em = new discord.MessageEmbed()
-                    .setTitle(`Qualifier match`)
-                    .setColor("#d7be26")
-                    .setDescription(`Match has ended early before voting period.\nPlease contact mod for information`)
-                    .setTimestamp()
-                await deleteQuals(match)
-                return channel.send(em)
-            }
+        if(match.playersdone.length === 0){
+            return channel.send({
+                embed: {
+                    title: `Qualifier has ended. No one submitted a meme.`,
+                    color: "#d7be26",
+                    timestamp: new Date()
+                }
+            });
+        }
+
+        else if (match.playersdone.length > 2) {
+            const fields = [];
+            for (let i = 0; i < match.votes.length; i++)
+                fields.push({
+                    name: `${await (await client.users.fetch(match.players[i].userid)).username}`,
+                    //value: `${match.votes[i].length > 0 ? `Came in with ${match.votes[i].length} vote(s)` : `Failed to submit meme`}`
+                    value: `${match.players[i].memedone ? `Came in with ${match.votes[i].length}` : `Failed to submit meme`}`, //`Came in with ${match.votes[i].length}`,
+                });
+
+            await deleteQuals(match)
+
+            return channel.send({
+                embed: {
+                    title: `Votes for this qualifier are in!`,
+                    fields,
+                    color: "#d7be26",
+                    timestamp: new Date()
+                }
+            });
         }
     }
 
-    let channel = <discord.TextChannel>await client.channels.fetch(id)
-
-    return channel.send(
-        new discord.MessageEmbed()
-        .setTitle(`Qualifier match`)
-        .setColor("#d7be26")
-        .setDescription(`No match is running in this channel`)
-        .setTimestamp()
-    )
-
+    else if (!match.votingperiod) {
+        return channel.send({
+            embed: {
+                title: `Votes for this qualifier are in!`,
+                color: "#d7be26",
+                description: "Match has ended early before voting period.\nPlease contact mod for information",
+                timestamp: new Date()
+            }
+        });
+    }
 }
 
+
+
+
+// let matches: qualmatch[] = await getQuals()
+
+// for (const match of matches) {
+
+//     if (id === match.channelid) {
+//         let channel = <discord.TextChannel>await client.channels.fetch(match.channelid)
+
+//         if (match.votingperiod) {
+
+//             if (match.playersdone.length <= 2) {
+//                 const fields = [];
+//                 for (let i = 0; i < match.votes.length; i++)
+//                     fields.push({
+//                         name: `${await (await client.users.fetch(match.players[i].userid)).username}`,
+//                         value: `Has automatically won!`
+//                     });
+//                 await deleteQuals(match)
+//                 return channel.send({
+//                     embed: {
+//                         title: `Qualifier has ended`,
+//                         fields,
+//                         color: "#d7be26",
+//                         timestamp: new Date()
+//                     }
+//                 });
+//             }
+
+//             else {
+//                 const fields = [];
+//                 for (let i = 0; i < match.votes.length; i++)
+//                     fields.push({
+//                         name: `${await (await client.users.fetch(match.players[i].userid)).username}`,
+//                         value: `${match.votes[i].length > 0 ? `Came in with ${match.votes[i].length} vote(s)` : `Failed to submit meme`}`
+//                     });
+//                 await deleteQuals(match)
+//                 return channel.send({
+//                     embed: {
+//                         title: `Votes for this qualifier are in!`,
+//                         fields,
+//                         color: "#d7be26",
+//                         timestamp: new Date()
+//                     }
+//                 });
+//             }
+//         }
+
+//         else if(!match.votingperiod){
+//             let channel = <discord.TextChannel>await client.channels.fetch(match.channelid)
+//             let em = new discord.MessageEmbed()
+//                 .setTitle(`Qualifier match`)
+//                 .setColor("#d7be26")
+//                 .setDescription(`Match has ended early before voting period.\nPlease contact mod for information`)
+//                 .setTimestamp()
+//             await deleteQuals(match)
+//             return channel.send(em)
+//         }
+//     }
+// }
+
+// let channel = <discord.TextChannel>await client.channels.fetch(id)
+
+// return channel.send(
+//     new discord.MessageEmbed()
+//     .setTitle(`Qualifier match`)
+//     .setColor("#d7be26")
+//     .setDescription(`No match is running in this channel`)
+//     .setTimestamp()
+// )
