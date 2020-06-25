@@ -147,7 +147,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
                 console.log(match.p1.voters);
                 console.log(match.p2.voters);
             }
-            return await db_1.updateActive(match);
+            await db_1.updateActive(match);
         }
     }
     if (quals) {
