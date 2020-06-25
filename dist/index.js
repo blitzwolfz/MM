@@ -69,7 +69,7 @@ client.on('ready', async () => {
     client.user.setActivity(`Meme Mania Season 0 | !help`);
 });
 client.on("messageReactionAdd", async function (messageReaction, user) {
-    var _a;
+    var _a, _b;
     console.log(`a reaction is added to a message`);
     if (user.bot)
         return;
@@ -147,38 +147,41 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
                 console.log(match.p1.voters);
                 console.log(match.p2.voters);
             }
-            await db_1.updateActive(match);
+            return await db_1.updateActive(match);
         }
     }
     if (quals) {
         for (const match of quals) {
-            utils_1.hasthreevotes(match.votes, user.id);
-            if (messageReaction.partial)
-                await messageReaction.fetch();
-            if (messageReaction.message.partial)
-                await messageReaction.message.fetch();
-            if (utils_1.emojis.includes(messageReaction.emoji.name)) {
-                let i = utils_1.emojis.indexOf(messageReaction.emoji.name);
-                console.log(messageReaction.emoji.name, utils_1.emojis[6]);
-                if (messageReaction.emoji.name === utils_1.emojis[6]) {
-                    match.votes = utils_1.removethreevotes(match.votes, user.id);
-                    await db_1.updateQuals(match);
-                    await messageReaction.users.remove(user.id);
-                    return user.send("Your votes have been reset");
-                }
-                if (!match.playersdone.includes(match.playerids[i])) {
-                    await messageReaction.users.remove(user.id);
-                    return user.send("You can't for a non meme");
-                }
-                else if (match.votes[i].includes(user.id)) {
-                    await messageReaction.users.remove(user.id);
-                    return user.send("You can't for a meme twice. Hit the recycle emote to reset your votes");
-                }
-                else {
-                    match.votes[i].push(user.id);
-                    await messageReaction.users.remove(user.id);
-                    await db_1.updateQuals(match);
-                    return user.send("You vote has been counted.");
+            let id = (_b = client.channels.cache.get(messageReaction.message.channel.id)) === null || _b === void 0 ? void 0 : _b.id;
+            if (match.channelid === id) {
+                utils_1.hasthreevotes(match.votes, user.id);
+                if (messageReaction.partial)
+                    await messageReaction.fetch();
+                if (messageReaction.message.partial)
+                    await messageReaction.message.fetch();
+                if (utils_1.emojis.includes(messageReaction.emoji.name)) {
+                    let i = utils_1.emojis.indexOf(messageReaction.emoji.name);
+                    console.log(messageReaction.emoji.name, utils_1.emojis[6]);
+                    if (messageReaction.emoji.name === utils_1.emojis[6]) {
+                        match.votes = utils_1.removethreevotes(match.votes, user.id);
+                        await db_1.updateQuals(match);
+                        await messageReaction.users.remove(user.id);
+                        return user.send("Your votes have been reset");
+                    }
+                    if (!match.playersdone.includes(match.playerids[i])) {
+                        await messageReaction.users.remove(user.id);
+                        return user.send("You can't for a non meme");
+                    }
+                    else if (match.votes[i].includes(user.id)) {
+                        await messageReaction.users.remove(user.id);
+                        return user.send("You can't for a meme twice. Hit the recycle emote to reset your votes");
+                    }
+                    else {
+                        match.votes[i].push(user.id);
+                        await messageReaction.users.remove(user.id);
+                        await db_1.updateQuals(match);
+                        return user.send("You vote has been counted.");
+                    }
                 }
             }
         }
