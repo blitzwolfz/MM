@@ -356,6 +356,12 @@ async function qualrunning(client) {
                 await winner_1.qualend(client, channelid.id);
             }
         }
+        if (match.playersdone.length === match.players.length) {
+            match.split = false;
+            match.votingperiod = true;
+            match.votetime = Math.floor(Date.now() / 1000);
+            await db_1.updateQuals(match);
+        }
     }
 }
 exports.qualrunning = qualrunning;

@@ -388,6 +388,7 @@ export async function qualrunning(client: discord.Client) {
                 console.log(u)
                 console.log(match.players.length)
 
+
                 if (Math.floor(Date.now() / 1000) - match.octime > 1800 && match.split === false) {
 
                     // if (match.playersdone.length <= 2) {
@@ -460,6 +461,13 @@ export async function qualrunning(client: discord.Client) {
             if ((Math.floor(Date.now() / 1000) - match.votetime > 7200) || match.playersdone.length <= 2) {
                 await qualend(client, channelid.id)
             }
+        }
+
+        if (match.playersdone.length === match.players.length) {
+            match.split = false
+            match.votingperiod = true
+            match.votetime = Math.floor(Date.now() / 1000)
+            await updateQuals(match)
         }
     }
 }
