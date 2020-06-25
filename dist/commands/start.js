@@ -296,6 +296,12 @@ async function qualrunning(client) {
         let channelid = client.channels.cache.get(match.channelid);
         if (match.votingperiod === false) {
             for (let u of match.players) {
+                if (match.playersdone.length === match.players.length) {
+                    match.split = false;
+                    match.votingperiod = true;
+                    match.votetime = Math.floor(Date.now() / 1000);
+                    await db_1.updateQuals(match);
+                }
                 console.log(u);
                 console.log(match.players.length);
                 if (Math.floor(Date.now() / 1000) - match.octime > 1800 && match.split === false) {
@@ -355,12 +361,6 @@ async function qualrunning(client) {
             if ((Math.floor(Date.now() / 1000) - match.votetime > 7200) || match.playersdone.length <= 2) {
                 await winner_1.qualend(client, channelid.id);
             }
-        }
-        if (match.playersdone.length === match.players.length) {
-            match.split = false;
-            match.votingperiod = true;
-            match.votetime = Math.floor(Date.now() / 1000);
-            await db_1.updateQuals(match);
         }
     }
 }
