@@ -22,6 +22,12 @@ export async function qualrunn(match: qualmatch, channelid: string,client: disco
         if(!match.split){
             console.log("Check 3")
             if(Math.floor(Date.now() / 1000) - match.octime > 1800 || match.playersdone.length === match.playerids.length){
+
+                if(match.playersdone.length <= 2){
+                    match.votingperiod = true
+                    await updateQuals(match)
+                    return await qualend(client, channel.id)
+                }
                 
                 for(let player of match.players){
                     if(player.memedone){
@@ -73,20 +79,35 @@ export async function qualrunn(match: qualmatch, channelid: string,client: disco
                         player.memedone = false;
     
                         let embed2 = new discord.MessageEmbed()
-                            .setDescription("Player failed to submit meme on time")
+                            .setDescription("You failed to submit meme on time")
                             .setColor("#d7be26")
                             .setTimestamp()
-                        await channel.send(embed2)
+                        await (await client.users.fetch(player.userid)).send(embed2)
                         match.playersdone.push(player.userid)
-                        await updateQuals(match)
+                        return await updateQuals(match)
                     }
                 }
             }
+
     
             if(match.playersdone.length === match.playerids.length){
+
+                //Doing this because a split match uses playersdone to turn into a regular match. 
+                //When this block of code excutes, the match will already be transforming into a regular match
+
                 console.log("Check 5")
                 match.split = false
                 match.octime = ((Math.floor(Date.now())) /1000) - 1800
+
+                let temparr = []
+
+                for (let player of match.players){
+                    if (!player.failed){
+                        temparr.push(player.userid)
+                    }
+                }
+                match.playersdone = temparr             
+
                 await updateQuals(match)
             }
         }

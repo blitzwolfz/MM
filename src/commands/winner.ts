@@ -185,11 +185,19 @@ export async function qualend(client: discord.Client, id: string) {
 
             let fields = [];
             for (let i = 0; i < match.votes.length; i++)
-                fields.push({
-                    name: `${await (await client.users.fetch(match.players[i].userid)).username}`,
-                    value: `Has automatically won!`
+                if(match.players[i].memedone){
+                    fields.push({
+                        name: `${await (await client.users.fetch(match.players[i].userid)).username}`,
+                        value: `Has automatically won!`
+                    });
                 }
-                );
+                else if(match.players[i].memedone === false){
+                    fields.push({
+                        name: `${await (await client.users.fetch(match.players[i].userid)).username}`,
+                        value: `Failed to submit meme!`
+                    });
+                }
+
             await deleteQuals(match)
             return channel.send({
                 embed: {

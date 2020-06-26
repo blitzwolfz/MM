@@ -23,11 +23,11 @@ exports.ModHelp = {
             value: `Starts a regular qualifier.\nMatch runs like a normal match where they have 30 mins to make a meme.\nJust like regular matches you can pass temp and theme flags`,
         },
         {
-            name: '`!splitqual`',
+            name: '`!splitqual @mention x 3`',
             value: `Creates a split qualifier. The memes will be sent once all the players have finised their portion.`,
         },
         {
-            name: '`!startsplitqual @mention`',
+            name: '`!startsplitqual @mention x 3`',
             value: `This is to start a split match for a user who is competing in qualifiers.`,
         },
         {
@@ -36,7 +36,7 @@ exports.ModHelp = {
         },
         {
             name: '`!startsplit @mention`',
-            value: `This is to start a split match for a user who is competing in a regular mathc.`,
+            value: `This is to start the portion of match for a user who is competing in a regular split math.`,
         },
         {
             name: '`!qualend`',

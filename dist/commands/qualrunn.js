@@ -35,6 +35,11 @@ async function qualrunn(match, channelid, client) {
         if (!match.split) {
             console.log("Check 3");
             if (Math.floor(Date.now() / 1000) - match.octime > 1800 || match.playersdone.length === match.playerids.length) {
+                if (match.playersdone.length <= 2) {
+                    match.votingperiod = true;
+                    await db_1.updateQuals(match);
+                    return await winner_1.qualend(client, channel.id);
+                }
                 for (let player of match.players) {
                     if (player.memedone) {
                         let embed = new discord.MessageEmbed()
@@ -74,12 +79,12 @@ async function qualrunn(match, channelid, client) {
                         player.failed = true;
                         player.memedone = false;
                         let embed2 = new discord.MessageEmbed()
-                            .setDescription("Player failed to submit meme on time")
+                            .setDescription("You failed to submit meme on time")
                             .setColor("#d7be26")
                             .setTimestamp();
-                        await channel.send(embed2);
+                        await (await client.users.fetch(player.userid)).send(embed2);
                         match.playersdone.push(player.userid);
-                        await db_1.updateQuals(match);
+                        return await db_1.updateQuals(match);
                     }
                 }
             }
@@ -87,6 +92,13 @@ async function qualrunn(match, channelid, client) {
                 console.log("Check 5");
                 match.split = false;
                 match.octime = ((Math.floor(Date.now())) / 1000) - 1800;
+                let temparr = [];
+                for (let player of match.players) {
+                    if (!player.failed) {
+                        temparr.push(player.userid);
+                    }
+                }
+                match.playersdone = temparr;
                 await db_1.updateQuals(match);
             }
         }
