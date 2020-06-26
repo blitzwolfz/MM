@@ -67,7 +67,7 @@ client.on('ready', async () => {
     }
     await start_1.running(client);
     await start_1.qualrunning(client);
-    client.user.setActivity(`Anyone below me has small pp`);
+    client.user.setActivity(`${process.env.STATUS}`);
 });
 client.on("messageReactionAdd", async function (messageReaction, user) {
     var _a, _b;
