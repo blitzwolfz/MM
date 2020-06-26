@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserHelp = exports.ModHelp = void 0;
+exports.ModSignupHelp = exports.UserHelp = exports.ModHelp = void 0;
 const utils_1 = require("../misc/utils");
 exports.ModHelp = {
     title: "Mod help menu",
@@ -58,6 +58,14 @@ exports.UserHelp = {
             value: `This is for qualifiers only.\nPasses a image/gif with the message or it will not be submitted :)`,
         },
         {
+            name: '`!signup`',
+            value: `To signup`
+        },
+        {
+            name: '`!removesignup`',
+            value: `To remove your signup`
+        },
+        {
             name: '`!template` or `!submittemplate`',
             value: `This will let you submit templates`,
         },
@@ -72,6 +80,30 @@ exports.UserHelp = {
         {
             name: 'Voting in qualifiers',
             value: `When voting in qualifiers, and you used up all 3 votes,\nclick on the ${utils_1.emojis[6]} to reset your votes`
+        },
+    ],
+    timestamp: new Date()
+};
+exports.ModSignupHelp = {
+    title: "Signup help menu",
+    color: "#d7be26",
+    fields: [
+        {
+            name: '`!startsignup`',
+            value: `Starts a signup. Any mod can start one, but only do so if other mods agree!\n
+            If there are errors, it will output it and ping me so I can fix it!`,
+        },
+        {
+            name: '`!reopensignup`',
+            value: `To reopen signup.`
+        },
+        {
+            name: '`!closesignup`',
+            value: `This is only closes signup.\nThis means, that users are no longer allowed to sign up.\nHowever, they can still remove signups! Also a record of the signup is sent:)`,
+        },
+        {
+            name: '`!deletesignup`',
+            value: `Be very careful on how you use this command!!!!.\nThis deletes the signup record.\nOnly use this when a new season starts!!`
         },
     ],
     timestamp: new Date()

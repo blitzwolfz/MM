@@ -58,3 +58,9 @@ export interface user{
     loss: number;
     img: string;
 }
+
+export interface signups{
+    _id:1;
+    open: boolean;
+    users: Array<string>;
+}

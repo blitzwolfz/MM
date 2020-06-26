@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteQuals = exports.deleteActive = exports.addUser = exports.updateProfile = exports.getProfile = exports.addProfile = exports.getSingularQuals = exports.getQuals = exports.getMatch = exports.getActive = exports.updateQuals = exports.insertQuals = exports.updateActive = exports.insertActive = exports.connectToDB = void 0;
+exports.deleteSignup = exports.updateSignup = exports.getSignups = exports.insertSignups = exports.deleteQuals = exports.deleteActive = exports.addUser = exports.updateProfile = exports.getProfile = exports.addProfile = exports.getSingularQuals = exports.getQuals = exports.getMatch = exports.getActive = exports.updateQuals = exports.insertQuals = exports.updateActive = exports.insertActive = exports.connectToDB = void 0;
 const mongo = __importStar(require("mongodb"));
 require("dotenv").config();
 const MongoClient = mongo.MongoClient;
@@ -30,10 +30,11 @@ async function connectToDB() {
             if (err)
                 throw err;
             console.log("Successfully connected");
-            client.db(process.env.DBNAME).createCollection("activematch");
-            client.db(process.env.DBNAME).createCollection("quals");
-            client.db(process.env.DBNAME).createCollection("users");
-            resolve();
+            await client.db(process.env.DBNAME).createCollection("activematch");
+            await client.db(process.env.DBNAME).createCollection("quals");
+            await client.db(process.env.DBNAME).createCollection("users");
+            await client.db(process.env.DBNAME).createCollection("signup");
+            await resolve();
         });
     });
 }
@@ -111,3 +112,20 @@ async function deleteQuals(match) {
     console.log("deleted quals");
 }
 exports.deleteQuals = deleteQuals;
+async function insertSignups(signup) {
+    await client.db(process.env.DBNAME).collection("signup").insertOne(signup);
+}
+exports.insertSignups = insertSignups;
+async function getSignups() {
+    return await client.db(process.env.DBNAME).collection("signup").findOne({ _id: 1 });
+}
+exports.getSignups = getSignups;
+async function updateSignup(signup) {
+    await client.db(process.env.DBNAME).collection("signup").updateOne({ _id: 1 }, { $set: signup });
+}
+exports.updateSignup = updateSignup;
+async function deleteSignup() {
+    await client.db(process.env.DBNAME).collection("signup").deleteOne({ _id: 1 });
+    return "signups are now deleted!";
+}
+exports.deleteSignup = deleteSignup;

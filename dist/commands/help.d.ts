@@ -16,3 +16,12 @@ export declare const UserHelp: {
     }[];
     timestamp: Date;
 };
+export declare const ModSignupHelp: {
+    title: string;
+    color: string;
+    fields: {
+        name: string;
+        value: string;
+    }[];
+    timestamp: Date;
+};

@@ -5,7 +5,7 @@ import { updateQuals} from "../misc/db"
 import { qualmatch } from "../misc/struct"
 
 
-export async function qualrunn(match: qualmatch, channelid: string,client: discord.Client) {
+export async function qualrunn(match: qualmatch, channelid: string, client: discord.Client) {
     // let match = await getSingularQuals(channelid)
 
     let channel = <discord.TextChannel>client.channels.cache.get(channelid)

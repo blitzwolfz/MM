@@ -1,4 +1,4 @@
-import { activematch, qualmatch, user } from "./struct";
+import { activematch, qualmatch, user, signups } from "./struct";
 export declare function connectToDB(): Promise<void>;
 export declare function insertActive(activematch: activematch): Promise<void>;
 export declare function updateActive(activematch: activematch): Promise<void>;
@@ -14,3 +14,7 @@ export declare function updateProfile(_id: string, field: string, num: number): 
 export declare function addUser(user: user): Promise<void>;
 export declare function deleteActive(match: activematch): Promise<void>;
 export declare function deleteQuals(match: qualmatch): Promise<void>;
+export declare function insertSignups(signup: signups): Promise<void>;
+export declare function getSignups(): Promise<signups>;
+export declare function updateSignup(signup: signups): Promise<void>;
+export declare function deleteSignup(): Promise<string>;

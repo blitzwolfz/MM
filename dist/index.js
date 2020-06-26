@@ -30,6 +30,7 @@ const help_1 = require("./commands/help");
 const db_1 = require("./misc/db");
 const template_1 = require("./commands/template");
 const user_1 = require("./commands/user");
+const signups_1 = require("./commands/signups");
 console.log("Hello World, bot has begun life");
 const express = require('express');
 const app = express();
@@ -284,6 +285,37 @@ client.on("message", async (message) => {
     }
     else if (command === "help") {
         await message.channel.send({ embed: help_1.UserHelp });
+    }
+    else if (command === "signuphelp") {
+        await message.channel.send({ embed: help_1.ModSignupHelp });
+    }
+    else if (command === "signup") {
+        await signups_1.signup(message);
+    }
+    else if (command === "startsignup") {
+        await signups_1.startsignup(message, client);
+    }
+    else if (command === "reopensignup") {
+        await signups_1.reopensignup(message, client);
+    }
+    else if (command === "closesignup") {
+        await signups_1.closesignup(message, client);
+    }
+    else if (command === "signup") {
+        await signups_1.signup(message);
+    }
+    else if (command === "removesignup") {
+        await signups_1.removesignup(message);
+    }
+    else if (command === "deletesignup") {
+        if (message.member.roles.cache.has('724818272922501190')
+            || message.member.roles.cache.has('724818272922501190')
+            || message.member.roles.cache.has('724832462286356590')) {
+            message.reply(await db_1.deleteSignup());
+        }
+        else {
+            message.reply("No.");
+        }
     }
     else if (command === "vs") {
         let users = [];

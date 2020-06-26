@@ -2,7 +2,7 @@ import * as mongo from "mongodb"
 
 require("dotenv").config();
 
-import { activematch, qualmatch, user } from "./struct";
+import { activematch, qualmatch, user, signups } from "./struct";
 
 const MongoClient = mongo.MongoClient
 //const assert = require("assert")
@@ -14,10 +14,11 @@ export async function connectToDB(): Promise<void> {
         client.connect(async (err: any) => {
             if (err) throw err;
             console.log("Successfully connected");
-            client.db(process.env.DBNAME).createCollection("activematch");
-            client.db(process.env.DBNAME).createCollection("quals");
-            client.db(process.env.DBNAME).createCollection("users");
-            resolve();
+            await client.db(process.env.DBNAME).createCollection("activematch");
+            await client.db(process.env.DBNAME).createCollection("quals");
+            await client.db(process.env.DBNAME).createCollection("users");
+            await client.db(process.env.DBNAME).createCollection("signup")
+            await resolve();
         });
     });
 }
@@ -96,4 +97,21 @@ export async function deleteActive(match: activematch): Promise<void>{
 export async function deleteQuals(match: qualmatch): Promise<void>{
     await client.db(process.env.DBNAME).collection("quals").deleteOne({_id:match.channelid})
     console.log("deleted quals")
+}
+
+export async function insertSignups(signup: signups): Promise<void>{
+    await client.db(process.env.DBNAME).collection("signup").insertOne(signup)
+}
+
+export async function getSignups(): Promise<signups>{
+    return await client.db(process.env.DBNAME).collection("signup").findOne({ _id: 1 })!;
+}
+
+export async function updateSignup(signup: signups): Promise<void> {
+    await client.db(process.env.DBNAME).collection("signup").updateOne({_id:1}, {$set: signup});
+}
+
+export async function deleteSignup(): Promise<string>{
+    await client.db(process.env.DBNAME).collection("signup").deleteOne({_id: 1})
+    return "signups are now deleted!";
 }
