@@ -10,7 +10,7 @@ import { ModHelp, UserHelp, ModSignupHelp } from "./commands/help";
 import { connectToDB, getQuals, getActive, updateActive, updateQuals, deleteSignup} from "./misc/db";
 import { template, approvetemplate } from "./commands/template";
 import { createrUser, stats } from "./commands/user";
-import { signup, startsignup, closesignup, removesignup, reopensignup } from "./commands/signups";
+import { signup, startsignup, closesignup, removesignup, reopensignup, viewsignup } from "./commands/signups";
 //import data from "../match.json"
 //const fs = require('fs');
 console.log("Hello World, bot has begun life");
@@ -348,6 +348,10 @@ client.on("message", async message => {
 
   else if(command === "signup"){
     await signup(message)
+  }
+
+  else if(command === "viewsignup" || command === "viewlist"){
+    await viewsignup(message, client)
   }
 
   else if(command === "startsignup"){

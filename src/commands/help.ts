@@ -92,12 +92,15 @@ export const ModSignupHelp = {
     fields: [
         {
             name: '`!startsignup`',
-            value: `Starts a signup. Any mod can start one, but only do so if other mods agree!\n
-            If there are errors, it will output it and ping me so I can fix it!`,
+            value: `Starts a signup. Any mod can start one, but only do so if other mods agree!\nIf there are errors, it will output it and ping me so I can fix it!`,
         },
         {
             name: '`!reopensignup`',
             value: `To reopen signup.`
+        },
+        {
+            name: '`!viewsignup`',
+            value: `Shows a list of the current signup list.`
         },
         {
             name: '`!closesignup`',

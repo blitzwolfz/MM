@@ -292,6 +292,9 @@ client.on("message", async (message) => {
     else if (command === "signup") {
         await signups_1.signup(message);
     }
+    else if (command === "viewsignup" || command === "viewlist") {
+        await signups_1.viewsignup(message, client);
+    }
     else if (command === "startsignup") {
         await signups_1.startsignup(message, client);
     }

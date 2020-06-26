@@ -193,3 +193,48 @@ export async function reopensignup(message: Discord.Message, client: Discord.Cli
         await (await client.users.fetch(message.author.id)).send("You aren't allowed to use that command!")
     }
 }
+
+export async function viewsignup(message: Discord.Message, client: Discord.Client) {
+    if (message.member!.roles.cache.has('724818272922501190')
+        || message.member!.roles.cache.has('724818272922501190')
+        || message.member!.roles.cache.has('724832462286356590')) {
+
+        try {
+
+            let signup = await getSignups()
+
+            if (signup.users) {
+                let fields = [];
+                for (let i = 0; i < signup.users.length; i++) {
+                    fields.push({
+                        name: `${await (await client.users.fetch(signup.users[i])).username}`,
+                        value: `Userid is: ${signup.users[i]}`,
+                });
+
+
+                    return message.channel.send({
+                        embed: {
+                            title: `Current Signup list`,
+                            fields,
+                            color: "#d7be26",
+                            timestamp: new Date()
+                        }
+                    });
+                }
+            }
+
+            else {
+                return message.reply(", none signed up.")
+            }
+
+        } catch (err) {
+            message.channel.send("```" + err + "```")
+            return message.reply(", there is an error! Ping blitz and show him the error.")
+        }
+
+    }
+
+    else {
+        await (await client.users.fetch(message.author.id)).send("You aren't allowed to use that command!")
+    }
+}

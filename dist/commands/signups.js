@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.reopensignup = exports.closesignup = exports.removesignup = exports.signup = exports.startsignup = void 0;
+exports.viewsignup = exports.reopensignup = exports.closesignup = exports.removesignup = exports.signup = exports.startsignup = void 0;
 const Discord = __importStar(require("discord.js"));
 const db_1 = require("../misc/db");
 async function startsignup(message, client) {
@@ -173,3 +173,40 @@ async function reopensignup(message, client) {
     }
 }
 exports.reopensignup = reopensignup;
+async function viewsignup(message, client) {
+    if (message.member.roles.cache.has('724818272922501190')
+        || message.member.roles.cache.has('724818272922501190')
+        || message.member.roles.cache.has('724832462286356590')) {
+        try {
+            let signup = await db_1.getSignups();
+            if (signup.users) {
+                let fields = [];
+                for (let i = 0; i < signup.users.length; i++) {
+                    fields.push({
+                        name: `${await (await client.users.fetch(signup.users[i])).username}`,
+                        value: `Userid is: ${signup.users[i]}`,
+                    });
+                    return message.channel.send({
+                        embed: {
+                            title: `Current Signup list`,
+                            fields,
+                            color: "#d7be26",
+                            timestamp: new Date()
+                        }
+                    });
+                }
+            }
+            else {
+                return message.reply(", none signed up.");
+            }
+        }
+        catch (err) {
+            message.channel.send("```" + err + "```");
+            return message.reply(", there is an error! Ping blitz and show him the error.");
+        }
+    }
+    else {
+        await (await client.users.fetch(message.author.id)).send("You aren't allowed to use that command!");
+    }
+}
+exports.viewsignup = viewsignup;

@@ -4,3 +4,4 @@ export declare function signup(message: Discord.Message): Promise<Discord.Messag
 export declare function removesignup(message: Discord.Message): Promise<Discord.Message | undefined>;
 export declare function closesignup(message: Discord.Message, client: Discord.Client): Promise<Discord.Message | undefined>;
 export declare function reopensignup(message: Discord.Message, client: Discord.Client): Promise<Discord.Message | undefined>;
+export declare function viewsignup(message: Discord.Message, client: Discord.Client): Promise<Discord.Message | undefined>;
