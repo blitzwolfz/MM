@@ -7,8 +7,20 @@
 
 Hi! If you are reading this, then you found my a discord bot that I am working on. It's called Meme Mania.
 
-  
 
+# Table of Contents
+- [General](#general)
+- [Files](#files)
+  * [Firecard, .env file, and all non code files](#firecard--env-file--and-all-non-code-files)
+  * [JSON Files](#json-files)
+  * [Rename a file](#rename-a-file)
+  * [Delete a file](#delete-a-file)
+- [Synchronization](#synchronization)
+- [Installation](#installation) <--- This is what you might be looking for
+  * [Locally](#locally) 
+
+  
+# General
 The bot is as of now actively maintained and well be done till all edge cases are worked out. Once we reach this point and no new features are being worked on, the bot will not see active maintenance on the codebase but more so on the server side. Of course you can always suggest new features and have your own implementation of how you think these features can be made. In terms of technology that's used, please look at the list below:
 
   
@@ -80,18 +92,43 @@ If you wish to run this bot with any features I make, then you should on the reg
 
 # Installation
 
-  
+For both local and hosted steps, you will need a copy of the bot. Do this by going [to this link](https://github.com/blitzwolfz/MM/tree/master) and downloading a copy.
 
-### Locally
-You can run this bot in two ways, locally or on the web. To run this bot locally you have to have the NodeJS Runtime on your PC, and have some basic knowledge on using the command prompt. If you are using the bot as is then follow these instructions, if you are modifying the bot, then follow these instructions.
+## Locally
+You can run this bot in two ways, locally or on the web. To run this bot locally you have to have the NodeJS Runtime on your PC, and have some basic knowledge on using the command prompt/terminal. If you are using the bot as is then follow these instructions, if you are modifying the bot, then follow these instructions but I can't promise anything from working properly.
 
-First make sure you downloaded either the latest version of [Node or the version](https://nodejs.org/en/download/) specified by this document.
+First make sure you downloaded either the latest version of [Node or the version](https://nodejs.org/en/download/) or the one specified by this document. As long as the version is equal to or greater than the one I stated, you shall be fine.
 
-To check if you have Node running, open a command line or command prompt and run `node -v`
-![The out should the version number that is either equal to or greater than this.](https://i.imgur.com/F7opU7f.png)
+To check if you have Node running, open a command line or command prompt and run 
+` 
+$ node dist/index.js
+`
+The out should the version number that is either equal to or greater than this.
+![](https://i.imgur.com/F7opU7f.png)
 
 Next you are going to need a MongoDB server. Now I'll leave this up to you on how you acquire this as there are many ways to make one, however some links down below to help you.
 
  - [They give 500mb for free, more than enough to run this tournament](https://www.mongodb.com)
  - [How to make a local database](https://www.freecodecamp.org/news/learn-mongodb-a4ce205e7739/)
  - AWS, Google Cloud, I believe also provide MongoDB servers at a price
+
+After this step, you are going to need to create a .env file. The .env file should contain these variables, which are important for running the bot.
+Should look this
+![](https://i.imgur.com/Ku33BVH.png)
+
+ - Token is your discord token
+ - dbname, is the name of your database. Now this can be anything you want as MongoDB will automatically create the db if it doesn't exist
+ - dburl is the url connection for your db. 
+ - Prefix is for the bot prefix, and status is for the bot status.
+ - Challonge is your challonge API key. Now you don't need this, but it some features of the bot will break without it.
+
+Now once you have all these files set up, it's a good idea to recompile the TS code but you don't have to as I provide a compiled folder of the code.
+Now all you have to do to run the bot is open a terminal in the folder. For Windows users, right-click and it should say open command prompt. 
+
+First command you need to run is `$ npm i`. What this command will do is install all the libraries needed to run this bot. Now this step may take some time, so be patient.
+
+Once the previous command is done, in the terminal type in this command `
+$ node dist/index.js
+`
+
+And you are done! The bot should be working perfectly, and will run as so long as you don't do Crtl+C in the terminal or close the terminal.
