@@ -57,3 +57,20 @@ export interface signups {
     open: boolean;
     users: Array<string>;
 }
+export interface quallist {
+    _id: 2;
+    url: string;
+    users: Array<string>;
+}
+export interface matchlist {
+    _id: 3;
+    url: string;
+    qualurl: string;
+    users: Array<string>;
+}
+export interface config {
+    _id: 4;
+    qual: string;
+    match: string;
+    users: Array<string>;
+}

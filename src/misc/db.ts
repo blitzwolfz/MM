@@ -2,7 +2,7 @@ import * as mongo from "mongodb"
 
 require("dotenv").config();
 
-import { activematch, qualmatch, user, signups } from "./struct";
+import { activematch, qualmatch, user, signups, matchlist } from "./struct";
 
 const MongoClient = mongo.MongoClient
 //const assert = require("assert")
@@ -113,5 +113,43 @@ export async function updateSignup(signup: signups): Promise<void> {
 
 export async function deleteSignup(): Promise<string>{
     await client.db(process.env.DBNAME).collection("signup").deleteOne({_id: 1})
-    return "signups are now deleted!";
+    return "Signups are now deleted!";
 }
+
+//Break
+
+// export async function insertQuallist(qualist: quallist): Promise<void>{
+//     await client.db(process.env.DBNAME).collection("signup").insertOne(qualist)
+// }
+
+// export async function getQuallist(): Promise<quallist>{
+//     return await client.db(process.env.DBNAME).collection("signup").findOne({ _id: 2 })!;
+// }
+
+// export async function updateQuallist(qualist: quallist): Promise<void> {
+//     await client.db(process.env.DBNAME).collection("signup").updateOne({_id:2}, {$set: qualist});
+// }
+
+// export async function deleteQuallist(): Promise<string>{
+//     await client.db(process.env.DBNAME).collection("signup").deleteOne({_id: 2})
+//     return "Quallist are now deleted!";
+// }
+
+//Break
+
+export async function insertMatchlist(matchlists: matchlist): Promise<void>{
+    await client.db(process.env.DBNAME).collection("signup").insertOne(matchlists)
+}
+
+export async function getMatchlist(): Promise<matchlist>{
+    return await client.db(process.env.DBNAME).collection("signup").findOne({ _id: 3 })!;
+}
+
+export async function updateMatchlist(matchlists: matchlist): Promise<void> {
+    await client.db(process.env.DBNAME).collection("signup").updateOne({_id:3}, {$set: matchlists});
+}
+
+// export async function deleteMatchlist(): Promise<string>{
+//     await client.db(process.env.DBNAME).collection("signup").deleteOne({_id: 3})
+//     return "Matchlist are now deleted!";
+// }

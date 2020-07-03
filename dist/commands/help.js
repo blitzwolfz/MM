@@ -108,6 +108,10 @@ exports.ModSignupHelp = {
             name: '`!deletesignup`',
             value: `Be very careful on how you use this command!!!!.\nThis deletes the signup record.\nOnly use this when a new season starts!!`
         },
+        {
+            name: '`!createquals`',
+            value: `Takes the signup list, randomizes it, and generates qualifiers list.\nIf there are any spares then it will say there are spares, and mods can decide what to do.`
+        },
     ],
     timestamp: new Date()
 };

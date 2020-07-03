@@ -209,18 +209,17 @@ export async function viewsignup(message: Discord.Message, client: Discord.Clien
                     fields.push({
                         name: `${await (await client.users.fetch(signup.users[i])).username}`,
                         value: `Userid is: ${signup.users[i]}`,
-                });
-
-
-                    return message.channel.send({
-                        embed: {
-                            title: `Current Signup list`,
-                            fields,
-                            color: "#d7be26",
-                            timestamp: new Date()
-                        }
                     });
                 }
+
+                return message.channel.send({
+                    embed: {
+                        title: `Current Signup list`,
+                        fields,
+                        color: "#d7be26",
+                        timestamp: new Date()
+                    }
+                });
             }
 
             else {

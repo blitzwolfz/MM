@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteSignup = exports.updateSignup = exports.getSignups = exports.insertSignups = exports.deleteQuals = exports.deleteActive = exports.addUser = exports.updateProfile = exports.getProfile = exports.addProfile = exports.getSingularQuals = exports.getQuals = exports.getMatch = exports.getActive = exports.updateQuals = exports.insertQuals = exports.updateActive = exports.insertActive = exports.connectToDB = void 0;
+exports.updateMatchlist = exports.getMatchlist = exports.insertMatchlist = exports.deleteSignup = exports.updateSignup = exports.getSignups = exports.insertSignups = exports.deleteQuals = exports.deleteActive = exports.addUser = exports.updateProfile = exports.getProfile = exports.addProfile = exports.getSingularQuals = exports.getQuals = exports.getMatch = exports.getActive = exports.updateQuals = exports.insertQuals = exports.updateActive = exports.insertActive = exports.connectToDB = void 0;
 const mongo = __importStar(require("mongodb"));
 require("dotenv").config();
 const MongoClient = mongo.MongoClient;
@@ -126,6 +126,18 @@ async function updateSignup(signup) {
 exports.updateSignup = updateSignup;
 async function deleteSignup() {
     await client.db(process.env.DBNAME).collection("signup").deleteOne({ _id: 1 });
-    return "signups are now deleted!";
+    return "Signups are now deleted!";
 }
 exports.deleteSignup = deleteSignup;
+async function insertMatchlist(matchlists) {
+    await client.db(process.env.DBNAME).collection("signup").insertOne(matchlists);
+}
+exports.insertMatchlist = insertMatchlist;
+async function getMatchlist() {
+    return await client.db(process.env.DBNAME).collection("signup").findOne({ _id: 3 });
+}
+exports.getMatchlist = getMatchlist;
+async function updateMatchlist(matchlists) {
+    await client.db(process.env.DBNAME).collection("signup").updateOne({ _id: 3 }, { $set: matchlists });
+}
+exports.updateMatchlist = updateMatchlist;

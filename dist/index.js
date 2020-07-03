@@ -31,6 +31,7 @@ const db_1 = require("./misc/db");
 const template_1 = require("./commands/template");
 const user_1 = require("./commands/user");
 const signups_1 = require("./commands/signups");
+const challonge_1 = require("./commands/challonge");
 console.log("Hello World, bot has begun life");
 const express = require('express');
 const app = express();
@@ -297,6 +298,15 @@ client.on("message", async (message) => {
     }
     else if (command === "startsignup") {
         await signups_1.startsignup(message, client);
+    }
+    else if (command === "createqualiferbracket" || command === "createqualbracket") {
+        await challonge_1.CreateChallongeQualBracket(message, client, args);
+    }
+    else if (command === "createbracket") {
+        await challonge_1.CreateChallongeMatchBracket(message, client, args);
+    }
+    else if (command === "channelcreate") {
+        await challonge_1.ChannelCreation(message, client, args);
     }
     else if (command === "reopensignup") {
         await signups_1.reopensignup(message, client);
