@@ -299,6 +299,9 @@ client.on("message", async (message) => {
     else if (command === "startsignup") {
         await signups_1.startsignup(message, client);
     }
+    else if (command === "matchlistmaker") {
+        await challonge_1.matchlistmaker();
+    }
     else if (command === "createqualiferbracket" || command === "createqualbracket") {
         await challonge_1.CreateChallongeQualBracket(message, client, args);
     }

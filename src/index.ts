@@ -11,7 +11,7 @@ import { connectToDB, getQuals, getActive, updateActive, updateQuals, deleteSign
 import { template, approvetemplate } from "./commands/template";
 import { createrUser, stats } from "./commands/user";
 import { signup, startsignup, closesignup, removesignup, reopensignup, viewsignup } from "./commands/signups";
-import { CreateChallongeQualBracket, ChannelCreation, CreateChallongeMatchBracket } from "./commands/challonge";
+import { CreateChallongeQualBracket, ChannelCreation, CreateChallongeMatchBracket, matchlistmaker } from "./commands/challonge";
 //import data from "../match.json"
 //const fs = require('fs');
 console.log("Hello World, bot has begun life");
@@ -357,6 +357,10 @@ client.on("message", async message => {
 
   else if(command === "startsignup"){
     await startsignup(message, client)
+  }
+
+  else if(command === "matchlistmaker"){
+    await matchlistmaker()
   }
 
   else if(command === "createqualiferbracket" || command === "createqualbracket"){

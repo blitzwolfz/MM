@@ -1,6 +1,6 @@
 //import { matchlist } from "../misc/struct";
 import * as Discord from "discord.js";
-import { getSignups, getMatchlist, updateMatchlist } from "../misc/db";
+import { getSignups, getMatchlist, updateMatchlist, insertMatchlist } from "../misc/db";
 import { matchlist } from "../misc/struct";
 
 const challonge = require("challonge-js")
@@ -287,6 +287,23 @@ export async function declarequalwinner(message: Discord.Message, client: Discor
 
     else {
         await (await client.users.fetch(message.author.id)).send("You aren't allowed to use that command!")
+    }
+}
+
+export async function matchlistmaker() {
+    let match = await getMatchlist()
+
+    if (!match) {
+
+        let newmatch: matchlist = {
+            _id: 3,
+            url: "",
+            qualurl: "",
+            users: [],
+
+        }
+
+        insertMatchlist(newmatch)
     }
 }
 

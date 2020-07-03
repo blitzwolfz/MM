@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.declarequalwinner = exports.ChannelCreation = exports.CreateChallongeMatchBracket = exports.CreateChallongeQualBracket = void 0;
+exports.matchlistmaker = exports.declarequalwinner = exports.ChannelCreation = exports.CreateChallongeMatchBracket = exports.CreateChallongeQualBracket = void 0;
 const Discord = __importStar(require("discord.js"));
 const db_1 = require("../misc/db");
 const challonge = require("challonge-js");
@@ -204,3 +204,16 @@ async function declarequalwinner(message, client) {
     }
 }
 exports.declarequalwinner = declarequalwinner;
+async function matchlistmaker() {
+    let match = await db_1.getMatchlist();
+    if (!match) {
+        let newmatch = {
+            _id: 3,
+            url: "",
+            qualurl: "",
+            users: [],
+        };
+        db_1.insertMatchlist(newmatch);
+    }
+}
+exports.matchlistmaker = matchlistmaker;
