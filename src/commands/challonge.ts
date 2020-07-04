@@ -32,7 +32,7 @@ export async function CreateChallongeQualBracket(message: Discord.Message, discl
         if (Signups) {
             if (Signups.open === false) {
                 for (let i = 0; i < Signups.users.length; i++) {
-                    client.participants.create({
+                    await client.participants.create({
                         id: id,
                         participant: {
                             name: (await disclient.users.fetch(Signups.users[i])).username
@@ -121,7 +121,8 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
 
         await updateMatchlist(matchlist)
 
-
+        await ChannelCreation(message, disclient, ["1"])
+        
         return message.reply(new Discord.MessageEmbed()
             .setColor("#d7be26")
             .setTitle(`Meme Mania ${args[0]}`)
