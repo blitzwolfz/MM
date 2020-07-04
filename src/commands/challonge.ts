@@ -95,7 +95,7 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
 
 
         console.log("ok")
-        await client.participants.index({
+        client.participants.index({
             id: qualid,
             callback: async (err:any, data: any) => {
                 console.log("ok")
@@ -109,7 +109,7 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
                         console.log("ok")
                         console.log(data[i].participant.name)
 
-                        await client.participants.create({
+                        client.participants.create({
                             id: matchid,
                             participant: {
                                 name: data[i].participant.name

@@ -81,7 +81,7 @@ async function CreateChallongeMatchBracket(message, disclient, args) {
         console.log(matchid);
         let qualid = (matchlist.qualurl).replace("https://challonge.com/", "");
         console.log("ok");
-        await client.participants.index({
+        client.participants.index({
             id: qualid,
             callback: async (err, data) => {
                 console.log("ok");
@@ -92,7 +92,7 @@ async function CreateChallongeMatchBracket(message, disclient, args) {
                     if (data[i].participant.finalRank <= 16) {
                         console.log("ok");
                         console.log(data[i].participant.name);
-                        await client.participants.create({
+                        client.participants.create({
                             id: matchid,
                             participant: {
                                 name: data[i].participant.name
