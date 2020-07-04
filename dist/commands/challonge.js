@@ -102,8 +102,7 @@ async function CreateChallongeMatchBracket(message, disclient, args) {
         });
         matchlist.url = `https://www.challonge.com/${matchid}`;
         await db_1.updateMatchlist(matchlist);
-        await ChannelCreation(message, disclient, ["1"]);
-        return message.reply(new Discord.MessageEmbed()
+        await message.reply(new Discord.MessageEmbed()
             .setColor("#d7be26")
             .setTitle(`Meme Mania ${args[0]}`)
             .setDescription(`Here's the link to the brackers\nhttps://www.challonge.com/${matchid}`)
