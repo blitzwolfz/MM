@@ -107,7 +107,7 @@ async function CreateChallongeMatchBracket(message, disclient, args) {
                 }
             }
         });
-        matchlist.url = `https://www.challonge.com/${matchid}`;
+        matchlist.url = `${matchid}`;
         await db_1.updateMatchlist(matchlist);
         await message.reply(new Discord.MessageEmbed()
             .setColor("#d7be26")

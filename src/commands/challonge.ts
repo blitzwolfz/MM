@@ -129,7 +129,7 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
 
 
 
-        matchlist.url = `https://www.challonge.com/${matchid}`
+        matchlist.url = `${matchid}`
 
         await updateMatchlist(matchlist)
 
