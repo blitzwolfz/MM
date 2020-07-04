@@ -84,6 +84,7 @@ async function CreateChallongeMatchBracket(message, disclient, args) {
             id: qualid,
             callback: async (err, data) => {
                 console.log(err);
+                console.log(data);
                 for (let i = 0; i < data.length; i++) {
                     if (data[i].participant.finalRank <= 16) {
                         console.log(data[i].participant.name);
@@ -105,7 +106,7 @@ async function CreateChallongeMatchBracket(message, disclient, args) {
         await message.reply(new Discord.MessageEmbed()
             .setColor("#d7be26")
             .setTitle(`Meme Mania ${args[0]}`)
-            .setDescription(`Here's the link to the brackers\nhttps://www.challonge.com/${matchid}`)
+            .setDescription(`Here's the link to the brackets\nhttps://www.challonge.com/${matchid}`)
             .setTimestamp());
     }
     else {

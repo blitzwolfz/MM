@@ -99,7 +99,7 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
             id: qualid,
             callback: async (err:any, data: any) => {
                 console.log(err);
-
+                console.log(data)
                 for (let i = 0; i < data.length; i++) {
 
                     if (data[i].participant.finalRank <= 16) {
@@ -129,7 +129,7 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
         await message.reply(new Discord.MessageEmbed()
             .setColor("#d7be26")
             .setTitle(`Meme Mania ${args[0]}`)
-            .setDescription(`Here's the link to the brackers\nhttps://www.challonge.com/${matchid}`)
+            .setDescription(`Here's the link to the brackets\nhttps://www.challonge.com/${matchid}`)
             .setTimestamp())
     }
 
