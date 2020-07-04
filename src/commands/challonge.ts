@@ -89,6 +89,8 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
 
         let matchlist = await getMatchlist();
 
+        console.log(matchid)
+
         let qualid = (matchlist.qualurl).replace("https://challonge.com/", "")
 
 
@@ -118,7 +120,7 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
         });
 
 
-        matchlist.url = `https://www.challonge.com\\${matchid}`
+        matchlist.url = `https://www.challonge.com/${matchid}`
 
         await updateMatchlist(matchlist)
 
@@ -127,7 +129,7 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
         return message.reply(new Discord.MessageEmbed()
             .setColor("#d7be26")
             .setTitle(`Meme Mania ${args[0]}`)
-            .setDescription(`Here's the link to the brackers\nhttps://www.challonge.com\\${matchid}`)
+            .setDescription(`Here's the link to the brackers\nhttps://www.challonge.com/${matchid}`)
             .setTimestamp())
     }
 

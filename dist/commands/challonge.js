@@ -78,6 +78,7 @@ async function CreateChallongeMatchBracket(message, disclient, args) {
         });
         let matchid = (args.join("")).replace("https://challonge.com/", "");
         let matchlist = await db_1.getMatchlist();
+        console.log(matchid);
         let qualid = (matchlist.qualurl).replace("https://challonge.com/", "");
         await client.participants.index({
             id: qualid,
@@ -99,13 +100,13 @@ async function CreateChallongeMatchBracket(message, disclient, args) {
                 }
             }
         });
-        matchlist.url = `https://www.challonge.com\\${matchid}`;
+        matchlist.url = `https://www.challonge.com/${matchid}`;
         await db_1.updateMatchlist(matchlist);
         await ChannelCreation(message, disclient, ["1"]);
         return message.reply(new Discord.MessageEmbed()
             .setColor("#d7be26")
             .setTitle(`Meme Mania ${args[0]}`)
-            .setDescription(`Here's the link to the brackers\nhttps://www.challonge.com\\${matchid}`)
+            .setDescription(`Here's the link to the brackers\nhttps://www.challonge.com/${matchid}`)
             .setTimestamp());
     }
     else {
