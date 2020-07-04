@@ -87,7 +87,7 @@ export const UserHelp = {
 };
 
 export const ModSignupHelp = {
-    title: "Signup help menu",
+    title: "Admin Signup help menu",
     color:"#d7be26",
     fields: [
         {
@@ -113,6 +113,26 @@ export const ModSignupHelp = {
         {
             name: '`!createquals`',
             value: `Takes the signup list, randomizes it, and generates qualifiers list.\nIf there are any spares then it will say there are spares, and mods can decide what to do.`
+        },
+    ],
+    timestamp: new Date()
+};
+
+export const ModChallongeHelp = {
+    title: "Admin Challonge help menu",
+    color:"#d7be26",
+    fields: [
+        {
+            name: '`!createqualbracket <challonge url>`',
+            value: `Must close signups!! You must also provide a challonge url. Only need to do this once, as it saves it`,
+        },
+        {
+            name: '`!createbracket <challonge url>`',
+            value: `Must have the qual tournament finished. You must also provide a challonge url. Only need to do this once, as it saves it.`
+        },
+        {
+            name: '`!channelcreate <number>`',
+            value: `The tournament must be running on challonge. You have to provide a round number such round 1 or round 2`
         },
     ],
     timestamp: new Date()

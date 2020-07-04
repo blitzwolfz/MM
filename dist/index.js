@@ -290,6 +290,9 @@ client.on("message", async (message) => {
     else if (command === "signuphelp") {
         await message.channel.send({ embed: help_1.ModSignupHelp });
     }
+    else if (command === "challongehelp") {
+        await message.channel.send({ embed: help_1.ModChallongeHelp });
+    }
     else if (command === "signup") {
         await signups_1.signup(message);
     }
@@ -303,19 +306,30 @@ client.on("message", async (message) => {
         await challonge_1.matchlistmaker();
     }
     else if (command === "createqualiferbracket" || command === "createqualbracket") {
+        if (message.member.roles.cache.has('724818272922501190')
+            || message.member.roles.cache.has('724832462286356590'))
+            await challonge_1.matchlistmaker();
         await challonge_1.CreateChallongeQualBracket(message, client, args);
     }
     else if (command === "createbracket") {
-        await challonge_1.CreateChallongeMatchBracket(message, client, args);
+        if (message.member.roles.cache.has('724818272922501190')
+            || message.member.roles.cache.has('724832462286356590'))
+            await challonge_1.CreateChallongeMatchBracket(message, client, args);
     }
     else if (command === "channelcreate") {
-        await challonge_1.ChannelCreation(message, client, args);
+        if (message.member.roles.cache.has('724818272922501190')
+            || message.member.roles.cache.has('724832462286356590'))
+            await challonge_1.ChannelCreation(message, client, args);
     }
     else if (command === "reopensignup") {
-        await signups_1.reopensignup(message, client);
+        if (message.member.roles.cache.has('724818272922501190')
+            || message.member.roles.cache.has('724832462286356590'))
+            await signups_1.reopensignup(message, client);
     }
     else if (command === "closesignup") {
-        await signups_1.closesignup(message, client);
+        if (message.member.roles.cache.has('724818272922501190')
+            || message.member.roles.cache.has('724832462286356590'))
+            await signups_1.closesignup(message, client);
     }
     else if (command === "signup") {
         await signups_1.signup(message);
@@ -325,7 +339,6 @@ client.on("message", async (message) => {
     }
     else if (command === "deletesignup") {
         if (message.member.roles.cache.has('724818272922501190')
-            || message.member.roles.cache.has('724818272922501190')
             || message.member.roles.cache.has('724832462286356590')) {
             message.reply(await db_1.deleteSignup());
         }

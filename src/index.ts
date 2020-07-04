@@ -6,7 +6,7 @@ import { start, running, qualrunning, startqual, startmodqual, splitqual, startr
 import { endmatch, qualend } from "./commands/winner";
 import { vs } from "./commands/card";
 import { getUser, hasthreevotes, emojis, removethreevotes} from "./misc/utils";
-import { ModHelp, UserHelp, ModSignupHelp } from "./commands/help";
+import { ModHelp, UserHelp, ModSignupHelp, ModChallongeHelp } from "./commands/help";
 import { connectToDB, getQuals, getActive, updateActive, updateQuals, deleteSignup} from "./misc/db";
 import { template, approvetemplate } from "./commands/template";
 import { createrUser, stats } from "./commands/user";
@@ -347,6 +347,10 @@ client.on("message", async message => {
     await message.channel.send({embed:ModSignupHelp})
   }
 
+  else if(command === "challongehelp"){
+    await message.channel.send({embed:ModChallongeHelp})
+  }
+
   else if(command === "signup"){
     await signup(message)
   }
@@ -364,22 +368,33 @@ client.on("message", async message => {
   }
 
   else if(command === "createqualiferbracket" || command === "createqualbracket"){
+    if (message.member!.roles.cache.has('724818272922501190') 
+    || message.member!.roles.cache.has('724832462286356590'))
+    await matchlistmaker()
     await CreateChallongeQualBracket(message, client, args)
   }
 
   else if(command === "createbracket"){
+    if (message.member!.roles.cache.has('724818272922501190') 
+    || message.member!.roles.cache.has('724832462286356590'))
     await CreateChallongeMatchBracket(message, client, args)
   }
 
   else if(command === "channelcreate"){
+    if (message.member!.roles.cache.has('724818272922501190') 
+    || message.member!.roles.cache.has('724832462286356590'))
     await ChannelCreation(message, client, args)
   }
   
   else if (command === "reopensignup"){
+    if (message.member!.roles.cache.has('724818272922501190') 
+    || message.member!.roles.cache.has('724832462286356590'))
     await reopensignup(message, client)
   }
 
   else if(command === "closesignup"){
+    if (message.member!.roles.cache.has('724818272922501190') 
+    || message.member!.roles.cache.has('724832462286356590'))
     await closesignup(message, client)
   }
 
@@ -392,8 +407,8 @@ client.on("message", async message => {
   }
 
   else if(command === "deletesignup"){
+    
     if (message.member!.roles.cache.has('724818272922501190') 
-    || message.member!.roles.cache.has('724818272922501190') 
     || message.member!.roles.cache.has('724832462286356590')){
       message.reply(await deleteSignup())
     }

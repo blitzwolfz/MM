@@ -9,7 +9,6 @@ const challonge = require("challonge-js")
 
 export async function CreateChallongeQualBracket(message: Discord.Message, disclient: Discord.Client, args: string[]) {
     if (message.member!.roles.cache.has('724818272922501190')
-        || message.member!.roles.cache.has('724818272922501190')
         || message.member!.roles.cache.has('724832462286356590')) {
 
         const client = challonge.createClient({

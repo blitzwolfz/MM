@@ -25,3 +25,12 @@ export declare const ModSignupHelp: {
     }[];
     timestamp: Date;
 };
+export declare const ModChallongeHelp: {
+    title: string;
+    color: string;
+    fields: {
+        name: string;
+        value: string;
+    }[];
+    timestamp: Date;
+};

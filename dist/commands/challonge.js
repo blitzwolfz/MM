@@ -25,7 +25,6 @@ const db_1 = require("../misc/db");
 const challonge = require("challonge-js");
 async function CreateChallongeQualBracket(message, disclient, args) {
     if (message.member.roles.cache.has('724818272922501190')
-        || message.member.roles.cache.has('724818272922501190')
         || message.member.roles.cache.has('724832462286356590')) {
         const client = challonge.createClient({
             apiKey: process.env.CHALLONGE
