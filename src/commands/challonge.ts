@@ -57,7 +57,7 @@ export async function CreateChallongeQualBracket(message: Discord.Message, discl
         }
 
 
-        matchlist.qualurl = `https://www.challonge.com/${id}`
+        matchlist.qualurl = `${id}`
 
         await updateMatchlist(matchlist)
 
@@ -207,9 +207,9 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
                                             }
                                         }
                                     }
-                                    await message.guild!.channels.create(`${channelstringname}`, { type: 'text', topic: 'Round 1' })
+                                    await message.guild!.channels.create(`${channelstringname}`, { type: 'text', topic: `Round ${args[0]}` })
                                         .then(async channel => {
-                                            let category = await message.guild!.channels.cache.find(c => c.name == "matches" && c.type == "category");
+                                            let category = await message.guild!.channels.cache.find(c => c.name == "tournament" && c.type == "category");
 
                                             if (!category) throw new Error("Category channel does not exist");
                                             await channel.setParent(category.id);

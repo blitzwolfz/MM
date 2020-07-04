@@ -55,7 +55,7 @@ async function CreateChallongeQualBracket(message, disclient, args) {
         else {
             return message.reply("No one signed up");
         }
-        matchlist.qualurl = `https://www.challonge.com/${id}`;
+        matchlist.qualurl = `${id}`;
         await db_1.updateMatchlist(matchlist);
         console.timeEnd("aaa");
         return message.reply(new Discord.MessageEmbed()
@@ -158,9 +158,9 @@ async function ChannelCreation(message, disclient, args) {
                                             }
                                         }
                                     }
-                                    await message.guild.channels.create(`${channelstringname}`, { type: 'text', topic: 'Round 1' })
+                                    await message.guild.channels.create(`${channelstringname}`, { type: 'text', topic: `Round ${args[0]}` })
                                         .then(async (channel) => {
-                                        let category = await message.guild.channels.cache.find(c => c.name == "matches" && c.type == "category");
+                                        let category = await message.guild.channels.cache.find(c => c.name == "tournament" && c.type == "category");
                                         if (!category)
                                             throw new Error("Category channel does not exist");
                                         await channel.setParent(category.id);
