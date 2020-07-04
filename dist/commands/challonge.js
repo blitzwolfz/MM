@@ -79,7 +79,8 @@ async function CreateChallongeMatchBracket(message, disclient, args) {
         let matchid = (args.join("")).replace("https://challonge.com/", "");
         let matchlist = await db_1.getMatchlist();
         console.log(matchid);
-        let qualid = (matchlist.qualurl).replace("https://challonge.com/", "");
+        let qualid = (matchlist.qualurl);
+        qualid = qualid.replace("https://challonge.com/", "");
         console.log(qualid);
         console.log("ok");
         client.participants.index({

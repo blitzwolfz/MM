@@ -2,7 +2,7 @@
 import * as Discord from "discord.js";
 import { getSignups, getMatchlist, updateMatchlist, insertMatchlist } from "../misc/db";
 import { matchlist } from "../misc/struct";
-import { qualend } from "./winner";
+
 
 const challonge = require("challonge-js")
 
@@ -92,7 +92,8 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
 
         console.log(matchid)
 
-        let qualid = (matchlist.qualurl).replace("https://challonge.com/", "")
+        let qualid = (matchlist.qualurl)
+        qualid = qualid.replace("https://challonge.com/", "")
 
         console.log(qualid)
 
