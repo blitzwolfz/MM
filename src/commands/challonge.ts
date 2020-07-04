@@ -89,11 +89,12 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
 
         let matchlist = await getMatchlist();
 
+        let qualid = (matchlist.qualurl).replace("https://challonge.com/", "")
 
 
 
         await client.participants.index({
-            id: (matchlist.qualurl).replace("https://challonge.com/", ""),
+            id: qualid,
             callback: async (data: any) => {
                 //console.log(data);
 
@@ -122,7 +123,7 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
         await updateMatchlist(matchlist)
 
         await ChannelCreation(message, disclient, ["1"])
-        
+
         return message.reply(new Discord.MessageEmbed()
             .setColor("#d7be26")
             .setTitle(`Meme Mania ${args[0]}`)
