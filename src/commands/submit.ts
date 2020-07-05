@@ -36,6 +36,8 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
 
                 if(match.p1.donesplit && match.p2.donesplit){
                     match.split = false
+                    // match.votingperiod = true
+                    // match.votetime = Math.floor(Date.now() / 1000)
                 }
                 await updateActive(match)
                 return;
@@ -60,8 +62,8 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
 
                 if(match.p1.donesplit && match.p2.donesplit){
                     match.split = false
-                    match.votingperiod = true
-                    match.votetime = Math.floor(Date.now() / 1000)
+                    // match.votingperiod = true
+                    // match.votetime = Math.floor(Date.now() / 1000)
                 }
                 await updateActive(match)
                 return;

@@ -257,8 +257,8 @@ async function running(client) {
                 channelid.send(embed);
                 await db_1.deleteActive(match);
             }
-            else if (!(match.split) && ((Math.floor(Date.now() / 1000) - match.p2.time < 2400) && match.p2.memedone === true)
-                && ((Math.floor(Date.now() / 1000) - match.p2.time < 2400) && match.p1.memedone === true)) {
+            else if ((!(match.split) && ((Math.floor(Date.now() / 1000) - match.p2.time < 2400) && match.p2.memedone === true)
+                && ((Math.floor(Date.now() / 1000) - match.p2.time < 2400) && match.p1.memedone === true))) {
                 var embed1 = new discord.MessageEmbed()
                     .setImage(match.p1.memelink)
                     .setColor("#d7be26")
