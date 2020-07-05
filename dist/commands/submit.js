@@ -51,6 +51,8 @@ async function submit(message, client) {
                 message.reply("Your meme has been attached!");
                 if (match.p1.donesplit && match.p2.donesplit) {
                     match.split = false;
+                    match.votingperiod = true;
+                    match.votetime = Math.floor(Date.now() / 1000);
                 }
                 await db_1.updateActive(match);
                 return;
