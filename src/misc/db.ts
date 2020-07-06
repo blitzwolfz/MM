@@ -55,6 +55,10 @@ export async function getMatch(channelid:string): Promise<activematch>{
     return client.db(process.env.DBNAME).collection("activematch").findOne({_id:channelid})!;
 }
 
+export async function getQual(channelid:string): Promise<qualmatch>{
+    return await client.db(process.env.DBNAME).collection("quals").findOne({_id:channelid})!;
+}
+
 export async function getQuals(): Promise<qualmatch[]>{
     console.log("Getting Quals!")
     return await client.db(process.env.DBNAME).collection("quals").find({}, {projection:{ _id: 0 }}).toArray();

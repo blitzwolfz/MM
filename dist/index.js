@@ -235,6 +235,19 @@ client.on("message", async (message) => {
             return message.reply("You don't have those premissions");
         await start_1.start(message, client);
     }
+    else if (command === "checkmatch") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
+        if (await db_1.getMatch(message.channel.id)) {
+            message.reply(", there is an active match");
+        }
+        else if (await db_1.getQual(message.channel.id)) {
+            message.reply(", there is an active qualifier match");
+        }
+        else {
+            message.reply(", there are no matches");
+        }
+    }
     else if (command === "startqual") {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");

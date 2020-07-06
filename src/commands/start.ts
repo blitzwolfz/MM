@@ -4,7 +4,7 @@ const prefix = process.env.PREFIX!
 import { activematch, qualmatch, players } from "../misc/struct"
 import { end} from "./winner"
 import { vs } from "./card"
-import { updateActive, deleteActive, insertActive, insertQuals, updateQuals, getActive, getQuals } from "../misc/db"
+import { updateActive, deleteActive, insertActive, insertQuals, updateQuals, getActive, getQuals} from "../misc/db"
 import { createAtUsermatch } from "./user"
 import { qualrunn } from "./qualrunn"
 //const Canvas = require('canvas');
@@ -559,6 +559,32 @@ export async function startregularsplit(message: discord.Message, client: discor
     await insertActive(newmatch)
     // return matches;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

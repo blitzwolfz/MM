@@ -7,7 +7,7 @@ import { endmatch, qualend } from "./commands/winner";
 import { vs } from "./commands/card";
 import { getUser, hasthreevotes, emojis, removethreevotes} from "./misc/utils";
 import { ModHelp, UserHelp, ModSignupHelp, ModChallongeHelp } from "./commands/help";
-import { connectToDB, getQuals, getActive, updateActive, updateQuals, deleteSignup} from "./misc/db";
+import { connectToDB, getQuals, getActive, updateActive, updateQuals, deleteSignup, getMatch, getQual} from "./misc/db";
 import { template, approvetemplate } from "./commands/template";
 import { createrUser, stats } from "./commands/user";
 import { signup, startsignup, closesignup, removesignup, reopensignup, viewsignup } from "./commands/signups";
@@ -283,6 +283,23 @@ client.on("message", async message => {
     await start(message, client)
   }
 
+  else if(command === "checkmatch"){
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
+    
+    if(await getMatch(message.channel.id)){
+      message.reply(", there is an active match")
+    }
+
+    else if(await getQual(message.channel.id)){
+      message.reply(", there is an active qualifier match")
+    }
+
+    else{
+      message.reply(", there are no matches")
+    }
+
+  }
+
   else if (command === "startqual"){
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await startqual(message, client)
@@ -429,33 +446,7 @@ client.on("message", async message => {
     }
     await vs(message, client, users)
   }
-  // matches = await getActive()
-
-  // qualmatches = await getQuals()
   
 });
 
 client.login(process.env.TOKEN);
-
-
-
-
-// let data = JSON.stringify(matches, null, 2);
-// let data2 = JSON.stringify(qualmatches, null, 2);
-
-// await fs.writeFile('./match.json', data, (err: any) => {
-//     if (err) throw err;
-//     console.log('Data written to file');
-// });
-
-// await fs.writeFile('./qualmatch.json', data2, (err: any) => {
-//   if (err) throw err;
-//   console.log('Data written to file');
-// });
-
-
-// let data = fs.readFileSync('./match.json');
-// let matchdata = JSON.parse(data);
-
-// let data2 = fs.readFileSync('./qualmatch.json');
-// let qualmatchdata = JSON.parse(data2);

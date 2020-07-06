@@ -242,6 +242,8 @@ export async function qualend(client: discord.Client, id: string) {
     }
 
     else if (!match.votingperiod) {
+        await deleteQuals(match)
+        
         return channel.send({
             embed: {
                 title: `Votes for this qualifier are in!`,

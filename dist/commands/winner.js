@@ -205,6 +205,7 @@ async function qualend(client, id) {
         }
     }
     else if (!match.votingperiod) {
+        await db_1.deleteQuals(match);
         return channel.send({
             embed: {
                 title: `Votes for this qualifier are in!`,
