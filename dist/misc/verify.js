@@ -49,6 +49,9 @@ async function verify(message, client) {
         }
     }
     if (args[0] === "code") {
+        if (!(message.member.roles.cache.has('730650583413030953'))) {
+            return message.reply("You are already verified.");
+        }
         if (args[1] === form.codes[form.users.indexOf(message.author.id)]) {
             await ((_a = message.member) === null || _a === void 0 ? void 0 : _a.roles.remove("730650583413030953"));
             await ((_b = message.member) === null || _b === void 0 ? void 0 : _b.roles.add("719941380503371897"));
@@ -59,7 +62,7 @@ async function verify(message, client) {
             ch.send(`A new contender entrered the arena of Meme Royale. Welcome <@${message.author.id}>`);
             return message.reply("You have been verified!");
         }
-        if (args[1] !== form.codes[form.users.indexOf(message.author.id)]) {
+        if (args[1] !== form.codes[form.users.indexOf(message.author.id)] || !args[1]) {
             form.users.splice(form.users.indexOf(message.author.id), 1);
             form.codes.splice(form.users.indexOf(message.author.id), 1);
             await db_1.updateVerify(form);

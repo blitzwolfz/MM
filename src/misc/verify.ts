@@ -81,6 +81,11 @@ export async function verify(message: Discord.Message, client: Discord.Client){
     }
 
     if(args[0] === "code"){
+
+        if(!(message.member!.roles.cache.has('730650583413030953'))){
+            return message.reply("You are already verified.")
+        }
+
         if(args[1] === form.codes[form.users.indexOf(message.author.id)]){
             await message.member?.roles.remove("730650583413030953")
 
@@ -100,7 +105,7 @@ export async function verify(message: Discord.Message, client: Discord.Client){
             return message.reply("You have been verified!")
         }
 
-        if(args[1] !== form.codes[form.users.indexOf(message.author.id)]){
+        if(args[1] !== form.codes[form.users.indexOf(message.author.id)] || !args[1]){
 
             form.users.splice(form.users.indexOf(message.author.id), 1)
             form.codes.splice(form.users.indexOf(message.author.id), 1)
