@@ -157,13 +157,15 @@ async function ChannelCreation(message, disclient, args) {
                                             }
                                         }
                                     }
-                                    await message.guild.channels.create(`${channelstringname}`, { type: 'text', topic: `Round ${args[0]}` })
-                                        .then(async (channel) => {
-                                        let category = await message.guild.channels.cache.find(c => c.name == "tournament" && c.type == "category");
-                                        if (!category)
-                                            throw new Error("Category channel does not exist");
-                                        await channel.setParent(category.id);
-                                    });
+                                    if (channelstringname.includes("vs")) {
+                                        await message.guild.channels.create(`${channelstringname}`, { type: 'text', topic: `Round ${args[0]}` })
+                                            .then(async (channel) => {
+                                            let category = await message.guild.channels.cache.find(c => c.name == "tournament" && c.type == "category");
+                                            if (!category)
+                                                throw new Error("Category channel does not exist");
+                                            await channel.setParent(category.id);
+                                        });
+                                    }
                                 }
                             });
                         }

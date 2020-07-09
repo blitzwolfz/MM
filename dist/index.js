@@ -70,6 +70,12 @@ client.on('ready', async () => {
     await start_1.qualrunning(client);
     client.user.setActivity(`${process.env.STATUS}`);
 });
+client.on("guildMemberAdd", async function (member) {
+    var _a, _b;
+    await member.roles.add("730650583413030953");
+    await ((_a = member.user) === null || _a === void 0 ? void 0 : _a.send("Please start verification with `!verify`."));
+    console.log(`a user joins a guild: ${(_b = member.user) === null || _b === void 0 ? void 0 : _b.username}`);
+});
 client.on("messageReactionAdd", async function (messageReaction, user) {
     var _a, _b;
     console.log(`a reaction is added to a message`);
@@ -197,7 +203,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
     }
 });
 client.on("message", async (message) => {
-    var _a;
+    var _a, _b, _c, _d, _e;
     const prefix = process.env.PREFIX;
     console.log(await db_1.getActive());
     console.log(await db_1.getQuals());
@@ -220,6 +226,11 @@ client.on("message", async (message) => {
     if (command === "ping") {
         const m = await message.channel.send("Ping?");
         await m.edit(`Latency is ${m.createdTimestamp - message.createdTimestamp}ms. Discord API Latency is ${Math.round(client.ws.ping)}ms`);
+    }
+    if (command === "test") {
+        await ((_b = message.member) === null || _b === void 0 ? void 0 : _b.roles.add("730650583413030953"));
+        await ((_d = (_c = message.member) === null || _c === void 0 ? void 0 : _c.user) === null || _d === void 0 ? void 0 : _d.send("Please start verification with `!verify`."));
+        console.log(`a user joins a guild: ${(_e = message.member) === null || _e === void 0 ? void 0 : _e.user.username}`);
     }
     else if (command === "submit") {
         await submit_1.submit(message, client);

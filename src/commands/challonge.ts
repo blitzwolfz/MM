@@ -100,11 +100,11 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
         console.log("ok")
         client.participants.index({
             id: qualid,
-            callback: async (err:any, data: any) => {
+            callback: async (err: any, data: any) => {
                 console.log("ok")
                 console.log(err);
                 console.log(data)
-                
+
                 for (let i = 0; i < data.length; i++) {
                     console.log("ok")
 
@@ -206,14 +206,17 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
                                             }
                                         }
                                     }
-                                    await message.guild!.channels.create(`${channelstringname}`, { type: 'text', topic: `Round ${args[0]}` })
-                                        .then(async channel => {
-                                            let category = await message.guild!.channels.cache.find(c => c.name == "tournament" && c.type == "category");
 
-                                            if (!category) throw new Error("Category channel does not exist");
-                                            await channel.setParent(category.id);
-                                        }
-                                        )
+                                    if (channelstringname.includes("vs")) {
+                                        await message.guild!.channels.create(`${channelstringname}`, { type: 'text', topic: `Round ${args[0]}` })
+                                            .then(async channel => {
+                                                let category = await message.guild!.channels.cache.find(c => c.name == "tournament" && c.type == "category");
+
+                                                if (!category) throw new Error("Category channel does not exist");
+                                                await channel.setParent(category.id);
+                                            });
+                                    }
+
                                 }
                             });
 

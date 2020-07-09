@@ -76,7 +76,14 @@ client.on('ready', async () => {
 
 });
 
+client.on("guildMemberAdd", async function(member){
+  
+  await member.roles.add("730650583413030953")
 
+  await member.user?.send("Please start verification with `!verify`.")
+
+  console.log(`a user joins a guild: ${member.user?.username}`);
+});
 
 client.on("messageReactionAdd", async function(messageReaction, user){
   console.log(`a reaction is added to a message`);
@@ -262,9 +269,13 @@ client.on("message", async message => {
     await m.edit(`Latency is ${m.createdTimestamp - message.createdTimestamp}ms. Discord API Latency is ${Math.round(client.ws.ping)}ms`);
   }
 
-  // if (command === "test"){
-  //   await ChannelCreation(message, client, args)
-  // }
+  if (command === "test"){
+    await message.member?.roles.add("730650583413030953")
+
+    await message.member?.user?.send("Please start verification with `!verify`.")
+  
+    console.log(`a user joins a guild: ${message.member?.user.username}`);
+  }
 
   else if(command === "submit"){
     await submit(message, client)
