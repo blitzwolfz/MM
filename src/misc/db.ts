@@ -2,7 +2,7 @@ import * as mongo from "mongodb"
 
 require("dotenv").config();
 
-import { activematch, qualmatch, user, signups, matchlist } from "./struct";
+import { activematch, qualmatch, user, signups, matchlist, verificationform } from "./struct";
 
 const MongoClient = mongo.MongoClient
 //const assert = require("assert")
@@ -157,3 +157,15 @@ export async function updateMatchlist(matchlists: matchlist): Promise<void> {
 //     await client.db(process.env.DBNAME).collection("signup").deleteOne({_id: 3})
 //     return "Matchlist are now deleted!";
 // }
+
+export async function insertVerify(verifyform: verificationform): Promise<void>{
+    await client.db(process.env.DBNAME).collection("signup").insertOne(verifyform)
+}
+
+export async function getVerify(): Promise<verificationform>{
+    return await client.db(process.env.DBNAME).collection("signup").findOne({ _id: 4 })!;
+}
+
+export async function updateVerify(verifyform: verificationform): Promise<void> {
+    await client.db(process.env.DBNAME).collection("signup").updateOne({_id:4}, {$set: verifyform});
+}

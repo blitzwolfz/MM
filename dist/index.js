@@ -32,6 +32,7 @@ const template_1 = require("./commands/template");
 const user_1 = require("./commands/user");
 const signups_1 = require("./commands/signups");
 const challonge_1 = require("./commands/challonge");
+const verify_1 = require("./misc/verify");
 console.log("Hello World, bot has begun life");
 const express = require('express');
 const app = express();
@@ -203,7 +204,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
     }
 });
 client.on("message", async (message) => {
-    var _a, _b, _c, _d, _e;
+    var _a;
     const prefix = process.env.PREFIX;
     console.log(await db_1.getActive());
     console.log(await db_1.getQuals());
@@ -228,9 +229,10 @@ client.on("message", async (message) => {
         await m.edit(`Latency is ${m.createdTimestamp - message.createdTimestamp}ms. Discord API Latency is ${Math.round(client.ws.ping)}ms`);
     }
     if (command === "test") {
-        await ((_b = message.member) === null || _b === void 0 ? void 0 : _b.roles.add("730650583413030953"));
-        await ((_d = (_c = message.member) === null || _c === void 0 ? void 0 : _c.user) === null || _d === void 0 ? void 0 : _d.send("Please start verification with `!verify`."));
-        console.log(`a user joins a guild: ${(_e = message.member) === null || _e === void 0 ? void 0 : _e.user.username}`);
+        await verify_1.test();
+    }
+    if (command === "verify" || command === "code") {
+        await verify_1.verify(message, client);
     }
     else if (command === "submit") {
         await submit_1.submit(message, client);

@@ -78,9 +78,8 @@ export interface matchlist{
     users: Array<string>;
 }
 
-export interface config{
+export interface verificationform{
     _id:4;
-    qual: string;
-    match:string;
+    codes: Array<string>
     users: Array<string>
 }

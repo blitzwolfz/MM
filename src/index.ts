@@ -12,6 +12,7 @@ import { template, approvetemplate } from "./commands/template";
 import { createrUser, stats } from "./commands/user";
 import { signup, startsignup, closesignup, removesignup, reopensignup, viewsignup } from "./commands/signups";
 import { CreateChallongeQualBracket, ChannelCreation, CreateChallongeMatchBracket, matchlistmaker } from "./commands/challonge";
+import { verify, test } from "./misc/verify";
 //import data from "../match.json"
 //const fs = require('fs');
 console.log("Hello World, bot has begun life");
@@ -270,11 +271,17 @@ client.on("message", async message => {
   }
 
   if (command === "test"){
-    await message.member?.roles.add("730650583413030953")
+    // await message.member?.roles.add("730650583413030953")
 
-    await message.member?.user?.send("Please start verification with `!verify`.")
+    // await message.member?.user?.send("Please start verification with `!verify`.")
   
-    console.log(`a user joins a guild: ${message.member?.user.username}`);
+    // console.log(`a user joins a guild: ${message.member?.user.username}`);
+
+    await test()
+  }
+
+  if(command === "verify" || command === "code"){
+    await verify(message, client)
   }
 
   else if(command === "submit"){
