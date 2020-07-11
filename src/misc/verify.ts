@@ -32,12 +32,20 @@ export async function verify(message: Discord.Message, client: Discord.Client){
 
             const snoowrap = require('snoowrap');
 
+            let e = `${process.env.RTOKEN}`
+            let f = `${process.env.RSECRET}`
+            let g = `${process.env.RPASSWORD}`
+
+            console.log(typeof(e))
+            console.log(typeof(f))
+            console.log(typeof(g))
+
             const r = new snoowrap({
                 userAgent: 'memeroyaleverification by u/meme_royale',
-                clientId: `${process.env.RTOKEN}`,
-                clientSecret: `${process.env.RSECRET}`,
+                clientId: e,
+                clientSecret: f,
                 username: 'meme_royale',
-                password: `${process.env.RPASSWORD}`
+                password: g
             });
             
             
@@ -75,7 +83,7 @@ export async function verify(message: Discord.Message, client: Discord.Client){
                         to: `${args[1]}`,
                         subject: "your verification code",
                         text: `${id}`
-                      })
+                    })
                     
                     return await message.member?.setNickname(userInfo.name)
                 }

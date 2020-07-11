@@ -18,12 +18,18 @@ async function verify(message, client) {
         }
         else {
             const snoowrap = require('snoowrap');
+            let e = `${process.env.RTOKEN}`;
+            let f = `${process.env.RSECRET}`;
+            let g = `${process.env.RPASSWORD}`;
+            console.log(typeof (e));
+            console.log(typeof (f));
+            console.log(typeof (g));
             const r = new snoowrap({
                 userAgent: 'memeroyaleverification by u/meme_royale',
-                clientId: `${process.env.RTOKEN}`,
-                clientSecret: `${process.env.RSECRET}`,
+                clientId: e,
+                clientSecret: f,
                 username: 'meme_royale',
-                password: `${process.env.RPASSWORD}`
+                password: g
             });
             r.getUser(args[1]).fetch().then(async (userInfo) => {
                 var _a;
