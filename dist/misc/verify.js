@@ -19,11 +19,11 @@ async function verify(message, client) {
         else {
             const snoowrap = require('snoowrap');
             const r = new snoowrap({
-                userAgent: 'ryzen-bot by u/blitzwolfz',
-                clientId: 'Fs8Zg93dVdaN6Q',
-                clientSecret: '5NoWXdEqgkmDwvpBkznfqxcbvac',
-                username: 'blitzwolfz',
-                password: '14526378977s'
+                userAgent: 'memeroyaleverification by u/meme_royale',
+                clientId: process.env.RTOKEN,
+                clientSecret: process.env.RSECRET,
+                username: 'meme_royale',
+                password: process.env.RPASSWORD
             });
             r.getUser(args[1]).fetch().then(async (userInfo) => {
                 var _a;
@@ -31,21 +31,25 @@ async function verify(message, client) {
                 console.log(userInfo.created_utc > (Math.floor(Date.now() / 100) - (30 * 24 * 60 * 60)));
                 console.log(userInfo.verified);
                 if (!(userInfo.created_utc < (Math.floor(Date.now() / 100) - (30 * 24 * 60 * 60)))) {
-                    return message.reply("Your account is not old enough. Please contact a mod if there is an issue.");
+                    return message.author.send("Your account is not old enough. Please contact a mod if there is an issue.");
                 }
                 if (!userInfo.verified) {
-                    return message.reply("Your email address has not been verified!");
+                    return message.author.send("Your email address has not been verified!");
                 }
                 else {
-                    await ((_a = message.member) === null || _a === void 0 ? void 0 : _a.setNickname(userInfo.name));
+                    let id = makeid(5);
+                    form.codes.push(id);
+                    form.users.push(message.author.id);
+                    await db_1.updateVerify(form);
+                    message.reply("Code has been sent to your reddit dm. Please do `!code <your code>` to verify! You only get one chance at it!");
+                    await r.composeMessage({
+                        to: `${args[1]}`,
+                        subject: "your verification code",
+                        text: `${id}`
+                    });
+                    return await ((_a = message.member) === null || _a === void 0 ? void 0 : _a.setNickname(userInfo.name));
                 }
             });
-            let id = makeid(5);
-            message.author.send(`Please type \`!code\` and your verification code, \`${id}\` in the verification channel`);
-            form.codes.push(id);
-            form.users.push(message.author.id);
-            await db_1.updateVerify(form);
-            return message.reply("Code has been sent. Please do `!code <your code>` to verify! You only get one chance at it!");
         }
     }
     if (args[0] === "code") {

@@ -33,11 +33,11 @@ export async function verify(message: Discord.Message, client: Discord.Client){
             const snoowrap = require('snoowrap');
 
             const r = new snoowrap({
-                userAgent: 'ryzen-bot by u/blitzwolfz',
-                clientId: 'Fs8Zg93dVdaN6Q',
-                clientSecret: '5NoWXdEqgkmDwvpBkznfqxcbvac',
-                username: 'blitzwolfz',
-                password: '14526378977s'
+                userAgent: 'memeroyaleverification by u/meme_royale',
+                clientId: process.env.RTOKEN,
+                clientSecret: process.env.RSECRET,
+                username: 'meme_royale',
+                password: process.env.RPASSWORD
             });
             
             
@@ -50,33 +50,41 @@ export async function verify(message: Discord.Message, client: Discord.Client){
 
 
                 if(!(userInfo.created_utc < (Math.floor(Date.now()/100) - (30*24*60*60)))){
-                    return message.reply("Your account is not old enough. Please contact a mod if there is an issue.")
+                    return message.author.send("Your account is not old enough. Please contact a mod if there is an issue.")
                 }
 
                 if(!userInfo.verified){
-                    return message.reply("Your email address has not been verified!")
+                    return message.author.send("Your email address has not been verified!")
                 }
 
                 else{
-                    await message.member?.setNickname(userInfo.name)
+                    let id = makeid(5)
+
+                    //message.author.send(`Please type \`!code\` and your verification code, \`${id}\` in the verification channel`)
+        
+                    form.codes.push(id)
+                    form.users.push(message.author.id)
+        
+                    
+        
+                    await updateVerify(form)
+        
+                    message.reply("Code has been sent to your reddit dm. Please do `!code <your code>` to verify! You only get one chance at it!")
+
+                    await r.composeMessage({
+                        to: `${args[1]}`,
+                        subject: "your verification code",
+                        text: `${id}`
+                      })
+                    
+                    return await message.member?.setNickname(userInfo.name)
                 }
                 
             });
 
 
 
-            let id = makeid(5)
 
-            message.author.send(`Please type \`!code\` and your verification code, \`${id}\` in the verification channel`)
-
-            form.codes.push(id)
-            form.users.push(message.author.id)
-
-            
-
-            await updateVerify(form)
-
-            return message.reply("Code has been sent. Please do `!code <your code>` to verify! You only get one chance at it!")
         }
     }
 
