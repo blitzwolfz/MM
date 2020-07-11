@@ -70,6 +70,6 @@ export interface matchlist {
 }
 export interface verificationform {
     _id: 4;
-    codes: Array<string>;
+    codes: Array<string[]>;
     users: Array<string>;
 }

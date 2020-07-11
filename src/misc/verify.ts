@@ -19,8 +19,10 @@ export async function verify(message: Discord.Message, client: Discord.Client){
     }
 
     if(args[0] === "verify"){
-        if(form.users.includes(message.author.id)){
-            return message.reply("You have already been sent a verification code!.")
+        for(let i = 0; i < form.codes.length; i++){
+            if (form.codes[i][0] === message.author.id){
+                return message.reply("You already have been sent a code. to reset do `!code 2`")
+            }
         }
 
         if(!args[1]){
@@ -73,8 +75,8 @@ export async function verify(message: Discord.Message, client: Discord.Client){
 
                     //message.author.send(`Please type \`!code\` and your verification code, \`${id}\` in the verification channel`)
         
-                    form.codes.push(id)
-                    form.users.push(message.author.id)
+                    form.codes.push([message.author.id, id])
+                    //form.users.push(message.author.id)
         
                     
         
@@ -104,34 +106,41 @@ export async function verify(message: Discord.Message, client: Discord.Client){
             return message.reply("You are already verified.")
         }
 
-        if(args[1] === form.codes[form.users.indexOf(message.author.id)]){
-            await message.member?.roles.remove("730650583413030953")
+        for(let i = 0; i < form.codes.length; i++){
+            if (form.codes[i][0] === message.author.id){
+                if (args[1] === form.codes[i][1]){
+                    await message.member?.roles.remove("730650583413030953")
 
-            await message.member?.roles.add("719941380503371897")
-
-            
-
-            form.users.splice(form.users.indexOf(message.author.id), 1)
-            form.codes.splice(form.users.indexOf(message.author.id), 1)
-
-            await updateVerify(form)
-
-            let ch = <Discord.TextChannel>client.channels.cache.get(("722285800225505879"))
-
-            ch.send(`A new contender entrered the arena of Meme Royale. Welcome <@${message.author.id}>`)
-            
-            return message.reply("You have been verified!")
+                    await message.member?.roles.add("719941380503371897")
+        
+                    
+        
+                    //form.users.splice(form.users.indexOf(message.author.id), 1)
+                    form.codes.splice(form.users.indexOf(message.author.id), 1)
+        
+                    await updateVerify(form)
+        
+                    let ch = <Discord.TextChannel>client.channels.cache.get(("722285800225505879"))
+        
+                    ch.send(`A new contender entered the arena of Meme Royale. Welcome <@${message.author.id}>`)
+                    
+                    return message.reply("You have been verified!")
+                }
+            }
         }
 
-        if(args[1] !== form.codes[form.users.indexOf(message.author.id)] || !args[1]){
+        form.codes.splice(form.users.indexOf(message.author.id), 1)
 
-            form.users.splice(form.users.indexOf(message.author.id), 1)
-            form.codes.splice(form.users.indexOf(message.author.id), 1)
+        await updateVerify(form)
 
-            await updateVerify(form)
+        return message.reply("You did not enter code properly. Please restart by doing `!verify <reddit username>`")
 
-            return message.reply("You did not enter code properly. Please restart by doing `!verify <reddit username>`")
-        }
+
+        // if(args[1] !== form.codes[form.users.indexOf(message.author.id)] || !args[1]){
+
+        //     form.users.splice(form.users.indexOf(message.author.id), 1)
+
+        // }
     }
 }
 

@@ -81,7 +81,7 @@ client.on("guildMemberAdd", async function(member){
   
   await member.roles.add("730650583413030953")
 
-  await member.user?.send("Please start verification with `!verify <reddit username>`.\nFurther instructions will be given!")
+  await member.user?.send("Please start verification with `!verify <reddit username>` in the verification channel.")
 
   console.log(`a user joins a guild: ${member.user?.username}`);
 });

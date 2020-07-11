@@ -10,8 +10,10 @@ async function verify(message, client) {
         return message.reply("You are already verified.");
     }
     if (args[0] === "verify") {
-        if (form.users.includes(message.author.id)) {
-            return message.reply("You have already been sent a verification code!.");
+        for (let i = 0; i < form.codes.length; i++) {
+            if (form.codes[i][0] === message.author.id) {
+                return message.reply("You already have been sent a code. to reset do `!code 2`");
+            }
         }
         if (!args[1]) {
             return message.reply("Please supply reddit username.");
@@ -47,8 +49,7 @@ async function verify(message, client) {
                 }
                 else {
                     let id = makeid(5);
-                    form.codes.push(id);
-                    form.users.push(message.author.id);
+                    form.codes.push([message.author.id, id]);
                     await db_1.updateVerify(form);
                     await message.reply("Code has been sent to your reddit dm. Please do `!code <your code>` to verify! You only get one chance at it!");
                     await r.composeMessage({
@@ -65,22 +66,22 @@ async function verify(message, client) {
         if (!(message.member.roles.cache.has('730650583413030953'))) {
             return message.reply("You are already verified.");
         }
-        if (args[1] === form.codes[form.users.indexOf(message.author.id)]) {
-            await ((_a = message.member) === null || _a === void 0 ? void 0 : _a.roles.remove("730650583413030953"));
-            await ((_b = message.member) === null || _b === void 0 ? void 0 : _b.roles.add("719941380503371897"));
-            form.users.splice(form.users.indexOf(message.author.id), 1);
-            form.codes.splice(form.users.indexOf(message.author.id), 1);
-            await db_1.updateVerify(form);
-            let ch = client.channels.cache.get(("722285800225505879"));
-            ch.send(`A new contender entrered the arena of Meme Royale. Welcome <@${message.author.id}>`);
-            return message.reply("You have been verified!");
+        for (let i = 0; i < form.codes.length; i++) {
+            if (form.codes[i][0] === message.author.id) {
+                if (args[1] === form.codes[i][1]) {
+                    await ((_a = message.member) === null || _a === void 0 ? void 0 : _a.roles.remove("730650583413030953"));
+                    await ((_b = message.member) === null || _b === void 0 ? void 0 : _b.roles.add("719941380503371897"));
+                    form.codes.splice(form.users.indexOf(message.author.id), 1);
+                    await db_1.updateVerify(form);
+                    let ch = client.channels.cache.get(("722285800225505879"));
+                    ch.send(`A new contender entered the arena of Meme Royale. Welcome <@${message.author.id}>`);
+                    return message.reply("You have been verified!");
+                }
+            }
         }
-        if (args[1] !== form.codes[form.users.indexOf(message.author.id)] || !args[1]) {
-            form.users.splice(form.users.indexOf(message.author.id), 1);
-            form.codes.splice(form.users.indexOf(message.author.id), 1);
-            await db_1.updateVerify(form);
-            return message.reply("You did not enter code properly. Please restart by doing `!verify <reddit username>`");
-        }
+        form.codes.splice(form.users.indexOf(message.author.id), 1);
+        await db_1.updateVerify(form);
+        return message.reply("You did not enter code properly. Please restart by doing `!verify <reddit username>`");
     }
 }
 exports.verify = verify;
