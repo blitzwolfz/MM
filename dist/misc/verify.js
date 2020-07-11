@@ -25,10 +25,10 @@ async function verify(message, client) {
             console.log(typeof (f));
             console.log(typeof (g));
             const r = new snoowrap({
-                userAgent: 'memeroyaleverification by u/meme_royale',
+                userAgent: 'ryzen-bot by u/blitzwolfz',
                 clientId: e,
                 clientSecret: f,
-                username: 'meme_royale',
+                username: 'blitzwolfz',
                 password: g
             });
             r.getUser(args[1]).fetch().then(async (userInfo) => {

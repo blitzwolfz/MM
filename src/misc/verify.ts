@@ -41,10 +41,10 @@ export async function verify(message: Discord.Message, client: Discord.Client){
             console.log(typeof(g))
 
             const r = new snoowrap({
-                userAgent: 'memeroyaleverification by u/meme_royale',
+                userAgent: 'ryzen-bot by u/blitzwolfz',
                 clientId: e,
                 clientSecret: f,
-                username: 'meme_royale',
+                username: 'blitzwolfz',
                 password: g
             });
             
