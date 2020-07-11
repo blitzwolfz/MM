@@ -34,10 +34,10 @@ export async function verify(message: Discord.Message, client: Discord.Client){
 
             const r = new snoowrap({
                 userAgent: 'memeroyaleverification by u/meme_royale',
-                clientId: process.env.RTOKEN,
-                clientSecret: process.env.RSECRET,
+                clientId: `${process.env.RTOKEN}`,
+                clientSecret: `${process.env.RSECRET}`,
                 username: 'meme_royale',
-                password: process.env.RPASSWORD
+                password: `${process.env.RPASSWORD}`
             });
             
             

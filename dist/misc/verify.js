@@ -20,10 +20,10 @@ async function verify(message, client) {
             const snoowrap = require('snoowrap');
             const r = new snoowrap({
                 userAgent: 'memeroyaleverification by u/meme_royale',
-                clientId: process.env.RTOKEN,
-                clientSecret: process.env.RSECRET,
+                clientId: `${process.env.RTOKEN}`,
+                clientSecret: `${process.env.RSECRET}`,
                 username: 'meme_royale',
-                password: process.env.RPASSWORD
+                password: `${process.env.RPASSWORD}`
             });
             r.getUser(args[1]).fetch().then(async (userInfo) => {
                 var _a;
