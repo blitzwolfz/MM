@@ -44,7 +44,7 @@ export async function verify(message: Discord.Message, client: Discord.Client){
                 userAgent: 'ryzen-bot by u/blitzwolfz',
                 clientId: e,
                 clientSecret: f,
-                username: 'blitzwolfz',
+                username: 'meme_royale',
                 password: g
             });
             
@@ -68,7 +68,7 @@ export async function verify(message: Discord.Message, client: Discord.Client){
                 else{
                     let id = makeid(5)
 
-                    //message.author.send(`Please type \`!code\` and your verification code, \`${id}\` in the verification channel`)
+                    message.author.send(`Please type \`!code\` and your verification code, \`${id}\` in the verification channel`)
         
                     form.codes.push(id)
                     form.users.push(message.author.id)
@@ -77,13 +77,15 @@ export async function verify(message: Discord.Message, client: Discord.Client){
         
                     await updateVerify(form)
         
-                    message.reply("Code has been sent to your reddit dm. Please do `!code <your code>` to verify! You only get one chance at it!")
+                    await message.reply("Code has been sent to your dm. Please do `!code <your code>` to verify! You only get one chance at it!")
 
-                    await r.composeMessage({
+                    /*await r.composeMessage({
                         to: args[1],
                         subject: "your verification code",
-                        text: `${id}`
-                    })
+                        text: id
+                    }).catch(
+                        console.error()
+                    )*/
                     
                     return await message.member?.setNickname(userInfo.name)
                 }
@@ -96,7 +98,7 @@ export async function verify(message: Discord.Message, client: Discord.Client){
         }
     }
 
-    if(args[0] === "code"){
+    else if(args[0] === "code"){
 
         if(!(message.member!.roles.cache.has('730650583413030953'))){
             return message.reply("You are already verified.")

@@ -28,7 +28,7 @@ async function verify(message, client) {
                 userAgent: 'ryzen-bot by u/blitzwolfz',
                 clientId: e,
                 clientSecret: f,
-                username: 'blitzwolfz',
+                username: 'meme_royale',
                 password: g
             });
             r.getUser(args[1]).fetch().then(async (userInfo) => {
@@ -44,21 +44,17 @@ async function verify(message, client) {
                 }
                 else {
                     let id = makeid(5);
+                    message.author.send(`Please type \`!code\` and your verification code, \`${id}\` in the verification channel`);
                     form.codes.push(id);
                     form.users.push(message.author.id);
                     await db_1.updateVerify(form);
-                    message.reply("Code has been sent to your reddit dm. Please do `!code <your code>` to verify! You only get one chance at it!");
-                    await r.composeMessage({
-                        to: args[1],
-                        subject: "your verification code",
-                        text: `${id}`
-                    });
+                    await message.reply("Code has been sent to your dm. Please do `!code <your code>` to verify! You only get one chance at it!");
                     return await ((_a = message.member) === null || _a === void 0 ? void 0 : _a.setNickname(userInfo.name));
                 }
             });
         }
     }
-    if (args[0] === "code") {
+    else if (args[0] === "code") {
         if (!(message.member.roles.cache.has('730650583413030953'))) {
             return message.reply("You are already verified.");
         }
