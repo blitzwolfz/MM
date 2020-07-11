@@ -18,18 +18,21 @@ async function verify(message, client) {
         }
         else {
             const snoowrap = require('snoowrap');
-            let e = `${process.env.RTOKEN}`;
-            let f = `${process.env.RSECRET}`;
-            let g = `${process.env.RPASSWORD}`;
+            let e = String(`${process.env.RTOKEN}`);
+            let f = String(`${process.env.SECRET}`);
+            let g = String(`${process.env.RPASSWORD}`);
             console.log(typeof (e));
             console.log(typeof (f));
             console.log(typeof (g));
+            console.log(e);
+            console.log((f));
+            console.log((g));
             const r = new snoowrap({
-                userAgent: 'ryzen-bot by u/blitzwolfz',
+                userAgent: 'memeroyaleverification by u/meme_royale',
                 clientId: e,
                 clientSecret: f,
                 username: 'meme_royale',
-                password: g
+                password: g,
             });
             r.getUser(args[1]).fetch().then(async (userInfo) => {
                 var _a;
@@ -44,14 +47,18 @@ async function verify(message, client) {
                 }
                 else {
                     let id = makeid(5);
-                    message.author.send(`Please type \`!code\` and your verification code, \`${id}\` in the verification channel`);
                     form.codes.push(id);
                     form.users.push(message.author.id);
                     await db_1.updateVerify(form);
-                    await message.reply("Code has been sent to your dm. Please do `!code <your code>` to verify! You only get one chance at it!");
+                    await message.reply("Code has been sent to your reddit dm. Please do `!code <your code>` to verify! You only get one chance at it!");
+                    await r.composeMessage({
+                        to: args[1],
+                        subject: "your verification code",
+                        text: id
+                    }).catch(console.error());
                     return await ((_a = message.member) === null || _a === void 0 ? void 0 : _a.setNickname(userInfo.name));
                 }
-            });
+            }).catch();
         }
     }
     else if (args[0] === "code") {
