@@ -66,9 +66,6 @@ async function signup(message) {
     else if (signup.users.includes(message.author.id)) {
         return message.reply("You already signed up!");
     }
-    else if (!signup) {
-        return message.reply(", signups haven't opened yet. Contact mod if there is an issue.");
-    }
     else if (signup.open === false) {
         return message.reply(", signups are now closed! Contact mod if there is an issue.");
     }
