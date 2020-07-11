@@ -49,7 +49,7 @@ async function verify(message, client) {
                     await db_1.updateVerify(form);
                     message.reply("Code has been sent to your reddit dm. Please do `!code <your code>` to verify! You only get one chance at it!");
                     await r.composeMessage({
-                        to: `${args[1]}`,
+                        to: args[1],
                         subject: "your verification code",
                         text: `${id}`
                     });
