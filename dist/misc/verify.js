@@ -41,7 +41,7 @@ async function verify(message, client) {
                 }
             });
             let id = makeid(5);
-            message.author.send(`Please type \`!code\` and your verification code, ${id} in the verification channel`);
+            message.author.send(`Please type \`!code\` and your verification code, \`${id}\` in the verification channel`);
             form.codes.push(id);
             form.users.push(message.author.id);
             await db_1.updateVerify(form);
@@ -82,7 +82,7 @@ async function test() {
 exports.test = test;
 function makeid(length) {
     let result = '';
-    let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let characters = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz123456789';
     let charactersLength = characters.length;
     for (let i = 0; i < length; i++) {
         result += characters.charAt(Math.floor(Math.random() * charactersLength));

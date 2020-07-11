@@ -67,7 +67,7 @@ export async function verify(message: Discord.Message, client: Discord.Client){
 
             let id = makeid(5)
 
-            message.author.send(`Please type \`!code\` and your verification code, ${id} in the verification channel`)
+            message.author.send(`Please type \`!code\` and your verification code, \`${id}\` in the verification channel`)
 
             form.codes.push(id)
             form.users.push(message.author.id)
@@ -134,7 +134,7 @@ export async function test(){
 
 function makeid(length: number) {
     let result           = '';
-    let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let characters       = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz123456789';
     let charactersLength = characters.length;
     for ( let i = 0; i < length; i++ ) {
        result += characters.charAt(Math.floor(Math.random() * charactersLength));

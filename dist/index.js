@@ -74,7 +74,7 @@ client.on('ready', async () => {
 client.on("guildMemberAdd", async function (member) {
     var _a, _b;
     await member.roles.add("730650583413030953");
-    await ((_a = member.user) === null || _a === void 0 ? void 0 : _a.send("Please start verification with `!verify`."));
+    await ((_a = member.user) === null || _a === void 0 ? void 0 : _a.send("Please start verification with `!verify <reddit username>`.\nFurther instructions will be given!"));
     console.log(`a user joins a guild: ${(_b = member.user) === null || _b === void 0 ? void 0 : _b.username}`);
 });
 client.on("messageReactionAdd", async function (messageReaction, user) {
@@ -382,5 +382,7 @@ client.on("message", async (message) => {
         }
         await card_1.vs(message, client, users);
     }
+    let awake = client.channels.cache.get("589585409684668430");
+    awake.send("ok");
 });
 client.login(process.env.TOKEN);
