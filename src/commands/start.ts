@@ -335,6 +335,17 @@ export async function running(client: discord.Client): Promise<void> {
             else if ((!(match.split) && ((Math.floor(Date.now() / 1000) - match.p2.time < 2400) && match.p2.memedone === true)
                 && ((Math.floor(Date.now() / 1000) - match.p2.time < 2400) && match.p1.memedone === true))) {
 
+                    if(Math.floor(Math.random() * (5 - 1) + 1) % 2 === 1){
+                        let temp = match.p1
+
+                        match.p1 = match.p2
+    
+                        match.p2 = temp
+    
+                        await updateActive(match)
+                    }
+
+
                 var embed1 = new discord.MessageEmbed()
                     .setImage(match.p1.memelink)
                     .setColor("#d7be26")
