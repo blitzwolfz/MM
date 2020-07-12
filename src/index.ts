@@ -87,6 +87,9 @@ client.on("guildMemberAdd", async function(member){
 });
 
 client.on("messageReactionAdd", async function(messageReaction, user){
+
+  if(!emojis.includes(messageReaction.emoji.name)) return;
+
   console.log(`a reaction is added to a message`);
   //console.log(messageReaction, user)
   if(user.bot) return;
@@ -186,6 +189,8 @@ client.on("messageReactionAdd", async function(messageReaction, user){
     }
   }
 
+  //removethreevotes() now only checks if it's 2 votes or less
+
   if(quals){
     for (const match of quals){
 
@@ -235,8 +240,8 @@ client.on("messageReactionAdd", async function(messageReaction, user){
       }
     }
   }
+  
 });
-
 
 client.on("message", async message => {
   //const gamemaster = message.guild.roles.get("719936221572235295");
@@ -470,7 +475,5 @@ client.on("message", async message => {
 
   awake.send("ok")
 
-  
 });
-
 client.login(process.env.TOKEN);

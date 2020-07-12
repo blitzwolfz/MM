@@ -79,6 +79,8 @@ client.on("guildMemberAdd", async function (member) {
 });
 client.on("messageReactionAdd", async function (messageReaction, user) {
     var _a, _b;
+    if (!utils_1.emojis.includes(messageReaction.emoji.name))
+        return;
     console.log(`a reaction is added to a message`);
     if (user.bot)
         return;

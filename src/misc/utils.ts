@@ -41,7 +41,7 @@ export function hasthreevotes(arr:Array<Array<string>>, search:string) {
     if (row.includes(search)) x++;
   });
 
-  if(x >= 3){
+  if(x >= 2){
     return true;
   }
   return false;

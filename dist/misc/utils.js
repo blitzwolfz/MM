@@ -24,7 +24,7 @@ function hasthreevotes(arr, search) {
         if (row.includes(search))
             x++;
     });
-    if (x >= 3) {
+    if (x >= 2) {
         return true;
     }
     return false;
