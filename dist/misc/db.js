@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateVerify = exports.getVerify = exports.insertVerify = exports.updateMatchlist = exports.getMatchlist = exports.insertMatchlist = exports.deleteSignup = exports.updateSignup = exports.getSignups = exports.insertSignups = exports.deleteQuals = exports.deleteActive = exports.addUser = exports.updateProfile = exports.getProfile = exports.addProfile = exports.getSingularQuals = exports.getQuals = exports.getQual = exports.getMatch = exports.getActive = exports.updateQuals = exports.insertQuals = exports.updateActive = exports.insertActive = exports.connectToDB = void 0;
+exports.updateVerify = exports.getVerify = exports.insertVerify = exports.updateMatchlist = exports.getMatchlist = exports.insertMatchlist = exports.deleteQuallist = exports.updateQuallist = exports.getQuallist = exports.insertQuallist = exports.deleteSignup = exports.updateSignup = exports.getSignups = exports.insertSignups = exports.deleteQuals = exports.deleteActive = exports.addUser = exports.updateProfile = exports.getProfile = exports.addProfile = exports.getSingularQuals = exports.getQuals = exports.getQual = exports.getMatch = exports.getActive = exports.updateQuals = exports.insertQuals = exports.updateActive = exports.insertActive = exports.connectToDB = void 0;
 const mongo = __importStar(require("mongodb"));
 require("dotenv").config();
 const MongoClient = mongo.MongoClient;
@@ -133,6 +133,23 @@ async function deleteSignup() {
     return "Signups are now deleted!";
 }
 exports.deleteSignup = deleteSignup;
+async function insertQuallist(qualist) {
+    await client.db(process.env.DBNAME).collection("signup").insertOne(qualist);
+}
+exports.insertQuallist = insertQuallist;
+async function getQuallist() {
+    return await client.db(process.env.DBNAME).collection("signup").findOne({ _id: 2 });
+}
+exports.getQuallist = getQuallist;
+async function updateQuallist(qualist) {
+    await client.db(process.env.DBNAME).collection("signup").updateOne({ _id: 2 }, { $set: qualist });
+}
+exports.updateQuallist = updateQuallist;
+async function deleteQuallist() {
+    await client.db(process.env.DBNAME).collection("signup").deleteOne({ _id: 2 });
+    return "Quallist are now deleted!";
+}
+exports.deleteQuallist = deleteQuallist;
 async function insertMatchlist(matchlists) {
     await client.db(process.env.DBNAME).collection("signup").insertOne(matchlists);
 }

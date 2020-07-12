@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.matchlistmaker = exports.declarequalwinner = exports.ChannelCreation = exports.CreateChallongeMatchBracket = exports.CreateChallongeQualBracket = void 0;
+exports.matchlistmaker = exports.declarequalwinner = exports.quallistEmbed = exports.CreateQualGroups = exports.ChannelCreation = exports.CreateChallongeMatchBracket = exports.CreateChallongeQualBracket = void 0;
 const Discord = __importStar(require("discord.js"));
 const db_1 = require("../misc/db");
 const challonge = require("challonge-js");
@@ -176,6 +176,87 @@ async function ChannelCreation(message, disclient, args) {
     }
 }
 exports.ChannelCreation = ChannelCreation;
+async function CreateQualGroups(message, args) {
+    if (message.member.roles.cache.has('724818272922501190')
+        || message.member.roles.cache.has('724832462286356590')) {
+        if (!args) {
+            return message.reply("Please enter how many people you want in a group");
+        }
+        let gNum = parseInt(args[0]);
+        let Signups = await db_1.getSignups();
+        if (Signups) {
+            if (Signups.open === false) {
+                let groups = await makeGroup(gNum, Signups.users);
+                let qualgroups = await db_1.getQuallist();
+                if (qualgroups) {
+                    qualgroups.users = groups;
+                    await db_1.updateQuallist(qualgroups);
+                }
+                else {
+                    qualgroups = {
+                        _id: 2,
+                        url: "",
+                        users: groups
+                    };
+                    await db_1.insertQuallist(qualgroups);
+                }
+                return message.reply("Made qualifier groups");
+            }
+            else {
+                return message.reply("Signups haven't closed");
+            }
+        }
+        else {
+            return message.reply("No one signed up");
+        }
+    }
+}
+exports.CreateQualGroups = CreateQualGroups;
+async function makeGroup(n, list) {
+    let evenGroupds = Math.floor(list.length / n);
+    let groups = [];
+    list = await shuffle(list);
+    let s = 0, end = n;
+    for (let i = 0; i < evenGroupds; i++) {
+        let temp = list.slice(s, end);
+        s += n;
+        end += n;
+        groups.push(temp);
+    }
+    groups.push(list.slice(evenGroupds * n - 1));
+    return groups;
+}
+async function shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+async function quallistEmbed(message, client, args) {
+    let signup = await db_1.getQuallist();
+    if (args.length === 0) {
+        return message.reply(`, there are ${signup.users.length} groups`);
+    }
+    else {
+        let page = parseInt(args[0]);
+        page -= 1;
+        const fields = [];
+        for (let i = 0; i < signup.users[page].length; i++)
+            fields.push({
+                name: `${i + 1}) ${await (await client.users.fetch(signup.users[page][i])).username}`,
+                value: `Userid is: ${signup.users[page][i]}`
+            });
+        return {
+            title: `Group ${page += 1}`,
+            description: "Groups for quals",
+            fields,
+            color: "#d7be26",
+            timestamp: new Date()
+        };
+    }
+}
+exports.quallistEmbed = quallistEmbed;
 async function declarequalwinner(message, client) {
     if (message.member.roles.cache.has('724818272922501190')
         || message.member.roles.cache.has('724818272922501190')
@@ -183,7 +264,17 @@ async function declarequalwinner(message, client) {
         try {
             let id = message.mentions.users.first().id;
             let match = await db_1.getMatchlist();
-            if (!match) {
+            if (match) {
+                if (match.users.includes(id)) {
+                    return message.reply(" user already added.");
+                }
+                else {
+                    match.users.push(id);
+                    await db_1.updateMatchlist(match);
+                    return message.reply(" added user.");
+                }
+            }
+            else {
                 let newmatch = {
                     _id: 3,
                     url: "",
@@ -191,18 +282,8 @@ async function declarequalwinner(message, client) {
                     users: [],
                 };
                 newmatch.users.push(id);
-                await db_1.updateMatchlist(newmatch);
+                await db_1.insertMatchlist(newmatch);
                 return message.reply(", added user.");
-            }
-            else if (match) {
-                if (match.users.includes(id)) {
-                    return message.reply(", user already added.");
-                }
-                else {
-                    match.users.push(id);
-                    await db_1.updateMatchlist(match);
-                    return message.reply(", added user.");
-                }
             }
         }
         catch (err) {

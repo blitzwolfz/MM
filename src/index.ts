@@ -11,8 +11,8 @@ import { connectToDB, getQuals, getActive, updateActive, updateQuals, deleteSign
 import { template, approvetemplate } from "./commands/template";
 import { createrUser, stats } from "./commands/user";
 import { signup, startsignup, closesignup, removesignup, reopensignup, activeOffers } from "./commands/signups";
-import { CreateChallongeQualBracket, ChannelCreation, CreateChallongeMatchBracket, matchlistmaker } from "./commands/challonge";
-import { verify, test } from "./misc/verify";
+import { CreateChallongeQualBracket, ChannelCreation, CreateChallongeMatchBracket, matchlistmaker, CreateQualGroups, quallistEmbed, declarequalwinner} from "./commands/challonge";
+import { verify} from "./misc/verify";
 //import data from "../match.json"
 //const fs = require('fs');
 console.log("Hello World, bot has begun life");
@@ -45,12 +45,13 @@ const listener = app.listen(process.env.PORT, () => {
 });
 
 client.on('ready', async () => {
+  await connectToDB()
   client.user!.setActivity(`Warming up`);
   console.log(`Logged in as ${client.user?.tag}`);
   console.log("OK")
   // for(let i = 0; i < 2; i++) console.log(i)
 
-  await connectToDB()
+  
 
   let matches:activematch[] = await getActive();
   
@@ -275,14 +276,28 @@ client.on("message", async message => {
     await m.edit(`Latency is ${m.createdTimestamp - message.createdTimestamp}ms. Discord API Latency is ${Math.round(client.ws.ping)}ms`);
   }
 
-  if (command === "test"){
-    // await message.member?.roles.add("730650583413030953")
+  // if (command === "test"){
+  //   // await message.member?.roles.add("730650583413030953")
 
-    // await message.member?.user?.send("Please start verification with `!verify`.")
+  //   // await message.member?.user?.send("Please start verification with `!verify`.")
   
-    // console.log(`a user joins a guild: ${message.member?.user.username}`);
+  //   // console.log(`a user joins a guild: ${message.member?.user.username}`);
+  // }
+  else if(command === "createqualgroup"){
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
+    await CreateQualGroups(message, args)
+  }
 
-    await test()
+  else if(command === "viewgroups"){
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
+
+    if(!args) return await quallistEmbed(message, client, args)
+
+    message.channel.send({ embed:await quallistEmbed(message, client, args)})
+  }
+
+  else if(command === "declarequalwinner"){
+    await declarequalwinner(message, client)
   }
 
   if(command === "verify" || command === "code"){
@@ -393,6 +408,11 @@ client.on("message", async message => {
 
   else if(command === "signup"){
     await signup(message)
+    removesignup
+  }
+
+  else if(command === "unsignup"){
+    await removesignup(message)
   }
 
   else if(command === "viewsignup" || command === "viewlist"){

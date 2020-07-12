@@ -60,7 +60,7 @@ export interface signups {
 export interface quallist {
     _id: 2;
     url: string;
-    users: Array<string>;
+    users: Array<Array<string>>;
 }
 export interface matchlist {
     _id: 3;

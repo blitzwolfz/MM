@@ -50,10 +50,10 @@ const listener = app.listen(process.env.PORT, () => {
 });
 client.on('ready', async () => {
     var _a;
+    await db_1.connectToDB();
     client.user.setActivity(`Warming up`);
     console.log(`Logged in as ${(_a = client.user) === null || _a === void 0 ? void 0 : _a.tag}`);
     console.log("OK");
-    await db_1.connectToDB();
     let matches = await db_1.getActive();
     if (matches) {
         for (const match of matches) {
@@ -230,8 +230,20 @@ client.on("message", async (message) => {
         const m = await message.channel.send("Ping?");
         await m.edit(`Latency is ${m.createdTimestamp - message.createdTimestamp}ms. Discord API Latency is ${Math.round(client.ws.ping)}ms`);
     }
-    if (command === "test") {
-        await verify_1.test();
+    else if (command === "createqualgroup") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
+        await challonge_1.CreateQualGroups(message, args);
+    }
+    else if (command === "viewgroups") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
+        if (!args)
+            return await challonge_1.quallistEmbed(message, client, args);
+        message.channel.send({ embed: await challonge_1.quallistEmbed(message, client, args) });
+    }
+    else if (command === "declarequalwinner") {
+        await challonge_1.declarequalwinner(message, client);
     }
     if (command === "verify" || command === "code") {
         await verify_1.verify(message, client);
@@ -323,6 +335,10 @@ client.on("message", async (message) => {
     }
     else if (command === "signup") {
         await signups_1.signup(message);
+        signups_1.removesignup;
+    }
+    else if (command === "unsignup") {
+        await signups_1.removesignup(message);
     }
     else if (command === "viewsignup" || command === "viewlist") {
         await signups_1.activeOffers(message, client);

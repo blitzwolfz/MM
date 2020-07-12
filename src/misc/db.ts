@@ -2,7 +2,7 @@ import * as mongo from "mongodb"
 
 require("dotenv").config();
 
-import { activematch, qualmatch, user, signups, matchlist, verificationform } from "./struct";
+import { activematch, qualmatch, user, signups, matchlist, verificationform, quallist } from "./struct";
 
 const MongoClient = mongo.MongoClient
 //const assert = require("assert")
@@ -122,22 +122,22 @@ export async function deleteSignup(): Promise<string>{
 
 //Break
 
-// export async function insertQuallist(qualist: quallist): Promise<void>{
-//     await client.db(process.env.DBNAME).collection("signup").insertOne(qualist)
-// }
+export async function insertQuallist(qualist: quallist): Promise<void>{
+    await client.db(process.env.DBNAME).collection("signup").insertOne(qualist)
+}
 
-// export async function getQuallist(): Promise<quallist>{
-//     return await client.db(process.env.DBNAME).collection("signup").findOne({ _id: 2 })!;
-// }
+export async function getQuallist(): Promise<quallist>{
+    return await client.db(process.env.DBNAME).collection("signup").findOne({ _id: 2 })!;
+}
 
-// export async function updateQuallist(qualist: quallist): Promise<void> {
-//     await client.db(process.env.DBNAME).collection("signup").updateOne({_id:2}, {$set: qualist});
-// }
+export async function updateQuallist(qualist: quallist): Promise<void> {
+    await client.db(process.env.DBNAME).collection("signup").updateOne({_id:2}, {$set: qualist});
+}
 
-// export async function deleteQuallist(): Promise<string>{
-//     await client.db(process.env.DBNAME).collection("signup").deleteOne({_id: 2})
-//     return "Quallist are now deleted!";
-// }
+export async function deleteQuallist(): Promise<string>{
+    await client.db(process.env.DBNAME).collection("signup").deleteOne({_id: 2})
+    return "Quallist are now deleted!";
+}
 
 //Break
 

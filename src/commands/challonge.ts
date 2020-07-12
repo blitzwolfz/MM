@@ -1,7 +1,7 @@
 //import { matchlist } from "../misc/struct";
 import * as Discord from "discord.js";
-import { getSignups, getMatchlist, updateMatchlist, insertMatchlist } from "../misc/db";
-import { matchlist } from "../misc/struct";
+import { getSignups, getMatchlist, updateMatchlist, insertMatchlist, insertQuallist, getQuallist, updateQuallist } from "../misc/db";
+import { matchlist, quallist } from "../misc/struct";
 
 
 const challonge = require("challonge-js")
@@ -231,6 +231,121 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
 }
 
 
+export async function CreateQualGroups(message: Discord.Message, args: string[]) {
+    if (message.member!.roles.cache.has('724818272922501190')
+        || message.member!.roles.cache.has('724832462286356590')) {
+        
+
+         if (!args){
+             return message.reply("Please enter how many people you want in a group")
+         }   
+        let gNum = parseInt(args[0])
+
+        let Signups = await getSignups()
+
+
+        if (Signups) {
+            if (Signups.open === false) {
+                let groups = await makeGroup(gNum, Signups.users)
+                let qualgroups:quallist = await getQuallist()
+                if(qualgroups){
+                    qualgroups.users = groups
+
+                    await updateQuallist(qualgroups)
+                }
+
+                else{
+                    qualgroups = {
+                        _id: 2,
+                        url: "",
+                        users: groups
+                    }
+    
+                    await insertQuallist(qualgroups)
+                }
+
+                return message.reply("Made qualifier groups")
+
+            }
+
+            else {
+                return message.reply("Signups haven't closed")
+            }
+
+        }
+
+        else {
+            return message.reply("No one signed up")
+        }
+
+    }
+}
+
+async function makeGroup(n: number, list: string[]){
+    let evenGroupds = Math.floor(list.length / n)
+    let groups = []
+    list = await shuffle(list)
+
+    let s = 0, end = n
+
+    for(let i = 0; i < evenGroupds; i++){
+        
+
+        let temp = list.slice(s, end)
+
+        s += n
+        end += n
+
+        groups.push(temp)
+    }
+
+    groups.push(list.slice(evenGroupds*n - 1))
+
+
+    return groups
+}
+
+async function shuffle(a: any[]) {
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
+export async function quallistEmbed(message: Discord.Message, client: Discord.Client, args: string[]){
+
+
+
+    let signup = await getQuallist()
+
+    if(args.length === 0){
+        return message.reply(`, there are ${signup.users.length} groups`)
+    }
+
+    else {
+        let page = parseInt(args[0])
+
+        page -= 1
+
+        const fields = [];
+
+        for (let i = 0; i < signup.users[page].length; i++)
+            fields.push({
+                name: `${i + 1}) ${await (await client.users.fetch(signup.users[page][i])).username}`,
+                value: `Userid is: ${signup.users[page][i]}`
+            });
+
+        return {
+            title: `Group ${page += 1}`,
+            description: "Groups for quals",
+            fields,
+            color: "#d7be26",
+            timestamp: new Date()
+        };
+    }
+}
+
 
 
 
@@ -264,7 +379,21 @@ export async function declarequalwinner(message: Discord.Message, client: Discor
             let id = message.mentions!.users!.first()!.id
             let match = await getMatchlist()
 
-            if (!match) {
+
+
+            if (match) {
+                if (match.users.includes(id)) {
+                    return message.reply(" user already added.")
+                }
+
+                else {
+                    match.users.push(id)
+                    await updateMatchlist(match)
+                    return message.reply(" added user.")
+                }
+            }
+
+            else{
 
                 let newmatch: matchlist = {
                     _id: 3,
@@ -276,21 +405,9 @@ export async function declarequalwinner(message: Discord.Message, client: Discor
 
                 newmatch.users.push(id)
 
-                await updateMatchlist(newmatch)
+                await insertMatchlist(newmatch)
                 return message.reply(", added user.")
 
-            }
-
-            else if (match) {
-                if (match.users.includes(id)) {
-                    return message.reply(", user already added.")
-                }
-
-                else {
-                    match.users.push(id)
-                    await updateMatchlist(match)
-                    return message.reply(", added user.")
-                }
             }
 
         } catch (err) {
