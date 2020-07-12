@@ -233,7 +233,8 @@ async function listEmbed(page = 1, client) {
     let signup = await db_1.getSignups();
     page = page < 1 ? 1 : page;
     const fields = [];
-    for (let i = 0; i < Math.min(10, signup.users.length); ++i)
+    let index = (0 + page - 1) * 10;
+    for (let i = index; i < Math.min(10, signup.users.length); ++i)
         fields.push({
             name: `${await (await client.users.fetch(signup.users[i])).username}`,
             value: `Userid is: ${signup.users[i]}`
