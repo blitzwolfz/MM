@@ -270,7 +270,7 @@ async function listEmbed(page: number = 1, client: Discord.Client){
     let index = (0 + page - 1) * 10
     for (let i = index; i < Math.min(index + 10, signup.users.length); ++i)
         fields.push({
-            name: `${await (await client.users.fetch(signup.users[i])).username}`,
+            name: `${i+1}) ${await (await client.users.fetch(signup.users[i])).username}`,
             value: `Userid is: ${signup.users[i]}`
         });
 
