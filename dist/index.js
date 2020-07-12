@@ -323,7 +323,7 @@ client.on("message", async (message) => {
         await signups_1.signup(message);
     }
     else if (command === "viewsignup" || command === "viewlist") {
-        await signups_1.viewsignup(message, client);
+        await signups_1.activeOffers(message, client);
     }
     else if (command === "startsignup") {
         await signups_1.startsignup(message, client);

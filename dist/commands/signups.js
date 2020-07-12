@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.viewsignup = exports.reopensignup = exports.closesignup = exports.removesignup = exports.signup = exports.startsignup = void 0;
+exports.activeOffers = exports.viewsignup = exports.reopensignup = exports.closesignup = exports.removesignup = exports.signup = exports.startsignup = void 0;
 const Discord = __importStar(require("discord.js"));
 const db_1 = require("../misc/db");
 async function startsignup(message, client) {
@@ -210,3 +210,41 @@ async function viewsignup(message, client) {
     }
 }
 exports.viewsignup = viewsignup;
+const backwardsFilter = (reaction, user) => reaction.emoji.name === '⬅' && !user.bot;
+const forwardsFilter = (reaction, user) => reaction.emoji.name === '➡' && !user.bot;
+async function activeOffers(message, client) {
+    let page = 1;
+    const m = (await message.channel.send({ embed: await listEmbed(page, client) }));
+    await m.react("⬅");
+    await m.react("➡");
+    const backwards = m.createReactionCollector(backwardsFilter, { time: 100000 });
+    const forwards = m.createReactionCollector(forwardsFilter, { time: 100000 });
+    backwards.on('collect', async () => {
+        m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
+        m.edit({ embed: await listEmbed(--page, client) });
+    });
+    forwards.on('collect', async () => {
+        m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
+        m.edit({ embed: await listEmbed(++page, client) });
+    });
+}
+exports.activeOffers = activeOffers;
+async function listEmbed(page = 1, client) {
+    let signup = await db_1.getSignups();
+    page = page < 1 ? 1 : page;
+    const fields = [];
+    for (let i = 0; i < Math.min(10, signup.users.length); ++i)
+        fields.push({
+            name: `${await (await client.users.fetch(signup.users[i])).username}`,
+            value: `Userid is: ${signup.users[i]}`
+        });
+    return {
+        title: `Signup List. You are on page ${page || 1} of ${Math.floor(signup.users.length / 10) + 1}`,
+        description: fields.length === 0 ?
+            "There are no signups" :
+            "All the signups!",
+        fields,
+        color: "#d7be26",
+        timestamp: new Date()
+    };
+}
