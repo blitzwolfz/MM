@@ -63,7 +63,7 @@ export const UserHelp = {
             value: `To signup`
         },
         {
-            name: '`!removesignup`',
+            name: '`!unsignup` or `!removesignup` or `!withdraw`',
             value: `To remove your signup`
         },
         {

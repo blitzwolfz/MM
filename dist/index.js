@@ -337,7 +337,7 @@ client.on("message", async (message) => {
         await signups_1.signup(message);
         signups_1.removesignup;
     }
-    else if (command === "unsignup") {
+    else if (command === "pullout" || command === "goingformilk" || command === "unsignup" || command === "withdraw" || command === "removesignup") {
         await signups_1.removesignup(message);
     }
     else if (command === "viewsignup" || command === "viewlist") {

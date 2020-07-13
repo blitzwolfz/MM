@@ -411,7 +411,7 @@ client.on("message", async message => {
     removesignup
   }
 
-  else if(command === "unsignup"){
+  else if(command === "pullout" || command === "goingformilk" || command === "unsignup" || command === "withdraw" || command === "removesignup"){
     await removesignup(message)
   }
 
