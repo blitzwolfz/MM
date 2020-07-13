@@ -223,7 +223,12 @@ async function makeGroup(n, list) {
         end += n;
         groups.push(temp);
     }
-    groups.push(list.slice(evenGroupds * n - 1));
+    if (n % 2 == 0) {
+        groups.push(list.slice(evenGroupds * n - 1));
+    }
+    else {
+        groups.push(list.slice(evenGroupds * n - 1).slice(1));
+    }
     return groups;
 }
 async function shuffle(a) {

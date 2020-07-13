@@ -298,8 +298,14 @@ async function makeGroup(n: number, list: string[]){
 
         groups.push(temp)
     }
-
-    groups.push(list.slice(evenGroupds*n - 1))
+    
+    if(n%2 == 0){
+        groups.push(list.slice(evenGroupds*n - 1))
+    }
+    
+    else{
+        groups.push(list.slice(evenGroupds*n - 1).slice(1))
+    }
 
 
     return groups

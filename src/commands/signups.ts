@@ -278,7 +278,7 @@ async function listEmbed(page: number = 1, client: Discord.Client){
         title: `Signup List. You are on page ${page! || 1} of ${Math.floor(signup.users.length / 10) + 1}`,
         description: fields.length === 0 ?
             `There are no signups` :
-            `All the signups!. Total Users: ${signup.users.length+1}`,
+            `All the signups!. Total Users: ${signup.users.length}`,
         fields,
         color: "#d7be26",
         timestamp: new Date()
