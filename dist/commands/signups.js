@@ -242,8 +242,8 @@ async function listEmbed(page = 1, client) {
     return {
         title: `Signup List. You are on page ${page || 1} of ${Math.floor(signup.users.length / 10) + 1}`,
         description: fields.length === 0 ?
-            "There are no signups" :
-            "All the signups!",
+            `There are no signups` :
+            `All the signups!. Total Users: ${signup.users.length + 1}`,
         fields,
         color: "#d7be26",
         timestamp: new Date()
