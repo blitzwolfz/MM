@@ -36,6 +36,7 @@ export async function qualrunn(match: qualmatch, channelid: string, client: disc
                 for(let player of match.players){
                     if(player.memedone){
                         let embed = new discord.MessageEmbed()
+                            .setTitle(`Meme #${match.players.indexOf(player) + 1}`)
                             .setColor("#d7be26")
                             .setImage(player.memelink)
                             .setTimestamp()
