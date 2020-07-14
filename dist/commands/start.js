@@ -206,8 +206,12 @@ async function startmodqual(message, client) {
         .setDescription(`This match has been split. Please contact mods to start your portion`)
         .setTimestamp();
     message.channel.send({ embed });
+    console.log(args[args.indexOf("theme") + 1]);
     if (["t", "template"].includes(args[x])) {
         newmatch.template = message.attachments.array()[0].url;
+    }
+    else if (args.includes("theme")) {
+        newmatch.template = args[args.indexOf("theme") + 1];
     }
     await db_1.insertQuals(newmatch);
 }
@@ -315,13 +319,13 @@ async function splitqual(client, message) {
                 if (u.userid === user.id && u.memedone === false && u.split === false) {
                     u.time = Math.floor(Date.now() / 1000);
                     await channelid.send(new discord.MessageEmbed()
-                        .setDescription(`<@${user.id}> your match has been split.\nYou have 30 mins to complete your memes\nUse ${`!qualsubmit`} to submit`)
+                        .setDescription(`<@${user.id}> your qaulifier match has been split.\nYou have 30 mins to complete your memes\nUse \`!qualsubmit\` to submit`)
                         .setColor("#d7be26")
                         .setTimestamp());
                     u.split = true;
-                    if (match.template.length > 0) {
-                        await user.send("Here is your template:");
-                        await user.send({ files: [new discord.MessageAttachment(match.template)] });
+                    await user.send(`<@${user.id}> your qaulifier match has been split.\nYou have 30 mins to complete your memes\nUse \`!qualsubmit\` to submit`);
+                    if (match.template.length > 0 || match.template) {
+                        await user.send("\n\nHere is your theme: " + match.template);
                     }
                     await db_1.updateQuals(match);
                 }

@@ -200,6 +200,7 @@ export async function startmodqual(message: discord.Message, client: discord.Cli
     }
 
     //console.log(args)
+    
 
     for (let i = 0; i < args.length; i++) {
         let userid = await getUser(args[i])
@@ -250,21 +251,29 @@ export async function startmodqual(message: discord.Message, client: discord.Cli
 
     message.channel.send({ embed })
 
+    console.log(args[args.indexOf("theme") + 1])
+
+
+
     if (["t", "template"].includes(args[x])) {
         newmatch.template = message.attachments.array()[0].url
     }
 
-    // else if (["th", "theme"].includes(args[2+x])){
-    //     for (let u of users){
-    //         let user = await client.fetchUser(u.userid)
-    //         await user.send(`Your theme is: ${args.splice(5+x)}`)
-    //     }
-    // }
+
+    else if (args.includes("theme")){
+        newmatch.template = args[args.indexOf("theme") + 1]
+        // for (let u of users){
+        //     let user = await client.fetchUser(u.userid)
+        //     await user.send(`Your theme is: ${args.splice(5+x)}`)
+        // }
+    }
 
     //console.log(newmatch)
     // qualmatches.push(newmatch)
 
     await insertQuals(newmatch)
+
+    // await message.edit()
     // return qualmatches;
 }
 
@@ -409,18 +418,22 @@ export async function splitqual(client: discord.Client, message: discord.Message
                 if (u.userid === user.id && u.memedone === false && u.split === false) {
                     u.time = Math.floor(Date.now() / 1000)
                     await channelid.send(new discord.MessageEmbed()
-                        .setDescription(`<@${user.id}> your match has been split.\nYou have 30 mins to complete your memes\nUse ${`!qualsubmit`} to submit`)
+                        .setDescription(`<@${user.id}> your qaulifier match has been split.\nYou have 30 mins to complete your memes\nUse \`!qualsubmit\` to submit`)
                         .setColor("#d7be26")
                         .setTimestamp())
                     u.split = true
 
-                    if (match.template.length > 0) {
-                        await user.send("Here is your template:")
-                        await user.send({ files: [new discord.MessageAttachment(match.template)] })
-                    }
+                    await user.send(`<@${user.id}> your qaulifier match has been split.\nYou have 30 mins to complete your memes\nUse \`!qualsubmit\` to submit`)
 
+
+                    if (match.template.length > 0 || match.template) {
+                        await user.send("\n\nHere is your theme: " + match.template)
+                        //await user.send({ files: [new discord.MessageAttachment(match.template)] })
+                    }
+                    
                     await updateQuals(match)
                 }
+
                 else if (u.split === true && u.userid === user.id) {
                     await channelid.send(new discord.MessageEmbed()
                         .setDescription(`<@${user.id}> has completed their portion`)

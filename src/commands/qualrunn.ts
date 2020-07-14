@@ -28,6 +28,10 @@ export async function qualrunn(match: qualmatch, channelid: string, client: disc
                     await updateQuals(match)
                     return await qualend(client, channel.id)
                 }
+
+                match = qualplayershuffle(match)
+
+                await updateQuals(match)
                 
                 for(let player of match.players){
                     if(player.memedone){
@@ -63,6 +67,11 @@ export async function qualrunn(match: qualmatch, channelid: string, client: disc
     
                 match.votetime = Math.floor(Date.now() / 1000)
                 match.votingperiod = true
+
+                if (match.template.length > 0 || match.template) {
+                    await channel.send("\n\nThe theme is: " + match.template)
+                    //await user.send({ files: [new discord.MessageAttachment(match.template)] })
+                }
     
                 await updateQuals(match)
             }
@@ -125,6 +134,33 @@ export async function qualrunn(match: qualmatch, channelid: string, client: disc
 }
 
 
+function qualplayershuffle(source: qualmatch) {
+    
+    let sourceArray = source.players
+    let source2 = source.playerids
+
+    console.log(sourceArray)
+
+
+    for (var i = 0; i < sourceArray.length - 1; i++) {
+        var j = i + Math.floor(Math.random() * (sourceArray.length - i));
+
+        var temp = sourceArray[j];
+        var temp2 = source2[j]
+
+
+        sourceArray[j] = sourceArray[i];
+        sourceArray[i] = temp;
+
+        source2[j] = source2[i]
+        source2[i] = temp2
+    }
+
+    console.log(sourceArray)
+
+
+    return source
+}
 
 
 
