@@ -352,6 +352,22 @@ export async function quallistEmbed(message: Discord.Message, client: Discord.Cl
     }
 }
 
+export async function GroupSearch(message: Discord.Message){
+    let signup = await getQuallist()
+
+    let id = message.mentions!.users!.first()!.id
+
+    for (let i = 0; i < signup.users.length; i++){
+
+        if(signup.users[i].includes(id)){
+            return message.reply(`<@${id}> is in group ${i+1}`)
+        }
+    }
+
+    return message.reply("they are not in a group")
+    
+}
+
 
 
 

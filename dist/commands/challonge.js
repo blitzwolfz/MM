@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.matchlistmaker = exports.declarequalwinner = exports.quallistEmbed = exports.CreateQualGroups = exports.ChannelCreation = exports.CreateChallongeMatchBracket = exports.CreateChallongeQualBracket = void 0;
+exports.matchlistmaker = exports.declarequalwinner = exports.GroupSearch = exports.quallistEmbed = exports.CreateQualGroups = exports.ChannelCreation = exports.CreateChallongeMatchBracket = exports.CreateChallongeQualBracket = void 0;
 const Discord = __importStar(require("discord.js"));
 const db_1 = require("../misc/db");
 const challonge = require("challonge-js");
@@ -262,6 +262,17 @@ async function quallistEmbed(message, client, args) {
     }
 }
 exports.quallistEmbed = quallistEmbed;
+async function GroupSearch(message) {
+    let signup = await db_1.getQuallist();
+    let id = message.mentions.users.first().id;
+    for (let i = 0; i < signup.users.length; i++) {
+        if (signup.users[i].includes(id)) {
+            return message.reply(`<@${id}> is in group ${i + 1}`);
+        }
+    }
+    return message.reply("they are not in a group");
+}
+exports.GroupSearch = GroupSearch;
 async function declarequalwinner(message, client) {
     if (message.member.roles.cache.has('724818272922501190')
         || message.member.roles.cache.has('724818272922501190')

@@ -242,6 +242,11 @@ client.on("message", async (message) => {
             return await challonge_1.quallistEmbed(message, client, args);
         message.channel.send({ embed: await challonge_1.quallistEmbed(message, client, args) });
     }
+    else if (command === "search") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
+        await challonge_1.GroupSearch(message);
+    }
     else if (command === "declarequalwinner") {
         await challonge_1.declarequalwinner(message, client);
     }

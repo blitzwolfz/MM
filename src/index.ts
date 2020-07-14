@@ -11,7 +11,7 @@ import { connectToDB, getQuals, getActive, updateActive, updateQuals, deleteSign
 import { template, approvetemplate } from "./commands/template";
 import { createrUser, stats } from "./commands/user";
 import { signup, startsignup, closesignup, removesignup, reopensignup, activeOffers } from "./commands/signups";
-import { CreateChallongeQualBracket, ChannelCreation, CreateChallongeMatchBracket, matchlistmaker, CreateQualGroups, quallistEmbed, declarequalwinner} from "./commands/challonge";
+import { CreateChallongeQualBracket, ChannelCreation, CreateChallongeMatchBracket, matchlistmaker, CreateQualGroups, quallistEmbed, declarequalwinner, GroupSearch} from "./commands/challonge";
 import { verify} from "./misc/verify";
 //import data from "../match.json"
 //const fs = require('fs');
@@ -294,6 +294,12 @@ client.on("message", async message => {
     if(!args) return await quallistEmbed(message, client, args)
 
     message.channel.send({ embed:await quallistEmbed(message, client, args)})
+  }
+  
+  else if(command === "search"){
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
+
+    await GroupSearch(message)
   }
 
   else if(command === "declarequalwinner"){
