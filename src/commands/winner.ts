@@ -210,6 +210,7 @@ export async function qualend(client: discord.Client, id: string) {
         }
 
         if(match.playersdone.length === 0){
+            await deleteQuals(match)
             return channel.send({
                 embed: {
                     title: `Qualifier has ended. No one submitted a meme.`,

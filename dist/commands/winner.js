@@ -178,6 +178,7 @@ async function qualend(client, id) {
             });
         }
         if (match.playersdone.length === 0) {
+            await db_1.deleteQuals(match);
             return channel.send({
                 embed: {
                     title: `Qualifier has ended. No one submitted a meme.`,
