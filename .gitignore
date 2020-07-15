@@ -8,3 +8,5 @@ upvote.png
 .env
 
 node_modules/
+
+.vscode/

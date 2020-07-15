@@ -36,7 +36,7 @@ async function vs(message, client, users) {
     console.log(prefix);
     var args = message.content.slice(prefix.length).trim().split(/ +/g);
     console.log(args);
-    if (args.length < 2) {
+    if (args.length < 3) {
         return message.reply("invalid response. Command is `!vs @user1 @user2 `");
     }
     const canvas = Canvas.createCanvas(700, 250);
@@ -44,8 +44,8 @@ async function vs(message, client, users) {
     ctx.drawImage(await Canvas.loadImage("firecard.jpg"), 0, 0, canvas.width, canvas.height);
     ctx.strokeStyle = '#74037b';
     ctx.strokeRect(0, 0, canvas.width, canvas.height);
-    let user1 = (await client.fetchUser(users[0]));
-    let user2 = (await client.fetchUser(users[1]));
+    let user1 = (await client.users.fetch(users[0]));
+    let user2 = (await client.users.fetch(users[1]));
     ctx.font = await applyText(canvas, `VS`);
     ctx.fillStyle = '#ffffff';
     await ctx.fillText(`VS`, canvas.width / 2 - 35, canvas.height / 2 + 10);
@@ -54,8 +54,8 @@ async function vs(message, client, users) {
     await ctx.arc(125, 125, 100, 0, Math.PI * 2, true);
     await ctx.closePath();
     await ctx.clip();
-    const avatar = await Canvas.loadImage(user1.displayAvatarURL);
-    const avatar2 = await Canvas.loadImage(user2.displayAvatarURL);
+    const avatar = await Canvas.loadImage(user1.displayAvatarURL({ format: 'png' }));
+    const avatar2 = await Canvas.loadImage(user2.displayAvatarURL({ format: 'png' }));
     await ctx.drawImage(avatar, 25, 25, 200, 200);
     await ctx.restore();
     await ctx.beginPath();
@@ -63,7 +63,7 @@ async function vs(message, client, users) {
     await ctx.closePath();
     await ctx.clip();
     await ctx.drawImage(avatar2, 475, 25, 200, 200);
-    const attachment = new Discord.Attachment(canvas.toBuffer(), 'welcome-image.png');
+    const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'welcome-image.png');
     await message.channel.send(attachment);
 }
 exports.vs = vs;
@@ -77,8 +77,8 @@ async function p1(message, client, users) {
     ctx.drawImage(await Canvas.loadImage("firecard.jpg"), 0, 0, canvas.width, canvas.height);
     ctx.strokeStyle = '#74037b';
     ctx.strokeRect(0, 0, canvas.width, canvas.height);
-    let user1 = (await client.fetchUser(users[0]));
-    let user2 = (await client.fetchUser(users[1]));
+    let user1 = (await client.users.fetch(users[0]));
+    let user2 = (await client.users.fetch(users[1]));
     ctx.font = await applyText(canvas, `VS`);
     ctx.fillStyle = '#ffffff';
     await ctx.fillText(`VS`, canvas.width / 2 - 35, canvas.height / 2 + 10);
@@ -87,8 +87,8 @@ async function p1(message, client, users) {
     await ctx.arc(125, 125, 100, 0, Math.PI * 2, true);
     await ctx.closePath();
     await ctx.clip();
-    const avatar = await Canvas.loadImage(user1.displayAvatarURL);
-    const avatar2 = await Canvas.loadImage(user2.displayAvatarURL);
+    const avatar = await Canvas.loadImage(user1.displayAvatarURL({ format: 'png' }));
+    const avatar2 = await Canvas.loadImage(user2.displayAvatarURL({ format: 'png' }));
     const up = await Canvas.loadImage("upvote.png");
     const down = await Canvas.loadImage("downvote.png");
     await ctx.drawImage(avatar, 25, 25, 200, 200);
@@ -102,7 +102,7 @@ async function p1(message, client, users) {
     await ctx.drawImage(avatar2, 475, 25, 200, 200);
     await ctx.drawImage(down, 475, 25, 200, 200);
     await ctx.restore();
-    const attachment = new Discord.Attachment(canvas.toBuffer(), 'welcome-image.png');
-    await message.channel.send(attachment);
+    const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'welcome-image.png');
+    await message.channel.send({ files: [attachment] });
 }
 exports.p1 = p1;

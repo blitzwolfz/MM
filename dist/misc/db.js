@@ -19,21 +19,22 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteQuals = exports.deleteActive = exports.addUser = exports.getUserProfile = exports.getQuals = exports.getActive = exports.updateQuals = exports.insertQuals = exports.updateActive = exports.insertActive = exports.connectToDB = void 0;
+exports.updateVerify = exports.getVerify = exports.insertVerify = exports.updateMatchlist = exports.getMatchlist = exports.insertMatchlist = exports.deleteQuallist = exports.updateQuallist = exports.getQuallist = exports.insertQuallist = exports.deleteSignup = exports.updateSignup = exports.getSignups = exports.insertSignups = exports.deleteQuals = exports.deleteActive = exports.addUser = exports.updateProfile = exports.getProfile = exports.addProfile = exports.getSingularQuals = exports.getQuals = exports.getQual = exports.getMatch = exports.getActive = exports.updateQuals = exports.insertQuals = exports.updateActive = exports.insertActive = exports.connectToDB = void 0;
 const mongo = __importStar(require("mongodb"));
 require("dotenv").config();
 const MongoClient = mongo.MongoClient;
-const client = new MongoClient(process.env.DBURL);
+const client = new MongoClient(process.env.DBURL, { useUnifiedTopology: true });
 async function connectToDB() {
     return new Promise(resolve => {
         client.connect(async (err) => {
             if (err)
                 throw err;
             console.log("Successfully connected");
-            client.db(process.env.DBNAME).createCollection("activematch");
-            client.db(process.env.DBNAME).createCollection("quals");
-            client.db(process.env.DBNAME).createCollection("users");
-            resolve();
+            await client.db(process.env.DBNAME).createCollection("activematch");
+            await client.db(process.env.DBNAME).createCollection("quals");
+            await client.db(process.env.DBNAME).createCollection("users");
+            await client.db(process.env.DBNAME).createCollection("signup");
+            await resolve();
         });
     });
 }
@@ -65,15 +66,41 @@ async function getActive() {
     return await client.db(process.env.DBNAME).collection("activematch").find({}, { projection: { _id: 0 } }).toArray();
 }
 exports.getActive = getActive;
+async function getMatch(channelid) {
+    return client.db(process.env.DBNAME).collection("activematch").findOne({ _id: channelid });
+}
+exports.getMatch = getMatch;
+async function getQual(channelid) {
+    return await client.db(process.env.DBNAME).collection("quals").findOne({ _id: channelid });
+}
+exports.getQual = getQual;
 async function getQuals() {
     console.log("Getting Quals!");
     return await client.db(process.env.DBNAME).collection("quals").find({}, { projection: { _id: 0 } }).toArray();
 }
 exports.getQuals = getQuals;
-async function getUserProfile(_id) {
-    return client.db(process.env.DBNAME).collection("users").findOne({ _id });
+async function getSingularQuals(_id) {
+    console.log("Getting Quals!");
+    return await client.db(process.env.DBNAME).collection("quals").findOne({ _id }, { projection: { _id: 0 } });
 }
-exports.getUserProfile = getUserProfile;
+exports.getSingularQuals = getSingularQuals;
+async function addProfile(User) {
+    await client.db(process.env.DBNAME).collection("users").insertOne(User);
+}
+exports.addProfile = addProfile;
+async function getProfile(_id) {
+    return client.db(process.env.DBNAME).collection("users").findOne({ _id: _id });
+}
+exports.getProfile = getProfile;
+async function updateProfile(_id, field, num) {
+    if (field === "wins") {
+        client.db(process.env.DBNAME).collection("users").updateOne({ _id: _id }, { $inc: { "wins": num } });
+    }
+    else {
+        client.db(process.env.DBNAME).collection("users").updateOne({ _id: _id }, { $inc: { "loss": num } });
+    }
+}
+exports.updateProfile = updateProfile;
 async function addUser(user) {
     await client.db(process.env.DBNAME).collection("users").insertOne(user);
 }
@@ -89,3 +116,61 @@ async function deleteQuals(match) {
     console.log("deleted quals");
 }
 exports.deleteQuals = deleteQuals;
+async function insertSignups(signup) {
+    await client.db(process.env.DBNAME).collection("signup").insertOne(signup);
+}
+exports.insertSignups = insertSignups;
+async function getSignups() {
+    return await client.db(process.env.DBNAME).collection("signup").findOne({ _id: 1 });
+}
+exports.getSignups = getSignups;
+async function updateSignup(signup) {
+    await client.db(process.env.DBNAME).collection("signup").updateOne({ _id: 1 }, { $set: signup });
+}
+exports.updateSignup = updateSignup;
+async function deleteSignup() {
+    await client.db(process.env.DBNAME).collection("signup").deleteOne({ _id: 1 });
+    return "Signups are now deleted!";
+}
+exports.deleteSignup = deleteSignup;
+async function insertQuallist(qualist) {
+    await client.db(process.env.DBNAME).collection("signup").insertOne(qualist);
+}
+exports.insertQuallist = insertQuallist;
+async function getQuallist() {
+    return await client.db(process.env.DBNAME).collection("signup").findOne({ _id: 2 });
+}
+exports.getQuallist = getQuallist;
+async function updateQuallist(qualist) {
+    await client.db(process.env.DBNAME).collection("signup").updateOne({ _id: 2 }, { $set: qualist });
+}
+exports.updateQuallist = updateQuallist;
+async function deleteQuallist() {
+    await client.db(process.env.DBNAME).collection("signup").deleteOne({ _id: 2 });
+    return "Quallist are now deleted!";
+}
+exports.deleteQuallist = deleteQuallist;
+async function insertMatchlist(matchlists) {
+    await client.db(process.env.DBNAME).collection("signup").insertOne(matchlists);
+}
+exports.insertMatchlist = insertMatchlist;
+async function getMatchlist() {
+    return await client.db(process.env.DBNAME).collection("signup").findOne({ _id: 3 });
+}
+exports.getMatchlist = getMatchlist;
+async function updateMatchlist(matchlists) {
+    await client.db(process.env.DBNAME).collection("signup").updateOne({ _id: 3 }, { $set: matchlists });
+}
+exports.updateMatchlist = updateMatchlist;
+async function insertVerify(verifyform) {
+    await client.db(process.env.DBNAME).collection("signup").insertOne(verifyform);
+}
+exports.insertVerify = insertVerify;
+async function getVerify() {
+    return await client.db(process.env.DBNAME).collection("signup").findOne({ _id: 4 });
+}
+exports.getVerify = getVerify;
+async function updateVerify(verifyform) {
+    await client.db(process.env.DBNAME).collection("signup").updateOne({ _id: 4 }, { $set: verifyform });
+}
+exports.updateVerify = updateVerify;

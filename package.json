@@ -5,7 +5,6 @@
   "main": "index.ts",
   "scripts": {
     "test": "tsc && node dist/index.js",
-    "testrun": "tsc && node dist/index.js",
     "start": "node dist/index.js"
   },
   "repository": {
@@ -22,9 +21,12 @@
     "@types/dotenv": "^8.2.0",
     "@types/mongodb": "^3.5.23",
     "canvas": "^2.6.0",
-    "discord.js": "^11.5.1",
+    "challonge-js": "^1.1.1",
+    "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "mongodb": "^3.5.9"
+    "mongodb": "^3.5.9",
+    "python-shell": "^2.0.1",
+    "snoowrap": "^1.21.0"
   }
 }
