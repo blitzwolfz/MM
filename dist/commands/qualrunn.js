@@ -75,7 +75,7 @@ async function qualrunn(match, channelid, client) {
                     await channel.send("\n\nThe theme is: " + match.template);
                 }
                 await db_1.updateQuals(match);
-                await channel.send(`<@719936221572235295>`);
+                await channel.send(`<@&719936221572235295>`);
             }
         }
         else if (match.split) {
