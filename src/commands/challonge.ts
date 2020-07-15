@@ -352,10 +352,10 @@ export async function quallistEmbed(message: Discord.Message, client: Discord.Cl
     }
 }
 
-export async function GroupSearch(message: Discord.Message){
+export async function GroupSearch(message: Discord.Message, args: string[]){
     let signup = await getQuallist()
 
-    let id = message.mentions!.users!.first()!.id
+    let id = message.mentions!.users!.first()!.id || args[0]
 
     for (let i = 0; i < signup.users.length; i++){
 

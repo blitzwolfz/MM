@@ -249,7 +249,7 @@ client.on("message", async (message) => {
     else if (command === "search") {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
-        await challonge_1.GroupSearch(message);
+        await challonge_1.GroupSearch(message, args);
     }
     else if (command === "declarequalwinner") {
         await challonge_1.declarequalwinner(message, client);
