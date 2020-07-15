@@ -192,7 +192,7 @@ async function qualend(client, id) {
             for (let i = 0; i < match.votes.length; i++)
                 fields.push({
                     name: `${await (await client.users.fetch(match.players[i].userid)).username}`,
-                    value: `${match.players[i].memedone ? `Came in with ${match.votes[i].length}` : `Failed to submit meme`}`,
+                    value: `${match.players[i].memedone ? `There meme was meme ${1 + 1}. Finished with ${match.votes[i].length}` : `Failed to submit meme`}`,
                 });
             await db_1.deleteQuals(match);
             return channel.send({

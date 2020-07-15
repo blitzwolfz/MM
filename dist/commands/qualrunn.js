@@ -92,7 +92,11 @@ async function qualrunn(match, channelid, client) {
                             .setTimestamp();
                         await (await client.users.fetch(player.userid)).send(embed2);
                         match.playersdone.push(player.userid);
-                        return await db_1.updateQuals(match);
+                        await db_1.updateQuals(match);
+                        await channel.send(new discord.MessageEmbed()
+                            .setDescription(`<@${player.userid}> has completed their portion`)
+                            .setColor("#d7be26")
+                            .setTimestamp());
                     }
                 }
             }

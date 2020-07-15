@@ -319,11 +319,11 @@ async function splitqual(client, message) {
                 if (u.userid === user.id && u.memedone === false && u.split === false) {
                     u.time = Math.floor(Date.now() / 1000);
                     await channelid.send(new discord.MessageEmbed()
-                        .setDescription(`<@${user.id}> your qaulifier match has been split.\nYou have 30 mins to complete your memes\nUse \`!qualsubmit\` to submit`)
+                        .setDescription(`<@${user.id}> your qualifier match has been split.\nYou have 30 mins to complete your memes\nUse \`!qualsubmit\` to submit`)
                         .setColor("#d7be26")
                         .setTimestamp());
                     u.split = true;
-                    await user.send(`<@${user.id}> your qaulifier match has been split.\nYou have 30 mins to complete your memes\nUse \`!qualsubmit\` to submit`);
+                    await user.send(`<@${user.id}> your qualifier match has been split.\nYou have 30 mins to complete your memes\nUse \`!qualsubmit\` to submit`);
                     if (match.template.length > 0 || match.template) {
                         await user.send("\n\nHere is your theme: " + match.template);
                     }
@@ -447,53 +447,49 @@ async function reload(message, client) {
             console.log("Check 1");
             return;
         }
-        if (match.votingperiod === false) {
-            console.log("Check 2");
-            if (!match.split) {
-                console.log("Check 3");
-                if (Math.floor(Date.now() / 1000) - match.octime > 1800 || match.playersdone.length === match.playerids.length) {
-                    if (match.playersdone.length <= 2) {
-                        match.votingperiod = true;
-                        await db_1.updateQuals(match);
-                        return await winner_1.qualend(client, channel.id);
-                    }
-                    for (let player of match.players) {
-                        if (player.memedone) {
-                            let embed = new discord.MessageEmbed()
-                                .setTitle(`Meme #${match.players.indexOf(player) + 1}`)
-                                .setColor("#d7be26")
-                                .setImage(player.memelink)
-                                .setTimestamp();
-                            await channel.send(embed);
-                        }
-                        else if (!player.memedone) {
-                            let embed2 = new discord.MessageEmbed()
-                                .setDescription("Player failed to submit meme on time")
-                                .setColor("#d7be26")
-                                .setTimestamp();
-                            await channel.send(embed2);
-                        }
-                    }
-                    let em = new discord.MessageEmbed()
-                        .setDescription("Please vote by clicking the number emotes.\nHit the recycle emote to reset votes")
+        console.log("Check 2");
+        console.log("Check 3");
+        if (Math.floor(Date.now() / 1000) - match.octime > 1800 || match.playersdone.length === match.playerids.length) {
+            if (match.playersdone.length <= 2) {
+                match.votingperiod = true;
+                await db_1.updateQuals(match);
+                return await winner_1.qualend(client, channel.id);
+            }
+            for (let player of match.players) {
+                if (player.memedone) {
+                    let embed = new discord.MessageEmbed()
+                        .setTitle(`Meme #${match.players.indexOf(player) + 1}`)
+                        .setColor("#d7be26")
+                        .setImage(player.memelink)
+                        .setTimestamp();
+                    await channel.send(embed);
+                }
+                else if (!player.memedone) {
+                    let embed2 = new discord.MessageEmbed()
+                        .setDescription("Player failed to submit meme on time")
                         .setColor("#d7be26")
                         .setTimestamp();
-                    channel.send(em).then(async (msg) => {
-                        for (let i = 0; i < match.playerids.length; i++) {
-                            await msg.react(utils_1.emojis[i]);
-                        }
-                        await msg.react(utils_1.emojis[6]);
-                    });
-                    match.votetime = Math.floor(Date.now() / 1000);
-                    match.votingperiod = true;
-                    if (match.template.length > 0 || match.template) {
-                        await channel.send("\n\nThe theme is: " + match.template);
-                    }
-                    await channel.send("You have 2 hours to vote. You can vote for 2 memes!");
-                    await db_1.updateQuals(match);
-                    await channel.send(`<@&719936221572235295>`);
+                    await channel.send(embed2);
                 }
             }
+            let em = new discord.MessageEmbed()
+                .setDescription("Please vote by clicking the number emotes.\nHit the recycle emote to reset votes")
+                .setColor("#d7be26")
+                .setTimestamp();
+            channel.send(em).then(async (msg) => {
+                for (let i = 0; i < match.playerids.length; i++) {
+                    await msg.react(utils_1.emojis[i]);
+                }
+                await msg.react(utils_1.emojis[6]);
+            });
+            match.votetime = Math.floor(Date.now() / 1000);
+            match.votingperiod = true;
+            if (match.template.length > 0 || match.template) {
+                await channel.send("\n\nThe theme is: " + match.template);
+            }
+            await channel.send("You have 2 hours to vote. You can vote for 2 memes!");
+            await db_1.updateQuals(match);
+            await channel.send(`<@&719936221572235295>`);
         }
     }
     else {

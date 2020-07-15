@@ -66,6 +66,8 @@ export async function signup(message: Discord.Message){
 
         await updateSignup(signup)
 
+        await message.member!.roles.add("730650583413030953")
+
         return message.reply("You have been signed up!")
     }
 }

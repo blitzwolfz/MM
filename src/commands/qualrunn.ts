@@ -89,6 +89,9 @@ export async function qualrunn(match: qualmatch, channelid: string, client: disc
             for(let player of match.players){
                 if(player.split){
                     if(Math.floor(Date.now() / 1000) - player.time > 1800 && player.failed === false){
+
+
+
                         player.failed = true;
                         player.memedone = false;
     
@@ -98,7 +101,12 @@ export async function qualrunn(match: qualmatch, channelid: string, client: disc
                             .setTimestamp()
                         await (await client.users.fetch(player.userid)).send(embed2)
                         match.playersdone.push(player.userid)
-                        return await updateQuals(match)
+                        await updateQuals(match)
+
+                        await channel.send(new discord.MessageEmbed()
+                        .setDescription(`<@${player.userid}> has completed their portion`)
+                        .setColor("#d7be26")
+                        .setTimestamp())
                     }
                 }
             }

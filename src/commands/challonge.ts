@@ -360,7 +360,7 @@ export async function GroupSearch(message: Discord.Message){
     for (let i = 0; i < signup.users.length; i++){
 
         if(signup.users[i].includes(id)){
-            return message.reply(`<@${id}> is in group ${i+1}`)
+            return message.reply(`<@${id}> is in #group-${i+1}`)
         }
     }
 

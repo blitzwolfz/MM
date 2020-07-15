@@ -72,6 +72,7 @@ async function signup(message) {
     else {
         signup.users.push(message.author.id);
         await db_1.updateSignup(signup);
+        await message.member.roles.add("730650583413030953");
         return message.reply("You have been signed up!");
     }
 }

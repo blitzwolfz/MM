@@ -226,7 +226,7 @@ export async function qualend(client: discord.Client, id: string) {
                 fields.push({
                     name: `${await (await client.users.fetch(match.players[i].userid)).username}`,
                     //value: `${match.votes[i].length > 0 ? `Came in with ${match.votes[i].length} vote(s)` : `Failed to submit meme`}`
-                    value: `${match.players[i].memedone ? `Came in with ${match.votes[i].length}` : `Failed to submit meme`}`, //`Came in with ${match.votes[i].length}`,
+                    value: `${match.players[i].memedone ? `There meme was meme ${1+1}. Finished with ${match.votes[i].length}` : `Failed to submit meme`}`, //`Came in with ${match.votes[i].length}`,
                 });
 
             await deleteQuals(match)
