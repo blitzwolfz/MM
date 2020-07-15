@@ -361,6 +361,10 @@ client.on("message", async (message) => {
     }
     else if (command === "viewsignup" || command === "viewlist") {
         await signups_1.activeOffers(message, client);
+        signups_1.matchlistEmbed;
+    }
+    else if (command === "viewmatchlist") {
+        await signups_1.matchlistEmbed(message, client);
     }
     else if (command === "startsignup") {
         await signups_1.startsignup(message, client);

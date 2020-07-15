@@ -1,6 +1,6 @@
 import * as Discord from "discord.js";
-import { signups } from "../misc/struct";
-import { insertSignups, getSignups, updateSignup } from "../misc/db";
+import { signups, matchlist } from "../misc/struct";
+import { insertSignups, getSignups, updateSignup, getMatchlist } from "../misc/db";
 
 
 export async function startsignup(message: Discord.Message, client: Discord.Client){
@@ -246,7 +246,8 @@ const forwardsFilter = (reaction: { emoji: { name: string; }; }, user: Discord.U
 
 export async function activeOffers(message: Discord.Message, client: Discord.Client) {
     let page: number = 1
-    const m = <Discord.Message>(await message.channel.send({ embed: await listEmbed(page!, client) }));
+    let signups = await getSignups()
+    const m = <Discord.Message>(await message.channel.send({ embed: await listEmbed(page!, client, signups) }));
     await m.react("⬅")
     await m.react("➡");
 
@@ -255,17 +256,37 @@ export async function activeOffers(message: Discord.Message, client: Discord.Cli
 
     backwards.on('collect', async () => {
         m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
-        m.edit({ embed: await listEmbed(--page, client)});
+        m.edit({ embed: await listEmbed(--page, client, signups)});
     });
     forwards.on('collect', async () => {
         m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
-        m.edit({ embed: await listEmbed(++page, client) });
+        m.edit({ embed: await listEmbed(++page, client, signups) });
     });
 }
 
-async function listEmbed(page: number = 1, client: Discord.Client){
+export async function matchlistEmbed(message: Discord.Message, client: Discord.Client) {
+    let page: number = 1
+    let signups = await getMatchlist()
+    const m = <Discord.Message>(await message.channel.send({ embed: await listEmbed(page!, client, signups) }));
+    await m.react("⬅")
+    await m.react("➡");
 
-    let signup = await getSignups()
+    const backwards = m.createReactionCollector(backwardsFilter, { time: 100000 });
+    const forwards = m.createReactionCollector(forwardsFilter, { time: 100000 });
+
+    backwards.on('collect', async () => {
+        m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
+        m.edit({ embed: await listEmbed(--page, client, signups)});
+    });
+    forwards.on('collect', async () => {
+        m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
+        m.edit({ embed: await listEmbed(++page, client, signups) });
+    });
+}
+
+async function listEmbed(page: number = 1, client: Discord.Client, signup: signups | matchlist){
+
+    //let signup = await getSignups()
 
     page = page < 1 ? 1 : page;
     const fields = [];

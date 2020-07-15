@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.activeOffers = exports.viewsignup = exports.reopensignup = exports.closesignup = exports.removesignup = exports.signup = exports.startsignup = void 0;
+exports.matchlistEmbed = exports.activeOffers = exports.viewsignup = exports.reopensignup = exports.closesignup = exports.removesignup = exports.signup = exports.startsignup = void 0;
 const Discord = __importStar(require("discord.js"));
 const db_1 = require("../misc/db");
 async function startsignup(message, client) {
@@ -215,23 +215,41 @@ const backwardsFilter = (reaction, user) => reaction.emoji.name === '⬅' && !us
 const forwardsFilter = (reaction, user) => reaction.emoji.name === '➡' && !user.bot;
 async function activeOffers(message, client) {
     let page = 1;
-    const m = (await message.channel.send({ embed: await listEmbed(page, client) }));
+    let signups = await db_1.getSignups();
+    const m = (await message.channel.send({ embed: await listEmbed(page, client, signups) }));
     await m.react("⬅");
     await m.react("➡");
     const backwards = m.createReactionCollector(backwardsFilter, { time: 100000 });
     const forwards = m.createReactionCollector(forwardsFilter, { time: 100000 });
     backwards.on('collect', async () => {
         m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
-        m.edit({ embed: await listEmbed(--page, client) });
+        m.edit({ embed: await listEmbed(--page, client, signups) });
     });
     forwards.on('collect', async () => {
         m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
-        m.edit({ embed: await listEmbed(++page, client) });
+        m.edit({ embed: await listEmbed(++page, client, signups) });
     });
 }
 exports.activeOffers = activeOffers;
-async function listEmbed(page = 1, client) {
-    let signup = await db_1.getSignups();
+async function matchlistEmbed(message, client) {
+    let page = 1;
+    let signups = await db_1.getMatchlist();
+    const m = (await message.channel.send({ embed: await listEmbed(page, client, signups) }));
+    await m.react("⬅");
+    await m.react("➡");
+    const backwards = m.createReactionCollector(backwardsFilter, { time: 100000 });
+    const forwards = m.createReactionCollector(forwardsFilter, { time: 100000 });
+    backwards.on('collect', async () => {
+        m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
+        m.edit({ embed: await listEmbed(--page, client, signups) });
+    });
+    forwards.on('collect', async () => {
+        m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
+        m.edit({ embed: await listEmbed(++page, client, signups) });
+    });
+}
+exports.matchlistEmbed = matchlistEmbed;
+async function listEmbed(page = 1, client, signup) {
     page = page < 1 ? 1 : page;
     const fields = [];
     let index = (0 + page - 1) * 10;

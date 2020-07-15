@@ -10,7 +10,7 @@ import { ModHelp, UserHelp, ModSignupHelp, ModChallongeHelp } from "./commands/h
 import { connectToDB, getQuals, getActive, updateActive, updateQuals, deleteSignup, getMatch, getQual} from "./misc/db";
 import { template, approvetemplate } from "./commands/template";
 import { createrUser, stats } from "./commands/user";
-import { signup, startsignup, closesignup, removesignup, reopensignup, activeOffers } from "./commands/signups";
+import { signup, startsignup, closesignup, removesignup, reopensignup, activeOffers, matchlistEmbed } from "./commands/signups";
 import { CreateChallongeQualBracket, ChannelCreation, CreateChallongeMatchBracket, matchlistmaker, CreateQualGroups, quallistEmbed, declarequalwinner, GroupSearch} from "./commands/challonge";
 import { verify} from "./misc/verify";
 //import data from "../match.json"
@@ -435,6 +435,13 @@ client.on("message", async message => {
   else if(command === "viewsignup" || command === "viewlist"){
     //await viewsignup(message, client)
     await activeOffers(message, client)
+    matchlistEmbed
+  }
+
+  else if(command === "viewmatchlist"){
+    //await viewsignup(message, client)
+    await matchlistEmbed(message, client)
+    
   }
 
   else if(command === "startsignup"){
