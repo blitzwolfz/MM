@@ -112,7 +112,8 @@ export async function verify(message: Discord.Message, client: Discord.Client){
                     await message.member?.roles.remove("730650583413030953")
 
                     await message.member?.roles.add("719941380503371897")
-        
+
+                    await message.author.send("Remember to check #info, #annoucements, #rules, and to signup for both vote pings and signup pings in #roles! Enjoy your stay.")      
                     
         
                     //form.users.splice(form.users.indexOf(message.author.id), 1)

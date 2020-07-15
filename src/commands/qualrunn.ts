@@ -73,6 +73,8 @@ export async function qualrunn(match: qualmatch, channelid: string, client: disc
                     await channel.send("\n\nThe theme is: " + match.template)
                     //await user.send({ files: [new discord.MessageAttachment(match.template)] })
                 }
+
+                await channel.send("You have 2 hours to vote. You can vote for 2 memes!")
     
                 await updateQuals(match)
 

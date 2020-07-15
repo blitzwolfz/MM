@@ -2,7 +2,7 @@ import * as Discord from "discord.js";
 require("dotenv").config();
 import {activematch, qualmatch} from "./misc/struct"
 import {submit, qualsubmit} from "./commands/submit"
-import { start, running, qualrunning, startqual, startmodqual, splitqual, startregularsplit, splitregular } from "./commands/start";
+import { start, running, qualrunning, startqual, startmodqual, splitqual, startregularsplit, splitregular, reload } from "./commands/start";
 import { endmatch, qualend } from "./commands/winner";
 import { vs } from "./commands/card";
 import { getUser, hasthreevotes, emojis, removethreevotes} from "./misc/utils";
@@ -285,11 +285,14 @@ client.on("message", async message => {
   // }
   else if(command === "createqualgroup"){
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
+    if(message.channel.id === "722285800225505879" || message.channel.id === "722285842705547305" || message.channel.id === "724839353129369681") return;
+
     await CreateQualGroups(message, args)
   }
 
   else if(command === "viewgroups"){
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
+    if(message.channel.id === "722285800225505879" || message.channel.id === "722285842705547305" || message.channel.id === "724839353129369681") return;
 
     if(!args) return await quallistEmbed(message, client, args)
 
@@ -311,10 +314,12 @@ client.on("message", async message => {
   }
 
   else if(command === "submit"){
+    if(message.channel.id === "722285800225505879" || message.channel.id === "722285842705547305" || message.channel.id === "724839353129369681") return;
     await submit(message, client)
   }
 
   else if(command === "qualsubmit"){
+    if(message.channel.id === "722285800225505879" || message.channel.id === "722285842705547305" || message.channel.id === "724839353129369681") return;
     await qualsubmit(message, client)
   }
 
@@ -361,6 +366,8 @@ client.on("message", async message => {
 
   else if(command === "approve"){
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
+    if(message.channel.id === "722285800225505879" || message.channel.id === "722285842705547305" || message.channel.id === "724839353129369681") return;
+
     await approvetemplate(message, client)
   }
 
@@ -380,6 +387,11 @@ client.on("message", async message => {
   else if(command === "startsplit"){
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await splitregular(message, client)
+  }
+
+  else if(command === "reload"){
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
+    await reload(message, client)
   }
 
   else if(command === "qualend"){
@@ -414,7 +426,6 @@ client.on("message", async message => {
 
   else if(command === "signup"){
     await signup(message)
-    removesignup
   }
 
   else if(command === "pullout" || command === "goingformilk" || command === "unsignup" || command === "withdraw" || command === "removesignup"){
@@ -431,6 +442,7 @@ client.on("message", async message => {
   }
 
   else if(command === "matchlistmaker"){
+    if(message.channel.id === "722285800225505879" || message.channel.id === "722285842705547305" || message.channel.id === "724839353129369681") return;
     await matchlistmaker()
   }
 

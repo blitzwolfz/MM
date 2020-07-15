@@ -233,11 +233,15 @@ client.on("message", async (message) => {
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
+        if (message.channel.id === "722285800225505879" || message.channel.id === "722285842705547305" || message.channel.id === "724839353129369681")
+            return;
         await challonge_1.CreateQualGroups(message, args);
     }
     else if (command === "viewgroups") {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
+        if (message.channel.id === "722285800225505879" || message.channel.id === "722285842705547305" || message.channel.id === "724839353129369681")
+            return;
         if (!args)
             return await challonge_1.quallistEmbed(message, client, args);
         message.channel.send({ embed: await challonge_1.quallistEmbed(message, client, args) });
@@ -254,9 +258,13 @@ client.on("message", async (message) => {
         await verify_1.verify(message, client);
     }
     else if (command === "submit") {
+        if (message.channel.id === "722285800225505879" || message.channel.id === "722285842705547305" || message.channel.id === "724839353129369681")
+            return;
         await submit_1.submit(message, client);
     }
     else if (command === "qualsubmit") {
+        if (message.channel.id === "722285800225505879" || message.channel.id === "722285842705547305" || message.channel.id === "724839353129369681")
+            return;
         await submit_1.qualsubmit(message, client);
     }
     else if (command === "submittemplate" || command === "template") {
@@ -298,6 +306,8 @@ client.on("message", async (message) => {
     else if (command === "approve") {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
+        if (message.channel.id === "722285800225505879" || message.channel.id === "722285842705547305" || message.channel.id === "724839353129369681")
+            return;
         await template_1.approvetemplate(message, client);
     }
     else if (command === "create") {
@@ -315,6 +325,11 @@ client.on("message", async (message) => {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
         await start_1.splitregular(message, client);
+    }
+    else if (command === "reload") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
+        await start_1.reload(message, client);
     }
     else if (command === "qualend") {
         if (!message.member.roles.cache.has('719936221572235295'))
@@ -340,7 +355,6 @@ client.on("message", async (message) => {
     }
     else if (command === "signup") {
         await signups_1.signup(message);
-        signups_1.removesignup;
     }
     else if (command === "pullout" || command === "goingformilk" || command === "unsignup" || command === "withdraw" || command === "removesignup") {
         await signups_1.removesignup(message);
@@ -352,6 +366,8 @@ client.on("message", async (message) => {
         await signups_1.startsignup(message, client);
     }
     else if (command === "matchlistmaker") {
+        if (message.channel.id === "722285800225505879" || message.channel.id === "722285842705547305" || message.channel.id === "724839353129369681")
+            return;
         await challonge_1.matchlistmaker();
     }
     else if (command === "createqualiferbracket" || command === "createqualbracket") {

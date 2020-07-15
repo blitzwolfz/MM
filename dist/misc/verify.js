@@ -71,6 +71,7 @@ async function verify(message, client) {
                 if (args[1] === form.codes[i][1]) {
                     await ((_a = message.member) === null || _a === void 0 ? void 0 : _a.roles.remove("730650583413030953"));
                     await ((_b = message.member) === null || _b === void 0 ? void 0 : _b.roles.add("719941380503371897"));
+                    await message.author.send("Remember to check #info, #annoucements, #rules, and to signup for both vote pings and signup pings in #roles! Enjoy your stay.");
                     form.codes.splice(form.users.indexOf(message.author.id), 1);
                     await db_1.updateVerify(form);
                     let ch = client.channels.cache.get(("722285800225505879"));
