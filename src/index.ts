@@ -302,7 +302,7 @@ client.on("message", async message => {
   else if(command === "search"){
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
 
-    await GroupSearch(message, args)
+    await GroupSearch(message, client, args)
   }
 
   else if(command === "declarequalwinner"){

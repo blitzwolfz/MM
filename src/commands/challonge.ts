@@ -352,7 +352,7 @@ export async function quallistEmbed(message: Discord.Message, client: Discord.Cl
     }
 }
 
-export async function GroupSearch(message: Discord.Message, args: string[]){
+export async function GroupSearch(message: Discord.Message, client: Discord.Client, args: string[]){
     let signup = await getQuallist()
     console.log(args[0])
     let id = (args[0] ? args[0] : message.mentions.users.first()!.id)
@@ -360,7 +360,7 @@ export async function GroupSearch(message: Discord.Message, args: string[]){
     for (let i = 0; i < signup.users.length; i++){
 
         if(signup.users[i].includes(id)){
-            return message.reply(`<@${id}> is in #group-${i+1}`)
+            return message.reply(`${await (await client.users.fetch(id)).username} is in #group-${i+1}`)
         }
     }
 

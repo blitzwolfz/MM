@@ -262,13 +262,13 @@ async function quallistEmbed(message, client, args) {
     }
 }
 exports.quallistEmbed = quallistEmbed;
-async function GroupSearch(message, args) {
+async function GroupSearch(message, client, args) {
     let signup = await db_1.getQuallist();
     console.log(args[0]);
     let id = (args[0] ? args[0] : message.mentions.users.first().id);
     for (let i = 0; i < signup.users.length; i++) {
         if (signup.users[i].includes(id)) {
-            return message.reply(`<@${id}> is in #group-${i + 1}`);
+            return message.reply(`${await (await client.users.fetch(id)).username} is in #group-${i + 1}`);
         }
     }
     return message.reply("they are not in a group");
