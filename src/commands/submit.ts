@@ -18,6 +18,7 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
     }
 
     else{
+        if(message.attachments.array()[0].url.toString().includes("mp4")) return message.reply("Video submissions aren't allowed")
         for (const match of matches){
             if(match.p1.userid === message.author.id && !match.p1.memedone){
                 match.p1.memedone = true

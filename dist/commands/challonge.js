@@ -263,9 +263,11 @@ async function quallistEmbed(message, client, args) {
 }
 exports.quallistEmbed = quallistEmbed;
 async function GroupSearch(message, client, args) {
+    var _a, _b, _c;
     let signup = await db_1.getQuallist();
-    console.log(args[0]);
-    let id = (args[0] ? args[0] : message.mentions.users.first().id);
+    let id = (((_c = (_b = (_a = message.mentions) === null || _a === void 0 ? void 0 : _a.users) === null || _b === void 0 ? void 0 : _b.first()) === null || _c === void 0 ? void 0 : _c.id) || args[0]);
+    if (!id)
+        return message.reply("invaild input. Please use User ID or a User mention");
     for (let i = 0; i < signup.users.length; i++) {
         if (signup.users[i].includes(id)) {
             return message.reply(`${await (await client.users.fetch(id)).username} is in #group-${i + 1}`);

@@ -276,13 +276,27 @@ client.on("message", async message => {
     await m.edit(`Latency is ${m.createdTimestamp - message.createdTimestamp}ms. Discord API Latency is ${Math.round(client.ws.ping)}ms`);
   }
 
-  // if (command === "test"){
-  //   // await message.member?.roles.add("730650583413030953")
+  //   else if (command === "test") {
+  //     for (let i = 0; i < 10; i++) {
+  //     //   await message.channel.send({        embed: {
+  //     //     color: 3447003,
+  //     //     image: {
+  //     //       url: 'https://cdn.discordapp.com/attachments/731529609803202572/733128124363046932/image0.jpg',
+  //     //     },
+  //     //   }
+  //     // })
 
-  //   // await message.member?.user?.send("Please start verification with `!verify`.")
-  
-  //   // console.log(`a user joins a guild: ${message.member?.user.username}`);
+  //     await message.channel.send(new Discord.MessageEmbed().setImage('https://cdn.discordapp.com/attachments/731528896998146209/732594060258443264/GifMeme19141914072020.gif'))
+  //   }
   // }
+
+
+    // await message.member?.roles.add("730650583413030953")
+
+    // await message.member?.user?.send("Please start verification with `!verify`.")
+  
+    // console.log(`a user joins a guild: ${message.member?.user.username}`);
+
   else if(command === "createqualgroup"){
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     if(message.channel.id === "722285800225505879" || message.channel.id === "722285842705547305" || message.channel.id === "724839353129369681") return;

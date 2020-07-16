@@ -354,8 +354,8 @@ export async function quallistEmbed(message: Discord.Message, client: Discord.Cl
 
 export async function GroupSearch(message: Discord.Message, client: Discord.Client, args: string[]){
     let signup = await getQuallist()
-    console.log(args[0])
-    let id = (args[0] ? args[0] : message.mentions.users.first()!.id)
+    let id = (message.mentions?.users?.first()?.id || args[0])
+    if(!id) return message.reply("invaild input. Please use User ID or a User mention")
 
     for (let i = 0; i < signup.users.length; i++){
 

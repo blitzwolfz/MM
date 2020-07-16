@@ -39,31 +39,16 @@ async function vs(message, client, users) {
     if (args.length < 3) {
         return message.reply("invalid response. Command is `!vs @user1 @user2 `");
     }
-    const canvas = Canvas.createCanvas(700, 250);
+    const canvas = Canvas.createCanvas(1917, 1168);
     const ctx = canvas.getContext('2d');
-    ctx.drawImage(await Canvas.loadImage("firecard.jpg"), 0, 0, canvas.width, canvas.height);
-    ctx.strokeStyle = '#74037b';
-    ctx.strokeRect(0, 0, canvas.width, canvas.height);
     let user1 = (await client.users.fetch(users[0]));
     let user2 = (await client.users.fetch(users[1]));
-    ctx.font = await applyText(canvas, `VS`);
-    ctx.fillStyle = '#ffffff';
-    await ctx.fillText(`VS`, canvas.width / 2 - 35, canvas.height / 2 + 10);
-    await ctx.save();
-    await ctx.beginPath();
-    await ctx.arc(125, 125, 100, 0, Math.PI * 2, true);
-    await ctx.closePath();
-    await ctx.clip();
-    const avatar = await Canvas.loadImage(user1.displayAvatarURL({ format: 'png' }));
-    const avatar2 = await Canvas.loadImage(user2.displayAvatarURL({ format: 'png' }));
-    await ctx.drawImage(avatar, 25, 25, 200, 200);
-    await ctx.restore();
-    await ctx.beginPath();
-    await ctx.arc(575, 125, 100, 0, 2 * Math.PI, true);
-    await ctx.closePath();
-    await ctx.clip();
-    await ctx.drawImage(avatar2, 475, 25, 200, 200);
-    const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'welcome-image.png');
+    const avatar = await Canvas.loadImage(user1.displayAvatarURL({ format: 'png', size: 1024 }));
+    const avatar2 = await Canvas.loadImage(user2.displayAvatarURL({ format: 'png', size: 1024 }));
+    await ctx.drawImage(avatar, ((canvas.height / 2) - 602.5), 300 - 26, 740, 636);
+    await ctx.drawImage(avatar2, ((canvas.width / 2) + 270), 300 - 26, 740, 636);
+    await ctx.drawImage(await Canvas.loadImage("newbackground.png"), 0, 0, canvas.width, canvas.height);
+    const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'welcome-image.jpg');
     await message.channel.send(attachment);
 }
 exports.vs = vs;

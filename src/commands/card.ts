@@ -29,56 +29,34 @@ export async function vs(message: Discord.Message, client: Discord.Client, users
         return message.reply("invalid response. Command is `!vs @user1 @user2 `")
     }
 
-    const canvas = Canvas.createCanvas(700, 250);
-    const ctx = canvas.getContext('2d');
-    
-	ctx.drawImage(await Canvas.loadImage("firecard.jpg"), 0, 0, canvas.width, canvas.height);
-
-	ctx.strokeStyle = '#74037b';
-    ctx.strokeRect(0, 0, canvas.width, canvas.height);
-
-    
+    const canvas = Canvas.createCanvas(1917 , 1168);
+	const ctx = canvas.getContext('2d');
+		
+	
+	
     
     // console.log(args)
 
     // console.log(users)
     let user1 = (await client.users.fetch(users[0]))
-    let user2 = (await client.users.fetch(users[1]))
+	let user2 = (await client.users.fetch(users[1]))
+	const avatar = await Canvas.loadImage(user1.displayAvatarURL({ format: 'png', size: 1024}));
+    const avatar2 = await Canvas.loadImage(user2.displayAvatarURL({ format: 'png', size: 1024}));
 
-	// // Slightly smaller text placed above the member's display name
-	// ctx.font = '28px sans-serif';
-	// ctx.fillStyle = '#ffffff';
-	// ctx.fillText('Welcome to the server,', canvas.width / 2.5, canvas.height / 3.5);
+	await ctx.drawImage(avatar, ((canvas.height/2)-602.5), 300-26, 740, 636);
+	//await ctx.drawImage(avatar, (529), 300-26, 740, 636);
 
-	// Add an exclamation point here and below
-	ctx.font = await applyText(canvas, `VS`);
-	ctx.fillStyle = '#ffffff';
-	await ctx.fillText(`VS`, canvas.width / 2 - 35, canvas.height / 2 + 10);
-	await ctx.save();
-	await ctx.beginPath();
-	await ctx.arc(125, 125, 100, 0, Math.PI * 2, true);
-	// ctx.fillStyle = "blue";
-	// await ctx.fill();
-	await ctx.closePath();
-	await ctx.clip();
+	//((canvas.width/2)+731)
+	await ctx.drawImage(avatar2, ((canvas.width/2)+270), 300-26, 740, 636);
+	//await ctx.drawImage(avatar2, (320), 300-26, 740, 636);
 
-    const avatar = await Canvas.loadImage(user1.displayAvatarURL({ format: 'png'}));
-    const avatar2 = await Canvas.loadImage(user2.displayAvatarURL({ format: 'png'}));
+	await ctx.drawImage(await Canvas.loadImage("newbackground.png"), 0, 0, canvas.width, canvas.height);
+
+
+
+
     
-	await ctx.drawImage(avatar, 25, 25, 200, 200);
-	await ctx.restore();
-
-	//await ctx.save();
-	await ctx.beginPath();
-	await ctx.arc(575, 125, 100, 0, 2 * Math.PI, true);
-	// ctx.fillStyle = "red";
-	// await ctx.fill();
-    await ctx.closePath();
-    await ctx.clip();
-	await ctx.drawImage(avatar2, 475, 25, 200, 200);
-	//ctx.globalCompositeOperation='source-over';
-    
-	const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'welcome-image.png');
+	const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'welcome-image.jpg');
 	//await message.channel.send({ files: [attachment]})
 	await message.channel.send(attachment)
 }
