@@ -230,6 +230,14 @@ client.on("message", async (message) => {
         const m = await message.channel.send("Ping?");
         await m.edit(`Latency is ${m.createdTimestamp - message.createdTimestamp}ms. Discord API Latency is ${Math.round(client.ws.ping)}ms`);
     }
+    else if (command === "test") {
+        let matchlist = await db_1.getMatchlist();
+        let guild = client.guilds.cache.get("719406444109103117");
+        console.log(matchlist.users);
+        for (let i = 0; i < matchlist.users.length; i++) {
+            message.reply((await guild.members.fetch(matchlist.users[i])).nickname);
+        }
+    }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
@@ -386,7 +394,7 @@ client.on("message", async (message) => {
     else if (command === "createbracket") {
         if (message.member.roles.cache.has('724818272922501190')
             || message.member.roles.cache.has('724832462286356590'))
-            await challonge_1.CreateChallongeMatchBracket(message, client, args);
+            await challonge_1.CreateChallongeMatchBracket(message, client, args, (await client.guilds.cache.get("719406444109103117")));
     }
     else if (command === "channelcreate") {
         if (message.member.roles.cache.has('724818272922501190')

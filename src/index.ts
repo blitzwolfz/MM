@@ -7,7 +7,7 @@ import { endmatch, qualend } from "./commands/winner";
 import { vs } from "./commands/card";
 import { getUser, hasthreevotes, emojis, removethreevotes} from "./misc/utils";
 import { ModHelp, UserHelp, ModSignupHelp, ModChallongeHelp } from "./commands/help";
-import { connectToDB, getQuals, getActive, updateActive, updateQuals, deleteSignup, getMatch, getQual} from "./misc/db";
+import { connectToDB, getQuals, getActive, updateActive, updateQuals, deleteSignup, getMatch, getQual, getMatchlist} from "./misc/db";
 import { template, approvetemplate } from "./commands/template";
 import { createrUser, stats } from "./commands/user";
 import { signup, startsignup, closesignup, removesignup, reopensignup, activeOffers, matchlistEmbed } from "./commands/signups";
@@ -276,19 +276,17 @@ client.on("message", async message => {
     await m.edit(`Latency is ${m.createdTimestamp - message.createdTimestamp}ms. Discord API Latency is ${Math.round(client.ws.ping)}ms`);
   }
 
-  //   else if (command === "test") {
-  //     for (let i = 0; i < 10; i++) {
-  //     //   await message.channel.send({        embed: {
-  //     //     color: 3447003,
-  //     //     image: {
-  //     //       url: 'https://cdn.discordapp.com/attachments/731529609803202572/733128124363046932/image0.jpg',
-  //     //     },
-  //     //   }
-  //     // })
+  else if (command === "test") {
+    let matchlist = await getMatchlist();
 
-  //     await message.channel.send(new Discord.MessageEmbed().setImage('https://cdn.discordapp.com/attachments/731528896998146209/732594060258443264/GifMeme19141914072020.gif'))
-  //   }
-  // }
+    let guild = client.guilds.cache.get("719406444109103117")
+    console.log(matchlist.users)
+
+    for(let i = 0; i < matchlist.users.length; i++){
+      message.reply((await guild!.members.fetch(matchlist.users[i])).nickname)
+    }
+
+  
 
 
     // await message.member?.roles.add("730650583413030953")
@@ -296,6 +294,7 @@ client.on("message", async message => {
     // await message.member?.user?.send("Please start verification with `!verify`.")
   
     // console.log(`a user joins a guild: ${message.member?.user.username}`);
+  }
 
   else if(command === "createqualgroup"){
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
@@ -481,7 +480,7 @@ client.on("message", async message => {
   else if(command === "createbracket"){
     if (message.member!.roles.cache.has('724818272922501190') 
     || message.member!.roles.cache.has('724832462286356590'))
-    await CreateChallongeMatchBracket(message, client, args)
+    await CreateChallongeMatchBracket(message, client, args, (await client.guilds.cache.get("719406444109103117")!))
   }
 
   else if(command === "channelcreate"){

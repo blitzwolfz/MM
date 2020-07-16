@@ -178,7 +178,8 @@ export async function qualend(client: discord.Client, id: string) {
 
     const match = await getSingularQuals(id)
     let channel = <discord.TextChannel>client.channels.cache.get(id)
-
+    let guild = client.guilds.cache.get("719406444109103117")
+    
     if (match.votingperiod) {
 
         if (match.playersdone.length <= 2 && match.playersdone.length >= 1) {
@@ -187,13 +188,13 @@ export async function qualend(client: discord.Client, id: string) {
             for (let i = 0; i < match.votes.length; i++)
                 if(match.players[i].memedone){
                     fields.push({
-                        name: `${await (await client.users.fetch(match.players[i].userid)).username}`,
+                        name: `${(await guild!.members.fetch(match.players[i].userid)).nickname}`,
                         value: `Has automatically won!`
                     });
                 }
                 else if(match.players[i].memedone === false){
                     fields.push({
-                        name: `${await (await client.users.fetch(match.players[i].userid)).username}`,
+                        name: `${(await guild!.members.fetch(match.players[i].userid)).nickname}`,
                         value: `Failed to submit meme!`
                     });
                 }
@@ -224,7 +225,7 @@ export async function qualend(client: discord.Client, id: string) {
             const fields = [];
             for (let i = 0; i < match.votes.length; i++)
                 fields.push({
-                    name: `${await (await client.users.fetch(match.players[i].userid)).username}`,
+                    name: `${(await guild!.members.fetch(match.players[i].userid)).nickname}`,
                     //value: `${match.votes[i].length > 0 ? `Came in with ${match.votes[i].length} vote(s)` : `Failed to submit meme`}`
                     value: `${match.players[i].memedone ? `Finished with ${match.votes[i].length}` : `Failed to submit meme`}`, //`Came in with ${match.votes[i].length}`,
                 });

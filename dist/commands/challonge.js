@@ -68,7 +68,7 @@ async function CreateChallongeQualBracket(message, disclient, args) {
     }
 }
 exports.CreateChallongeQualBracket = CreateChallongeQualBracket;
-async function CreateChallongeMatchBracket(message, disclient, args) {
+async function CreateChallongeMatchBracket(message, disclient, args, guild) {
     if (message.member.roles.cache.has('724818272922501190')
         || message.member.roles.cache.has('724818272922501190')
         || message.member.roles.cache.has('724832462286356590')) {
@@ -79,7 +79,7 @@ async function CreateChallongeMatchBracket(message, disclient, args) {
         let matchlist = await db_1.getMatchlist();
         for (let i = 0; i < matchlist.users.length; i++) {
             console.log("ok");
-            let name = await (await disclient.users.fetch(matchlist.users[i])).username;
+            let name = (await guild.members.fetch(matchlist.users[i])).nickname;
             console.log("ok");
             console.log(name);
             client.participants.create({

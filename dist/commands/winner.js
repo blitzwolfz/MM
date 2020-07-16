@@ -151,19 +151,20 @@ exports.end = end;
 async function qualend(client, id) {
     const match = await db_1.getSingularQuals(id);
     let channel = client.channels.cache.get(id);
+    let guild = client.guilds.cache.get("719406444109103117");
     if (match.votingperiod) {
         if (match.playersdone.length <= 2 && match.playersdone.length >= 1) {
             let fields = [];
             for (let i = 0; i < match.votes.length; i++)
                 if (match.players[i].memedone) {
                     fields.push({
-                        name: `${await (await client.users.fetch(match.players[i].userid)).username}`,
+                        name: `${(await guild.members.fetch(match.players[i].userid)).nickname}`,
                         value: `Has automatically won!`
                     });
                 }
                 else if (match.players[i].memedone === false) {
                     fields.push({
-                        name: `${await (await client.users.fetch(match.players[i].userid)).username}`,
+                        name: `${(await guild.members.fetch(match.players[i].userid)).nickname}`,
                         value: `Failed to submit meme!`
                     });
                 }
@@ -191,7 +192,7 @@ async function qualend(client, id) {
             const fields = [];
             for (let i = 0; i < match.votes.length; i++)
                 fields.push({
-                    name: `${await (await client.users.fetch(match.players[i].userid)).username}`,
+                    name: `${(await guild.members.fetch(match.players[i].userid)).nickname}`,
                     value: `${match.players[i].memedone ? `Finished with ${match.votes[i].length}` : `Failed to submit meme`}`,
                 });
             await db_1.deleteQuals(match);
