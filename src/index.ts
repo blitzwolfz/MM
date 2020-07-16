@@ -11,7 +11,7 @@ import { connectToDB, getQuals, getActive, updateActive, updateQuals, deleteSign
 import { template, approvetemplate } from "./commands/template";
 import { createrUser, stats } from "./commands/user";
 import { signup, startsignup, closesignup, removesignup, reopensignup, activeOffers, matchlistEmbed } from "./commands/signups";
-import { CreateChallongeQualBracket, ChannelCreation, CreateChallongeMatchBracket, matchlistmaker, CreateQualGroups, quallistEmbed, declarequalwinner, GroupSearch} from "./commands/challonge";
+import { CreateChallongeQualBracket, ChannelCreation, CreateChallongeMatchBracket, matchlistmaker, CreateQualGroups, quallistEmbed, declarequalwinner, GroupSearch, removequalwinner} from "./commands/challonge";
 import { verify} from "./misc/verify";
 //import data from "../match.json"
 //const fs = require('fs');
@@ -321,6 +321,10 @@ client.on("message", async message => {
 
   else if(command === "declarequalwinner"){
     await declarequalwinner(message, client)
+  }
+
+  else if(command === "removequalwinner"){
+    await removequalwinner(message, client)
   }
 
   if(command === "verify" || command === "code"){

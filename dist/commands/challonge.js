@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.matchlistmaker = exports.declarequalwinner = exports.GroupSearch = exports.quallistEmbed = exports.CreateQualGroups = exports.ChannelCreation = exports.CreateChallongeMatchBracket = exports.CreateChallongeQualBracket = void 0;
+exports.matchlistmaker = exports.removequalwinner = exports.declarequalwinner = exports.GroupSearch = exports.quallistEmbed = exports.CreateQualGroups = exports.ChannelCreation = exports.CreateChallongeMatchBracket = exports.CreateChallongeQualBracket = void 0;
 const Discord = __importStar(require("discord.js"));
 const db_1 = require("../misc/db");
 const challonge = require("challonge-js");
@@ -315,6 +315,34 @@ async function declarequalwinner(message, client) {
     }
 }
 exports.declarequalwinner = declarequalwinner;
+async function removequalwinner(message, client) {
+    if (message.member.roles.cache.has('724818272922501190')
+        || message.member.roles.cache.has('724818272922501190')
+        || message.member.roles.cache.has('724832462286356590')) {
+        try {
+            let id = message.mentions.users.first().id;
+            let match = await db_1.getMatchlist();
+            if (match) {
+                if (match.users.includes(id)) {
+                    match.users.splice(match.users.indexOf(id), 1);
+                    await db_1.updateMatchlist(match);
+                    return message.reply("user removed.");
+                }
+                else {
+                    return message.reply("user not on list");
+                }
+            }
+        }
+        catch (err) {
+            message.channel.send("```" + err + "```");
+            return message.reply(", there is an error! Ping blitz and show him the error.");
+        }
+    }
+    else {
+        await (await client.users.fetch(message.author.id)).send("You aren't allowed to use that command!");
+    }
+}
+exports.removequalwinner = removequalwinner;
 async function matchlistmaker() {
     let match = await db_1.getMatchlist();
     if (!match) {

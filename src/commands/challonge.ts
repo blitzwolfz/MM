@@ -444,6 +444,43 @@ export async function declarequalwinner(message: Discord.Message, client: Discor
     }
 }
 
+export async function removequalwinner(message: Discord.Message, client: Discord.Client) {
+
+    if (message.member!.roles.cache.has('724818272922501190')
+        || message.member!.roles.cache.has('724818272922501190')
+        || message.member!.roles.cache.has('724832462286356590')) {
+
+        try {
+
+            let id = message.mentions!.users!.first()!.id
+            let match = await getMatchlist()
+
+
+
+            if (match) {
+                if (match.users.includes(id)) {
+                    match.users.splice( match.users.indexOf(id), 1 )
+                    await updateMatchlist(match)
+                    return message.reply("user removed.")
+                }
+
+                else {
+                    return message.reply("user not on list")
+                }
+            }
+
+        } catch (err) {
+            message.channel.send("```" + err + "```")
+            return message.reply(", there is an error! Ping blitz and show him the error.")
+        }
+
+    }
+
+    else {
+        await (await client.users.fetch(message.author.id)).send("You aren't allowed to use that command!")
+    }
+}
+
 export async function matchlistmaker() {
     let match = await getMatchlist()
 

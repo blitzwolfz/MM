@@ -15,4 +15,5 @@ export declare function quallistEmbed(message: Discord.Message, client: Discord.
 }>;
 export declare function GroupSearch(message: Discord.Message, client: Discord.Client, args: string[]): Promise<Discord.Message>;
 export declare function declarequalwinner(message: Discord.Message, client: Discord.Client): Promise<Discord.Message | undefined>;
+export declare function removequalwinner(message: Discord.Message, client: Discord.Client): Promise<Discord.Message | undefined>;
 export declare function matchlistmaker(): Promise<void>;

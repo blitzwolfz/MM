@@ -254,6 +254,9 @@ client.on("message", async (message) => {
     else if (command === "declarequalwinner") {
         await challonge_1.declarequalwinner(message, client);
     }
+    else if (command === "removequalwinner") {
+        await challonge_1.removequalwinner(message, client);
+    }
     if (command === "verify" || command === "code") {
         await verify_1.verify(message, client);
     }
