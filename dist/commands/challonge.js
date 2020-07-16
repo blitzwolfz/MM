@@ -79,7 +79,7 @@ async function CreateChallongeMatchBracket(message, disclient, args, guild) {
         let matchlist = await db_1.getMatchlist();
         for (let i = 0; i < matchlist.users.length; i++) {
             console.log("ok");
-            let name = (await guild.members.fetch(matchlist.users[i])).nickname;
+            let name = (await (await guild.members.fetch(matchlist.users[i])).nickname) || await (await disclient.users.fetch(matchlist.users[i])).username;
             console.log("ok");
             console.log(name);
             client.participants.create({
