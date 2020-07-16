@@ -231,12 +231,7 @@ client.on("message", async (message) => {
         await m.edit(`Latency is ${m.createdTimestamp - message.createdTimestamp}ms. Discord API Latency is ${Math.round(client.ws.ping)}ms`);
     }
     else if (command === "test") {
-        let matchlist = await db_1.getMatchlist();
-        let guild = client.guilds.cache.get("719406444109103117");
-        console.log(matchlist.users);
-        for (let i = 0; i < matchlist.users.length; i++) {
-            message.reply((await (await guild.members.fetch(matchlist.users[i])).nickname) || await (await client.users.fetch(matchlist.users[i])).username);
-        }
+        message.reply("no.");
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))

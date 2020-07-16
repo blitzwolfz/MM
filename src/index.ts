@@ -277,14 +277,15 @@ client.on("message", async message => {
   }
 
   else if (command === "test") {
-    let matchlist = await getMatchlist();
+    message.reply("no.")
+    // let matchlist = await getMatchlist();
 
-    let guild = client.guilds.cache.get("719406444109103117")
-    console.log(matchlist.users)
+    // let guild = client.guilds.cache.get("719406444109103117")
+    // console.log(matchlist.users)
 
-    for(let i = 0; i < matchlist.users.length; i++){
-      message.reply((await (await guild!.members.fetch(matchlist.users[i])).nickname) || await (await client.users.fetch(matchlist.users[i])).username)
-    }
+    // for(let i = 0; i < matchlist.users.length; i++){
+    //   message.reply((await (await guild!.members.fetch(matchlist.users[i])).nickname) || await (await client.users.fetch(matchlist.users[i])).username)
+    // }
 
   
 
