@@ -102,7 +102,7 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
 
         for (let i = 0; i < matchlist.users.length; i++) {
             console.log("ok")
-            let name = await (await client.users.fetch(matchlist.users[i])).username
+            let name = await (await disclient.users.fetch(matchlist.users[i])).username
 
             console.log("ok")
             console.log(name)
