@@ -89,42 +89,35 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
 
         let matchlist = await getMatchlist();
 
-        console.log(matchid)
+        // console.log(matchid)
 
-        let qualid = (matchlist.qualurl)
-        qualid = qualid.replace("https://challonge.com/", "")
+        // let qualid = (matchlist.qualurl)
+        // qualid = qualid.replace("https://challonge.com/", "")
 
-        console.log(qualid)
+        // console.log(qualid)
 
 
-        console.log("ok")
-        client.participants.index({
-            id: qualid,
-            callback: async (err: any, data: any) => {
+
+
+
+            for (let i = 0; i < matchlist.users.length; i++) {
                 console.log("ok")
-                console.log(err);
-                console.log(data)
 
-                for (let i = 0; i < data.length; i++) {
-                    console.log("ok")
+                console.log("ok")
+                console.log((await (await client.users.fetch(matchlist.users[i])).username))
 
-                    if (data[i].participant.finalRank <= 16) {
-                        console.log("ok")
-                        console.log(data[i].participant.name)
 
-                        client.participants.create({
-                            id: matchid,
-                            participant: {
-                                name: data[i].participant.name
-                            },
-                            callback: (err: any, data: any) => {
-                                console.log(err, data);
-                            }
-                        });
+                client.participants.create({
+                    id: matchid,
+                    participant: {
+                        name: `${(await (await client.users.fetch(matchlist.users[i])).username)}`
+                    },
+                    callback: (err: any, data: any) => {
+                        console.log(err, data);
                     }
-                }
+                });
             }
-        });
+
 
 
 

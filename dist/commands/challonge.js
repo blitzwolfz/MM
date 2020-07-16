@@ -77,35 +77,20 @@ async function CreateChallongeMatchBracket(message, disclient, args) {
         });
         let matchid = (args.join("")).replace("https://challonge.com/", "");
         let matchlist = await db_1.getMatchlist();
-        console.log(matchid);
-        let qualid = (matchlist.qualurl);
-        qualid = qualid.replace("https://challonge.com/", "");
-        console.log(qualid);
-        console.log("ok");
-        client.participants.index({
-            id: qualid,
-            callback: async (err, data) => {
-                console.log("ok");
-                console.log(err);
-                console.log(data);
-                for (let i = 0; i < data.length; i++) {
-                    console.log("ok");
-                    if (data[i].participant.finalRank <= 16) {
-                        console.log("ok");
-                        console.log(data[i].participant.name);
-                        client.participants.create({
-                            id: matchid,
-                            participant: {
-                                name: data[i].participant.name
-                            },
-                            callback: (err, data) => {
-                                console.log(err, data);
-                            }
-                        });
-                    }
+        for (let i = 0; i < matchlist.users.length; i++) {
+            console.log("ok");
+            console.log("ok");
+            console.log((await (await client.users.fetch(matchlist.users[i])).username));
+            client.participants.create({
+                id: matchid,
+                participant: {
+                    name: `${(await (await client.users.fetch(matchlist.users[i])).username)}`
+                },
+                callback: (err, data) => {
+                    console.log(err, data);
                 }
-            }
-        });
+            });
+        }
         matchlist.url = `${matchid}`;
         await db_1.updateMatchlist(matchlist);
         await message.reply(new Discord.MessageEmbed()
