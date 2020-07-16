@@ -390,7 +390,7 @@ export async function declarequalwinner(message: Discord.Message, client: Discor
 
     if (message.member!.roles.cache.has('724818272922501190')
         || message.member!.roles.cache.has('724818272922501190')
-        || message.member!.roles.cache.has('724832462286356590')) {
+        || message.member!.roles.cache.has('724832462286356590') || !message.member!.roles.cache.has('719936221572235295')) {
 
         try {
 
@@ -444,7 +444,8 @@ export async function removequalwinner(message: Discord.Message, client: Discord
 
     if (message.member!.roles.cache.has('724818272922501190')
         || message.member!.roles.cache.has('724818272922501190')
-        || message.member!.roles.cache.has('724832462286356590')) {
+        || message.member!.roles.cache.has('724832462286356590') || !message.member!.roles.cache.has('719936221572235295')) {
+
 
         try {
 

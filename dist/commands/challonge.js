@@ -265,7 +265,7 @@ exports.GroupSearch = GroupSearch;
 async function declarequalwinner(message, client) {
     if (message.member.roles.cache.has('724818272922501190')
         || message.member.roles.cache.has('724818272922501190')
-        || message.member.roles.cache.has('724832462286356590')) {
+        || message.member.roles.cache.has('724832462286356590') || !message.member.roles.cache.has('719936221572235295')) {
         try {
             let id = message.mentions.users.first().id;
             let match = await db_1.getMatchlist();
@@ -304,7 +304,7 @@ exports.declarequalwinner = declarequalwinner;
 async function removequalwinner(message, client) {
     if (message.member.roles.cache.has('724818272922501190')
         || message.member.roles.cache.has('724818272922501190')
-        || message.member.roles.cache.has('724832462286356590')) {
+        || message.member.roles.cache.has('724832462286356590') || !message.member.roles.cache.has('719936221572235295')) {
         try {
             let id = message.mentions.users.first().id;
             let match = await db_1.getMatchlist();
