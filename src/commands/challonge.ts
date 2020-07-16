@@ -100,23 +100,24 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
 
 
 
-            for (let i = 0; i < matchlist.users.length; i++) {
-                console.log("ok")
+        for (let i = 0; i < matchlist.users.length; i++) {
+            console.log("ok")
+            let name = await (await client.users.fetch(matchlist.users[i])).username
 
-                console.log("ok")
-                console.log((await (await client.users.fetch(matchlist.users[i])).username))
+            console.log("ok")
+            console.log(name)
 
 
-                client.participants.create({
-                    id: matchid,
-                    participant: {
-                        name: `${(await (await client.users.fetch(matchlist.users[i])).username)}`
-                    },
-                    callback: (err: any, data: any) => {
-                        console.log(err, data);
-                    }
-                });
-            }
+            client.participants.create({
+                id: matchid,
+                participant: {
+                    name: name
+                },
+                callback: (err: any, data: any) => {
+                    console.log(err, data);
+                }
+            });
+        }
 
 
 
