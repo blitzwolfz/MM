@@ -5,7 +5,7 @@ export declare function updateActive(activematch: activematch): Promise<void>;
 export declare function insertQuals(Qual: qualmatch): Promise<void>;
 export declare function updateQuals(Qual: qualmatch): Promise<void>;
 export declare function getActive(): Promise<activematch[]>;
-export declare function getMatch(channelid: string): Promise<activematch>;
+export declare function getMatch(_id: string): Promise<activematch>;
 export declare function getQual(channelid: string): Promise<qualmatch>;
 export declare function getQuals(): Promise<qualmatch[]>;
 export declare function getSingularQuals(_id: string): Promise<qualmatch>;

@@ -390,16 +390,16 @@ export async function running(client: discord.Client): Promise<void> {
                 match.votingperiod = true
                 match.votetime = (Math.floor(Date.now() / 1000))
                 await updateActive(match)
-                await channelid.send(`<@&719936221572235295>`)
+                //await channelid.send(`<@&719936221572235295>`)
 
                 await channelid.send("You have 2 hours to vote!")
             }
         }
 
-        if (match.votingperiod === true) {
+        if (match.votingperiod === true && !match.split) {
             //7200
-            if ((Math.floor(Date.now() / 1000) - match.votetime > 7200)) {
-                await end(client)
+            if ((Math.floor(Date.now() / 1000) - match.votetime > 7200) && !match.split) {
+                await end(client, match.channelid)
             }
         }
     }
