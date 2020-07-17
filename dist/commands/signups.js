@@ -250,12 +250,13 @@ async function matchlistEmbed(message, client) {
 }
 exports.matchlistEmbed = matchlistEmbed;
 async function listEmbed(page = 1, client, signup) {
+    let guild = client.guilds.cache.get("719406444109103117");
     page = page < 1 ? 1 : page;
     const fields = [];
     let index = (0 + page - 1) * 10;
     for (let i = index; i < Math.min(index + 10, signup.users.length); ++i)
         fields.push({
-            name: `${i + 1}) ${await (await client.users.fetch(signup.users[i])).username}`,
+            name: `${i + 1}) ${(await (await guild.members.fetch(signup.users[i])).nickname) || await (await client.users.fetch(signup.users[i])).username}`,
             value: `Userid is: ${signup.users[i]}`
         });
     return {

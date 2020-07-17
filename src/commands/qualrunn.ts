@@ -78,7 +78,7 @@ export async function qualrunn(match: qualmatch, channelid: string, client: disc
     
                 await updateQuals(match)
 
-                await channel.send(`<@&719936221572235295>`)
+                //await channel.send(`<@&719936221572235295>`)
             }
         }
     

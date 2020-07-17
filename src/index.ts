@@ -204,7 +204,12 @@ client.on("messageReactionAdd", async function(messageReaction, user){
         if (emojis.includes(messageReaction.emoji.name)){
           let i = emojis.indexOf(messageReaction.emoji.name)
           console.log(messageReaction.emoji.name, emojis[6])
-  
+
+          if(match.playerids.includes(user.id)){
+            await messageReaction.users.remove(user.id)
+            return user.send("You can't vote in your own qualifers")
+          }
+
           if(messageReaction.emoji.name === emojis[6]){
             match.votes = removethreevotes(match.votes, user.id)
             await updateQuals(match)
@@ -215,11 +220,6 @@ client.on("messageReactionAdd", async function(messageReaction, user){
           if(hasthreevotes(match.votes, user.id)){
             await messageReaction.users.remove(user.id)
             return user.send("You used up all your votes. Please hit the recycle emote to reset your votes")
-          }
-
-          if(match.playerids.includes(user.id)){
-            await messageReaction.users.remove(user.id)
-            return user.send("You can't vote in your own qualifers")
           }
   
           if(!match.playersdone.includes(match.playerids[i])){
@@ -256,8 +256,9 @@ client.on("message", async message => {
     if(message.author.id !== "688558229646475344") return;
   }
 
-  await running(client)
   await qualrunning(client);
+  await running(client)
+
   
   var args: Array<string> = message.content.slice(prefix.length).trim().split(/ +/g);
   
@@ -377,7 +378,7 @@ client.on("message", async message => {
     await startmodqual(message, client)
   }
 
-  else if (command === "startmodmatch" || command === "splitmatch"){
+  else if (command === "startmodmatch" || command === "splitmatch" || command === "split"){
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await startregularsplit(message, client)
   }

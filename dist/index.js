@@ -172,6 +172,10 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
                 if (utils_1.emojis.includes(messageReaction.emoji.name)) {
                     let i = utils_1.emojis.indexOf(messageReaction.emoji.name);
                     console.log(messageReaction.emoji.name, utils_1.emojis[6]);
+                    if (match.playerids.includes(user.id)) {
+                        await messageReaction.users.remove(user.id);
+                        return user.send("You can't vote in your own qualifers");
+                    }
                     if (messageReaction.emoji.name === utils_1.emojis[6]) {
                         match.votes = utils_1.removethreevotes(match.votes, user.id);
                         await db_1.updateQuals(match);
@@ -181,10 +185,6 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
                     if (utils_1.hasthreevotes(match.votes, user.id)) {
                         await messageReaction.users.remove(user.id);
                         return user.send("You used up all your votes. Please hit the recycle emote to reset your votes");
-                    }
-                    if (match.playerids.includes(user.id)) {
-                        await messageReaction.users.remove(user.id);
-                        return user.send("You can't vote in your own qualifers");
                     }
                     if (!match.playersdone.includes(match.playerids[i])) {
                         await messageReaction.users.remove(user.id);
@@ -214,8 +214,8 @@ client.on("message", async (message) => {
         if (message.author.id !== "688558229646475344")
             return;
     }
-    await start_1.running(client);
     await start_1.qualrunning(client);
+    await start_1.running(client);
     var args = message.content.slice(prefix.length).trim().split(/ +/g);
     if (!args || args.length === 0) {
         return;
@@ -304,7 +304,7 @@ client.on("message", async (message) => {
             return message.reply("You don't have those premissions");
         await start_1.startmodqual(message, client);
     }
-    else if (command === "startmodmatch" || command === "splitmatch") {
+    else if (command === "startmodmatch" || command === "splitmatch" || command === "split") {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
         await start_1.startregularsplit(message, client);

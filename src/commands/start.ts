@@ -66,7 +66,7 @@ export async function start(message: discord.Message, client: discord.Client) {
     let embed = new discord.MessageEmbed()
         .setTitle(`Match between ${user1.username} and ${user2.username}`)
         .setColor("#d7be26")
-        .setDescription(`<@${user1.id}> and <@${user2.id}> both have 30 mins to complete your memes.\n Contact admins if you have an issue.`)
+        .setDescription(`<@${user1.id}> and <@${user2.id}> both have 40 mins to complete your memes.\n Contact admins if you have an issue.`)
         .setTimestamp()
 
 
@@ -92,6 +92,9 @@ export async function start(message: discord.Message, client: discord.Client) {
         // await message.channel.send("Here is your template:")
         // await message.channel.send(att)
     }
+    await user1.send(`Your match has been split.\nYou have 40 mins to complete your portion\nUse \`!submit\` to submit`)
+    await user2.send(`Your match has been split.\nYou have 40 mins to complete your portion\nUse \`!submit\` to submit`)
+
 
     //console.log(newmatch)
     // matches.push(newmatch)
@@ -289,10 +292,10 @@ export async function running(client: discord.Client): Promise<void> {
 
         if (match.votingperiod === false) {
 
-            if (!(match.split) && ((Math.floor(Date.now() / 1000) - match.p2.time > 2400) && match.p2.memedone === false)
+            if (((Math.floor(Date.now() / 1000) - match.p2.time > 2400) && match.p2.memedone === false)
                 && ((Math.floor(Date.now() / 1000) - match.p1.time > 2400) && match.p1.memedone === false)) {
-                user1.send("You have failed to submit your meme")
-                user2.send("You have failed to submit your meme")
+                user1.send("You have lost because did not submit your meme")
+                user2.send("You have lost because did not submit your meme")
 
                 let embed = new discord.MessageEmbed()
                     .setColor("#d7be26")
@@ -470,6 +473,7 @@ export async function splitregular(message: discord.Message, client: discord.Cli
 
                         match.p1.donesplit = true
                         match.p1.time = Math.floor(Date.now() / 1000)
+                        await (await client.users.fetch(match.p1.userid)).send(`Your match has been split.\nYou have 40 mins to complete your portion\nUse \`!submit\` to submit`)
                         await updateActive(match)
                         return;
                     }
@@ -485,6 +489,7 @@ export async function splitregular(message: discord.Message, client: discord.Cli
 
                         match.p2.donesplit = true
                         match.p2.time = Math.floor(Date.now() / 1000)
+                        await (await client.users.fetch(match.p2.userid)).send(`Your match has been split.\nYou have 40 mins to complete your portion\nUse \`!submit\` to submit`)
                         await updateActive(match)
                         return;
                     }
@@ -570,13 +575,13 @@ export async function startregularsplit(message: discord.Message, client: discor
         // await message.channel.send(att)
     }
 
-    else if (["th", "theme"].includes(args[3])) {
-        await user1.send(`Your theme is: ${args.splice(4).join(" ")}`)
-        await user2.send(`Your theme is: ${args.splice(4).join(" ")}`)
+    // else if (["th", "theme"].includes(args[3])) {
+    //     await user1.send(`Your theme is: ${args.splice(4).join(" ")}`)
+    //     await user2.send(`Your theme is: ${args.splice(4).join(" ")}`)
 
-        // await message.channel.send("Here is your template:")
-        // await message.channel.send(att)
-    }
+    //     // await message.channel.send("Here is your template:")
+    //     // await message.channel.send(att)
+    // }
 
     //console.log(newmatch)
     // matches.push(newmatch)
@@ -599,6 +604,10 @@ export async function reload(message: discord.Message, client: discord.Client) {
         console.log("Check 2")
         console.log("Check 3")
         if (Math.floor(Date.now() / 1000) - match.octime > 1800 || match.playersdone.length === match.playerids.length) {
+
+            for(let i = 0; i < match.votes.length; i++){
+                match.votes[i] = []
+            }
 
             if (match.playersdone.length <= 2) {
                 match.votingperiod = true

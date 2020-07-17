@@ -98,7 +98,7 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
 
 
 
-
+        matchlist.users = await shuffle(matchlist.users)
 
         for (let i = 0; i < matchlist.users.length; i++) {
             console.log("ok")
