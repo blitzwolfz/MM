@@ -359,11 +359,13 @@ export async function running(client: discord.Client): Promise<void> {
 
 
                 var embed1 = new discord.MessageEmbed()
+                    .setDescription("Meme #1")
                     .setImage(match.p1.memelink)
                     .setColor("#d7be26")
                     .setTimestamp()
 
                 var embed2 = new discord.MessageEmbed()
+                    .setDescription("Meme #2")
                     .setImage(match.p2.memelink)
                     .setColor("#d7be26")
                     .setTimestamp()
@@ -388,6 +390,9 @@ export async function running(client: discord.Client): Promise<void> {
                 match.votingperiod = true
                 match.votetime = (Math.floor(Date.now() / 1000))
                 await updateActive(match)
+                await channelid.send(`<@&719936221572235295>`)
+
+                await channelid.send("You have 2 hours to vote. You can vote for 2 memes!")
             }
         }
 

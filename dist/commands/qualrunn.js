@@ -74,6 +74,7 @@ async function qualrunn(match, channelid, client) {
                 if (match.template.length > 0 || match.template) {
                     await channel.send("\n\nThe theme is: " + match.template);
                 }
+                await channel.send(`<@&719936221572235295>`);
                 await channel.send("You have 2 hours to vote. You can vote for 2 memes!");
                 await db_1.updateQuals(match);
             }
