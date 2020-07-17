@@ -392,7 +392,7 @@ export async function running(client: discord.Client): Promise<void> {
                 await updateActive(match)
                 await channelid.send(`<@&719936221572235295>`)
 
-                await channelid.send("You have 2 hours to vote. You can vote for 2 memes!")
+                await channelid.send("You have 2 hours to vote!")
             }
         }
 
