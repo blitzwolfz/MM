@@ -3,6 +3,7 @@ import * as discord from "discord.js"
 // import {prefix} from "../misc/config.json"
 import { activematch} from "../misc/struct"
 import { deleteActive, deleteQuals, getActive, updateProfile, getSingularQuals, getMatch } from "../misc/db"
+import { winner } from "./card"
 
 export async function endmatch(message: discord.Message, client: discord.Client) {
     let matches: activematch[] = await getActive()
@@ -99,6 +100,7 @@ export async function end(client: discord.Client, id: string) {
         updateProfile(user1.id, "loss", 1)
 
         await channelid.send(embed)
+        await channelid.send([await winner(client, user2.id)!])
     }
 
     else if ((Math.floor(Date.now() / 1000) - match.p2.time > 1800) && match.p2.memedone === false) {
@@ -115,6 +117,8 @@ export async function end(client: discord.Client, id: string) {
         updateProfile(user2.id, "loss", 1)
 
         await channelid.send(embed)
+        await channelid.send([await winner(client, user1.id)!])
+
     }
 
     else if (((Math.floor(Date.now() / 1000) - match.p2.time > 1800) && match.p2.memedone === false) && ((Math.floor(Date.now() / 1000) - match.p1.time > 1800) && match.p1.memedone === false)) {
@@ -141,8 +145,8 @@ export async function end(client: discord.Client, id: string) {
         updateProfile(user2.id, "loss", 1)
 
         await channelid.send(embed)
-
-
+        await channelid.send([await winner(client, user1.id)!])
+    
     }
 
     else if (match.p1.votes < match.p2.votes) {
@@ -150,12 +154,14 @@ export async function end(client: discord.Client, id: string) {
             .setTitle(`Match between ${user1.username} and ${user2.username}`)
             .setColor("#d7be26")
             .setDescription(`<@${user2.id}> has won with image B!\n The final votes where ${match.p1.votes} to ${match.p2.votes}`)
+
             .setTimestamp()
 
         updateProfile(user1.id, "loss", 1)
         updateProfile(user2.id, "wins", 1)
 
         await channelid.send(embed)
+        await channelid.send([await winner(client, user2.id)!])
     }
 
     else if (match.p1.votes === match.p2.votes) {

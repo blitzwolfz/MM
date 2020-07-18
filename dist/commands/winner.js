@@ -22,6 +22,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.qualend = exports.end = exports.endmatch = void 0;
 const discord = __importStar(require("discord.js"));
 const db_1 = require("../misc/db");
+const card_1 = require("./card");
 async function endmatch(message, client) {
     let matches = await db_1.getActive();
     for (const match of matches) {
@@ -93,6 +94,7 @@ async function end(client, id) {
         db_1.updateProfile(user2.id, "wins", 1);
         db_1.updateProfile(user1.id, "loss", 1);
         await channelid.send(embed);
+        await channelid.send([await card_1.winner(client, user2.id)]);
     }
     else if ((Math.floor(Date.now() / 1000) - match.p2.time > 1800) && match.p2.memedone === false) {
         console.log(Date.now() - match.p2.time);
@@ -105,6 +107,7 @@ async function end(client, id) {
         db_1.updateProfile(user1.id, "wins", 1);
         db_1.updateProfile(user2.id, "loss", 1);
         await channelid.send(embed);
+        await channelid.send([await card_1.winner(client, user1.id)]);
     }
     else if (((Math.floor(Date.now() / 1000) - match.p2.time > 1800) && match.p2.memedone === false) && ((Math.floor(Date.now() / 1000) - match.p1.time > 1800) && match.p1.memedone === false)) {
         user1.send("You have failed to submit your meme");
@@ -125,6 +128,7 @@ async function end(client, id) {
         db_1.updateProfile(user1.id, "wins", 1);
         db_1.updateProfile(user2.id, "loss", 1);
         await channelid.send(embed);
+        await channelid.send([await card_1.winner(client, user1.id)]);
     }
     else if (match.p1.votes < match.p2.votes) {
         let embed = new discord.MessageEmbed()
@@ -135,6 +139,7 @@ async function end(client, id) {
         db_1.updateProfile(user1.id, "loss", 1);
         db_1.updateProfile(user2.id, "wins", 1);
         await channelid.send(embed);
+        await channelid.send([await card_1.winner(client, user2.id)]);
     }
     else if (match.p1.votes === match.p2.votes) {
         let embed = new discord.MessageEmbed()

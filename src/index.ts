@@ -280,24 +280,8 @@ client.on("message", async message => {
   }
 
   // else if (command === "test") {
-  //   message.reply("no.")
-  //   let matchlist = await getMatchlist();
 
-  //   let guild = client.guilds.cache.get("719406444109103117")
-  //   console.log(matchlist.users)
-
-  //   for(let i = 0; i < matchlist.users.length; i++){
-  //     message.reply((await (await guild!.members.fetch(matchlist.users[i])).nickname) || await (await client.users.fetch(matchlist.users[i])).username)
-  //   }
-
-  
-
-
-  //   await message.member?.roles.add("730650583413030953")
-
-  //   await message.member?.user?.send("Please start verification with `!verify`.")
-  
-  //   console.log(`a user joins a guild: ${message.member?.user.username}`);
+  //   await winner(message, client, args[0]) //239516219445608449
   // }
 
   else if(command === "createqualgroup"){
