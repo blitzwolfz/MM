@@ -1,18 +1,20 @@
 import * as Discord from "discord.js";
 require("dotenv").config();
-import {activematch, qualmatch} from "./misc/struct"
+import {activematch, qualmatch, cockratingInterface} from "./misc/struct"
 import {submit, qualsubmit} from "./commands/submit"
 import { start, running, qualrunning, startqual, startmodqual, splitqual, startregularsplit, splitregular, reload } from "./commands/start";
 import { endmatch, qualend } from "./commands/winner";
 import { vs } from "./commands/card";
 import { getUser, hasthreevotes, emojis, removethreevotes} from "./misc/utils";
 import { ModHelp, UserHelp, ModSignupHelp, ModChallongeHelp } from "./commands/help";
-import { connectToDB, getQuals, getActive, updateActive, updateQuals, deleteSignup, getMatch, getQual} from "./misc/db";
+import { connectToDB, getQuals, getActive, updateActive, updateQuals, deleteSignup, getMatch, getQual, getCockrating, insertCockrating, updateCockrating} from "./misc/db";
 import { template, approvetemplate } from "./commands/template";
 import { createrUser, stats } from "./commands/user";
 import { signup, startsignup, closesignup, removesignup, reopensignup, activeOffers, matchlistEmbed } from "./commands/signups";
 import { CreateChallongeQualBracket, ChannelCreation, CreateChallongeMatchBracket, matchlistmaker, CreateQualGroups, quallistEmbed, declarequalwinner, GroupSearch, removequalwinner} from "./commands/challonge";
 import { verify} from "./misc/verify";
+import { cockratingLB } from "./misc/lbs";
+// import e from "express";
 //import data from "../match.json"
 //const fs = require('fs');
 console.log("Hello World, bot has begun life");
@@ -277,26 +279,26 @@ client.on("message", async message => {
     await m.edit(`Latency is ${m.createdTimestamp - message.createdTimestamp}ms. Discord API Latency is ${Math.round(client.ws.ping)}ms`);
   }
 
-  else if (command === "test") {
-    message.reply("no.")
-    // let matchlist = await getMatchlist();
+  // else if (command === "test") {
+  //   message.reply("no.")
+  //   let matchlist = await getMatchlist();
 
-    // let guild = client.guilds.cache.get("719406444109103117")
-    // console.log(matchlist.users)
+  //   let guild = client.guilds.cache.get("719406444109103117")
+  //   console.log(matchlist.users)
 
-    // for(let i = 0; i < matchlist.users.length; i++){
-    //   message.reply((await (await guild!.members.fetch(matchlist.users[i])).nickname) || await (await client.users.fetch(matchlist.users[i])).username)
-    // }
+  //   for(let i = 0; i < matchlist.users.length; i++){
+  //     message.reply((await (await guild!.members.fetch(matchlist.users[i])).nickname) || await (await client.users.fetch(matchlist.users[i])).username)
+  //   }
 
   
 
 
-    // await message.member?.roles.add("730650583413030953")
+  //   await message.member?.roles.add("730650583413030953")
 
-    // await message.member?.user?.send("Please start verification with `!verify`.")
+  //   await message.member?.user?.send("Please start verification with `!verify`.")
   
-    // console.log(`a user joins a guild: ${message.member?.user.username}`);
-  }
+  //   console.log(`a user joins a guild: ${message.member?.user.username}`);
+  // }
 
   else if(command === "createqualgroup"){
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
@@ -392,6 +394,49 @@ client.on("message", async message => {
 
   else if (command === "create"){
     await createrUser(message)
+  }
+
+  else if (command === "cr" || command === "cockrating"){
+
+    if (!message.member!.roles.cache.has('719936221572235295')) {
+      return message.reply("You are not cock rating master.")
+    }
+
+    else {
+      let id = (message.mentions?.users?.first()?.id || message.author.id)
+      let form = await getCockrating(id)
+      let max = 100
+      let min = Math.floor(Math.random() * ((max-1) - 1) + 1)
+
+      if(!form){
+        message.reply(`<@${id}> has ${max === min ? `100% good cock` : `${min}/${max} cock`}`)
+
+
+        let newform:cockratingInterface = {
+          _id: id,
+          num: min,
+          time: Math.floor(Date.now()/1000)
+        }
+
+        await insertCockrating(newform)
+      }
+
+      if(Math.floor(Date.now() / 1000) -  form.time < 259200){
+        return message.reply("It has not been 3 days")
+      }
+
+      else{
+        message.reply(`<@${id}> has ${max === min ? `100% good cock` : `${min}/${max} cock`}`)
+        
+        form.num = min
+        form.time = Math.floor(Date.now() / 1000)
+        await updateCockrating(form)
+      }
+    }
+  }
+
+  else if(command === "crlb"){
+    await cockratingLB(message, client, args)
   }
 
   else if (command === "stats"){

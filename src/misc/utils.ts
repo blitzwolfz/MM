@@ -1,4 +1,4 @@
-//import { Client } from "discord.js"
+import * as Discord from "discord.js"
 
 export async function getUser(mention: string) {
   // The id is the first and only match found by the RegEx.
@@ -57,3 +57,6 @@ export function removethreevotes(arr:Array<Array<string>>, search:string){
 
   return arr;
 }
+
+export const backwardsFilter = (reaction: { emoji: { name: string; }; }, user: Discord.User) => reaction.emoji.name === '⬅' && !user.bot;
+export const forwardsFilter = (reaction: { emoji: { name: string; }; }, user: Discord.User) => reaction.emoji.name === '➡'  && !user.bot;

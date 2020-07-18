@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateVerify = exports.getVerify = exports.insertVerify = exports.updateMatchlist = exports.getMatchlist = exports.insertMatchlist = exports.deleteQuallist = exports.updateQuallist = exports.getQuallist = exports.insertQuallist = exports.deleteSignup = exports.updateSignup = exports.getSignups = exports.insertSignups = exports.deleteQuals = exports.deleteActive = exports.addUser = exports.updateProfile = exports.getProfile = exports.addProfile = exports.getSingularQuals = exports.getQuals = exports.getQual = exports.getMatch = exports.getActive = exports.updateQuals = exports.insertQuals = exports.updateActive = exports.insertActive = exports.connectToDB = void 0;
+exports.getAllCockratings = exports.updateCockrating = exports.getCockrating = exports.insertCockrating = exports.updateVerify = exports.getVerify = exports.insertVerify = exports.updateMatchlist = exports.getMatchlist = exports.insertMatchlist = exports.deleteQuallist = exports.updateQuallist = exports.getQuallist = exports.insertQuallist = exports.deleteSignup = exports.updateSignup = exports.getSignups = exports.insertSignups = exports.deleteQuals = exports.deleteActive = exports.addUser = exports.updateProfile = exports.getProfile = exports.addProfile = exports.getSingularQuals = exports.getQuals = exports.getQual = exports.getMatch = exports.getActive = exports.updateQuals = exports.insertQuals = exports.updateActive = exports.insertActive = exports.connectToDB = void 0;
 const mongo = __importStar(require("mongodb"));
 require("dotenv").config();
 const MongoClient = mongo.MongoClient;
@@ -34,6 +34,7 @@ async function connectToDB() {
             await client.db(process.env.DBNAME).createCollection("quals");
             await client.db(process.env.DBNAME).createCollection("users");
             await client.db(process.env.DBNAME).createCollection("signup");
+            await client.db(process.env.DBNAME).createCollection("cockrating");
             await resolve();
         });
     });
@@ -176,3 +177,20 @@ async function updateVerify(verifyform) {
     await client.db(process.env.DBNAME).collection("signup").updateOne({ _id: 4 }, { $set: verifyform });
 }
 exports.updateVerify = updateVerify;
+async function insertCockrating(cockratingForm) {
+    await client.db(process.env.DBNAME).collection("cockrating").insertOne(cockratingForm);
+}
+exports.insertCockrating = insertCockrating;
+async function getCockrating(id) {
+    return await client.db(process.env.DBNAME).collection("cockrating").findOne({ _id: id });
+}
+exports.getCockrating = getCockrating;
+async function updateCockrating(cockratingForm) {
+    let _id = cockratingForm._id;
+    await client.db(process.env.DBNAME).collection("cockrating").updateOne({ _id }, { $set: cockratingForm });
+}
+exports.updateCockrating = updateCockrating;
+async function getAllCockratings() {
+    return await client.db(process.env.DBNAME).collection("cockrating").find({}).toArray();
+}
+exports.getAllCockratings = getAllCockratings;

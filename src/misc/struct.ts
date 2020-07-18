@@ -83,3 +83,9 @@ export interface verificationform{
     codes: Array<string[]>
     users: Array<string>
 }
+
+export interface cockratingInterface{
+    _id:string;
+    num:number;
+    time:number;
+}

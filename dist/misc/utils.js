@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
+exports.forwardsFilter = exports.backwardsFilter = exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
 async function getUser(mention) {
     const matches = mention.match(/^<@!?(\d+)>$/);
     if (!matches)
@@ -39,3 +39,5 @@ function removethreevotes(arr, search) {
     return arr;
 }
 exports.removethreevotes = removethreevotes;
+exports.backwardsFilter = (reaction, user) => reaction.emoji.name === '⬅' && !user.bot;
+exports.forwardsFilter = (reaction, user) => reaction.emoji.name === '➡' && !user.bot;

@@ -22,6 +22,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.matchlistEmbed = exports.activeOffers = exports.viewsignup = exports.reopensignup = exports.closesignup = exports.removesignup = exports.signup = exports.startsignup = void 0;
 const Discord = __importStar(require("discord.js"));
 const db_1 = require("../misc/db");
+const utils_1 = require("../misc/utils");
 async function startsignup(message, client) {
     if (message.member.roles.cache.has('724818272922501190')
         || message.member.roles.cache.has('724818272922501190')
@@ -211,16 +212,14 @@ async function viewsignup(message, client) {
     }
 }
 exports.viewsignup = viewsignup;
-const backwardsFilter = (reaction, user) => reaction.emoji.name === '⬅' && !user.bot;
-const forwardsFilter = (reaction, user) => reaction.emoji.name === '➡' && !user.bot;
 async function activeOffers(message, client) {
     let page = 1;
     let signups = await db_1.getSignups();
     const m = (await message.channel.send({ embed: await listEmbed(page, client, signups) }));
     await m.react("⬅");
     await m.react("➡");
-    const backwards = m.createReactionCollector(backwardsFilter, { time: 100000 });
-    const forwards = m.createReactionCollector(forwardsFilter, { time: 100000 });
+    const backwards = m.createReactionCollector(utils_1.backwardsFilter, { time: 100000 });
+    const forwards = m.createReactionCollector(utils_1.forwardsFilter, { time: 100000 });
     backwards.on('collect', async () => {
         m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
         m.edit({ embed: await listEmbed(--page, client, signups) });
@@ -237,8 +236,8 @@ async function matchlistEmbed(message, client) {
     const m = (await message.channel.send({ embed: await listEmbed(page, client, signups) }));
     await m.react("⬅");
     await m.react("➡");
-    const backwards = m.createReactionCollector(backwardsFilter, { time: 100000 });
-    const forwards = m.createReactionCollector(forwardsFilter, { time: 100000 });
+    const backwards = m.createReactionCollector(utils_1.backwardsFilter, { time: 100000 });
+    const forwards = m.createReactionCollector(utils_1.forwardsFilter, { time: 100000 });
     backwards.on('collect', async () => {
         m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
         m.edit({ embed: await listEmbed(--page, client, signups) });

@@ -2,7 +2,7 @@ import * as mongo from "mongodb"
 
 require("dotenv").config();
 
-import { activematch, qualmatch, user, signups, matchlist, verificationform, quallist } from "./struct";
+import { activematch, qualmatch, user, signups, matchlist, verificationform, quallist, cockratingInterface } from "./struct";
 
 const MongoClient = mongo.MongoClient
 //const assert = require("assert")
@@ -18,6 +18,7 @@ export async function connectToDB(): Promise<void> {
             await client.db(process.env.DBNAME).createCollection("quals");
             await client.db(process.env.DBNAME).createCollection("users");
             await client.db(process.env.DBNAME).createCollection("signup")
+            await client.db(process.env.DBNAME).createCollection("cockrating")
             await resolve();
         });
     });
@@ -170,4 +171,21 @@ export async function getVerify(): Promise<verificationform>{
 
 export async function updateVerify(verifyform: verificationform): Promise<void> {
     await client.db(process.env.DBNAME).collection("signup").updateOne({_id:4}, {$set: verifyform});
+}
+
+export async function insertCockrating(cockratingForm: cockratingInterface): Promise<void>{
+    await client.db(process.env.DBNAME).collection("cockrating").insertOne(cockratingForm)
+}
+
+export async function getCockrating(id: string): Promise<cockratingInterface>{
+    return await client.db(process.env.DBNAME).collection("cockrating").findOne({ _id:id })!;
+}
+
+export async function updateCockrating(cockratingForm: cockratingInterface): Promise<void> {
+    let _id = cockratingForm._id
+    await client.db(process.env.DBNAME).collection("cockrating").updateOne({_id}, {$set: cockratingForm});
+}
+
+export async function getAllCockratings(): Promise<cockratingInterface[]>{
+    return await client.db(process.env.DBNAME).collection("cockrating").find({}).toArray();
 }

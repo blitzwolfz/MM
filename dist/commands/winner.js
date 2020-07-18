@@ -120,7 +120,7 @@ async function end(client, id) {
         let embed = new discord.MessageEmbed()
             .setTitle(`Match between ${user1.username} and ${user2.username}`)
             .setColor("#d7be26")
-            .setDescription(`<@${user1.id}> has won!\n The final votes where ${match.p1.votes} to ${match.p2.votes}\n${user1.username} won with image A`)
+            .setDescription(`<@${user1.id}> has won with image A!\n The final votes where ${match.p1.votes} to ${match.p2.votes}`)
             .setTimestamp();
         db_1.updateProfile(user1.id, "wins", 1);
         db_1.updateProfile(user2.id, "loss", 1);
@@ -130,7 +130,7 @@ async function end(client, id) {
         let embed = new discord.MessageEmbed()
             .setTitle(`Match between ${user1.username} and ${user2.username}`)
             .setColor("#d7be26")
-            .setDescription(`<@${user2.id}> has won!\n The final votes where ${match.p1.votes} to ${match.p2.votes}\n${user2.username} won with image B`)
+            .setDescription(`<@${user2.id}> has won with image B!\n The final votes where ${match.p1.votes} to ${match.p2.votes}`)
             .setTimestamp();
         db_1.updateProfile(user1.id, "loss", 1);
         db_1.updateProfile(user2.id, "wins", 1);
@@ -140,7 +140,7 @@ async function end(client, id) {
         let embed = new discord.MessageEmbed()
             .setColor("#d7be26")
             .setTitle(`Match between ${user1.username} and ${user2.username}`)
-            .setDescription(`Both users have come to a draw.\nPlease find a new time for your rematch.`)
+            .setDescription(`Both users have gotten ${match.p1.votes} vote(s). Both users came to a draw.\nPlease find a new time for your rematch.`)
             .setTimestamp();
         await channelid.send(embed);
     }

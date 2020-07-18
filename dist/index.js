@@ -33,6 +33,7 @@ const user_1 = require("./commands/user");
 const signups_1 = require("./commands/signups");
 const challonge_1 = require("./commands/challonge");
 const verify_1 = require("./misc/verify");
+const lbs_1 = require("./misc/lbs");
 console.log("Hello World, bot has begun life");
 const express = require('express');
 const app = express();
@@ -206,7 +207,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
     }
 });
 client.on("message", async (message) => {
-    var _a;
+    var _a, _b, _c, _d;
     const prefix = process.env.PREFIX;
     console.log(await db_1.getActive());
     console.log(await db_1.getQuals());
@@ -229,9 +230,6 @@ client.on("message", async (message) => {
     if (command === "ping") {
         const m = await message.channel.send("Ping?");
         await m.edit(`Latency is ${m.createdTimestamp - message.createdTimestamp}ms. Discord API Latency is ${Math.round(client.ws.ping)}ms`);
-    }
-    else if (command === "test") {
-        message.reply("no.");
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))
@@ -318,6 +316,38 @@ client.on("message", async (message) => {
     }
     else if (command === "create") {
         await user_1.createrUser(message);
+    }
+    else if (command === "cr" || command === "cockrating") {
+        if (!message.member.roles.cache.has('719936221572235295')) {
+            return message.reply("You are not cock rating master.");
+        }
+        else {
+            let id = (((_d = (_c = (_b = message.mentions) === null || _b === void 0 ? void 0 : _b.users) === null || _c === void 0 ? void 0 : _c.first()) === null || _d === void 0 ? void 0 : _d.id) || message.author.id);
+            let form = await db_1.getCockrating(id);
+            let max = 100;
+            let min = Math.floor(Math.random() * ((max - 1) - 1) + 1);
+            if (!form) {
+                message.reply(`<@${id}> has ${max === min ? `100% good cock` : `${min}/${max} cock`}`);
+                let newform = {
+                    _id: id,
+                    num: min,
+                    time: Math.floor(Date.now() / 1000)
+                };
+                await db_1.insertCockrating(newform);
+            }
+            if (Math.floor(Date.now() / 1000) - form.time < 259200) {
+                return message.reply("It has not been 3 days");
+            }
+            else {
+                message.reply(`<@${id}> has ${max === min ? `100% good cock` : `${min}/${max} cock`}`);
+                form.num = min;
+                form.time = Math.floor(Date.now() / 1000);
+                await db_1.updateCockrating(form);
+            }
+        }
+    }
+    else if (command === "crlb") {
+        await lbs_1.cockratingLB(message, client, args);
     }
     else if (command === "stats") {
         await user_1.stats(message, client);

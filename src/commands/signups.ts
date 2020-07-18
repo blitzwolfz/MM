@@ -1,6 +1,7 @@
 import * as Discord from "discord.js";
 import { signups, matchlist } from "../misc/struct";
 import { insertSignups, getSignups, updateSignup, getMatchlist } from "../misc/db";
+import { backwardsFilter, forwardsFilter } from "../misc/utils";
 
 
 export async function startsignup(message: Discord.Message, client: Discord.Client){
@@ -240,8 +241,7 @@ export async function viewsignup(message: Discord.Message, client: Discord.Clien
     }
 }
 
-const backwardsFilter = (reaction: { emoji: { name: string; }; }, user: Discord.User) => reaction.emoji.name === '⬅' && !user.bot;
-const forwardsFilter = (reaction: { emoji: { name: string; }; }, user: Discord.User) => reaction.emoji.name === '➡'  && !user.bot;
+
 
 
 export async function activeOffers(message: Discord.Message, client: Discord.Client) {
