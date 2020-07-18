@@ -568,6 +568,10 @@ async function reload(message, client) {
             });
             match.votingperiod = true;
             match.votetime = (Math.floor(Date.now() / 1000));
+            match.p1.voters = [];
+            match.p1.votes = 0;
+            match.p2.voters = [];
+            match.p2.votes = 0;
             await db_1.updateActive(match);
         }
     }

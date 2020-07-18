@@ -207,7 +207,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
     }
 });
 client.on("message", async (message) => {
-    var _a, _b, _c, _d;
+    var _a, _b, _c, _d, _e, _f, _g;
     const prefix = process.env.PREFIX;
     console.log(await db_1.getActive());
     console.log(await db_1.getQuals());
@@ -230,6 +230,10 @@ client.on("message", async (message) => {
     if (command === "ping") {
         const m = await message.channel.send("Ping?");
         await m.edit(`Latency is ${m.createdTimestamp - message.createdTimestamp}ms. Discord API Latency is ${Math.round(client.ws.ping)}ms`);
+    }
+    else if (command === "test") {
+        let id = args[0] || ((_d = (_c = (_b = message.mentions) === null || _b === void 0 ? void 0 : _b.users) === null || _c === void 0 ? void 0 : _c.first()) === null || _d === void 0 ? void 0 : _d.id) || message.author.id;
+        await message.channel.send([await card_1.winner(client, id)]);
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))
@@ -322,7 +326,7 @@ client.on("message", async (message) => {
             return message.reply("You are not cock rating master.");
         }
         else {
-            let id = (((_d = (_c = (_b = message.mentions) === null || _b === void 0 ? void 0 : _b.users) === null || _c === void 0 ? void 0 : _c.first()) === null || _d === void 0 ? void 0 : _d.id) || message.author.id);
+            let id = (((_g = (_f = (_e = message.mentions) === null || _e === void 0 ? void 0 : _e.users) === null || _f === void 0 ? void 0 : _f.first()) === null || _g === void 0 ? void 0 : _g.id) || message.author.id);
             let form = await db_1.getCockrating(id);
             let max = 100;
             let min = Math.floor(Math.random() * ((max - 1) - 1) + 1);

@@ -4,7 +4,7 @@ import {activematch, qualmatch, cockratingInterface} from "./misc/struct"
 import {submit, qualsubmit} from "./commands/submit"
 import { start, running, qualrunning, startqual, startmodqual, splitqual, startregularsplit, splitregular, reload } from "./commands/start";
 import { endmatch, qualend } from "./commands/winner";
-import { vs } from "./commands/card";
+import { vs, winner } from "./commands/card";
 import { getUser, hasthreevotes, emojis, removethreevotes} from "./misc/utils";
 import { ModHelp, UserHelp, ModSignupHelp, ModChallongeHelp } from "./commands/help";
 import { connectToDB, getQuals, getActive, updateActive, updateQuals, deleteSignup, getMatch, getQual, getCockrating, insertCockrating, updateCockrating} from "./misc/db";
@@ -279,10 +279,12 @@ client.on("message", async message => {
     await m.edit(`Latency is ${m.createdTimestamp - message.createdTimestamp}ms. Discord API Latency is ${Math.round(client.ws.ping)}ms`);
   }
 
-  // else if (command === "test") {
+  else if (command === "test") {
 
-  //   await winner(message, client, args[0]) //239516219445608449
-  // }
+    let id = args[0] ||message.mentions?.users?.first()?.id ||  message.author.id 
+    await message.channel.send([await winner(client, id)])
+
+  }
 
   else if(command === "createqualgroup"){
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")

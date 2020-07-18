@@ -18,6 +18,7 @@ Hi! If you are reading this, then you found my a discord bot that I am working o
 - [Synchronization](#synchronization)
 - [Installation](#installation) <--- This is what you might be looking for
   * [Locally](#locally) 
+  * [Cloud](#Cloud) 
 
   
 # General
@@ -132,3 +133,7 @@ $ node dist/index.js
 `
 
 And you are done! The bot should be working perfectly, and will run as so long as you don't do Crtl+C in the terminal or close the terminal.
+
+
+## Cloud
+To host the bot on a server, you can use services such as Heroku. As there many forms of these services, find the best one for you and use their installation guide. The steps that are is the dB steps, which you will need regardless of how you host the bot.
