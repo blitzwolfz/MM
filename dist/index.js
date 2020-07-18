@@ -466,6 +466,6 @@ client.on("message", async (message) => {
         await card_1.vs(message, client, users);
     }
     let awake = client.channels.cache.get("734075282708758540");
-    awake.send("ok <@370633705091497985>");
+    await awake.send("ok <@370633705091497985>");
 });
 client.login(process.env.TOKEN);
