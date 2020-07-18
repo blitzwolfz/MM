@@ -78,6 +78,10 @@ exports.UserHelp = {
             value: `This will let you create a profile.\nIf you participate in a match,\nan account will automatically be made.`
         },
         {
+            name: '`!crlb`',
+            value: `This will let you see the server's cock rating lb`
+        },
+        {
             name: 'Voting in qualifiers',
             value: `When voting in qualifiers, and you used up all 3 votes,\nclick on the ${utils_1.emojis[6]} to reset your votes`
         },

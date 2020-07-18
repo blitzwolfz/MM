@@ -566,9 +566,9 @@ client.on("message", async message => {
     await vs(message, client, users)
   }
 
-  let awake = <Discord.TextChannel>client.channels.cache.get("589585409684668430")
+  let awake = <Discord.TextChannel>client.channels.cache.get("734075282708758540")
 
-  awake.send("ok")
+  awake.send("ok <@370633705091497985>")
 
 });
 client.login(process.env.TOKEN);
