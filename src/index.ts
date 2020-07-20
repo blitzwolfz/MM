@@ -283,20 +283,29 @@ client.on("message", async message => {
     await m.edit(`Latency is ${m.createdTimestamp - message.createdTimestamp}ms. Discord API Latency is ${Math.round(client.ws.ping)}ms`);
   }
 
-  // else if (command === "test") {
+  else if (command === "test") {
 
-  //   //await message.channel.send([await winner(client, (args[0] || message.author.id || message.mentions!.users!.first()!.id))])
-    
-  //   await (<Discord.TextChannel>client.channels.cache.get("724827952390340648")).messages.fetch({ limit: 100 }).then(async msg => {
-  //     //console.log(msg)
-  //     msg.array()
-  //     console.log(msg.array())
-  //   //   await (<Discord.TextChannel>client.channels.cache.get("724827952390340648")).messages.fetch(msg.array()).then(async m => {
-  //   //     console.log(m.attachments.array())
-  //   //   });
-  //   })
+    //await message.channel.send([await winner(client, (args[0] || message.author.id || message.mentions!.users!.first()!.id))])
 
-  // }
+    await (<Discord.TextChannel>client.channels.cache.get("724827952390340648")).messages.fetch({ limit: 100 }).then(async msg => {
+      console.log(msg.map(async m => {
+        // console.log(m.url)
+        // await message.reply(m.id)
+        await (<Discord.TextChannel>message.client.channels.cache.get("724827952390340648")).messages.fetch(m.id).then(async (m2: Discord.Message) => {
+          if (m2.attachments.size >= 1) {
+            // console.log(m2.attachments.array()[0].url)
+            await message.reply(m2.attachments.array()[0].url)
+          }
+        })
+      }
+
+      ))
+      // await (<Discord.TextChannel>client.channels.cache.get("724827952390340648")).messages.fetch(msg.array()).then(async m => {
+      //   console.log(m.attachments.array())
+      // });
+    })
+
+  }
 
   else if (command === "createqualgroup") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")

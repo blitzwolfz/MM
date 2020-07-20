@@ -231,6 +231,17 @@ client.on("message", async (message) => {
         const m = await message.channel.send("Ping?");
         await m.edit(`Latency is ${m.createdTimestamp - message.createdTimestamp}ms. Discord API Latency is ${Math.round(client.ws.ping)}ms`);
     }
+    else if (command === "test") {
+        await client.channels.cache.get("724827952390340648").messages.fetch({ limit: 100 }).then(async (msg) => {
+            console.log(msg.map(async (m) => {
+                await message.client.channels.cache.get("724827952390340648").messages.fetch(m.id).then(async (m2) => {
+                    if (m2.attachments.size >= 1) {
+                        await message.reply(m2.attachments.array()[0].url);
+                    }
+                });
+            }));
+        });
+    }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
