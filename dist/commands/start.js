@@ -263,20 +263,21 @@ async function running(client) {
                 channelid.send(embed);
                 await db_1.deleteActive(match);
             }
-            else if ((!(match.split) && ((Math.floor(Date.now() / 1000) - match.p2.time < 2400) && match.p2.memedone === true)
-                && ((Math.floor(Date.now() / 1000) - match.p2.time < 2400) && match.p1.memedone === true))) {
+            else if ((!(match.split) && ((Math.floor(Date.now() / 1000) - match.p2.time <= 2400) && match.p2.memedone === true)
+                && ((Math.floor(Date.now() / 1000) - match.p1.time <= 2400) && match.p1.memedone === true))) {
                 if (Math.floor(Math.random() * (5 - 1) + 1) % 2 === 1) {
                     let temp = match.p1;
                     match.p1 = match.p2;
                     match.p2 = temp;
                     await db_1.updateActive(match);
                 }
-                var embed1 = new discord.MessageEmbed()
+                let embed1 = new discord.MessageEmbed()
                     .setDescription("Meme #1")
                     .setImage(match.p1.memelink)
                     .setColor("#d7be26")
                     .setTimestamp();
-                var embed2 = new discord.MessageEmbed()
+                console.log("Player 1 embed done");
+                let embed2 = new discord.MessageEmbed()
                     .setDescription("Meme #2")
                     .setImage(match.p2.memelink)
                     .setColor("#d7be26")

@@ -287,8 +287,13 @@ client.on("message", async message => {
 
   //   //await message.channel.send([await winner(client, (args[0] || message.author.id || message.mentions!.users!.first()!.id))])
     
-  //   await (<Discord.TextChannel>client.channels.cache.get("724827952390340648")).messages.fetch({limit: 100}).then(async msg => {
-  //     await message.reply(msg.attachments.array())
+  //   await (<Discord.TextChannel>client.channels.cache.get("724827952390340648")).messages.fetch({ limit: 100 }).then(async msg => {
+  //     //console.log(msg)
+  //     msg.array()
+  //     console.log(msg.array())
+  //   //   await (<Discord.TextChannel>client.channels.cache.get("724827952390340648")).messages.fetch(msg.array()).then(async m => {
+  //   //     console.log(m.attachments.array())
+  //   //   });
   //   })
 
   // }
