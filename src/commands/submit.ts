@@ -26,9 +26,9 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
                 if(match.split){
                     match.p1.donesplit = true
                 }
-                await (<Discord.TextChannel>client.channels.cache.get(match.channelid)).send({
+                await (<Discord.TextChannel>client.channels.cache.get("722616679280148504")).send({
                     embed:{
-                        description: `<@${message.author.id}> has submitted their meme`,
+                        description: `<@${message.author.id}> has submitted their meme\nChannel: <#${match.channelid}>`,
                         color: "#d7be26",
                         timestamp: new Date()
                     }
@@ -52,9 +52,9 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
                     match.p2.donesplit = true
                 }
                 
-                await (<Discord.TextChannel>client.channels.cache.get(match.channelid)).send({
+                await (<Discord.TextChannel>client.channels.cache.get("722616679280148504")).send({
                     embed:{
-                        description: `<@${message.author.id}> has submitted their meme`,
+                        description: `<@${message.author.id}> has submitted their meme\nChannel: <#${match.channelid}>`,
                         color: "#d7be26",
                         timestamp: new Date()
                     }
@@ -109,9 +109,9 @@ export async function qualsubmit(message: Discord.Message, client: Discord.Clien
                             //     match.votetime = Math.floor(Date.now() / 1000)
                             // }
                             await message.reply("You meme has been attached!")
-                            await (<Discord.TextChannel>client.channels.cache.get(match.channelid)).send({
+                            await (<Discord.TextChannel>client.channels.cache.get("722616679280148504")).send({
                                 embed:{
-                                    description: `<@${message.author.id}> has submitted their meme`,
+                                    description: `<@${message.author.id}> has submitted their meme\nChannel: <#${match.channelid}>`,
                                     color:"#d7be26",
                                     timestamp: new Date()
                                 }

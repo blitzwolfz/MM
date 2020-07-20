@@ -133,19 +133,31 @@ export async function end(client: discord.Client, id: string) {
 
         await channelid.send(embed)
     }
-
+    
     else if (match.p1.votes > match.p2.votes) {
         let embed = new discord.MessageEmbed()
             .setTitle(`Match between ${user1.username} and ${user2.username}`)
             .setColor("#d7be26")
             .setDescription(`<@${user1.id}> has won with image A!\n The final votes where ${match.p1.votes} to ${match.p2.votes}`)
             .setTimestamp()
-
+        
         updateProfile(user1.id, "wins", 1)
         updateProfile(user2.id, "loss", 1)
 
         await channelid.send(embed)
+
+
         await channelid.send([await winner(client, user1.id)!])
+
+        // let d = new Date()
+        
+        await (<discord.TextChannel>client.channels.cache.get("734565012378746950")).send((new discord.MessageEmbed()
+            .setColor("#d7be26")
+            .setImage(match.p1.memelink)
+            .setDescription(`${(await (await channelid.guild!.members.fetch(user1.id)).nickname) || await (await client.users.fetch(user1.id)).username} won with ${match.p1.votes} votes!`)
+            .setTimestamp()
+        ))
+
     
     }
 
@@ -154,7 +166,7 @@ export async function end(client: discord.Client, id: string) {
             .setTitle(`Match between ${user1.username} and ${user2.username}`)
             .setColor("#d7be26")
             .setDescription(`<@${user2.id}> has won with image B!\n The final votes where ${match.p1.votes} to ${match.p2.votes}`)
-
+            .setImage(match.p2.memelink)
             .setTimestamp()
 
         updateProfile(user1.id, "loss", 1)
@@ -162,6 +174,14 @@ export async function end(client: discord.Client, id: string) {
 
         await channelid.send(embed)
         await channelid.send([await winner(client, user2.id)!])
+
+        // let d = new Date()
+        
+        await (<discord.TextChannel>client.channels.cache.get("734565012378746950")).send((new discord.MessageEmbed()
+            .setColor("#d7be26")
+            .setDescription(`${(await (await channelid.guild!.members.fetch(user2.id)).nickname) || await (await client.users.fetch(user2.id)).username} won with ${match.p2.votes} votes!`)
+            .setTimestamp()
+        ))
     }
 
     else if (match.p1.votes === match.p2.votes) {

@@ -23,9 +23,9 @@ async function submit(message, client) {
                 if (match.split) {
                     match.p1.donesplit = true;
                 }
-                await client.channels.cache.get(match.channelid).send({
+                await client.channels.cache.get("722616679280148504").send({
                     embed: {
-                        description: `<@${message.author.id}> has submitted their meme`,
+                        description: `<@${message.author.id}> has submitted their meme\nChannel: <#${match.channelid}>`,
                         color: "#d7be26",
                         timestamp: new Date()
                     }
@@ -43,9 +43,9 @@ async function submit(message, client) {
                 if (match.split) {
                     match.p2.donesplit = true;
                 }
-                await client.channels.cache.get(match.channelid).send({
+                await client.channels.cache.get("722616679280148504").send({
                     embed: {
-                        description: `<@${message.author.id}> has submitted their meme`,
+                        description: `<@${message.author.id}> has submitted their meme\nChannel: <#${match.channelid}>`,
                         color: "#d7be26",
                         timestamp: new Date()
                     }
@@ -85,9 +85,9 @@ async function qualsubmit(message, client) {
                                 match.playersdone.push(message.author.id);
                             }
                             await message.reply("You meme has been attached!");
-                            await client.channels.cache.get(match.channelid).send({
+                            await client.channels.cache.get("722616679280148504").send({
                                 embed: {
-                                    description: `<@${message.author.id}> has submitted their meme`,
+                                    description: `<@${message.author.id}> has submitted their meme\nChannel: <#${match.channelid}>`,
                                     color: "#d7be26",
                                     timestamp: new Date()
                                 }

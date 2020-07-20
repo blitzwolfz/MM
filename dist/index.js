@@ -207,7 +207,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
     }
 });
 client.on("message", async (message) => {
-    var _a, _b, _c, _d, _e, _f, _g;
+    var _a, _b, _c, _d;
     const prefix = process.env.PREFIX;
     console.log(await db_1.getActive());
     console.log(await db_1.getQuals());
@@ -232,8 +232,7 @@ client.on("message", async (message) => {
         await m.edit(`Latency is ${m.createdTimestamp - message.createdTimestamp}ms. Discord API Latency is ${Math.round(client.ws.ping)}ms`);
     }
     else if (command === "test") {
-        let id = args[0] || ((_d = (_c = (_b = message.mentions) === null || _b === void 0 ? void 0 : _b.users) === null || _c === void 0 ? void 0 : _c.first()) === null || _d === void 0 ? void 0 : _d.id) || message.author.id;
-        await message.channel.send([await card_1.winner(client, id)]);
+        await message.channel.send([await card_1.winner(client, (args[0] || message.author.id || message.mentions.users.first().id))]);
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))
@@ -326,7 +325,7 @@ client.on("message", async (message) => {
             return message.reply("You are not cock rating master.");
         }
         else {
-            let id = (((_g = (_f = (_e = message.mentions) === null || _e === void 0 ? void 0 : _e.users) === null || _f === void 0 ? void 0 : _f.first()) === null || _g === void 0 ? void 0 : _g.id) || message.author.id);
+            let id = (((_d = (_c = (_b = message.mentions) === null || _b === void 0 ? void 0 : _b.users) === null || _c === void 0 ? void 0 : _c.first()) === null || _d === void 0 ? void 0 : _d.id) || message.author.id);
             let form = await db_1.getCockrating(id);
             let max = 100;
             let min = Math.floor(Math.random() * ((max - 1) - 1) + 1);
@@ -465,7 +464,5 @@ client.on("message", async (message) => {
         }
         await card_1.vs(message, client, users);
     }
-    let awake = client.channels.cache.get("734075282708758540");
-    await awake.send("ok <@370633705091497985>");
 });
 client.login(process.env.TOKEN);

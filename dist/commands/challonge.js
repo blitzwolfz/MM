@@ -127,6 +127,8 @@ async function ChannelCreation(message, disclient, args) {
                         if (data[i].match.winnerId === null && data[i].match.loserId === null) {
                             let oneid = data[i].match.player1Id;
                             let twoid = data[i].match.player2Id;
+                            if (oneid === null || twoid === null)
+                                continue;
                             let channelstringname = "";
                             client.participants.index({
                                 id: matchlist.url,
@@ -135,22 +137,24 @@ async function ChannelCreation(message, disclient, args) {
                                         console.log(err);
                                     for (let x = 0; x < data.length; x++) {
                                         if (data[x].participant.id === oneid) {
-                                            channelstringname += data[x].participant.name.substring(0, 5);
-                                        }
-                                        if (channelstringname) {
-                                            if (data[x].participant.id === twoid) {
-                                                channelstringname += "vs" + data[x].participant.name.substring(0, 5);
-                                                break;
-                                            }
+                                            channelstringname += data[x].participant.name.substring(0, 10);
+                                            break;
                                         }
                                     }
-                                    if (channelstringname.includes("vs")) {
-                                        await message.guild.channels.create(`${channelstringname}`, { type: 'text', topic: `Round ${args[0]}` })
+                                    for (let y = 0; y < data.length; y++) {
+                                        if (data[y].participant.id === twoid) {
+                                            channelstringname += "-vs-" + data[y].participant.name.substring(0, 10);
+                                            break;
+                                        }
+                                    }
+                                    if (channelstringname.includes("-vs-")) {
+                                        await message.guild.channels.create(channelstringname, { type: 'text', topic: `Round ${args[0]}` })
                                             .then(async (channel) => {
-                                            let category = await message.guild.channels.cache.find(c => c.name == "tournament" && c.type == "category");
+                                            let category = await message.guild.channels.cache.find(c => c.name == "matches" && c.type == "category");
                                             if (!category)
                                                 throw new Error("Category channel does not exist");
                                             await channel.setParent(category.id);
+                                            await channel.lockPermissions();
                                         });
                                     }
                                 }
@@ -161,6 +165,7 @@ async function ChannelCreation(message, disclient, args) {
             }
         });
     }
+    return message.reply("Made all channels");
 }
 exports.ChannelCreation = ChannelCreation;
 async function CreateQualGroups(message, args) {

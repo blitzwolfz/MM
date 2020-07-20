@@ -2,9 +2,9 @@ import * as discord from "discord.js"
 import { getUser, emojis } from "../misc/utils"
 const prefix = process.env.PREFIX!
 import { activematch, qualmatch, players } from "../misc/struct"
-import { end, qualend} from "./winner"
+import { end, qualend } from "./winner"
 import { vs } from "./card"
-import { updateActive, deleteActive, insertActive, insertQuals, updateQuals, getActive, getQuals, getSingularQuals, getMatch} from "../misc/db"
+import { updateActive, deleteActive, insertActive, insertQuals, updateQuals, getActive, getQuals, getSingularQuals, getMatch } from "../misc/db"
 import { createAtUsermatch } from "./user"
 import { qualrunn } from "./qualrunn"
 //const Canvas = require('canvas');
@@ -203,7 +203,7 @@ export async function startmodqual(message: discord.Message, client: discord.Cli
     }
 
     //console.log(args)
-    
+
 
     for (let i = 0; i < args.length; i++) {
         let userid = await getUser(args[i])
@@ -263,7 +263,7 @@ export async function startmodqual(message: discord.Message, client: discord.Cli
     }
 
 
-    else if (args.includes("theme")){
+    else if (args.includes("theme")) {
         newmatch.template = args[args.indexOf("theme") + 1]
         // for (let u of users){
         //     let user = await client.fetchUser(u.userid)
@@ -340,22 +340,19 @@ export async function running(client: discord.Client): Promise<void> {
                 await deleteActive(match)
             }
 
-            
-
-
 
             else if ((!(match.split) && ((Math.floor(Date.now() / 1000) - match.p2.time < 2400) && match.p2.memedone === true)
                 && ((Math.floor(Date.now() / 1000) - match.p2.time < 2400) && match.p1.memedone === true))) {
 
-                    if(Math.floor(Math.random() * (5 - 1) + 1) % 2 === 1){
-                        let temp = match.p1
+                if (Math.floor(Math.random() * (5 - 1) + 1) % 2 === 1) {
+                    let temp = match.p1
 
-                        match.p1 = match.p2
-    
-                        match.p2 = temp
-    
-                        await updateActive(match)
-                    }
+                    match.p1 = match.p2
+
+                    match.p2 = temp
+
+                    await updateActive(match)
+                }
 
 
                 var embed1 = new discord.MessageEmbed()
@@ -390,7 +387,7 @@ export async function running(client: discord.Client): Promise<void> {
                 match.votingperiod = true
                 match.votetime = (Math.floor(Date.now() / 1000))
                 await updateActive(match)
-                await channelid.send(`<@&719936221572235295>`)
+                //await channelid.send(`<@&719936221572235295>`)
 
                 await channelid.send("You have 2 hours to vote!")
             }
@@ -438,7 +435,7 @@ export async function splitqual(client: discord.Client, message: discord.Message
                         await user.send("\n\nHere is your theme: " + match.template)
                         //await user.send({ files: [new discord.MessageAttachment(match.template)] })
                     }
-                    
+
                     await updateQuals(match)
                 }
 
@@ -610,7 +607,7 @@ export async function reload(message: discord.Message, client: discord.Client) {
         console.log("Check 3")
         if (Math.floor(Date.now() / 1000) - match.octime > 1800 || match.playersdone.length === match.playerids.length) {
 
-            for(let i = 0; i < match.votes.length; i++){
+            for (let i = 0; i < match.votes.length; i++) {
                 match.votes[i] = []
             }
 
@@ -671,7 +668,7 @@ export async function reload(message: discord.Message, client: discord.Client) {
         }
     }
 
-    else{
+    else {
         let match = await getMatch(message.channel.id)
 
         let channelid = <discord.TextChannel>client.channels.cache.get(match.channelid)

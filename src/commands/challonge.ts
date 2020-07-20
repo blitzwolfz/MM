@@ -105,7 +105,7 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
             let name = (await (await guild!.members.fetch(matchlist.users[i])).nickname) || await (await disclient.users.fetch(matchlist.users[i])).username
 
 
-            
+
             console.log("ok")
             console.log(name)
 
@@ -174,6 +174,9 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
                     //var channelstringname = ""
 
                     if (data[i].match.round === parseInt(args[0])) {
+                        //await message.reply(`\`\`\` ${data[i]}\`\`\``)
+
+                        //console.log(data[i])
 
 
                         if (data[i].match.winnerId === null && data[i].match.loserId === null) {
@@ -183,33 +186,38 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
 
                             let twoid = data[i].match.player2Id
 
-                            let channelstringname = ""
+                            if (oneid === null || twoid === null) continue;
+
+                            let channelstringname: string = ""
 
                             client.participants.index({
                                 id: matchlist.url,
                                 callback: async (err: any, data: any) => {
                                     if (err) console.log(err)
 
+
                                     for (let x = 0; x < data.length; x++) {
                                         if (data[x].participant.id === oneid) {
-                                            channelstringname += data[x].participant.name.substring(0, 5)
-                                        }
-
-                                        if (channelstringname) {
-                                            if (data[x].participant.id === twoid) {
-                                                channelstringname += "vs" + data[x].participant.name.substring(0, 5)
-                                                break
-                                            }
+                                            channelstringname += data[x].participant.name.substring(0, 10)
+                                            break;
                                         }
                                     }
 
-                                    if (channelstringname.includes("vs")) {
-                                        await message.guild!.channels.create(`${channelstringname}`, { type: 'text', topic: `Round ${args[0]}` })
+                                    for (let y = 0; y < data.length; y++) {
+                                        if (data[y].participant.id === twoid) {
+                                            channelstringname += "-vs-" + data[y].participant.name.substring(0, 10)
+                                            break;
+                                        }
+                                    }
+
+                                    if (channelstringname.includes("-vs-")) {
+                                        await message.guild!.channels.create(channelstringname, { type: 'text', topic: `Round ${args[0]}` })
                                             .then(async channel => {
-                                                let category = await message.guild!.channels.cache.find(c => c.name == "tournament" && c.type == "category");
+                                                let category = await message.guild!.channels.cache.find(c => c.name == "matches" && c.type == "category");
 
                                                 if (!category) throw new Error("Category channel does not exist");
                                                 await channel.setParent(category.id);
+                                                await channel.lockPermissions()
                                             });
                                     }
 
@@ -223,18 +231,18 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
             }
         });
     }
-
+    return message.reply("Made all channels")
 }
 
 
 export async function CreateQualGroups(message: Discord.Message, args: string[]) {
     if (message.member!.roles.cache.has('724818272922501190')
         || message.member!.roles.cache.has('724832462286356590')) {
-        
 
-         if (!args){
-             return message.reply("Please enter how many people you want in a group")
-         }   
+
+        if (!args) {
+            return message.reply("Please enter how many people you want in a group")
+        }
         let gNum = parseInt(args[0])
 
         let Signups = await getSignups()
@@ -243,20 +251,20 @@ export async function CreateQualGroups(message: Discord.Message, args: string[])
         if (Signups) {
             if (Signups.open === false) {
                 let groups = await makeGroup(gNum, Signups.users)
-                let qualgroups:quallist = await getQuallist()
-                if(qualgroups){
+                let qualgroups: quallist = await getQuallist()
+                if (qualgroups) {
                     qualgroups.users = groups
 
                     await updateQuallist(qualgroups)
                 }
 
-                else{
+                else {
                     qualgroups = {
                         _id: 2,
                         url: "",
                         users: groups
                     }
-    
+
                     await insertQuallist(qualgroups)
                 }
 
@@ -277,15 +285,15 @@ export async function CreateQualGroups(message: Discord.Message, args: string[])
     }
 }
 
-async function makeGroup(n: number, list: string[]){
+async function makeGroup(n: number, list: string[]) {
     let evenGroupds = Math.floor(list.length / n)
     let groups = []
     list = await shuffle(list)
 
     let s = 0, end = n
 
-    for(let i = 0; i < evenGroupds; i++){
-        
+    for (let i = 0; i < evenGroupds; i++) {
+
 
         let temp = list.slice(s, end)
 
@@ -294,13 +302,13 @@ async function makeGroup(n: number, list: string[]){
 
         groups.push(temp)
     }
-    
-    if(n%2 == 0){
-        groups.push(list.slice(evenGroupds*n - 1))
+
+    if (n % 2 == 0) {
+        groups.push(list.slice(evenGroupds * n - 1))
     }
-    
-    else{
-        groups.push(list.slice(evenGroupds*n - 1).slice(1))
+
+    else {
+        groups.push(list.slice(evenGroupds * n - 1).slice(1))
     }
 
 
@@ -315,13 +323,13 @@ async function shuffle(a: any[]) {
     return a;
 }
 
-export async function quallistEmbed(message: Discord.Message, client: Discord.Client, args: string[]){
+export async function quallistEmbed(message: Discord.Message, client: Discord.Client, args: string[]) {
 
 
 
     let signup = await getQuallist()
 
-    if(args.length === 0){
+    if (args.length === 0) {
         return message.reply(`, there are ${signup.users.length} groups`)
     }
 
@@ -348,20 +356,20 @@ export async function quallistEmbed(message: Discord.Message, client: Discord.Cl
     }
 }
 
-export async function GroupSearch(message: Discord.Message, client: Discord.Client, args: string[]){
+export async function GroupSearch(message: Discord.Message, client: Discord.Client, args: string[]) {
     let signup = await getQuallist()
     let id = (message.mentions?.users?.first()?.id || args[0])
-    if(!id) return message.reply("invaild input. Please use User ID or a User mention")
+    if (!id) return message.reply("invaild input. Please use User ID or a User mention")
 
-    for (let i = 0; i < signup.users.length; i++){
+    for (let i = 0; i < signup.users.length; i++) {
 
-        if(signup.users[i].includes(id)){
-            return message.reply(`${await (await client.users.fetch(id)).username} is in #group-${i+1}`)
+        if (signup.users[i].includes(id)) {
+            return message.reply(`${await (await client.users.fetch(id)).username} is in #group-${i + 1}`)
         }
     }
 
     return message.reply("they are not in a group")
-    
+
 }
 
 
@@ -411,7 +419,7 @@ export async function declarequalwinner(message: Discord.Message, client: Discor
                 }
             }
 
-            else{
+            else {
 
                 let newmatch: matchlist = {
                     _id: 3,
@@ -456,7 +464,7 @@ export async function removequalwinner(message: Discord.Message, client: Discord
 
             if (match) {
                 if (match.users.includes(id)) {
-                    match.users.splice( match.users.indexOf(id), 1 )
+                    match.users.splice(match.users.indexOf(id), 1)
                     await updateMatchlist(match)
                     return message.reply("user removed.")
                 }
