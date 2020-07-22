@@ -360,7 +360,7 @@ export async function running(client: discord.Client): Promise<void> {
 
                     match.p2 = temp
 
-                    await updateActive(match)
+                    //await updateActive(match)
                 }
 
 

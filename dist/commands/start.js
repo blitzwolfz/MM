@@ -269,7 +269,6 @@ async function running(client) {
                     let temp = match.p1;
                     match.p1 = match.p2;
                     match.p2 = temp;
-                    await db_1.updateActive(match);
                 }
                 let embed1 = new discord.MessageEmbed()
                     .setDescription("Meme #1")
