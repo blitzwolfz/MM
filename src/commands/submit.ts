@@ -35,8 +35,11 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
                 });
                 message.reply("Your meme has been attached!")
 
-                if(match.p1.donesplit && match.p2.donesplit){
+                if(match.p1.donesplit && match.p2.donesplit && match.split){
+                    console.log("not a split match")
                     match.split = false
+                    match.p1.time = Math.floor(Date.now() / 1000) - 1800
+                    match.p2.time = Math.floor(Date.now() / 1000) - 1800
                     // match.votingperiod = true
                     // match.votetime = Math.floor(Date.now() / 1000)
                 }
@@ -61,8 +64,11 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
                 });
                 message.reply("Your meme has been attached!")
 
-                if(match.p1.donesplit && match.p2.donesplit){
+                if(match.p1.donesplit && match.p2.donesplit && match.split){
+                    console.log("not a split match")
                     match.split = false
+                    match.p1.time = Math.floor(Date.now() / 1000) - 1800
+                    match.p2.time = Math.floor(Date.now() / 1000) - 1800
                     // match.votingperiod = true
                     // match.votetime = Math.floor(Date.now() / 1000)
                 }

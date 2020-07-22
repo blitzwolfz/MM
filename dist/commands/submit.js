@@ -31,8 +31,11 @@ async function submit(message, client) {
                     }
                 });
                 message.reply("Your meme has been attached!");
-                if (match.p1.donesplit && match.p2.donesplit) {
+                if (match.p1.donesplit && match.p2.donesplit && match.split) {
+                    console.log("not a split match");
                     match.split = false;
+                    match.p1.time = Math.floor(Date.now() / 1000) - 1800;
+                    match.p2.time = Math.floor(Date.now() / 1000) - 1800;
                 }
                 await db_1.updateActive(match);
                 return;
@@ -51,8 +54,11 @@ async function submit(message, client) {
                     }
                 });
                 message.reply("Your meme has been attached!");
-                if (match.p1.donesplit && match.p2.donesplit) {
+                if (match.p1.donesplit && match.p2.donesplit && match.split) {
+                    console.log("not a split match");
                     match.split = false;
+                    match.p1.time = Math.floor(Date.now() / 1000) - 1800;
+                    match.p2.time = Math.floor(Date.now() / 1000) - 1800;
                 }
                 await db_1.updateActive(match);
                 return;
