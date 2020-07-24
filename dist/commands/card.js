@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.winner = exports.vs = void 0;
+exports.grandwinner = exports.winner = exports.vs = void 0;
 const Canvas = require('canvas');
 const Discord = __importStar(require("discord.js"));
 const prefix = process.env.PREFIX;
@@ -61,3 +61,21 @@ async function winner(client, userid) {
     return attachment;
 }
 exports.winner = winner;
+async function grandwinner(client, userid) {
+    let user = await client.users.fetch(userid);
+    const avatar = await Canvas.loadImage(user.displayAvatarURL({ format: 'png', size: 512 }));
+    const canvas = Canvas.createCanvas(1032, 648);
+    const ctx = canvas.getContext('2d');
+    await ctx.fill("#FF0000");
+    await ctx.save();
+    await ctx.beginPath();
+    await ctx.arc(1095 / 2, 597 / 2 - 70, 225, 0, Math.PI * 2, true);
+    await ctx.closePath();
+    await ctx.clip();
+    await ctx.drawImage(avatar, 300 + 20, 15, 455, 455);
+    await ctx.restore();
+    await ctx.drawImage(await Canvas.loadImage("Tourneywinner.png"), 0, 0, canvas.width, canvas.height);
+    const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'welcome-image.jpg');
+    return attachment;
+}
+exports.grandwinner = grandwinner;

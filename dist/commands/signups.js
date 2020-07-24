@@ -59,7 +59,7 @@ async function startsignup(message, client) {
     }
 }
 exports.startsignup = startsignup;
-async function signup(message) {
+async function signup(message, client) {
     let signup = await db_1.getSignups();
     if (message.channel.type !== "dm") {
         return message.reply(",you have to signup in bot DM.");
@@ -73,9 +73,9 @@ async function signup(message) {
     else {
         signup.users.push(message.author.id);
         await db_1.updateSignup(signup);
-        await message.member.roles.add("730650583413030953");
-        return message.reply("You have been signed up!");
+        await (await (await client.guilds.cache.get("719406444109103117")).members.fetch(message.author.id)).roles.add("731568704499875932");
     }
+    return message.reply("You have been signed up!");
 }
 exports.signup = signup;
 async function removesignup(message) {

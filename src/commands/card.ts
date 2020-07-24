@@ -98,6 +98,42 @@ export async function winner(client: Discord.Client, userid: string){
 
 }
 
+export async function grandwinner(client: Discord.Client, userid: string){
+	let user = await client.users.fetch(userid)
+	const avatar = await Canvas.loadImage(user.displayAvatarURL({ format: 'png', size: 512}));
+	//console.log(avatar.data)
+
+    const canvas = Canvas.createCanvas(1032, 648);
+	const ctx = canvas.getContext('2d');
+	//await ctx.drawImage(await Canvas.loadImage("winnercardnobackgroundwithname.png"), 0, 0, canvas.width, canvas.height);
+
+	//await ctx.drawImage(avatar, 547.5, 298.5, 200, 200);
+	await ctx.fill( "#FF0000")
+	await ctx.save();
+	await ctx.beginPath();
+	await ctx.arc(1095/2, 597/2 - 70, 225, 0, Math.PI * 2, true);
+	// ctx.fillStyle = "blue";
+	// await ctx.fill();
+	await ctx.closePath();
+	await ctx.clip()
+	await ctx.drawImage(avatar, 300+20, 15, 455 , 455);
+
+	//await ctx.drawImage(avatar, 25, 25, 200, 200);
+	
+	await ctx.restore();
+	
+	
+
+    
+	await ctx.drawImage(await Canvas.loadImage("Tourneywinner.png"), 0, 0, canvas.width, canvas.height);
+
+	const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'welcome-image.jpg');
+	//await message.channel.send({ files: [attachment]})
+	return attachment
+
+
+}
+
 
 
 

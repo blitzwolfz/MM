@@ -232,15 +232,7 @@ client.on("message", async (message) => {
         await m.edit(`Latency is ${m.createdTimestamp - message.createdTimestamp}ms. Discord API Latency is ${Math.round(client.ws.ping)}ms`);
     }
     else if (command === "test") {
-        await client.channels.cache.get("724827952390340648").messages.fetch({ limit: 100 }).then(async (msg) => {
-            console.log(msg.map(async (m) => {
-                await message.client.channels.cache.get("724827952390340648").messages.fetch(m.id).then(async (m2) => {
-                    if (m2.attachments.size >= 1) {
-                        await message.reply(m2.attachments.array()[0].url);
-                    }
-                });
-            }));
-        });
+        await message.channel.send([await card_1.grandwinner(client, (args[0]))]);
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))
@@ -400,9 +392,6 @@ client.on("message", async (message) => {
     else if (command === "challongehelp") {
         await message.channel.send({ embed: help_1.ModChallongeHelp });
     }
-    else if (command === "signup") {
-        await signups_1.signup(message);
-    }
     else if (command === "pullout" || command === "goingformilk" || command === "unsignup" || command === "withdraw" || command === "removesignup") {
         await signups_1.removesignup(message);
     }
@@ -448,7 +437,7 @@ client.on("message", async (message) => {
             await signups_1.closesignup(message, client);
     }
     else if (command === "signup") {
-        await signups_1.signup(message);
+        await signups_1.signup(message, client);
     }
     else if (command === "removesignup") {
         await signups_1.removesignup(message);

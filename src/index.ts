@@ -4,7 +4,7 @@ import { activematch, qualmatch, cockratingInterface } from "./misc/struct"
 import { submit, qualsubmit } from "./commands/submit"
 import { start, running, qualrunning, startqual, startmodqual, splitqual, startregularsplit, splitregular, reload } from "./commands/start";
 import { endmatch, qualend } from "./commands/winner";
-import { vs } from "./commands/card";
+import { vs, grandwinner } from "./commands/card";
 import { getUser, hasthreevotes, emojis, removethreevotes } from "./misc/utils";
 import { ModHelp, UserHelp, ModSignupHelp, ModChallongeHelp } from "./commands/help";
 import { connectToDB, getQuals, getActive, updateActive, updateQuals, deleteSignup, getMatch, getQual, getCockrating, insertCockrating, updateCockrating } from "./misc/db";
@@ -287,24 +287,26 @@ client.on("message", async message => {
 
     //await message.channel.send([await winner(client, (args[0] || message.author.id || message.mentions!.users!.first()!.id))])
 
-    await (<Discord.TextChannel>client.channels.cache.get("724827952390340648")).messages.fetch({ limit: 100 }).then(async msg => {
-      console.log(msg.map(async m => {
-        // console.log(m.url)
-        // await message.reply(m.id)
-        await (<Discord.TextChannel>message.client.channels.cache.get("724827952390340648")).messages.fetch(m.id).then(async (m2: Discord.Message) => {
-          if (m2.attachments.size >= 1) {
-            // console.log(m2.attachments.array()[0].url)
-            await message.reply(m2.attachments.array()[0].url)
-          }
-        })
-      }
+    // await (<Discord.TextChannel>client.channels.cache.get("724827952390340648")).messages.fetch({ limit: 100 }).then(async msg => {
+    //   console.log(msg.map(async m => {
+    //     // console.log(m.url)
+    //     // await message.reply(m.id)
+    //     await (<Discord.TextChannel>message.client.channels.cache.get("724827952390340648")).messages.fetch(m.id).then(async (m2: Discord.Message) => {
+    //       if (m2.attachments.size >= 1) {
+    //         // console.log(m2.attachments.array()[0].url)
+    //         await message.reply(m2.attachments.array()[0].url)
+    //       }
+    //     })
+    //   }
 
-      ))
-      // await (<Discord.TextChannel>client.channels.cache.get("724827952390340648")).messages.fetch(msg.array()).then(async m => {
-      //   console.log(m.attachments.array())
-      // });
-    })
+    //   ))
+    //   // await (<Discord.TextChannel>client.channels.cache.get("724827952390340648")).messages.fetch(msg.array()).then(async m => {
+    //   //   console.log(m.attachments.array())
+    //   // });
+    // })
 
+    await message.channel.send([await grandwinner(client, (args[0]))])
+    
   }
 
   else if (command === "createqualgroup") {
@@ -495,10 +497,6 @@ client.on("message", async message => {
     await message.channel.send({ embed: ModChallongeHelp })
   }
 
-  else if (command === "signup") {
-    await signup(message)
-  }
-
   else if (command === "pullout" || command === "goingformilk" || command === "unsignup" || command === "withdraw" || command === "removesignup") {
     await removesignup(message)
   }
@@ -558,7 +556,7 @@ client.on("message", async message => {
   }
 
   else if (command === "signup") {
-    await signup(message)
+    await signup(message, client)
   }
 
   else if (command === "removesignup") {

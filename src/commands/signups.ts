@@ -47,7 +47,7 @@ export async function startsignup(message: Discord.Message, client: Discord.Clie
     }
 }
 
-export async function signup(message: Discord.Message){
+export async function signup(message: Discord.Message, client: Discord.Client){
     let signup = await getSignups()
 
     if(message.channel.type !== "dm"){
@@ -67,10 +67,12 @@ export async function signup(message: Discord.Message){
 
         await updateSignup(signup)
 
-        await message.member!.roles.add("730650583413030953")
+        await (await (await client.guilds!.cache.get("719406444109103117")!).members.fetch(message.author.id)).roles.add("731568704499875932")!
 
-        return message.reply("You have been signed up!")
     }
+
+    return message.reply("You have been signed up!")
+
 }
 
 export async function removesignup(message: Discord.Message){
