@@ -69,10 +69,10 @@ async function grandwinner(client, userid) {
     await ctx.fill("#FF0000");
     await ctx.save();
     await ctx.beginPath();
-    await ctx.arc(1095 / 2, 597 / 2 - 70, 225, 0, Math.PI * 2, true);
+    await ctx.arc(1032 / 2, 648 / 2 - 70, 225, 0, Math.PI * 2, true);
     await ctx.closePath();
     await ctx.clip();
-    await ctx.drawImage(avatar, 300 + 20, 15, 455, 455);
+    await ctx.drawImage(avatar, 220, 15, 550, 550);
     await ctx.restore();
     await ctx.drawImage(await Canvas.loadImage("Tourneywinner.png"), 0, 0, canvas.width, canvas.height);
     const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'welcome-image.jpg');

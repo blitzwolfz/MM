@@ -3,7 +3,7 @@ import * as discord from "discord.js"
 // import {prefix} from "../misc/config.json"
 import { activematch} from "../misc/struct"
 import { deleteActive, deleteQuals, getActive, updateProfile, getSingularQuals, getMatch } from "../misc/db"
-import { winner } from "./card"
+import { grandwinner } from "./card"
 
 export async function endmatch(message: discord.Message, client: discord.Client) {
     let matches: activematch[] = await getActive()
@@ -100,7 +100,7 @@ export async function end(client: discord.Client, id: string) {
         updateProfile(user1.id, "loss", 1)
 
         await channelid.send(embed)
-        await channelid.send([await winner(client, user2.id)!])
+        await channelid.send([await grandwinner(client, user2.id)!])
     }
 
     else if ((Math.floor(Date.now() / 1000) - match.p2.time > 1800) && match.p2.memedone === false) {
@@ -117,7 +117,7 @@ export async function end(client: discord.Client, id: string) {
         updateProfile(user2.id, "loss", 1)
 
         await channelid.send(embed)
-        await channelid.send([await winner(client, user1.id)!])
+        await channelid.send([await grandwinner(client, user1.id)!])
 
     }
 
@@ -147,7 +147,7 @@ export async function end(client: discord.Client, id: string) {
         await channelid.send(embed)
 
 
-        await channelid.send([await winner(client, user1.id)!])
+        await channelid.send([await grandwinner(client, user1.id)!])
 
         // let d = new Date()
         
@@ -172,7 +172,7 @@ export async function end(client: discord.Client, id: string) {
         updateProfile(user2.id, "wins", 1)
 
         await channelid.send(embed)
-        await channelid.send([await winner(client, user2.id)!])
+        await channelid.send([await grandwinner(client, user2.id)!])
 
         // let d = new Date()
         

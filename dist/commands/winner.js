@@ -94,7 +94,7 @@ async function end(client, id) {
         db_1.updateProfile(user2.id, "wins", 1);
         db_1.updateProfile(user1.id, "loss", 1);
         await channelid.send(embed);
-        await channelid.send([await card_1.winner(client, user2.id)]);
+        await channelid.send([await card_1.grandwinner(client, user2.id)]);
     }
     else if ((Math.floor(Date.now() / 1000) - match.p2.time > 1800) && match.p2.memedone === false) {
         console.log(Date.now() - match.p2.time);
@@ -107,7 +107,7 @@ async function end(client, id) {
         db_1.updateProfile(user1.id, "wins", 1);
         db_1.updateProfile(user2.id, "loss", 1);
         await channelid.send(embed);
-        await channelid.send([await card_1.winner(client, user1.id)]);
+        await channelid.send([await card_1.grandwinner(client, user1.id)]);
     }
     else if (((Math.floor(Date.now() / 1000) - match.p2.time > 1800) && match.p2.memedone === false) && ((Math.floor(Date.now() / 1000) - match.p1.time > 1800) && match.p1.memedone === false)) {
         user1.send("You have failed to submit your meme");
@@ -128,7 +128,7 @@ async function end(client, id) {
         db_1.updateProfile(user1.id, "wins", 1);
         db_1.updateProfile(user2.id, "loss", 1);
         await channelid.send(embed);
-        await channelid.send([await card_1.winner(client, user1.id)]);
+        await channelid.send([await card_1.grandwinner(client, user1.id)]);
         await client.channels.cache.get("734565012378746950").send((new discord.MessageEmbed()
             .setColor("#d7be26")
             .setImage(match.p1.memelink)
@@ -144,7 +144,7 @@ async function end(client, id) {
         db_1.updateProfile(user1.id, "loss", 1);
         db_1.updateProfile(user2.id, "wins", 1);
         await channelid.send(embed);
-        await channelid.send([await card_1.winner(client, user2.id)]);
+        await channelid.send([await card_1.grandwinner(client, user2.id)]);
         await client.channels.cache.get("734565012378746950").send((new discord.MessageEmbed()
             .setColor("#d7be26")
             .setDescription(`${(await (await channelid.guild.members.fetch(user2.id)).nickname) || await (await client.users.fetch(user2.id)).username} won with ${match.p2.votes} votes!`)
