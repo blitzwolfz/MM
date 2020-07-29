@@ -426,6 +426,9 @@ client.on("message", async (message) => {
             || message.member.roles.cache.has('724832462286356590'))
             await challonge_1.ChannelCreation(message, client, args);
     }
+    else if (command === "qualchannelcreate") {
+        await challonge_1.QualChannelCreation(message, client, args);
+    }
     else if (command === "reopensignup") {
         if (message.member.roles.cache.has('724818272922501190')
             || message.member.roles.cache.has('724832462286356590'))

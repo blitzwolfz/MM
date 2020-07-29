@@ -234,6 +234,31 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
     return message.reply("Made all channels")
 }
 
+export async function QualChannelCreation(message: Discord.Message, disclient: Discord.Client, args: string[]) {
+
+    let groups = await getQuallist()
+    console.log(groups.users)
+
+    for(let i = 0; i < groups.users.length; i++){
+
+        if(groups.users[i].length > 0){
+                    
+            await message.guild!.channels.create(`Group ${i+1}`, { type: 'text', topic: `Round ${args[0]}` })
+            .then(async channel => {
+                let category = await message.guild!.channels.cache.find(c => c.name == "qualifiers" && c.type == "category");
+
+                if (!category) throw new Error("Category channel does not exist");
+                await channel.setParent(category.id);
+                //await channel.lockPermissions()
+                await channel.send({ embed: await quallistEmbed(message, disclient, [`${i+1}`]) })
+            });
+        }
+
+    }
+    
+    return message.reply("Made all channels")
+}
+
 
 export async function CreateQualGroups(message: Discord.Message, args: string[]) {
     if (message.member!.roles.cache.has('724818272922501190')
@@ -326,10 +351,10 @@ async function shuffle(a: any[]) {
 export async function quallistEmbed(message: Discord.Message, client: Discord.Client, args: string[]) {
 
 
-
+    console.log(args)
     let signup = await getQuallist()
 
-    if (args.length === 0) {
+    if (!args.length) {
         return message.reply(`, there are ${signup.users.length} groups`)
     }
 

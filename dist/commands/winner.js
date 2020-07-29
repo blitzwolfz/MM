@@ -94,7 +94,7 @@ async function end(client, id) {
         db_1.updateProfile(user2.id, "wins", 1);
         db_1.updateProfile(user1.id, "loss", 1);
         await channelid.send(embed);
-        await channelid.send([await card_1.grandwinner(client, user2.id)]);
+        await channelid.send([await card_1.winner(client, user2.id)]);
     }
     else if ((Math.floor(Date.now() / 1000) - match.p2.time > 1800) && match.p2.memedone === false) {
         console.log(Date.now() - match.p2.time);
@@ -107,7 +107,7 @@ async function end(client, id) {
         db_1.updateProfile(user1.id, "wins", 1);
         db_1.updateProfile(user2.id, "loss", 1);
         await channelid.send(embed);
-        await channelid.send([await card_1.grandwinner(client, user1.id)]);
+        await channelid.send([await card_1.winner(client, user1.id)]);
     }
     else if (((Math.floor(Date.now() / 1000) - match.p2.time > 1800) && match.p2.memedone === false) && ((Math.floor(Date.now() / 1000) - match.p1.time > 1800) && match.p1.memedone === false)) {
         user1.send("You have failed to submit your meme");
@@ -128,7 +128,7 @@ async function end(client, id) {
         db_1.updateProfile(user1.id, "wins", 1);
         db_1.updateProfile(user2.id, "loss", 1);
         await channelid.send(embed);
-        await channelid.send([await card_1.grandwinner(client, user1.id)]);
+        await channelid.send([await card_1.winner(client, user1.id)]);
         await client.channels.cache.get("734565012378746950").send((new discord.MessageEmbed()
             .setColor("#d7be26")
             .setImage(match.p1.memelink)
@@ -144,7 +144,7 @@ async function end(client, id) {
         db_1.updateProfile(user1.id, "loss", 1);
         db_1.updateProfile(user2.id, "wins", 1);
         await channelid.send(embed);
-        await channelid.send([await card_1.grandwinner(client, user2.id)]);
+        await channelid.send([await card_1.winner(client, user2.id)]);
         await client.channels.cache.get("734565012378746950").send((new discord.MessageEmbed()
             .setColor("#d7be26")
             .setDescription(`${(await (await channelid.guild.members.fetch(user2.id)).nickname) || await (await client.users.fetch(user2.id)).username} won with ${match.p2.votes} votes!`)
@@ -205,15 +205,20 @@ async function qualend(client, id) {
         }
         else if (match.playersdone.length > 2) {
             const fields = [];
+            let totalvotes = 0;
+            for (let votes of match.votes) {
+                totalvotes += votes.length;
+            }
             for (let i = 0; i < match.votes.length; i++)
                 fields.push({
                     name: `${(await (await guild.members.fetch(match.players[i].userid)).nickname) || await (await client.users.fetch(match.players[i].userid)).username}`,
-                    value: `${match.players[i].memedone ? `Finished with ${match.votes[i].length}` : `Failed to submit meme`}`,
+                    value: `${match.players[i].memedone ? `Finished with ${match.votes[i].length} | ${Math.floor(match.votes[i].length / totalvotes * 100)}% of the votes ` : `Failed to submit meme`}`,
                 });
             await db_1.deleteQuals(match);
             return channel.send({
                 embed: {
                     title: `Votes for this qualifier are in!`,
+                    description: `${totalvotes} votes for this qualifier`,
                     fields,
                     color: "#d7be26",
                     timestamp: new Date()

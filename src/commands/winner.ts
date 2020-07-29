@@ -3,7 +3,7 @@ import * as discord from "discord.js"
 // import {prefix} from "../misc/config.json"
 import { activematch} from "../misc/struct"
 import { deleteActive, deleteQuals, getActive, updateProfile, getSingularQuals, getMatch } from "../misc/db"
-import { grandwinner } from "./card"
+import { winner } from "./card"
 
 export async function endmatch(message: discord.Message, client: discord.Client) {
     let matches: activematch[] = await getActive()
@@ -100,7 +100,7 @@ export async function end(client: discord.Client, id: string) {
         updateProfile(user1.id, "loss", 1)
 
         await channelid.send(embed)
-        await channelid.send([await grandwinner(client, user2.id)!])
+        await channelid.send([await winner(client, user2.id)!])
     }
 
     else if ((Math.floor(Date.now() / 1000) - match.p2.time > 1800) && match.p2.memedone === false) {
@@ -117,7 +117,7 @@ export async function end(client: discord.Client, id: string) {
         updateProfile(user2.id, "loss", 1)
 
         await channelid.send(embed)
-        await channelid.send([await grandwinner(client, user1.id)!])
+        await channelid.send([await winner(client, user1.id)!])
 
     }
 
@@ -147,7 +147,7 @@ export async function end(client: discord.Client, id: string) {
         await channelid.send(embed)
 
 
-        await channelid.send([await grandwinner(client, user1.id)!])
+        await channelid.send([await winner(client, user1.id)!])
 
         // let d = new Date()
         
@@ -172,7 +172,7 @@ export async function end(client: discord.Client, id: string) {
         updateProfile(user2.id, "wins", 1)
 
         await channelid.send(embed)
-        await channelid.send([await grandwinner(client, user2.id)!])
+        await channelid.send([await winner(client, user2.id)!])
 
         // let d = new Date()
         
@@ -249,11 +249,18 @@ export async function qualend(client: discord.Client, id: string) {
 
         else if (match.playersdone.length > 2) {
             const fields = [];
+
+            let totalvotes:number = 0;
+
+            for(let votes of match.votes){
+                totalvotes += votes.length
+            }
+
             for (let i = 0; i < match.votes.length; i++)
                 fields.push({
                     name: `${(await (await guild!.members.fetch(match.players[i].userid)).nickname) || await (await client.users.fetch(match.players[i].userid)).username}`,
                     //value: `${match.votes[i].length > 0 ? `Came in with ${match.votes[i].length} vote(s)` : `Failed to submit meme`}`
-                    value: `${match.players[i].memedone ? `Finished with ${match.votes[i].length}` : `Failed to submit meme`}`, //`Came in with ${match.votes[i].length}`,
+                    value: `${match.players[i].memedone ? `Finished with ${match.votes[i].length} | ${Math.floor(match.votes[i].length/totalvotes*100)}% of the votes ` : `Failed to submit meme`}`, //`Came in with ${match.votes[i].length}`,
                 });
 
             await deleteQuals(match)
@@ -261,6 +268,7 @@ export async function qualend(client: discord.Client, id: string) {
             return channel.send({
                 embed: {
                     title: `Votes for this qualifier are in!`,
+                    description: `${totalvotes} votes for this qualifier`,
                     fields,
                     color: "#d7be26",
                     timestamp: new Date()

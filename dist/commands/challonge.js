@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.matchlistmaker = exports.removequalwinner = exports.declarequalwinner = exports.GroupSearch = exports.quallistEmbed = exports.CreateQualGroups = exports.ChannelCreation = exports.CreateChallongeMatchBracket = exports.CreateChallongeQualBracket = void 0;
+exports.matchlistmaker = exports.removequalwinner = exports.declarequalwinner = exports.GroupSearch = exports.quallistEmbed = exports.CreateQualGroups = exports.QualChannelCreation = exports.ChannelCreation = exports.CreateChallongeMatchBracket = exports.CreateChallongeQualBracket = void 0;
 const Discord = __importStar(require("discord.js"));
 const db_1 = require("../misc/db");
 const challonge = require("challonge-js");
@@ -168,6 +168,24 @@ async function ChannelCreation(message, disclient, args) {
     return message.reply("Made all channels");
 }
 exports.ChannelCreation = ChannelCreation;
+async function QualChannelCreation(message, disclient, args) {
+    let groups = await db_1.getQuallist();
+    console.log(groups.users);
+    for (let i = 0; i < groups.users.length; i++) {
+        if (groups.users[i].length > 0) {
+            await message.guild.channels.create(`Group ${i + 1}`, { type: 'text', topic: `Round ${args[0]}` })
+                .then(async (channel) => {
+                let category = await message.guild.channels.cache.find(c => c.name == "qualifiers" && c.type == "category");
+                if (!category)
+                    throw new Error("Category channel does not exist");
+                await channel.setParent(category.id);
+                await channel.send({ embed: await quallistEmbed(message, disclient, [`${i + 1}`]) });
+            });
+        }
+    }
+    return message.reply("Made all channels");
+}
+exports.QualChannelCreation = QualChannelCreation;
 async function CreateQualGroups(message, args) {
     if (message.member.roles.cache.has('724818272922501190')
         || message.member.roles.cache.has('724832462286356590')) {
@@ -231,8 +249,9 @@ async function shuffle(a) {
     return a;
 }
 async function quallistEmbed(message, client, args) {
+    console.log(args);
     let signup = await db_1.getQuallist();
-    if (args.length === 0) {
+    if (!args.length) {
         return message.reply(`, there are ${signup.users.length} groups`);
     }
     else {

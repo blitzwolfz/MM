@@ -11,7 +11,7 @@ import { connectToDB, getQuals, getActive, updateActive, updateQuals, deleteSign
 import { template, approvetemplate } from "./commands/template";
 import { createrUser, stats } from "./commands/user";
 import { signup, startsignup, closesignup, removesignup, reopensignup, activeOffers, matchlistEmbed } from "./commands/signups";
-import { CreateChallongeQualBracket, ChannelCreation, CreateChallongeMatchBracket, matchlistmaker, CreateQualGroups, quallistEmbed, declarequalwinner, GroupSearch, removequalwinner } from "./commands/challonge";
+import { CreateChallongeQualBracket, ChannelCreation, CreateChallongeMatchBracket, matchlistmaker, CreateQualGroups, quallistEmbed, declarequalwinner, GroupSearch, removequalwinner, QualChannelCreation } from "./commands/challonge";
 import { verify } from "./misc/verify";
 import { cockratingLB } from "./misc/lbs";
 // import e from "express";
@@ -539,6 +539,10 @@ client.on("message", async message => {
     if (message.member!.roles.cache.has('724818272922501190')
       || message.member!.roles.cache.has('724832462286356590'))
       await ChannelCreation(message, client, args)
+  }
+
+  else if (command === "qualchannelcreate") {
+    await QualChannelCreation(message, client, args)
   }
 
   //CqtzrpLVF0GOnJXcFwLwyLbYoAwSQ1jH5QkGnpUJ
