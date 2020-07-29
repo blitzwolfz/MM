@@ -214,6 +214,7 @@ async function startmodqual(message, client) {
     }
     else if (args.includes("theme")) {
         newmatch.template = args.slice(args.indexOf("theme") + 1).join(" ");
+        await client.channels.cache.get("738047732312309870").send(`<#${message.channel.id}> theme is ${args.slice(args.indexOf("theme") + 1).join(" ")}`);
     }
     await db_1.insertQuals(newmatch);
 }

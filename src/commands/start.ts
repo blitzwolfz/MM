@@ -273,7 +273,8 @@ export async function startmodqual(message: discord.Message, client: discord.Cli
 
     else if (args.includes("theme")) {
         newmatch.template = args.slice(args.indexOf("theme") + 1).join(" ")
-        // for (let u of users){
+
+        await (<discord.TextChannel>client.channels.cache.get("738047732312309870")).send(`<#${message.channel.id}> theme is ${args.slice(args.indexOf("theme") + 1).join(" ")}`);
         //     let user = await client.fetchUser(u.userid)
         //     await user.send(`Your theme is: ${args.splice(5+x)}`)
         // }
