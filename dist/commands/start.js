@@ -213,7 +213,7 @@ async function startmodqual(message, client) {
         newmatch.template = message.attachments.array()[0].url;
     }
     else if (args.includes("theme")) {
-        newmatch.template = args[args.indexOf("theme") + 1];
+        newmatch.template = args.slice(args.indexOf("theme") + 1).join(" ");
     }
     await db_1.insertQuals(newmatch);
 }
