@@ -4,7 +4,7 @@ const prefix = process.env.PREFIX!
 import { activematch, qualmatch, players } from "../misc/struct"
 import { end, qualend } from "./winner"
 import { vs } from "./card"
-import { updateActive, deleteActive, insertActive, insertQuals, updateQuals, getActive, getQuals, getSingularQuals, getMatch } from "../misc/db"
+import { updateActive, deleteActive, insertActive, insertQuals, updateQuals, getActive, getQuals, getSingularQuals, getMatch} from "../misc/db"
 import { createAtUsermatch } from "./user"
 import { qualrunn } from "./qualrunn"
 //const Canvas = require('canvas');
@@ -795,6 +795,8 @@ export async function reload(message: discord.Message, client: discord.Client) {
         }
     }
 }
+
+
 
 
 

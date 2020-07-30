@@ -369,7 +369,7 @@ export async function quallistEmbed(message: Discord.Message, client: Discord.Cl
             fields.push({
                 name: `${i + 1}) ${await (await client.users.fetch(signup.users[page][i])).username}`,
                 value: `Userid is: ${signup.users[page][i]}`
-            });
+        });
 
         return {
             title: `Group ${page += 1}`,

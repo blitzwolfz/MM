@@ -133,7 +133,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
           if (messageReaction.emoji.name === emojis[1]) {
             match.p2.votes += 1
             match.p2.voters.push(user.id)
-            await user.send("Vote counted for meme 2")
+            await user.send(`Vote counted for meme 2 in <#${match.channelid}>`)
             await messageReaction.users.remove(user.id)
             await messageReaction.message.react(emojis[1])
           }
@@ -141,7 +141,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
           else if (messageReaction.emoji.name === emojis[0]) {
             match.p1.votes += 1
             match.p1.voters.push(user.id)
-            await user.send("Vote counted for meme 1")
+            await user.send(`Vote counted for meme 1 in <#${match.channelid}>`)
             await messageReaction.users.remove(user.id)
             await messageReaction.message.react(emojis[1])
           }
@@ -151,7 +151,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
           if (messageReaction.emoji.name === emojis[1]) {
             match.p2.votes += 1
             match.p2.voters.push(user.id)
-            await user.send("Vote counted for meme 2")
+            await user.send(`Vote counted for meme 2 in <#${match.channelid}>`)
             match.p1.votes -= 1
             match.p1.voters.splice(match.p1.voters.indexOf(user.id), 1)
 
@@ -177,7 +177,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
           else if (messageReaction.emoji.name === emojis[0]) {
             match.p1.votes += 1
             match.p1.voters.push(user.id)
-            await user.send("Vote counted for meme 1")
+            await user.send(`Vote counted for meme 1 in <#${match.channelid}>`)
             match.p2.votes -= 1
             match.p2.voters.splice(match.p1.voters.indexOf(user.id), 1)
 
@@ -237,7 +237,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             match.votes[i].push(user.id)
             await messageReaction.users.remove(user.id)
             await updateQuals(match)
-            return user.send("You vote has been counted.");
+            return user.send(`Your vote for meme ${i+1} in <#${match.channelid}> been counted.`);
           }
         }
       }
