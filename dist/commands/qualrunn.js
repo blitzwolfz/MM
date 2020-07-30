@@ -41,7 +41,6 @@ async function qualrunn(match, channelid, client) {
                     return await winner_1.qualend(client, channel.id);
                 }
                 match = qualplayershuffle(match);
-                await db_1.updateQuals(match);
                 for (let player of match.players) {
                     if (player.memedone) {
                         let embed = new discord.MessageEmbed()

@@ -31,7 +31,7 @@ export async function qualrunn(match: qualmatch, channelid: string, client: disc
 
                 match = qualplayershuffle(match)
 
-                await updateQuals(match)
+                //await updateQuals(match)
                 
                 for(let player of match.players){
                     if(player.memedone){
