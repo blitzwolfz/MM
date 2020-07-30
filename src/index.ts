@@ -4,7 +4,7 @@ import { activematch, qualmatch, cockratingInterface } from "./misc/struct"
 import { submit, qualsubmit } from "./commands/submit"
 import { start, running, qualrunning, startqual, startmodqual, splitqual, startregularsplit, splitregular, reload } from "./commands/start";
 import { endmatch, qualend } from "./commands/winner";
-import { vs, grandwinner } from "./commands/card";
+import { vs } from "./commands/card";
 import { getUser, hasthreevotes, emojis, removethreevotes } from "./misc/utils";
 import { ModHelp, UserHelp, ModSignupHelp, ModChallongeHelp } from "./commands/help";
 import { connectToDB, getQuals, getActive, updateActive, updateQuals, deleteSignup, getMatch, getQual, getCockrating, insertCockrating, updateCockrating } from "./misc/db";
@@ -14,6 +14,7 @@ import { signup, startsignup, closesignup, removesignup, reopensignup, activeOff
 import { CreateChallongeQualBracket, ChannelCreation, CreateChallongeMatchBracket, matchlistmaker, CreateQualGroups, quallistEmbed, declarequalwinner, GroupSearch, removequalwinner, QualChannelCreation } from "./commands/challonge";
 import { verify } from "./misc/verify";
 import { cockratingLB } from "./misc/lbs";
+//import { RandomTemplateFunc } from "./misc/randomtemp";
 // import e from "express";
 //import data from "../match.json"
 //const fs = require('fs');
@@ -305,7 +306,7 @@ client.on("message", async message => {
     //   // });
     // })
 
-    await message.channel.send([await grandwinner(client, (args[0]))])
+    //await RandomTemplateFunc(message, client).then(async e => await message.reply(e))
     
   }
 
@@ -593,8 +594,7 @@ client.on("message", async message => {
 
   let awake = <Discord.TextChannel>client.channels.cache.get("734075282708758540")
 
-  await awake.send(`ok 
-  <@370633705091497985>`)
+  await awake.send(`ok`)
 
 });
 

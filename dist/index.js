@@ -232,7 +232,6 @@ client.on("message", async (message) => {
         await m.edit(`Latency is ${m.createdTimestamp - message.createdTimestamp}ms. Discord API Latency is ${Math.round(client.ws.ping)}ms`);
     }
     else if (command === "test") {
-        await message.channel.send([await card_1.grandwinner(client, (args[0]))]);
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))
@@ -465,7 +464,6 @@ client.on("message", async (message) => {
         await card_1.vs(message, client, users);
     }
     let awake = client.channels.cache.get("734075282708758540");
-    await awake.send(`ok 
-  <@370633705091497985>`);
+    await awake.send(`ok`);
 });
 client.login(process.env.TOKEN);
