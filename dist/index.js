@@ -179,8 +179,8 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
                     }
                     if (messageReaction.emoji.name === utils_1.emojis[6]) {
                         match.votes = utils_1.removethreevotes(match.votes, user.id);
-                        await db_1.updateQuals(match);
-                        await messageReaction.users.remove(user.id);
+                        db_1.updateQuals(match);
+                        messageReaction.users.remove(user.id);
                         return user.send("Your votes have been reset");
                     }
                     if (utils_1.hasthreevotes(match.votes, user.id)) {

@@ -214,8 +214,8 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
 
           if (messageReaction.emoji.name === emojis[6]) {
             match.votes = removethreevotes(match.votes, user.id)
-            await updateQuals(match)
-            await messageReaction.users.remove(user.id)
+            updateQuals(match)
+            messageReaction.users.remove(user.id)
             return user.send("Your votes have been reset")
           }
 
