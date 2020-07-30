@@ -31,11 +31,13 @@ function hasthreevotes(arr, search) {
 }
 exports.hasthreevotes = hasthreevotes;
 function removethreevotes(arr, search) {
-    arr.some((row) => {
-        if (row.includes(search)) {
-            row.pop();
+    for (let i = 0; i < arr.length; i++) {
+        for (let x = 0; x < arr[i].length; x++) {
+            if (arr[i][x] === search) {
+                arr[i].splice(x, 1);
+            }
         }
-    });
+    }
     return arr;
 }
 exports.removethreevotes = removethreevotes;
