@@ -211,7 +211,7 @@ async function qualend(client, id) {
             }
             for (let i = 0; i < match.votes.length; i++)
                 fields.push({
-                    name: `${(await (await guild.members.fetch(match.players[i].userid)).nickname) || await (await client.users.fetch(match.players[i].userid)).username}`,
+                    name: `${(await (await guild.members.fetch(match.players[i].userid)).nickname) || await (await client.users.fetch(match.players[i].userid)).username} | Meme #${match.players.indexOf(match.players[i]) + 1}`,
                     value: `${match.players[i].memedone ? `Finished with ${match.votes[i].length} | ${Math.floor(match.votes[i].length / totalvotes * 100)}% of the votes ` : `Failed to submit meme`}`,
                 });
             await db_1.deleteQuals(match);
