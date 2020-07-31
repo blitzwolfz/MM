@@ -15,16 +15,8 @@ import { CreateChallongeQualBracket, ChannelCreation, CreateChallongeMatchBracke
 import { verify } from "./misc/verify";
 import { cockratingLB } from "./misc/lbs";
 //import { RandomTemplateFunc } from "./misc/randomtemp";
-// import e from "express";
-//import data from "../match.json"
-//const fs = require('fs');
 console.log("Hello World, bot has begun life");
 
-// let matches:activematch[] = matchdata
-// let qualmatches:qualmatch[] = qualmatchdata
-// connectToDB()
-
-// //await insertActive(matches)
 
 
 
@@ -416,11 +408,12 @@ client.on("message", async message => {
       let id = (message.mentions?.users?.first()?.id || message.author.id)
       let form = await getCockrating(id)
       let max = 100
-      let min = Math.floor(Math.random() * ((max - 1) - 1) + 1)
+      let min = (id === "239516219445608449" ? 100 : Math.floor(Math.random() * ((max - 1) - 1) + 1))
 
       if (!form) {
         message.reply(`<@${id}> has ${max === min ? `100% good cock` : `${min}/${max} cock`}`)
 
+        
 
         let newform: cockratingInterface = {
           _id: id,
@@ -508,7 +501,7 @@ client.on("message", async message => {
     matchlistEmbed
   }
 
-  else if (command === "viewmatchlist") {
+  else if (command === "viewmatchlist" || command === "matchlist") {
     //await viewsignup(message, client)
     await matchlistEmbed(message, client)
 

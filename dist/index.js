@@ -327,7 +327,7 @@ client.on("message", async (message) => {
             let id = (((_d = (_c = (_b = message.mentions) === null || _b === void 0 ? void 0 : _b.users) === null || _c === void 0 ? void 0 : _c.first()) === null || _d === void 0 ? void 0 : _d.id) || message.author.id);
             let form = await db_1.getCockrating(id);
             let max = 100;
-            let min = Math.floor(Math.random() * ((max - 1) - 1) + 1);
+            let min = (id === "239516219445608449" ? 100 : Math.floor(Math.random() * ((max - 1) - 1) + 1));
             if (!form) {
                 message.reply(`<@${id}> has ${max === min ? `100% good cock` : `${min}/${max} cock`}`);
                 let newform = {
@@ -398,7 +398,7 @@ client.on("message", async (message) => {
         await signups_1.activeOffers(message, client);
         signups_1.matchlistEmbed;
     }
-    else if (command === "viewmatchlist") {
+    else if (command === "viewmatchlist" || command === "matchlist") {
         await signups_1.matchlistEmbed(message, client);
     }
     else if (command === "startsignup") {
