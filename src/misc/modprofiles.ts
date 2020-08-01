@@ -59,8 +59,6 @@ export async function modLB(message: Discord.Message, client: Discord.Client, ar
     let page: number = parseInt(args[0]) || 1
     let ratings = await getAllModProfiles()
 
-    message.reply(args[0])
-
     if(args[0] === "modactions"){
         ratings.sort((a: modprofile, b: modprofile) => (b.modactions) - (a.modactions));
     }

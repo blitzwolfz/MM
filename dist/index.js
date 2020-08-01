@@ -219,14 +219,6 @@ client.on("message", async (message) => {
     const prefix = process.env.PREFIX;
     console.log(await db_1.getActive());
     console.log(await db_1.getQuals());
-    if (message.content.includes("<@&731568704499875932>")) {
-        if (!message.member.roles.cache.has('719936221572235295')) {
-            return;
-        }
-        else {
-            await db_1.updateModProfile(message.author.id, "modactions", 1);
-        }
-    }
     if (message.content.indexOf(prefix) !== 0 || message.author.bot) {
         if (message.author.id !== "688558229646475344")
             return;

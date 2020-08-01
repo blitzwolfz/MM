@@ -61,7 +61,6 @@ exports.viewmodprofile = viewmodprofile;
 async function modLB(message, client, args) {
     let page = parseInt(args[0]) || 1;
     let ratings = await db_1.getAllModProfiles();
-    message.reply(args[0]);
     if (args[0] === "modactions") {
         ratings.sort((a, b) => (b.modactions) - (a.modactions));
     }

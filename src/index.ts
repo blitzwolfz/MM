@@ -258,16 +258,16 @@ client.on("message", async message => {
   //   message.channel.send("")
   // }
 
-  if(message.content.includes("<@&731568704499875932>")){
-    if (!message.member!.roles.cache.has('719936221572235295')){
-      return
-    }
+  // if(message.content.includes("<@&731568704499875932>")){
+  //   if (!message.member!.roles.cache.has('719936221572235295')){
+  //     return
+  //   }
     
-    else{
-      await updateModProfile(message.author.id, "modactions", 1)
-    }
+  //   else{
+  //     await updateModProfile(message.author.id, "modactions", 1)
+  //   }
 
-  }
+  // }
 
 
   if (message.content.indexOf(prefix) !== 0 || message.author.bot) {
