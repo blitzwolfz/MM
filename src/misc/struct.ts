@@ -89,3 +89,10 @@ export interface cockratingInterface{
     num:number;
     time:number;
 }
+
+export interface modprofile{
+    _id: string,
+    modactions:number,
+    matchesstarted:number
+    matchportionsstarted:number
+}

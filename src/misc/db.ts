@@ -2,7 +2,7 @@ import * as mongo from "mongodb"
 
 require("dotenv").config();
 
-import { activematch, qualmatch, user, signups, matchlist, verificationform, quallist, cockratingInterface } from "./struct";
+import { activematch, qualmatch, user, signups, matchlist, verificationform, quallist, cockratingInterface, modprofile } from "./struct";
 
 const MongoClient = mongo.MongoClient
 //const assert = require("assert")
@@ -19,6 +19,7 @@ export async function connectToDB(): Promise<void> {
             await client.db(process.env.DBNAME).createCollection("users");
             await client.db(process.env.DBNAME).createCollection("signup")
             await client.db(process.env.DBNAME).createCollection("cockrating")
+            await client.db(process.env.DBNAME).createCollection("modprofiles")
             await resolve();
         });
     });
@@ -188,4 +189,33 @@ export async function updateCockrating(cockratingForm: cockratingInterface): Pro
 
 export async function getAllCockratings(): Promise<cockratingInterface[]>{
     return await client.db(process.env.DBNAME).collection("cockrating").find({}).toArray();
+}
+
+/*Mod profiles*/
+
+export async function getModProfile(_id: string): Promise<modprofile> {
+    return client.db(process.env.DBNAME).collection("modprofiles").findOne({_id:_id})!;
+}
+
+export async function addModProfile(User:modprofile): Promise<void> {
+    await client.db(process.env.DBNAME).collection("modprofiles").insertOne(User)!;
+}
+
+export async function updateModProfile(_id:string, field:string, num: number): Promise<void> {
+    
+    if(field === "modactions"){
+        await client.db(process.env.DBNAME).collection("modprofiles").updateOne({_id:_id}, {$inc:{"modactions":num}})!;
+    }
+
+    else if(field === "matchesstarted"){
+        await client.db(process.env.DBNAME).collection("modprofiles").updateOne({_id:_id}, {$inc:{"matchesstarted":num}})!;
+    }
+
+    else if(field === "matchportionsstarted"){
+        await client.db(process.env.DBNAME).collection("modprofiles").updateOne({_id:_id}, {$inc:{"matchportionsstarted":num}})!;
+    }
+}
+
+export async function getAllModProfiles(): Promise<modprofile[]>{
+    return await client.db(process.env.DBNAME).collection("modprofiles").find({}).toArray();
 }

@@ -1,4 +1,4 @@
-import { activematch, qualmatch, user, signups, matchlist, verificationform, quallist, cockratingInterface } from "./struct";
+import { activematch, qualmatch, user, signups, matchlist, verificationform, quallist, cockratingInterface, modprofile } from "./struct";
 export declare function connectToDB(): Promise<void>;
 export declare function insertActive(activematch: activematch): Promise<void>;
 export declare function updateActive(activematch: activematch): Promise<void>;
@@ -33,3 +33,7 @@ export declare function insertCockrating(cockratingForm: cockratingInterface): P
 export declare function getCockrating(id: string): Promise<cockratingInterface>;
 export declare function updateCockrating(cockratingForm: cockratingInterface): Promise<void>;
 export declare function getAllCockratings(): Promise<cockratingInterface[]>;
+export declare function getModProfile(_id: string): Promise<modprofile>;
+export declare function addModProfile(User: modprofile): Promise<void>;
+export declare function updateModProfile(_id: string, field: string, num: number): Promise<void>;
+export declare function getAllModProfiles(): Promise<modprofile[]>;

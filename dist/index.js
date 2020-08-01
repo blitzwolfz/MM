@@ -34,6 +34,7 @@ const signups_1 = require("./commands/signups");
 const challonge_1 = require("./commands/challonge");
 const verify_1 = require("./misc/verify");
 const lbs_1 = require("./misc/lbs");
+const modprofiles_1 = require("./misc/modprofiles");
 console.log("Hello World, bot has begun life");
 const express = require('express');
 const app = express();
@@ -70,6 +71,13 @@ client.on('ready', async () => {
     }
     await start_1.running(client);
     await start_1.qualrunning(client);
+    await client.channels.cache.get("722291588922867772").send("<@239516219445608449>", {
+        embed: {
+            description: `Updates/Restart has worked`,
+            color: "#d7be26",
+            timestamp: new Date()
+        }
+    });
     client.user.setActivity(`${process.env.STATUS}`);
 });
 client.on("guildMemberAdd", async function (member) {
@@ -211,6 +219,14 @@ client.on("message", async (message) => {
     const prefix = process.env.PREFIX;
     console.log(await db_1.getActive());
     console.log(await db_1.getQuals());
+    if (message.content.includes("<@&731568704499875932>")) {
+        if (!message.member.roles.cache.has('719936221572235295')) {
+            return;
+        }
+        else {
+            await db_1.updateModProfile(message.author.id, "modactions", 1);
+        }
+    }
     if (message.content.indexOf(prefix) !== 0 || message.author.bot) {
         if (message.author.id !== "688558229646475344")
             return;
@@ -280,6 +296,8 @@ client.on("message", async (message) => {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
         await start_1.start(message, client);
+        await db_1.updateModProfile(message.author.id, "modactions", 1);
+        await db_1.updateModProfile(message.author.id, "matchesstarted", 1);
     }
     else if (command === "checkmatch") {
         if (!message.member.roles.cache.has('719936221572235295'))
@@ -298,16 +316,22 @@ client.on("message", async (message) => {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
         await start_1.startqual(message, client);
+        await db_1.updateModProfile(message.author.id, "modactions", 1);
+        await db_1.updateModProfile(message.author.id, "matchesstarted", 1);
     }
     else if (command === "startmodqual" || command === "splitqual") {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
         await start_1.startmodqual(message, client);
+        await db_1.updateModProfile(message.author.id, "modactions", 1);
+        await db_1.updateModProfile(message.author.id, "matchesstarted", 1);
     }
     else if (command === "startmodmatch" || command === "splitmatch" || command === "split") {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
         await start_1.startregularsplit(message, client);
+        await db_1.updateModProfile(message.author.id, "modactions", 1);
+        await db_1.updateModProfile(message.author.id, "matchesstarted", 1);
     }
     else if (command === "approve") {
         if (!message.member.roles.cache.has('719936221572235295'))
@@ -315,9 +339,25 @@ client.on("message", async (message) => {
         if (message.channel.id === "722285800225505879" || message.channel.id === "722285842705547305" || message.channel.id === "724839353129369681")
             return;
         await template_1.approvetemplate(message, client);
+        await db_1.updateModProfile(message.author.id, "modactions", 1);
     }
     else if (command === "create") {
         await user_1.createrUser(message);
+    }
+    else if (command === "modcreate") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
+        await modprofiles_1.createmodprofile(message);
+    }
+    else if (command === "modstats") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
+        await modprofiles_1.viewmodprofile(message, client, args);
+    }
+    else if (command === "modlb") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
+        await modprofiles_1.modLB(message, client, args);
     }
     else if (command === "cr" || command === "cockrating") {
         if (!message.member.roles.cache.has('719936221572235295')) {
@@ -358,11 +398,15 @@ client.on("message", async (message) => {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
         await start_1.splitqual(client, message);
+        await db_1.updateModProfile(message.author.id, "modactions", 1);
+        await db_1.updateModProfile(message.author.id, "matchportionsstarted", 1);
     }
     else if (command === "startsplit") {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
         await start_1.splitregular(message, client);
+        await db_1.updateModProfile(message.author.id, "modactions", 1);
+        await db_1.updateModProfile(message.author.id, "matchportionsstarted", 1);
     }
     else if (command === "reload") {
         if (!message.member.roles.cache.has('719936221572235295'))

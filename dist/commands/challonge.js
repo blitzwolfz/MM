@@ -301,6 +301,7 @@ async function declarequalwinner(message, client) {
                 else {
                     match.users.push(id);
                     await db_1.updateMatchlist(match);
+                    db_1.updateProfile(id, "wins", 1);
                     return message.reply(" added user.");
                 }
             }

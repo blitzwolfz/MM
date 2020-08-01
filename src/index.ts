@@ -7,13 +7,14 @@ import { endmatch, qualend } from "./commands/winner";
 import { vs } from "./commands/card";
 import { getUser, hasthreevotes, emojis, removethreevotes } from "./misc/utils";
 import { ModHelp, UserHelp, ModSignupHelp, ModChallongeHelp } from "./commands/help";
-import { connectToDB, getQuals, getActive, updateActive, updateQuals, deleteSignup, getMatch, getQual, getCockrating, insertCockrating, updateCockrating } from "./misc/db";
+import { connectToDB, getQuals, getActive, updateActive, updateQuals, deleteSignup, getMatch, getQual, getCockrating, insertCockrating, updateCockrating, updateModProfile } from "./misc/db";
 import { template, approvetemplate } from "./commands/template";
 import { createrUser, stats } from "./commands/user";
 import { signup, startsignup, closesignup, removesignup, reopensignup, activeOffers, matchlistEmbed } from "./commands/signups";
 import { CreateChallongeQualBracket, ChannelCreation, CreateChallongeMatchBracket, matchlistmaker, CreateQualGroups, quallistEmbed, declarequalwinner, GroupSearch, removequalwinner, QualChannelCreation } from "./commands/challonge";
 import { verify } from "./misc/verify";
 import { cockratingLB } from "./misc/lbs";
+import { createmodprofile, viewmodprofile, modLB } from "./misc/modprofiles";
 //import { RandomTemplateFunc } from "./misc/randomtemp";
 console.log("Hello World, bot has begun life");
 
@@ -66,6 +67,13 @@ client.on('ready', async () => {
 
   await running(client)
   await qualrunning(client)
+  await (<Discord.TextChannel>client.channels.cache.get("722291588922867772")).send("<@239516219445608449>",{
+    embed:{
+        description: `Updates/Restart has worked`,
+        color:"#d7be26",
+        timestamp: new Date()
+    }
+  });
   //client.user!.setActivity(`Meme Mania Season 0 | !help`);
   client.user!.setActivity(`${process.env.STATUS}`);
   // client.user!.setPresence({ activity: { name: "Testing", type: "CUSTOM_STATUS" }, status: "online" })
@@ -250,6 +258,17 @@ client.on("message", async message => {
   //   message.channel.send("")
   // }
 
+  if(message.content.includes("<@&731568704499875932>")){
+    if (!message.member!.roles.cache.has('719936221572235295')){
+      return
+    }
+    
+    else{
+      await updateModProfile(message.author.id, "modactions", 1)
+    }
+
+  }
+
 
   if (message.content.indexOf(prefix) !== 0 || message.author.bot) {
     if (message.author.id !== "688558229646475344") return;
@@ -264,6 +283,8 @@ client.on("message", async message => {
   if (!args || args.length === 0) {
     return
   };
+
+
 
   const command: string | undefined = args?.shift()?.toLowerCase();
 
@@ -353,6 +374,8 @@ client.on("message", async message => {
   else if (command === "start") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await start(message, client)
+    await updateModProfile(message.author.id, "modactions", 1)
+    await updateModProfile(message.author.id, "matchesstarted", 1)
   }
 
   else if (command === "checkmatch") {
@@ -375,16 +398,22 @@ client.on("message", async message => {
   else if (command === "startqual") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await startqual(message, client)
+    await updateModProfile(message.author.id, "modactions", 1)
+    await updateModProfile(message.author.id, "matchesstarted", 1)
   }
 
   else if (command === "startmodqual" || command === "splitqual") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await startmodqual(message, client)
+    await updateModProfile(message.author.id, "modactions", 1)
+    await updateModProfile(message.author.id, "matchesstarted", 1)
   }
 
   else if (command === "startmodmatch" || command === "splitmatch" || command === "split") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await startregularsplit(message, client)
+    await updateModProfile(message.author.id, "modactions", 1)
+    await updateModProfile(message.author.id, "matchesstarted", 1)
   }
 
   else if (command === "approve") {
@@ -392,10 +421,26 @@ client.on("message", async message => {
     if (message.channel.id === "722285800225505879" || message.channel.id === "722285842705547305" || message.channel.id === "724839353129369681") return;
 
     await approvetemplate(message, client)
+    await updateModProfile(message.author.id, "modactions", 1)
   }
 
   else if (command === "create") {
     await createrUser(message)
+  }
+
+  else if (command === "modcreate"){
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
+    await createmodprofile(message)
+  }
+
+  else if(command === "modstats"){
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
+    await viewmodprofile(message, client, args)
+  }
+
+  else if(command === "modlb"){
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
+    await modLB(message, client, args)
   }
 
   else if (command === "cr" || command === "cockrating") {
@@ -449,11 +494,15 @@ client.on("message", async message => {
   else if (command === "startsplitqual") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await splitqual(client, message)
+    await updateModProfile(message.author.id, "modactions", 1)
+    await updateModProfile(message.author.id, "matchportionsstarted", 1)
   }
 
   else if (command === "startsplit") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await splitregular(message, client)
+    await updateModProfile(message.author.id, "modactions", 1)
+    await updateModProfile(message.author.id, "matchportionsstarted", 1)
   }
 
   else if (command === "reload") {

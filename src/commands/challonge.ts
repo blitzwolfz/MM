@@ -1,6 +1,6 @@
 //import { matchlist } from "../misc/struct";
 import * as Discord from "discord.js";
-import { getSignups, getMatchlist, updateMatchlist, insertMatchlist, insertQuallist, getQuallist, updateQuallist } from "../misc/db";
+import { getSignups, getMatchlist, updateMatchlist, insertMatchlist, insertQuallist, getQuallist, updateQuallist, updateProfile } from "../misc/db";
 import { matchlist, quallist } from "../misc/struct";
 
 
@@ -440,6 +440,7 @@ export async function declarequalwinner(message: Discord.Message, client: Discor
                 else {
                     match.users.push(id)
                     await updateMatchlist(match)
+                    updateProfile(id, "wins", 1)
                     return message.reply(" added user.")
                 }
             }

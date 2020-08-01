@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllCockratings = exports.updateCockrating = exports.getCockrating = exports.insertCockrating = exports.updateVerify = exports.getVerify = exports.insertVerify = exports.updateMatchlist = exports.getMatchlist = exports.insertMatchlist = exports.deleteQuallist = exports.updateQuallist = exports.getQuallist = exports.insertQuallist = exports.deleteSignup = exports.updateSignup = exports.getSignups = exports.insertSignups = exports.deleteQuals = exports.deleteActive = exports.addUser = exports.updateProfile = exports.getProfile = exports.addProfile = exports.getSingularQuals = exports.getQuals = exports.getQual = exports.getMatch = exports.getActive = exports.updateQuals = exports.insertQuals = exports.updateActive = exports.insertActive = exports.connectToDB = void 0;
+exports.getAllModProfiles = exports.updateModProfile = exports.addModProfile = exports.getModProfile = exports.getAllCockratings = exports.updateCockrating = exports.getCockrating = exports.insertCockrating = exports.updateVerify = exports.getVerify = exports.insertVerify = exports.updateMatchlist = exports.getMatchlist = exports.insertMatchlist = exports.deleteQuallist = exports.updateQuallist = exports.getQuallist = exports.insertQuallist = exports.deleteSignup = exports.updateSignup = exports.getSignups = exports.insertSignups = exports.deleteQuals = exports.deleteActive = exports.addUser = exports.updateProfile = exports.getProfile = exports.addProfile = exports.getSingularQuals = exports.getQuals = exports.getQual = exports.getMatch = exports.getActive = exports.updateQuals = exports.insertQuals = exports.updateActive = exports.insertActive = exports.connectToDB = void 0;
 const mongo = __importStar(require("mongodb"));
 require("dotenv").config();
 const MongoClient = mongo.MongoClient;
@@ -35,6 +35,7 @@ async function connectToDB() {
             await client.db(process.env.DBNAME).createCollection("users");
             await client.db(process.env.DBNAME).createCollection("signup");
             await client.db(process.env.DBNAME).createCollection("cockrating");
+            await client.db(process.env.DBNAME).createCollection("modprofiles");
             await resolve();
         });
     });
@@ -194,3 +195,27 @@ async function getAllCockratings() {
     return await client.db(process.env.DBNAME).collection("cockrating").find({}).toArray();
 }
 exports.getAllCockratings = getAllCockratings;
+async function getModProfile(_id) {
+    return client.db(process.env.DBNAME).collection("modprofiles").findOne({ _id: _id });
+}
+exports.getModProfile = getModProfile;
+async function addModProfile(User) {
+    await client.db(process.env.DBNAME).collection("modprofiles").insertOne(User);
+}
+exports.addModProfile = addModProfile;
+async function updateModProfile(_id, field, num) {
+    if (field === "modactions") {
+        await client.db(process.env.DBNAME).collection("modprofiles").updateOne({ _id: _id }, { $inc: { "modactions": num } });
+    }
+    else if (field === "matchesstarted") {
+        await client.db(process.env.DBNAME).collection("modprofiles").updateOne({ _id: _id }, { $inc: { "matchesstarted": num } });
+    }
+    else if (field === "matchportionsstarted") {
+        await client.db(process.env.DBNAME).collection("modprofiles").updateOne({ _id: _id }, { $inc: { "matchportionsstarted": num } });
+    }
+}
+exports.updateModProfile = updateModProfile;
+async function getAllModProfiles() {
+    return await client.db(process.env.DBNAME).collection("modprofiles").find({}).toArray();
+}
+exports.getAllModProfiles = getAllModProfiles;
