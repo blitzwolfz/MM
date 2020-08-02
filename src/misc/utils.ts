@@ -64,3 +64,17 @@ export function removethreevotes(arr:Array<Array<string>>, search:string){
 
 export const backwardsFilter = (reaction: { emoji: { name: string; }; }, user: Discord.User) => reaction.emoji.name === '⬅' && !user.bot;
 export const forwardsFilter = (reaction: { emoji: { name: string; }; }, user: Discord.User) => reaction.emoji.name === '➡'  && !user.bot;
+
+export function indexOf2d (arr:any[][], item:any, searchpos: number, returnpos: number) {
+
+  for (let i = 0; i < arr.length; i++){
+    console.log(arr[i][searchpos])
+    console.log(arr[i][returnpos])
+    if(arr[i][searchpos] == item){
+        
+      return arr[i][returnpos]
+    }
+  }
+
+  return -1
+}

@@ -26,7 +26,9 @@ export async function endmatch(message: discord.Message, client: discord.Client)
                     updateProfile(user1.id, "wins", 1)
                     updateProfile(user2.id, "loss", 1)
 
-                    channelid.send(embed)
+                    channelid.send(embed)                    
+                    await user1.send(`You won with ${match.p1.votes}!! The final votes were ${match.p1.votes} to ${match.p2.votes}`)
+                    await user2.send(`You lost, and your meme got ${match.p2.votes}. The final votes were ${match.p1.votes} to ${match.p2.votes}`)
 
                 }
 
@@ -41,6 +43,8 @@ export async function endmatch(message: discord.Message, client: discord.Client)
                     updateProfile(user1.id, "loss", 1)
 
                     channelid.send(embed)
+                    await user2.send(`You won with ${match.p1.votes}!! The final votes were ${match.p1.votes} to ${match.p2.votes}`)
+                    await user1.send(`You lost, and your meme got ${match.p1.votes}. The final votes were ${match.p1.votes} to ${match.p2.votes}`)
                 }
 
                 else if (match.p1.votes === match.p2.votes) {

@@ -2,6 +2,7 @@
 import * as Discord from "discord.js";
 import { getSignups, getMatchlist, updateMatchlist, insertMatchlist, insertQuallist, getQuallist, updateQuallist, updateProfile } from "../misc/db";
 import { matchlist, quallist } from "../misc/struct";
+import { indexOf2d } from "../misc/utils";
 
 
 const challonge = require("challonge-js")
@@ -99,6 +100,10 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
 
 
         matchlist.users = await shuffle(matchlist.users)
+        matchlist.users = await shuffle(matchlist.users)
+        matchlist.users = await shuffle(matchlist.users)
+        matchlist.users = await shuffle(matchlist.users)
+        matchlist.users = await shuffle(matchlist.users)
 
         for (let i = 0; i < matchlist.users.length; i++) {
             console.log("ok")
@@ -150,6 +155,14 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
 
     else {
 
+        let names:string[] = []
+
+        let match = await getMatchlist()
+
+        for(let i of match.users){
+            names.concat([((await (await message.guild!.members.fetch(i)).nickname) || await (await disclient.users.fetch(i)).username), i])
+        }
+
         const client = challonge.createClient({
             apiKey: process.env.CHALLONGE
         });
@@ -189,6 +202,8 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
                             if (oneid === null || twoid === null) continue;
 
                             let channelstringname: string = ""
+                            let name1:string = ""
+                            let name2:string = ""
 
                             client.participants.index({
                                 id: matchlist.url,
@@ -199,6 +214,7 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
                                     for (let x = 0; x < data.length; x++) {
                                         if (data[x].participant.id === oneid) {
                                             channelstringname += data[x].participant.name.substring(0, 10)
+                                            name1 = data[x].participant.name
                                             break;
                                         }
                                     }
@@ -206,19 +222,35 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
                                     for (let y = 0; y < data.length; y++) {
                                         if (data[y].participant.id === twoid) {
                                             channelstringname += "-vs-" + data[y].participant.name.substring(0, 10)
+                                            name2 = data[y].participant.name
                                             break;
                                         }
                                     }
 
                                     if (channelstringname.includes("-vs-")) {
-                                        await message.guild!.channels.create(channelstringname, { type: 'text', topic: `Round ${args[0]}` })
-                                            .then(async channel => {
-                                                let category = await message.guild!.channels.cache.find(c => c.name == "matches" && c.type == "category");
+                                                let names:string[][] = []
 
-                                                if (!category) throw new Error("Category channel does not exist");
-                                                await channel.setParent(category.id);
-                                                await channel.lockPermissions()
-                                            });
+                                                let match = await getMatchlist()
+                                            
+                                                for(let i of match.users){
+                                                  //((await (await message.guild!.members.fetch(i)!).nickname) ||
+                                                    names.push([((await message.guild!.members.fetch(i)!).nickname || (await client.users.fetch(i)!).username), i])
+                                                }
+                                            
+                                                // console.log(names)
+                                            
+                                                await message.guild!.channels.create("pen15club", { type: 'text', topic: `Round pen15` })
+                                                .then(async channel => {
+                                                    let category = await message.guild!.channels.cache.find(c => c.name == "matches" && c.type == "category");
+                                            
+                                                    let id1 = indexOf2d(names, name1, 0, 1)
+                                                    let id2 = indexOf2d(names, name2, 0, 1)
+                                            
+                                                    await channel.send(`<@${id1}> <@${id2}> You have ${args[0]}h to complete this match. Contact a ref to begin, you may also split your match`)
+                                                    if (!category) throw new Error("Category channel does not exist");
+                                                    await channel.setParent(category.id);
+                                                    await channel.lockPermissions()
+                                                });
                                     }
 
                                 }

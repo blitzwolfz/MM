@@ -22,6 +22,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.matchlistmaker = exports.removequalwinner = exports.declarequalwinner = exports.GroupSearch = exports.quallistEmbed = exports.CreateQualGroups = exports.QualChannelCreation = exports.ChannelCreation = exports.CreateChallongeMatchBracket = exports.CreateChallongeQualBracket = void 0;
 const Discord = __importStar(require("discord.js"));
 const db_1 = require("../misc/db");
+const utils_1 = require("../misc/utils");
 const challonge = require("challonge-js");
 async function CreateChallongeQualBracket(message, disclient, args) {
     if (message.member.roles.cache.has('724818272922501190')
@@ -78,6 +79,10 @@ async function CreateChallongeMatchBracket(message, disclient, args, guild) {
         let matchid = (args.join("")).replace("https://challonge.com/", "");
         let matchlist = await db_1.getMatchlist();
         matchlist.users = await shuffle(matchlist.users);
+        matchlist.users = await shuffle(matchlist.users);
+        matchlist.users = await shuffle(matchlist.users);
+        matchlist.users = await shuffle(matchlist.users);
+        matchlist.users = await shuffle(matchlist.users);
         for (let i = 0; i < matchlist.users.length; i++) {
             console.log("ok");
             let name = (await (await guild.members.fetch(matchlist.users[i])).nickname) || await (await disclient.users.fetch(matchlist.users[i])).username;
@@ -111,6 +116,11 @@ async function ChannelCreation(message, disclient, args) {
     if (!args)
         return message.reply("Please input round number!");
     else {
+        let names = [];
+        let match = await db_1.getMatchlist();
+        for (let i of match.users) {
+            names.concat([((await (await message.guild.members.fetch(i)).nickname) || await (await disclient.users.fetch(i)).username), i]);
+        }
         const client = challonge.createClient({
             apiKey: process.env.CHALLONGE
         });
@@ -130,6 +140,8 @@ async function ChannelCreation(message, disclient, args) {
                             if (oneid === null || twoid === null)
                                 continue;
                             let channelstringname = "";
+                            let name1 = "";
+                            let name2 = "";
                             client.participants.index({
                                 id: matchlist.url,
                                 callback: async (err, data) => {
@@ -138,19 +150,29 @@ async function ChannelCreation(message, disclient, args) {
                                     for (let x = 0; x < data.length; x++) {
                                         if (data[x].participant.id === oneid) {
                                             channelstringname += data[x].participant.name.substring(0, 10);
+                                            name1 = data[x].participant.name;
                                             break;
                                         }
                                     }
                                     for (let y = 0; y < data.length; y++) {
                                         if (data[y].participant.id === twoid) {
                                             channelstringname += "-vs-" + data[y].participant.name.substring(0, 10);
+                                            name2 = data[y].participant.name;
                                             break;
                                         }
                                     }
                                     if (channelstringname.includes("-vs-")) {
-                                        await message.guild.channels.create(channelstringname, { type: 'text', topic: `Round ${args[0]}` })
+                                        let names = [];
+                                        let match = await db_1.getMatchlist();
+                                        for (let i of match.users) {
+                                            names.push([((await message.guild.members.fetch(i)).nickname || (await client.users.fetch(i)).username), i]);
+                                        }
+                                        await message.guild.channels.create("pen15club", { type: 'text', topic: `Round pen15` })
                                             .then(async (channel) => {
                                             let category = await message.guild.channels.cache.find(c => c.name == "matches" && c.type == "category");
+                                            let id1 = utils_1.indexOf2d(names, name1, 0, 1);
+                                            let id2 = utils_1.indexOf2d(names, name2, 0, 1);
+                                            await channel.send(`<@${id1}> <@${id2}> You have ${args[0]}h to complete this match. Contact a ref to begin, you may also split your match`);
                                             if (!category)
                                                 throw new Error("Category channel does not exist");
                                             await channel.setParent(category.id);

@@ -74,11 +74,7 @@ client.on('ready', async () => {
         timestamp: new Date()
     }
   });
-  //client.user!.setActivity(`Meme Mania Season 0 | !help`);
   client.user!.setActivity(`${process.env.STATUS}`);
-  // client.user!.setPresence({ activity: { name: "Testing", type: "CUSTOM_STATUS" }, status: "online" })
-  //console.log(await getActive())
-
 });
 
 client.on("guildMemberAdd", async function (member) {
