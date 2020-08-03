@@ -155,13 +155,14 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
 
     else {
 
-        let names:string[] = []
+        let names:any[] = []
         let guild = disclient.guilds.cache.get("719406444109103117")
 
         let match = await getMatchlist()
 
         for(let i of match.users){
-            names.concat([((await (await message.guild!.members.fetch(i)).nickname) || await (await disclient.users.fetch(i)).username), i])
+            names.push([(await (await guild!.members.fetch(i)!).nickname || (await disclient.users.fetch(i)!).username), i])
+            //names.concat([((await (await message.guild!.members.fetch(i)).nickname) || await (await disclient.users.fetch(i)).username), i])
         }
 
         const client = challonge.createClient({
@@ -229,14 +230,14 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
                                     }
 
                                     if (channelstringname.includes("-vs-")) {
-                                                let names:string[][] = []
+                                                // let names:string[][] = []
 
-                                                let match = await getMatchlist()
+                                                // let match = await getMatchlist()
                                             
-                                                for(let i of match.users){
-                                                  //((await (await message.guild!.members.fetch(i)!).nickname) ||
-                                                    names.push([((await guild!.members.fetch(i)!).nickname || (await disclient.users.fetch(i)!).username), i])
-                                                }
+                                                // for(let i of match.users){
+                                                //   //((await (await message.guild!.members.fetch(i)!).nickname) ||
+                                                //     names.push([(await (await guild!.members.fetch(i)!).nickname || (await disclient.users.fetch(i)!).username), i])
+                                                // }
                                             
                                                 // console.log(names)
                                             

@@ -120,7 +120,7 @@ async function ChannelCreation(message, disclient, args) {
         let guild = disclient.guilds.cache.get("719406444109103117");
         let match = await db_1.getMatchlist();
         for (let i of match.users) {
-            names.concat([((await (await message.guild.members.fetch(i)).nickname) || await (await disclient.users.fetch(i)).username), i]);
+            names.push([(await (await guild.members.fetch(i)).nickname || (await disclient.users.fetch(i)).username), i]);
         }
         const client = challonge.createClient({
             apiKey: process.env.CHALLONGE
@@ -163,11 +163,6 @@ async function ChannelCreation(message, disclient, args) {
                                         }
                                     }
                                     if (channelstringname.includes("-vs-")) {
-                                        let names = [];
-                                        let match = await db_1.getMatchlist();
-                                        for (let i of match.users) {
-                                            names.push([((await guild.members.fetch(i)).nickname || (await disclient.users.fetch(i)).username), i]);
-                                        }
                                         await message.guild.channels.create(channelstringname, { type: 'text', topic: `Round ${args[0]}` })
                                             .then(async (channel) => {
                                             let category = await message.guild.channels.cache.find(c => c.name == "matches" && c.type == "category");
