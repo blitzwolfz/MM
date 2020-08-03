@@ -119,8 +119,8 @@ async function ChannelCreation(message, disclient, args) {
         let names = [];
         let guild = disclient.guilds.cache.get("719406444109103117");
         let match = await db_1.getMatchlist();
-        for (let i of match.users) {
-            let name = (await (await guild.members.fetch(i)).nickname) || await (await disclient.users.fetch(i)).username;
+        for (let i = 0; i < match.users.length; i++) {
+            let name = (await (await guild.members.fetch(match.users[i])).nickname) || await (await disclient.users.fetch(match.users[i])).username;
             names.push([name, i]);
         }
         const client = challonge.createClient({

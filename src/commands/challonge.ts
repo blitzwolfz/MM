@@ -160,8 +160,8 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
 
         let match = await getMatchlist()
 
-        for(let i of match.users){
-            let name = (await (await guild!.members.fetch(i)).nickname) || await (await disclient.users.fetch(i)).username
+        for(let i = 0; i < match.users.length; i++){
+            let name = (await (await guild!.members.fetch(match.users[i])).nickname) || await (await disclient.users.fetch(match.users[i])).username
             names.push([name, i])
             //names.concat([((await (await message.guild!.members.fetch(i)).nickname) || await (await disclient.users.fetch(i)).username), i])
         }
