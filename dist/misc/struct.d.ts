@@ -3,6 +3,8 @@ export interface activematch {
     channelid: string;
     messageID: string;
     split: boolean;
+    template: string;
+    tempfound: boolean;
     p1: {
         userid: string;
         memedone: boolean;
@@ -83,4 +85,11 @@ export interface modprofile {
     modactions: number;
     matchesstarted: number;
     matchportionsstarted: number;
+}
+export interface randomtempstruct {
+    _id: string;
+    found: boolean;
+    messageid: string;
+    url: string;
+    time: number;
 }

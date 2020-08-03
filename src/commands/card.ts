@@ -20,14 +20,11 @@ const prefix = process.env.PREFIX!
 //     return ctx.font;
 // };
 
-export async function vs(message: Discord.Message, client: Discord.Client, users: string[]){
+export async function vs(channelid: string, client: Discord.Client, users: string[]){
 	//let users:string[] = []
 	console.log(prefix)
-    var args: Array<string> = message.content.slice(prefix.length).trim().split(/ +/g)
-	console.log(args)
-    if (args.length < 3) {
-        return message.reply("invalid response. Command is `!vs @user1 @user2 `")
-    }
+
+	let ch = <Discord.TextChannel> await client.channels.fetch(channelid)
 
     const canvas = Canvas.createCanvas(1917 , 1168);
 	const ctx = canvas.getContext('2d');
@@ -58,7 +55,7 @@ export async function vs(message: Discord.Message, client: Discord.Client, users
     
 	const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'welcome-image.jpg');
 	//await message.channel.send({ files: [attachment]})
-	await message.channel.send(attachment)
+	await ch.send(attachment)
 }
 
 

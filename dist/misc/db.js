@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllModProfiles = exports.updateModProfile = exports.addModProfile = exports.getModProfile = exports.getAllCockratings = exports.updateCockrating = exports.getCockrating = exports.insertCockrating = exports.updateVerify = exports.getVerify = exports.insertVerify = exports.updateMatchlist = exports.getMatchlist = exports.insertMatchlist = exports.deleteQuallist = exports.updateQuallist = exports.getQuallist = exports.insertQuallist = exports.deleteSignup = exports.updateSignup = exports.getSignups = exports.insertSignups = exports.deleteQuals = exports.deleteActive = exports.addUser = exports.updateProfile = exports.getProfile = exports.addProfile = exports.getSingularQuals = exports.getQuals = exports.getQual = exports.getMatch = exports.getActive = exports.updateQuals = exports.insertQuals = exports.updateActive = exports.insertActive = exports.connectToDB = void 0;
+exports.getalltempStructs = exports.deletetempStruct = exports.updatetempStruct = exports.inserttempStruct = exports.gettempStruct = exports.getAllModProfiles = exports.updateModProfile = exports.addModProfile = exports.getModProfile = exports.getAllCockratings = exports.updateCockrating = exports.getCockrating = exports.insertCockrating = exports.updateVerify = exports.getVerify = exports.insertVerify = exports.updateMatchlist = exports.getMatchlist = exports.insertMatchlist = exports.deleteQuallist = exports.updateQuallist = exports.getQuallist = exports.insertQuallist = exports.deleteSignup = exports.updateSignup = exports.getSignups = exports.insertSignups = exports.deleteQuals = exports.deleteActive = exports.addUser = exports.updateProfile = exports.getProfile = exports.addProfile = exports.getSingularQuals = exports.getQuals = exports.getQual = exports.getMatch = exports.getActive = exports.updateQuals = exports.insertQuals = exports.updateActive = exports.insertActive = exports.connectToDB = void 0;
 const mongo = __importStar(require("mongodb"));
 require("dotenv").config();
 const MongoClient = mongo.MongoClient;
@@ -219,3 +219,23 @@ async function getAllModProfiles() {
     return await client.db(process.env.DBNAME).collection("modprofiles").find({}).toArray();
 }
 exports.getAllModProfiles = getAllModProfiles;
+async function gettempStruct(_id) {
+    return client.db(process.env.DBNAME).collection("tempstruct").findOne({ _id: _id });
+}
+exports.gettempStruct = gettempStruct;
+async function inserttempStruct(struct) {
+    await client.db(process.env.DBNAME).collection("tempstruct").insertOne(struct);
+}
+exports.inserttempStruct = inserttempStruct;
+async function updatetempStruct(_id, struct) {
+    await client.db(process.env.DBNAME).collection("tempstruct").updateOne({ _id }, { $set: struct });
+}
+exports.updatetempStruct = updatetempStruct;
+async function deletetempStruct(_id) {
+    await client.db(process.env.DBNAME).collection("tempstruct").deleteOne({ _id });
+}
+exports.deletetempStruct = deletetempStruct;
+async function getalltempStructs() {
+    return client.db(process.env.DBNAME).collection("tempstruct").find({}).toArray();
+}
+exports.getalltempStructs = getalltempStructs;

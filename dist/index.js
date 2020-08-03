@@ -71,13 +71,6 @@ client.on('ready', async () => {
     }
     await start_1.running(client);
     await start_1.qualrunning(client);
-    await client.channels.cache.get("722291588922867772").send("<@239516219445608449>", {
-        embed: {
-            description: `Updates/Restart has worked`,
-            color: "#d7be26",
-            timestamp: new Date()
-        }
-    });
     client.user.setActivity(`${process.env.STATUS}`);
 });
 client.on("guildMemberAdd", async function (member) {
@@ -95,6 +88,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
         return;
     let matches = await db_1.getActive();
     let quals = await db_1.getQuals();
+    let temps = await db_1.getalltempStructs();
     if (matches) {
         for (const match of matches) {
             console.log(match.p1.voters);
@@ -213,18 +207,33 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             }
         }
     }
+    if (temps) {
+        for (const temp of temps) {
+            if (messageReaction.emoji.name === utils_1.emojis[7]) {
+                temp.found = true;
+                await db_1.updatetempStruct(temp._id, temp);
+                await messageReaction.message.delete();
+            }
+            else if (messageReaction.emoji.name === '❌') {
+                temp.time = 121;
+                await db_1.updatetempStruct(temp._id, temp);
+            }
+        }
+    }
 });
 client.on("message", async (message) => {
     var _a, _b, _c, _d;
     const prefix = process.env.PREFIX;
     console.log(await db_1.getActive());
     console.log(await db_1.getQuals());
+    if (message.content.includes("!s")) {
+        await start_1.qualrunning(client);
+        await start_1.running(client);
+    }
     if (message.content.indexOf(prefix) !== 0 || message.author.bot) {
         if (message.author.id !== "688558229646475344")
             return;
     }
-    await start_1.qualrunning(client);
-    await start_1.running(client);
     var args = message.content.slice(prefix.length).trim().split(/ +/g);
     if (!args || args.length === 0) {
         return;
@@ -497,9 +506,7 @@ client.on("message", async (message) => {
                 users.push(userid);
             }
         }
-        await card_1.vs(message, client, users);
+        await card_1.vs(message.channel.id, client, users);
     }
-    let awake = client.channels.cache.get("734075282708758540");
-    await awake.send(`ok`);
 });
 client.login(process.env.TOKEN);
