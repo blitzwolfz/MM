@@ -5,9 +5,9 @@ import { submit, qualsubmit } from "./commands/submit"
 import { start, running, qualrunning, startqual, startmodqual, splitqual, startregularsplit, splitregular, reload } from "./commands/start";
 import { endmatch, qualend } from "./commands/winner";
 import { vs } from "./commands/card";
-import { getUser, hasthreevotes, emojis, removethreevotes } from "./misc/utils";
+import { getUser, hasthreevotes, emojis, removethreevotes, indexOf2d } from "./misc/utils";
 import { ModHelp, UserHelp, ModSignupHelp, ModChallongeHelp } from "./commands/help";
-import { connectToDB, getQuals, getActive, updateActive, updateQuals, deleteSignup, getMatch, getQual, getCockrating, insertCockrating, updateCockrating, updateModProfile, getalltempStructs, updatetempStruct } from "./misc/db";
+import { connectToDB, getQuals, getActive, updateActive, updateQuals, deleteSignup, getMatch, getQual, getCockrating, insertCockrating, updateCockrating, updateModProfile, getalltempStructs, updatetempStruct, getMatchlist } from "./misc/db";
 import { template, approvetemplate } from "./commands/template";
 import { createrUser, stats } from "./commands/user";
 import { signup, startsignup, closesignup, removesignup, reopensignup, activeOffers, matchlistEmbed } from "./commands/signups";
@@ -336,6 +336,29 @@ client.on("message", async message => {
   }
 
   else if (command === "test") {
+
+    let match = await getMatchlist()
+
+    let names:any[] = []
+
+    let guild = client.guilds.cache.get("719406444109103117")!
+
+    for(let i = 0; i < match.users.length; i++){
+        console.log(match.users[i])
+        let name = (await (await guild!.members.fetch(match.users[i])).nickname) || await (await client.users.fetch(match.users[i])).username
+        names.push([name, match.users[i]])
+        // console.log(name)
+        // message.reply(name)
+        //message.reply((match.users[i]))
+        //names.concat([((await (await message.guild!.members.fetch(i)).nickname) || await (await disclient.users.fetch(i)).username), i])
+    }
+
+    for (let i = 0; i < names.length; i++){
+      console.log(names[i][1])
+      console.log(names[i][1])
+      await message.reply(indexOf2d(names, names[i][0], 0, 1))
+    }
+  
 
     //await message.channel.send([await winner(client, (args[0] || message.author.id || message.mentions!.users!.first()!.id))])
 

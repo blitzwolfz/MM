@@ -50,6 +50,7 @@ function indexOf2d(arr, item, searchpos, returnpos) {
         console.log(arr[i][searchpos]);
         console.log(arr[i][returnpos]);
         if (arr[i][searchpos] == item) {
+            console.log(arr[i][returnpos]);
             return arr[i][returnpos];
         }
     }

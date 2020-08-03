@@ -161,8 +161,9 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
         let match = await getMatchlist()
 
         for(let i = 0; i < match.users.length; i++){
+            console.log(match.users[i])
             let name = (await (await guild!.members.fetch(match.users[i])).nickname) || await (await disclient.users.fetch(match.users[i])).username
-            names.push([name, i])
+            names.push([name, match.users[i]])
             //names.concat([((await (await message.guild!.members.fetch(i)).nickname) || await (await disclient.users.fetch(i)).username), i])
         }
 
@@ -245,7 +246,10 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
                                                 await message.guild!.channels.create(channelstringname, { type: 'text', topic: `Round ${args[0]}` })
                                                 .then(async channel => {
                                                     let category = await message.guild!.channels.cache.find(c => c.name == "matches" && c.type == "category");
-                                            
+
+                                                    console.log(name1)
+                                                    console.log(name1)
+
                                                     let id1 = indexOf2d(names, name1, 0, 1)
                                                     let id2 = indexOf2d(names, name2, 0, 1)
                                             
