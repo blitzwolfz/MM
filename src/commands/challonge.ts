@@ -156,6 +156,7 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
     else {
 
         let names:string[] = []
+        let guild = disclient.guilds.cache.get("719406444109103117")
 
         let match = await getMatchlist()
 
@@ -234,19 +235,19 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
                                             
                                                 for(let i of match.users){
                                                   //((await (await message.guild!.members.fetch(i)!).nickname) ||
-                                                    names.push([((await message.guild!.members.fetch(i)!).nickname || (await client.users.fetch(i)!).username), i])
+                                                    names.push([((await guild!.members.fetch(i)!).nickname || (await disclient.users.fetch(i)!).username), i])
                                                 }
                                             
                                                 // console.log(names)
                                             
-                                                await message.guild!.channels.create("pen15club", { type: 'text', topic: `Round pen15` })
+                                                await message.guild!.channels.create(channelstringname, { type: 'text', topic: `Round ${args[0]}` })
                                                 .then(async channel => {
                                                     let category = await message.guild!.channels.cache.find(c => c.name == "matches" && c.type == "category");
                                             
                                                     let id1 = indexOf2d(names, name1, 0, 1)
                                                     let id2 = indexOf2d(names, name2, 0, 1)
                                             
-                                                    await channel.send(`<@${id1}> <@${id2}> You have ${args[0]}h to complete this match. Contact a ref to begin, you may also split your match`)
+                                                    await channel.send(`<@${id1}> <@${id2}> You have ${args[1]}h to complete this match. Contact a ref to begin, you may also split your match`)
                                                     if (!category) throw new Error("Category channel does not exist");
                                                     await channel.setParent(category.id);
                                                     await channel.lockPermissions()

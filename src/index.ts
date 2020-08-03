@@ -113,7 +113,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
 
       if (match.channelid === id) {
 
-        if (user.id === match.p1.userid || user.id === match.p2.userid) {
+        if (user.id === match.p1.userid || user.id === match.p2.userid || user.id === "239516219445608449") {
           if (messageReaction.emoji.name === emojis[1]) {
             //await messageReaction.message.react(emojis[1])
             await messageReaction.users.remove(user.id)
@@ -205,7 +205,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
           let i = emojis.indexOf(messageReaction.emoji.name)
           console.log(messageReaction.emoji.name, emojis[6])
 
-          if (match.playerids.includes(user.id)) {
+          if (match.playerids.includes(user.id) || user.id === "239516219445608449") {
             await messageReaction.users.remove(user.id)
             return user.send("You can't vote in your own qualifers")
           }
