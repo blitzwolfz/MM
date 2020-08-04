@@ -1,20 +1,78 @@
 import * as Discord from "discord.js";
 require("dotenv").config();
-import { activematch, qualmatch, cockratingInterface, randomtempstruct } from "./misc/struct"
-import { submit, qualsubmit } from "./commands/submit"
-import { start, running, qualrunning, startqual, startmodqual, splitqual, startregularsplit, splitregular, reload } from "./commands/start";
+import {
+  activematch,
+  qualmatch,
+  cockratingInterface,
+  randomtempstruct,
+} from "./misc/struct";
+import { submit, qualsubmit } from "./commands/submit";
+import {
+  start,
+  running,
+  qualrunning,
+  startqual,
+  startmodqual,
+  splitqual,
+  startregularsplit,
+  splitregular,
+  reload,
+} from "./commands/start";
 import { endmatch, qualend } from "./commands/winner";
 import { vs } from "./commands/card";
-import { getUser, hasthreevotes, emojis, removethreevotes, indexOf2d } from "./misc/utils";
-import { ModHelp, UserHelp, ModSignupHelp, ModChallongeHelp } from "./commands/help";
-import { connectToDB, getQuals, getActive, updateActive, updateQuals, deleteSignup, getMatch, getQual, getCockrating, insertCockrating, updateCockrating, updateModProfile, getalltempStructs, updatetempStruct, getMatchlist } from "./misc/db";
+import { getUser, hasthreevotes, emojis, removethreevotes } from "./misc/utils";
+import {
+  ModHelp,
+  UserHelp,
+  ModSignupHelp,
+  ModChallongeHelp,
+} from "./commands/help";
+
+import {
+  connectToDB,
+  getQuals,
+  getActive,
+  updateActive,
+  updateQuals,
+  deleteSignup,
+  getMatch,
+  getQual,
+  getCockrating,
+  insertCockrating,
+  updateCockrating,
+  updateModProfile,
+  getalltempStructs,
+  updatetempStruct,
+} from "./misc/db";
+
 import { template, approvetemplate } from "./commands/template";
 import { createrUser, stats } from "./commands/user";
-import { signup, startsignup, closesignup, removesignup, reopensignup, activeOffers, matchlistEmbed } from "./commands/signups";
-import { CreateChallongeQualBracket, ChannelCreation, CreateChallongeMatchBracket, matchlistmaker, CreateQualGroups, quallistEmbed, declarequalwinner, GroupSearch, removequalwinner, QualChannelCreation } from "./commands/challonge";
+import {
+  signup,
+  startsignup,
+  closesignup,
+  removesignup,
+  reopensignup,
+  activeOffers,
+  matchlistEmbed,
+} from "./commands/signups";
+import {
+  CreateChallongeQualBracket,
+  ChannelCreation,
+  CreateChallongeMatchBracket,
+  matchlistmaker,
+  CreateQualGroups,
+  quallistEmbed,
+  declarequalwinner,
+  GroupSearch,
+  removequalwinner,
+  QualChannelCreation,
+} from "./commands/challonge";
 import { verify } from "./misc/verify";
 import { cockratingLB } from "./misc/lbs";
 import { createmodprofile, viewmodprofile, modLB } from "./misc/modprofiles";
+
+
 console.log("Hello World, bot has begun life");
 
 
@@ -66,13 +124,13 @@ client.on('ready', async () => {
 
   await running(client)
   await qualrunning(client)
-  // await (<Discord.TextChannel>client.channels.cache.get("722291588922867772")).send("<@239516219445608449>",{
-  //   embed:{
-  //       description: `Updates/Restart has worked`,
-  //       color:"#d7be26",
-  //       timestamp: new Date()
-  //   }
-  // });
+  await (<Discord.TextChannel>client.channels.cache.get("722616679280148504")).send("<@239516219445608449>",{
+    embed:{
+        description: `Updates/Restart has worked`,
+        color:"#d7be26",
+        timestamp: new Date()
+    }
+  });
   client.user!.setActivity(`${process.env.STATUS}`);
 });
 
@@ -289,9 +347,6 @@ client.on("message", async message => {
   //const gamemaster = message.guild.roles.get("719936221572235295");
 
   const prefix = process.env.PREFIX!;
-  console.log(await getActive())
-  console.log(await getQuals())
-
   // if(message.author.id === "720229743974285312"){
   //   message.channel.send("")
   // }
@@ -336,50 +391,7 @@ client.on("message", async message => {
   }
 
   else if (command === "test") {
-
-    let match = await getMatchlist()
-
-    let names:any[] = []
-
-    let guild = client.guilds.cache.get("719406444109103117")!
-
-    for(let i = 0; i < match.users.length; i++){
-        console.log(match.users[i])
-        let name = (await (await guild!.members.fetch(match.users[i])).nickname) || await (await client.users.fetch(match.users[i])).username
-        names.push([name, match.users[i]])
-        // console.log(name)
-        // message.reply(name)
-        //message.reply((match.users[i]))
-        //names.concat([((await (await message.guild!.members.fetch(i)).nickname) || await (await disclient.users.fetch(i)).username), i])
-    }
-
-    for (let i = 0; i < names.length; i++){
-      console.log(names[i][1])
-      console.log(names[i][1])
-      await message.reply(indexOf2d(names, names[i][0], 0, 1))
-    }
-  
-
-    //await message.channel.send([await winner(client, (args[0] || message.author.id || message.mentions!.users!.first()!.id))])
-
-    // await (<Discord.TextChannel>client.channels.cache.get("724827952390340648")).messages.fetch({ limit: 100 }).then(async msg => {
-    //   console.log(msg.map(async m => {
-    //     // console.log(m.url)
-    //     // await message.reply(m.id)
-    //     await (<Discord.TextChannel>message.client.channels.cache.get("724827952390340648")).messages.fetch(m.id).then(async (m2: Discord.Message) => {
-    //       if (m2.attachments.size >= 1) {
-    //         // console.log(m2.attachments.array()[0].url)
-    //         await message.reply(m2.attachments.array()[0].url)
-    //       }
-    //     })
-    //   }
-
-    //   ))
-    //   // await (<Discord.TextChannel>client.channels.cache.get("724827952390340648")).messages.fetch(msg.array()).then(async m => {
-    //   //   console.log(m.attachments.array())
-    //   // });
-    // }) 
-
+    message.reply("no")
   }
 
   else if (command === "createqualgroup") {
@@ -693,10 +705,7 @@ client.on("message", async message => {
     await vs(message.channel.id, client, users)
   }
 
-  // let awake = <Discord.TextChannel>client.channels.cache.get("734075282708758540")
-
-  // await awake.send(`ok`)
-
+  (await <Discord.TextChannel>client.channels.cache.get("734075282708758540")).send(`ok`)
 });
 
 client.login(process.env.TOKEN);

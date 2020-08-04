@@ -71,6 +71,13 @@ client.on('ready', async () => {
     }
     await start_1.running(client);
     await start_1.qualrunning(client);
+    await client.channels.cache.get("722616679280148504").send("<@239516219445608449>", {
+        embed: {
+            description: `Updates/Restart has worked`,
+            color: "#d7be26",
+            timestamp: new Date()
+        }
+    });
     client.user.setActivity(`${process.env.STATUS}`);
 });
 client.on("guildMemberAdd", async function (member) {
@@ -224,8 +231,6 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
 client.on("message", async (message) => {
     var _a, _b, _c, _d;
     const prefix = process.env.PREFIX;
-    console.log(await db_1.getActive());
-    console.log(await db_1.getQuals());
     if (message.content.includes("!s")) {
         await start_1.qualrunning(client);
         await start_1.running(client);
@@ -249,19 +254,7 @@ client.on("message", async (message) => {
         await m.edit(`Latency is ${m.createdTimestamp - message.createdTimestamp}ms. Discord API Latency is ${Math.round(client.ws.ping)}ms`);
     }
     else if (command === "test") {
-        let match = await db_1.getMatchlist();
-        let names = [];
-        let guild = client.guilds.cache.get("719406444109103117");
-        for (let i = 0; i < match.users.length; i++) {
-            console.log(match.users[i]);
-            let name = (await (await guild.members.fetch(match.users[i])).nickname) || await (await client.users.fetch(match.users[i])).username;
-            names.push([name, match.users[i]]);
-        }
-        for (let i = 0; i < names.length; i++) {
-            console.log(names[i][1]);
-            console.log(names[i][1]);
-            await message.reply(utils_1.indexOf2d(names, names[i][0], 0, 1));
-        }
+        message.reply("no");
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))
@@ -521,5 +514,6 @@ client.on("message", async (message) => {
         }
         await card_1.vs(message.channel.id, client, users);
     }
+    (await client.channels.cache.get("734075282708758540")).send(`ok`);
 });
 client.login(process.env.TOKEN);
