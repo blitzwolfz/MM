@@ -18,7 +18,8 @@ exports.emojis = [
     "6️⃣",
     "♻️",
     "✅",
-    "❌"
+    "❌",
+    "🌀"
 ];
 function hasthreevotes(arr, search) {
     let x = 0;

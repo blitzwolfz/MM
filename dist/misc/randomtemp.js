@@ -91,6 +91,7 @@ async function RandomTemplateFunc(message, client, _id) {
     await client.channels.cache.get("722616679280148504").send(await RandomTemplateEmbed(random, message.channel.id)).then(async (message) => {
         await message.react(utils_1.emojis[7]);
         await message.react('❌');
+        await message.react('🌀');
         tempstruct.messageid = message.id;
     });
     await db_1.inserttempStruct(tempstruct);

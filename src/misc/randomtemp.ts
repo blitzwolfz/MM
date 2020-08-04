@@ -100,7 +100,7 @@ export async function RandomTemplateFunc(message: Discord.Message, client: Disco
     await (<Discord.TextChannel>client.channels.cache.get("722616679280148504")).send(await RandomTemplateEmbed(random, message.channel.id)).then(async message => {
       await message.react(emojis[7])
       await message.react('❌')
-      //await message.react('🌀')
+      await message.react('🌀')
       tempstruct.messageid = message.id
     })
 

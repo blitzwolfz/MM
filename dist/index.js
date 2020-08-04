@@ -35,6 +35,7 @@ const challonge_1 = require("./commands/challonge");
 const verify_1 = require("./misc/verify");
 const lbs_1 = require("./misc/lbs");
 const modprofiles_1 = require("./misc/modprofiles");
+const randomtemp_1 = require("./misc/randomtemp");
 console.log("Hello World, bot has begun life");
 const express = require('express');
 const app = express();
@@ -88,11 +89,11 @@ client.on("guildMemberAdd", async function (member) {
 });
 client.on("messageReactionAdd", async function (messageReaction, user) {
     var _a, _b;
+    if (user.bot)
+        return;
     if (!utils_1.emojis.includes(messageReaction.emoji.name))
         return;
     console.log(`a reaction is added to a message`);
-    if (user.bot)
-        return;
     let matches = await db_1.getActive();
     let quals = await db_1.getQuals();
     let temps = await db_1.getalltempStructs();
@@ -216,6 +217,24 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
     }
     if (temps) {
         for (const temp of temps) {
+            let templatelist = await randomtemp_1.getRandomTemplateList(client);
+            console.log(templatelist, "penis");
+            if (messageReaction.emoji.name === '🌀') {
+                console.log("penis");
+                let random = templatelist[Math.floor(Math.random() * (((templatelist.length - 1) - 1) - 1) + 1)];
+                let embed = new Discord.MessageEmbed()
+                    .setDescription("Random template")
+                    .setImage(random)
+                    .setColor("#d7be26")
+                    .setTimestamp();
+                console.log(await messageReaction.message.id);
+                temp.url = random;
+                await (await client.channels.cache.get("722616679280148504")
+                    .messages.fetch(temp.messageid))
+                    .edit({ embed });
+                await db_1.updatetempStruct(temp._id, temp);
+                await messageReaction.users.remove(user.id);
+            }
             if (messageReaction.emoji.name === utils_1.emojis[7]) {
                 temp.found = true;
                 await db_1.updatetempStruct(temp._id, temp);
@@ -254,7 +273,7 @@ client.on("message", async (message) => {
         await m.edit(`Latency is ${m.createdTimestamp - message.createdTimestamp}ms. Discord API Latency is ${Math.round(client.ws.ping)}ms`);
     }
     else if (command === "test") {
-        message.reply("no");
+        await message.reply("no").then(async (message) => await message.react('🤏'));
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))

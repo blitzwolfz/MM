@@ -1,5 +1,6 @@
 import * as Discord from "discord.js";
 require("dotenv").config();
+
 import {
   activematch,
   qualmatch,
@@ -71,6 +72,8 @@ import {
 import { verify } from "./misc/verify";
 import { cockratingLB } from "./misc/lbs";
 import { createmodprofile, viewmodprofile, modLB } from "./misc/modprofiles";
+import { getRandomTemplateList } from "./misc/randomtemp";
+
 
 
 console.log("Hello World, bot has begun life");
@@ -144,12 +147,19 @@ client.on("guildMemberAdd", async function (member) {
 });
 
 client.on("messageReactionAdd", async function (messageReaction, user) {
+  if (user.bot) return;
+
+  // if(messageReaction.emoji.name === '🤏' && user.id !== "722303830368190485") {
+  //   await messageReaction.users.remove(user.id)
+  //   await messageReaction.message.react('🌀')
+  //   let m = await messageReaction.message
+  //   await m.edit("yes")
+  // }
 
   if (!emojis.includes(messageReaction.emoji.name)) return;
 
   console.log(`a reaction is added to a message`);
   //console.log(messageReaction, user)
-  if (user.bot) return;
   let matches: activematch[] = await getActive();
 
   let quals: qualmatch[] = await getQuals()
@@ -303,30 +313,31 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
   if (temps){
 
     for(const temp of temps){
-      //let templatelist = await getRandomTemplateList(client)
-      //console.log(templatelist, "penis")
+      let templatelist = await getRandomTemplateList(client)
+      console.log(templatelist, "penis")
 
-      // if (messageReaction.emoji.name === '🌀') {  
-      //   console.log("penis")
-      //   //let m = await (await messageReaction.message)
-      //   //console.log(templatelist, "penis")
-      //   let random:string = templatelist[Math.floor(Math.random() * (((templatelist.length - 1) - 1) - 1) + 1)];
+      if (messageReaction.emoji.name === '🌀') {  
+        console.log("penis")
+        //let m = await (await messageReaction.message)
+        //console.log(templatelist, "penis")
+        let random:string = templatelist[Math.floor(Math.random() * (((templatelist.length - 1) - 1) - 1) + 1)];
 
-      //   let embed = new Discord.MessageEmbed()
-      //   .setDescription("Random template")
-      //   .setImage(random)
-      //   .setColor("#d7be26")
-      //   .setTimestamp()
-      //   console.log(await messageReaction.message.id)
+        let embed = new Discord.MessageEmbed()
+        .setDescription("Random template")
+        .setImage(random)
+        .setColor("#d7be26")
+        .setTimestamp()
+        console.log(await messageReaction.message.id)
 
-      //   temp.url = random
+        temp.url = random
 
-      //   //await messageReaction.message.edit({embed})
-      //   await (await (<Discord.TextChannel>client.channels.cache.get("722616679280148504"))
-      //   .messages.fetch(temp.messageid))
-      //   .edit({embed})
-      //   await updatetempStruct(temp._id, temp)
-      // }
+        //await messageReaction.message.edit({embed})
+        await (await (<Discord.TextChannel>client.channels.cache.get("722616679280148504"))
+        .messages.fetch(temp.messageid))
+        .edit({embed})
+        await updatetempStruct(temp._id, temp)
+        await messageReaction.users.remove(user.id)
+      }
 
       if(messageReaction.emoji.name === emojis[7]){
         temp.found = true
@@ -391,7 +402,7 @@ client.on("message", async message => {
   }
 
   else if (command === "test") {
-    message.reply("no")
+    await message.reply("no").then(async message => await message.react('🤏'))
   }
 
   else if (command === "createqualgroup") {
