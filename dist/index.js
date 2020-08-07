@@ -72,13 +72,6 @@ client.on('ready', async () => {
     }
     await start_1.running(client);
     await start_1.qualrunning(client);
-    await client.channels.cache.get("722616679280148504").send("<@239516219445608449>", {
-        embed: {
-            description: `Updates/Restart has worked`,
-            color: "#d7be26",
-            timestamp: new Date()
-        }
-    });
     client.user.setActivity(`${process.env.STATUS}`);
 });
 client.on("guildMemberAdd", async function (member) {

@@ -127,13 +127,13 @@ client.on('ready', async () => {
 
   await running(client)
   await qualrunning(client)
-  await (<Discord.TextChannel>client.channels.cache.get("722616679280148504")).send("<@239516219445608449>",{
+  /**await (<Discord.TextChannel>client.channels.cache.get("722616679280148504")).send("<@239516219445608449>",{
     embed:{
         description: `Updates/Restart has worked`,
         color:"#d7be26",
         timestamp: new Date()
     }
-  });
+  });**/
   client.user!.setActivity(`${process.env.STATUS}`);
 });
 
