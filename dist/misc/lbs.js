@@ -26,10 +26,15 @@ async function ratingslistEmbed(page = 1, client, ratings) {
     const fields = [];
     let index = (0 + page - 1) * 10;
     for (let i = index; i < index + 10; i++) {
-        fields.push({
-            name: `${i + 1}) ${await (await client.users.fetch(ratings[i]._id)).username}`,
-            value: `Cock rating is: ${100 === ratings[i].num ? `100% good cock` : `${ratings[i].num}/${100}`}`
-        });
+        try {
+            fields.push({
+                name: `${i + 1}) ${await (await client.users.fetch(ratings[i]._id)).username}`,
+                value: `Cock rating is: ${100 === ratings[i].num ? `100% good cock` : `${ratings[i].num}/${100}`}`
+            });
+        }
+        catch {
+            continue;
+        }
     }
     return {
         title: `Cock Rating Leaderboard. You are on page ${page || 1} of ${Math.floor(ratings.length / 10) + 1}`,
