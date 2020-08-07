@@ -433,6 +433,9 @@ client.on("message", async (message) => {
     else if (command === "crlb") {
         await lbs_1.cockratingLB(message, client, args);
     }
+    else if (command === "lb") {
+        await lbs_1.winningLB(message, client, args);
+    }
     else if (command === "stats") {
         await user_1.stats(message, client);
     }

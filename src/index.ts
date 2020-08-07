@@ -70,7 +70,7 @@ import {
   QualChannelCreation,
 } from "./commands/challonge";
 import { verify } from "./misc/verify";
-import { cockratingLB } from "./misc/lbs";
+import { cockratingLB, winningLB } from "./misc/lbs";
 import { createmodprofile, viewmodprofile, modLB } from "./misc/modprofiles";
 import { getRandomTemplateList } from "./misc/randomtemp";
 
@@ -604,6 +604,10 @@ client.on("message", async message => {
 
   else if (command === "crlb") {
     await cockratingLB(message, client, args)
+  }
+
+  else if(command === "lb"){
+    await winningLB(message, client, args)
   }
 
   else if (command === "stats") {

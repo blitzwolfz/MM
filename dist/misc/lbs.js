@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.cockratingLB = void 0;
+exports.winningLB = exports.cockratingLB = void 0;
 const db_1 = require("./db");
 const utils_1 = require("./utils");
 async function cockratingLB(message, client, args) {
@@ -41,6 +41,49 @@ async function ratingslistEmbed(page = 1, client, ratings) {
         description: fields.length === 0 ?
             `There are no cockratings` :
             `Total Cock Ratings: ${ratings.length}`,
+        fields,
+        color: "#d7be26",
+        timestamp: new Date()
+    };
+}
+async function winningLB(message, client, args) {
+    let page = parseInt(args[0]) || 1;
+    let ratings = await db_1.getAllProfiles();
+    const m = (await message.channel.send({ embed: await winlistEmbed(page, client, ratings) }));
+    await m.react("⬅");
+    await m.react("➡");
+    const backwards = m.createReactionCollector(utils_1.backwardsFilter, { time: 100000 });
+    const forwards = m.createReactionCollector(utils_1.forwardsFilter, { time: 100000 });
+    backwards.on('collect', async () => {
+        m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
+        m.edit({ embed: await winlistEmbed(--page, client, ratings) });
+    });
+    forwards.on('collect', async () => {
+        m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
+        m.edit({ embed: await winlistEmbed(++page, client, ratings) });
+    });
+}
+exports.winningLB = winningLB;
+async function winlistEmbed(page = 1, client, ratings) {
+    page = page < 1 ? 1 : page;
+    const fields = [];
+    let index = (0 + page - 1) * 10;
+    for (let i = index; i < index + 10; i++) {
+        try {
+            fields.push({
+                name: `${i + 1}) ${await (await client.users.fetch(ratings[i]._id)).username}`,
+                value: `Wins: ${ratings[i].wins}\nLoss: ${ratings[i].wins}`
+            });
+        }
+        catch {
+            continue;
+        }
+    }
+    return {
+        title: `Wins Leaderboard. You are on page ${page || 1} of ${Math.floor(ratings.length / 10) + 1}`,
+        description: fields.length === 0 ?
+            `There are no users` :
+            `Total users: ${ratings.length}`,
         fields,
         color: "#d7be26",
         timestamp: new Date()

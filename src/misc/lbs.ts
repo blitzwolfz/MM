@@ -1,6 +1,6 @@
 import * as Discord from "discord.js";
-import { getAllCockratings } from "./db";
-import { cockratingInterface } from "./struct";
+import { getAllCockratings, getAllProfiles } from "./db";
+import { cockratingInterface, user } from "./struct";
 import { backwardsFilter, forwardsFilter } from "./utils";
 
 
@@ -53,6 +53,61 @@ async function ratingslistEmbed(page: number = 1, client: Discord.Client, rating
         description: fields.length === 0 ?
             `There are no cockratings` :
             `Total Cock Ratings: ${ratings.length}`,
+        fields,
+        color: "#d7be26",
+        timestamp: new Date()
+    };
+}
+
+
+export async function winningLB(message: Discord.Message, client: Discord.Client, args: string[]) {
+    let page: number = parseInt(args[0]) || 1
+    let ratings = await getAllProfiles()
+    const m = <Discord.Message>(await message.channel.send({ embed: await winlistEmbed(page!, client, ratings) }));
+    await m.react("⬅")
+    await m.react("➡");
+
+    const backwards = m.createReactionCollector(backwardsFilter, { time: 100000 });
+    const forwards = m.createReactionCollector(forwardsFilter, { time: 100000 });
+
+    backwards.on('collect', async () => {
+        m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
+        m.edit({ embed: await winlistEmbed(--page, client, ratings)});
+    });
+    forwards.on('collect', async () => {
+        m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
+        m.edit({ embed: await winlistEmbed(++page, client, ratings) });
+    });
+}
+
+async function winlistEmbed(page: number = 1, client: Discord.Client, ratings: user[]){
+
+    //let signup = await getSignups()
+    //let guild = client.guilds.cache.get("719406444109103117")
+
+    page = page < 1 ? 1 : page;
+    const fields = [];
+    let index = (0 + page - 1) * 10
+    for (let i = index; i < index + 10; i++){
+
+        try{
+            fields.push({
+                name: `${i+1}) ${await (await client.users.fetch(ratings[i]._id)).username}`,
+                value: `Wins: ${ratings[i].wins}\nLoss: ${ratings[i].wins}`
+            });
+        }
+        catch{
+            continue;
+        }
+
+    }
+
+
+    return {
+        title: `Wins Leaderboard. You are on page ${page! || 1} of ${Math.floor(ratings.length / 10) + 1}`,
+        description: fields.length === 0 ?
+            `There are no users` :
+            `Total users: ${ratings.length}`,
         fields,
         color: "#d7be26",
         timestamp: new Date()
