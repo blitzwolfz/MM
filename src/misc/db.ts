@@ -188,7 +188,7 @@ export async function updateCockrating(cockratingForm: cockratingInterface): Pro
 }
 
 export async function getAllCockratings(): Promise<cockratingInterface[]>{
-    return await client.db(process.env.DBNAME).collection("cockrating").find({}).toArray();
+    return await client.db(process.env.DBNAME).collection("cockrating").find({}).sort({num:-1}).toArray();
 }
 
 /*Mod profiles*/

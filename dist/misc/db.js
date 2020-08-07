@@ -192,7 +192,7 @@ async function updateCockrating(cockratingForm) {
 }
 exports.updateCockrating = updateCockrating;
 async function getAllCockratings() {
-    return await client.db(process.env.DBNAME).collection("cockrating").find({}).toArray();
+    return await client.db(process.env.DBNAME).collection("cockrating").find({}).sort({ num: -1 }).toArray();
 }
 exports.getAllCockratings = getAllCockratings;
 async function getModProfile(_id) {

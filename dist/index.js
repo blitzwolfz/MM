@@ -88,7 +88,6 @@ client.on("guildMemberAdd", async function (member) {
     console.log(`a user joins a guild: ${(_b = member.user) === null || _b === void 0 ? void 0 : _b.username}`);
 });
 client.on("messageReactionAdd", async function (messageReaction, user) {
-    var _a, _b;
     if (user.bot)
         return;
     if (messageReaction.emoji.name === '🅰️' || messageReaction.emoji.name === '🅱️' && user.id !== "722303830368190485") {
@@ -128,7 +127,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
                 await messageReaction.fetch();
             if (messageReaction.message.partial)
                 await messageReaction.message.fetch();
-            let id = (_a = client.channels.cache.get(messageReaction.message.channel.id)) === null || _a === void 0 ? void 0 : _a.id;
+            let id = messageReaction.message.channel.id;
             if (match.channelid === id) {
                 if (user.id === match.p1.userid || user.id === match.p2.userid || user.id === "239516219445608449") {
                     if (messageReaction.emoji.name === utils_1.emojis[1]) {
@@ -197,7 +196,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
     }
     if (quals) {
         for (const match of quals) {
-            let id = (_b = client.channels.cache.get(messageReaction.message.channel.id)) === null || _b === void 0 ? void 0 : _b.id;
+            let id = messageReaction.message.channel.id;
             if (match.channelid === id) {
                 if (messageReaction.partial)
                     await messageReaction.fetch();
@@ -290,6 +289,7 @@ client.on("message", async (message) => {
     if (command === "s") {
         await start_1.qualrunning(client);
         await start_1.running(client);
+        (await client.channels.cache.get("734075282708758540")).send(`ok`);
     }
     else if (command === "ping") {
         const m = await message.channel.send("Ping?");
@@ -556,6 +556,5 @@ client.on("message", async (message) => {
         }
         await card_1.vs(message.channel.id, client, users);
     }
-    (await client.channels.cache.get("734075282708758540")).send(`ok`);
 });
 client.login(process.env.TOKEN);

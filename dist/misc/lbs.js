@@ -6,7 +6,6 @@ const utils_1 = require("./utils");
 async function cockratingLB(message, client, args) {
     let page = parseInt(args[0]) || 1;
     let ratings = await db_1.getAllCockratings();
-    ratings.sort((a, b) => (b.num) - (a.num));
     const m = (await message.channel.send({ embed: await ratingslistEmbed(page, client, ratings) }));
     await m.react("⬅");
     await m.react("➡");
