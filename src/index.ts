@@ -147,6 +147,7 @@ client.on("guildMemberAdd", async function (member) {
 });
 
 client.on("messageReactionAdd", async function (messageReaction, user) {
+  //console.log(messageReaction.message.member!.roles.cache.has('719936221572235295'))
   if (user.bot) return;
 
   // if(messageReaction.emoji.name === '🤏' && user.id !== "722303830368190485") {
@@ -157,13 +158,16 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
   // }
 
   if(messageReaction.emoji.name === '🅰️' || messageReaction.emoji.name === '🅱️' && user.id !== "722303830368190485") {
+    //messageReaction.message.channel.send(user.client.guilds.cache.get(messageReaction.message.guild!.id)!.roles.cache.has("719936221572235295"))
 
-      if (messageReaction.partial) await messageReaction.fetch();
-      if (messageReaction.message.partial) await messageReaction.message.fetch();
+    if (messageReaction.partial) await messageReaction.fetch();
+    if (messageReaction.message.partial) await messageReaction.message.fetch();
 
-      if (!messageReaction.message.member!.roles.cache.has('719936221572235295')){
-        await messageReaction.users.remove(user.id)
-      }
+    if (user.client.guilds.cache
+      .get(messageReaction.message.guild!.id)!
+      .members.cache.get(user.id)!
+      .roles.cache.has("719936221572235295") 
+      === true){
 
       if(messageReaction.emoji.name === '🅰️'){
 
@@ -184,6 +188,13 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
         await messageReaction.users.remove(user.id)
         
       }
+    }
+    
+    else{
+      await messageReaction.users.remove(user.id)
+      await user.send("No.")
+    }
+
 
   }
 
@@ -390,29 +401,11 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
 client.on("message", async message => {
   //const gamemaster = message.guild.roles.get("719936221572235295");
 
-  const prefix = process.env.PREFIX!;
-  // if(message.author.id === "720229743974285312"){
-  //   message.channel.send("")
-  // }
-
-  // if(message.content.includes("<@&731568704499875932>")){
-  //   if (!message.member!.roles.cache.has('719936221572235295')){
-  //     return
-  //   }
-    
-  //   else{
-  //     await updateModProfile(message.author.id, "modactions", 1)
-  //   }
-
-  // }
-
-
-
-  if (message.content.indexOf(prefix) !== 0 || message.author.bot) {
+  if (message.content.indexOf(process.env.PREFIX!) !== 0 || message.author.bot) {
     if (message.author.id !== "688558229646475344") return;
   }
 
-  var args: Array<string> = message.content.slice(prefix.length).trim().split(/ +/g);
+  var args: Array<string> = message.content.slice(process.env.PREFIX!.length).trim().split(/ +/g);
 
   if (!args || args.length === 0) {
     return

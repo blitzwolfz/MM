@@ -88,22 +88,29 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             await messageReaction.fetch();
         if (messageReaction.message.partial)
             await messageReaction.message.fetch();
-        if (!messageReaction.message.member.roles.cache.has('719936221572235295')) {
-            await messageReaction.users.remove(user.id);
+        if (user.client.guilds.cache
+            .get(messageReaction.message.guild.id)
+            .members.cache.get(user.id)
+            .roles.cache.has("719936221572235295")
+            === true) {
+            if (messageReaction.emoji.name === '🅰️') {
+                let id = await (await db_1.getMatch(messageReaction.message.channel.id)).p1.userid;
+                await start_1.splitregular(messageReaction.message, client, id);
+                await db_1.updateModProfile(messageReaction.message.author.id, "modactions", 1);
+                await db_1.updateModProfile(messageReaction.message.author.id, "matchportionsstarted", 1);
+                await messageReaction.users.remove(user.id);
+            }
+            else if (messageReaction.emoji.name === '🅱️') {
+                let id = await (await db_1.getMatch(messageReaction.message.channel.id)).p2.userid;
+                await start_1.splitregular(messageReaction.message, client, id);
+                await db_1.updateModProfile(messageReaction.message.author.id, "modactions", 1);
+                await db_1.updateModProfile(messageReaction.message.author.id, "matchportionsstarted", 1);
+                await messageReaction.users.remove(user.id);
+            }
         }
-        if (messageReaction.emoji.name === '🅰️') {
-            let id = await (await db_1.getMatch(messageReaction.message.channel.id)).p1.userid;
-            await start_1.splitregular(messageReaction.message, client, id);
-            await db_1.updateModProfile(messageReaction.message.author.id, "modactions", 1);
-            await db_1.updateModProfile(messageReaction.message.author.id, "matchportionsstarted", 1);
+        else {
             await messageReaction.users.remove(user.id);
-        }
-        else if (messageReaction.emoji.name === '🅱️') {
-            let id = await (await db_1.getMatch(messageReaction.message.channel.id)).p2.userid;
-            await start_1.splitregular(messageReaction.message, client, id);
-            await db_1.updateModProfile(messageReaction.message.author.id, "modactions", 1);
-            await db_1.updateModProfile(messageReaction.message.author.id, "matchportionsstarted", 1);
-            await messageReaction.users.remove(user.id);
+            await user.send("No.");
         }
     }
     if (!utils_1.emojis.includes(messageReaction.emoji.name))
@@ -264,12 +271,11 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
 });
 client.on("message", async (message) => {
     var _a, _b, _c, _d;
-    const prefix = process.env.PREFIX;
-    if (message.content.indexOf(prefix) !== 0 || message.author.bot) {
+    if (message.content.indexOf(process.env.PREFIX) !== 0 || message.author.bot) {
         if (message.author.id !== "688558229646475344")
             return;
     }
-    var args = message.content.slice(prefix.length).trim().split(/ +/g);
+    var args = message.content.slice(process.env.PREFIX.length).trim().split(/ +/g);
     if (!args || args.length === 0) {
         return;
     }
