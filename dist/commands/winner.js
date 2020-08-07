@@ -19,67 +19,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.qualend = exports.end = exports.endmatch = void 0;
+exports.qualend = exports.end = void 0;
 const discord = __importStar(require("discord.js"));
 const db_1 = require("../misc/db");
 const card_1 = require("./card");
-async function endmatch(message, client) {
-    let matches = await db_1.getActive();
-    for (const match of matches) {
-        let user1 = (await client.users.fetch(match.p1.userid));
-        let user2 = (await client.users.fetch(match.p2.userid));
-        let channelid = client.channels.cache.get(match.channelid);
-        if (message.channel.id === channelid.id) {
-            if (match.votingperiod) {
-                if (match.p1.votes > match.p2.votes) {
-                    let embed = new discord.MessageEmbed()
-                        .setColor("#d7be26")
-                        .setTitle(`Match between ${user1.username} and ${user2.username}`)
-                        .setDescription(`<@${user1.id}> has won!\n The final votes where ${match.p1.votes} to ${match.p2.votes}\n${user1.username} won with image A`)
-                        .setTimestamp();
-                    db_1.updateProfile(user1.id, "wins", 1);
-                    db_1.updateProfile(user2.id, "loss", 1);
-                    channelid.send(embed);
-                    await user1.send(`You won with ${match.p1.votes}!! The final votes were ${match.p1.votes} to ${match.p2.votes}`);
-                    await user2.send(`You lost, and your meme got ${match.p2.votes}. The final votes were ${match.p1.votes} to ${match.p2.votes}`);
-                }
-                else if (match.p1.votes < match.p2.votes) {
-                    let embed = new discord.MessageEmbed()
-                        .setTitle(`Match between ${user1.username} and ${user2.username}`)
-                        .setColor("#d7be26")
-                        .setDescription(`<@${user2.id}> has won!\n The final votes where ${match.p1.votes} to ${match.p2.votes}\n${user2.username} won with image B`)
-                        .setTimestamp();
-                    db_1.updateProfile(user2.id, "wins", 1);
-                    db_1.updateProfile(user1.id, "loss", 1);
-                    channelid.send(embed);
-                    await user2.send(`You won with ${match.p1.votes}!! The final votes were ${match.p1.votes} to ${match.p2.votes}`);
-                    await user1.send(`You lost, and your meme got ${match.p1.votes}. The final votes were ${match.p1.votes} to ${match.p2.votes}`);
-                }
-                else if (match.p1.votes === match.p2.votes) {
-                    let embed = new discord.MessageEmbed()
-                        .setColor("#d7be26")
-                        .setTitle(`Match between ${user1.username} and ${user2.username}`)
-                        .setDescription(`Both users have come to a draw.\nPlease find a new time for your rematch.`)
-                        .setTimestamp();
-                    channelid.send(embed);
-                }
-                await db_1.deleteActive(match);
-                break;
-            }
-            else {
-                let embed = new discord.MessageEmbed()
-                    .setTitle(`Match between ${user1.username} and ${user2.username}`)
-                    .setColor("#d7be26")
-                    .setDescription(`Match has ended early before voting period.\nPlease contact mod for information`)
-                    .setTimestamp();
-                channelid.send(embed);
-                await db_1.deleteActive(match);
-                break;
-            }
-        }
-    }
-}
-exports.endmatch = endmatch;
 async function end(client, id) {
     let match = await db_1.getMatch(id);
     console.log(match);

@@ -91,6 +91,29 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
     var _a, _b;
     if (user.bot)
         return;
+    if (messageReaction.emoji.name === '🅰️' || messageReaction.emoji.name === '🅱️' && user.id !== "722303830368190485") {
+        if (messageReaction.partial)
+            await messageReaction.fetch();
+        if (messageReaction.message.partial)
+            await messageReaction.message.fetch();
+        if (!messageReaction.message.member.roles.cache.has('719936221572235295')) {
+            await messageReaction.users.remove(user.id);
+        }
+        if (messageReaction.emoji.name === '🅰️') {
+            let id = await (await db_1.getMatch(messageReaction.message.channel.id)).p1.userid;
+            await start_1.splitregular(messageReaction.message, client, id);
+            await db_1.updateModProfile(messageReaction.message.author.id, "modactions", 1);
+            await db_1.updateModProfile(messageReaction.message.author.id, "matchportionsstarted", 1);
+            await messageReaction.users.remove(user.id);
+        }
+        else if (messageReaction.emoji.name === '🅱️') {
+            let id = await (await db_1.getMatch(messageReaction.message.channel.id)).p2.userid;
+            await start_1.splitregular(messageReaction.message, client, id);
+            await db_1.updateModProfile(messageReaction.message.author.id, "modactions", 1);
+            await db_1.updateModProfile(messageReaction.message.author.id, "matchportionsstarted", 1);
+            await messageReaction.users.remove(user.id);
+        }
+    }
     if (!utils_1.emojis.includes(messageReaction.emoji.name))
         return;
     console.log(`a reaction is added to a message`);
@@ -250,10 +273,6 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
 client.on("message", async (message) => {
     var _a, _b, _c, _d;
     const prefix = process.env.PREFIX;
-    if (message.content.includes("!s")) {
-        await start_1.qualrunning(client);
-        await start_1.running(client);
-    }
     if (message.content.indexOf(prefix) !== 0 || message.author.bot) {
         if (message.author.id !== "688558229646475344")
             return;
@@ -268,7 +287,11 @@ client.on("message", async (message) => {
         return;
     }
     ;
-    if (command === "ping") {
+    if (command === "s") {
+        await start_1.qualrunning(client);
+        await start_1.running(client);
+    }
+    else if (command === "ping") {
         const m = await message.channel.send("Ping?");
         await m.edit(`Latency is ${m.createdTimestamp - message.createdTimestamp}ms. Discord API Latency is ${Math.round(client.ws.ping)}ms`);
     }
@@ -447,7 +470,7 @@ client.on("message", async (message) => {
     else if (command === "end") {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
-        await winner_1.endmatch(message, client);
+        await winner_1.end(client, message.channel.id);
     }
     else if (command === "modhelp") {
         await message.channel.send({ embed: help_1.ModHelp });

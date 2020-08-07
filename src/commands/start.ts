@@ -557,8 +557,8 @@ export async function splitqual(client: discord.Client, message: discord.Message
     }
 }
 
-export async function splitregular(message: discord.Message, client: discord.Client) {
-    let user = await (client.users.fetch(message.mentions!.users!.first()!.id));
+export async function splitregular(message: discord.Message, client: discord.Client, ...userid:string[]) {
+    let user = await (client.users.fetch(userid[0]) || client.users.fetch(message.mentions!.users!.first()!.id));
     let matches: activematch[] = await getActive()
 
     for (let match of matches) {
@@ -717,7 +717,10 @@ export async function startregularsplit(message: discord.Message, client: discor
 
 
 
-    message.channel.send({ embed })
+    message.channel.send({ embed }).then(async message => {
+        await message.react('🅰️')
+        await message.react('🅱️')
+    })
 
     newmatch.template = rantemp.url
     await insertActive(newmatch)

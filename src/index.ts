@@ -19,7 +19,7 @@ import {
   splitregular,
   reload,
 } from "./commands/start";
-import { endmatch, qualend } from "./commands/winner";
+import { qualend, end } from "./commands/winner";
 import { vs } from "./commands/card";
 import { getUser, hasthreevotes, emojis, removethreevotes } from "./misc/utils";
 import {
@@ -156,6 +156,37 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
   //   await m.edit("yes")
   // }
 
+  if(messageReaction.emoji.name === '🅰️' || messageReaction.emoji.name === '🅱️' && user.id !== "722303830368190485") {
+
+      if (messageReaction.partial) await messageReaction.fetch();
+      if (messageReaction.message.partial) await messageReaction.message.fetch();
+
+      if (!messageReaction.message.member!.roles.cache.has('719936221572235295')){
+        await messageReaction.users.remove(user.id)
+      }
+
+      if(messageReaction.emoji.name === '🅰️'){
+
+        let id = await (await getMatch(messageReaction.message.channel.id)).p1.userid
+        await splitregular(messageReaction.message, client, id)
+        await updateModProfile(messageReaction.message.author.id, "modactions", 1)
+        await updateModProfile(messageReaction.message.author.id, "matchportionsstarted", 1)
+        await messageReaction.users.remove(user.id)
+
+      }
+      
+      else if(messageReaction.emoji.name === '🅱️'){
+
+        let id = await (await getMatch(messageReaction.message.channel.id)).p2.userid
+        await splitregular(messageReaction.message, client, id)
+        await updateModProfile(messageReaction.message.author.id, "modactions", 1)
+        await updateModProfile(messageReaction.message.author.id, "matchportionsstarted", 1)
+        await messageReaction.users.remove(user.id)
+        
+      }
+
+  }
+
   if (!emojis.includes(messageReaction.emoji.name)) return;
 
   console.log(`a reaction is added to a message`);
@@ -177,13 +208,12 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
       if (messageReaction.message.partial) await messageReaction.message.fetch();
 
 
-      let id = client.channels.cache.get(messageReaction.message.channel.id)?.id
+      let id = messageReaction.message.channel.id
 
       if (match.channelid === id) {
 
         if (user.id === match.p1.userid || user.id === match.p2.userid || user.id === "239516219445608449") {
           if (messageReaction.emoji.name === emojis[1]) {
-            //await messageReaction.message.react(emojis[1])
             await messageReaction.users.remove(user.id)
             return await user.send("Can't vote on your own match")
           }
@@ -263,7 +293,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
   if (quals) {
     for (const match of quals) {
 
-      let id = client.channels.cache.get(messageReaction.message.channel.id)?.id
+      let id = messageReaction.message.channel.id
       if (match.channelid === id) {
 
         if (messageReaction.partial) await messageReaction.fetch();
@@ -350,7 +380,10 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
         await updatetempStruct(temp._id, temp)
         //await messageReaction.message.delete()
       }
-    }}
+    }
+  }
+
+
 
 });
 
@@ -373,10 +406,7 @@ client.on("message", async message => {
 
   // }
 
-  if(message.content.includes("!s")){
-    await qualrunning(client);
-    await running(client)
-  }
+
 
   if (message.content.indexOf(prefix) !== 0 || message.author.bot) {
     if (message.author.id !== "688558229646475344") return;
@@ -396,7 +426,12 @@ client.on("message", async message => {
     return
   };
 
-  if (command === "ping") {
+  if(command === "s"){
+    await qualrunning(client);
+    await running(client)
+  }
+
+  else if (command === "ping") {
     const m: Discord.Message = await message.channel.send("Ping?") as Discord.Message;
     await m.edit(`Latency is ${m.createdTimestamp - message.createdTimestamp}ms. Discord API Latency is ${Math.round(client.ws.ping)}ms`);
   }
@@ -599,11 +634,8 @@ client.on("message", async message => {
   }
 
   else if (command === "end") {
-    // if (message.author.id !== "239516219445608449"){
-    //   return
-    // }
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
-    await endmatch(message, client)
+    await end(client, message.channel.id)
   }
 
   else if (command === "modhelp") {

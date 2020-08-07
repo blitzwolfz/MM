@@ -381,8 +381,8 @@ async function splitqual(client, message) {
     }
 }
 exports.splitqual = splitqual;
-async function splitregular(message, client) {
-    let user = await (client.users.fetch(message.mentions.users.first().id));
+async function splitregular(message, client, ...userid) {
+    let user = await (client.users.fetch(userid[0]) || client.users.fetch(message.mentions.users.first().id));
     let matches = await db_1.getActive();
     for (let match of matches) {
         if (match.split) {
@@ -501,7 +501,10 @@ async function startregularsplit(message, client) {
         .setColor("#d7be26")
         .setDescription(`<@${user1.id}> and <@${user2.id}> your match has been split.\nContact mods to start your portion\nUse ${`!submit`} to submit`)
         .setTimestamp();
-    message.channel.send({ embed });
+    message.channel.send({ embed }).then(async (message) => {
+        await message.react('🅰️');
+        await message.react('🅱️');
+    });
     newmatch.template = rantemp.url;
     await db_1.insertActive(newmatch);
     await db_1.deletetempStruct(rantemp._id);
