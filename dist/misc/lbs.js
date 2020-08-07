@@ -49,22 +49,22 @@ async function ratingslistEmbed(page = 1, client, ratings) {
 async function winningLB(message, client, args) {
     let page = parseInt(args[0]) || 1;
     let ratings = await db_1.getAllProfiles();
-    const m = (await message.channel.send({ embed: await winlistEmbed(page, client, ratings) }));
+    const m = (await message.channel.send({ embed: await winlistEmbed(page, client, ratings, message.author.id) }));
     await m.react("⬅");
     await m.react("➡");
     const backwards = m.createReactionCollector(utils_1.backwardsFilter, { time: 100000 });
     const forwards = m.createReactionCollector(utils_1.forwardsFilter, { time: 100000 });
     backwards.on('collect', async () => {
         m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
-        m.edit({ embed: await winlistEmbed(--page, client, ratings) });
+        m.edit({ embed: await winlistEmbed(--page, client, ratings, message.author.id) });
     });
     forwards.on('collect', async () => {
         m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
-        m.edit({ embed: await winlistEmbed(++page, client, ratings) });
+        m.edit({ embed: await winlistEmbed(++page, client, ratings, message.author.id) });
     });
 }
 exports.winningLB = winningLB;
-async function winlistEmbed(page = 1, client, ratings) {
+async function winlistEmbed(page = 1, client, ratings, ...rest) {
     page = page < 1 ? 1 : page;
     const fields = [];
     let index = (0 + page - 1) * 10;
@@ -72,7 +72,8 @@ async function winlistEmbed(page = 1, client, ratings) {
         try {
             fields.push({
                 name: `${i + 1}) ${await (await client.users.fetch(ratings[i]._id)).username}`,
-                value: `Wins: ${ratings[i].wins}\nLoss: ${ratings[i].wins}`
+                value: `Wins: ${ratings[i].wins}\n
+                Loss: ${ratings[i].loss}\n`
             });
         }
         catch {
@@ -81,9 +82,7 @@ async function winlistEmbed(page = 1, client, ratings) {
     }
     return {
         title: `Wins Leaderboard. You are on page ${page || 1} of ${Math.floor(ratings.length / 10) + 1}`,
-        description: fields.length === 0 ?
-            `There are no users` :
-            `Total users: ${ratings.length}`,
+        description: `Your rank is: ${ratings.findIndex(item => item._id == rest[0]) + 1}`,
         fields,
         color: "#d7be26",
         timestamp: new Date()
