@@ -2,7 +2,7 @@ import * as mongo from "mongodb"
 
 require("dotenv").config();
 
-import { activematch, qualmatch, user, signups, matchlist, verificationform, quallist, cockratingInterface, modprofile } from "./struct";
+import { activematch, qualmatch, user, signups, matchlist, verificationform, quallist, cockratingInterface, modprofile, randomtempstruct } from "./struct";
 
 const MongoClient = mongo.MongoClient
 //const assert = require("assert")
@@ -75,6 +75,10 @@ export async function getSingularQuals(_id:string): Promise<qualmatch>{
 
 export async function addProfile(User:user): Promise<void> {
     await client.db(process.env.DBNAME).collection("users").insertOne(User)!;
+}
+
+export async function getAllProfiles(): Promise<user[]> {
+    return await client.db(process.env.DBNAME).collection("users").find({}).sort({wins: -1}).toArray();
 }
 
 export async function getProfile(_id: string): Promise<user> {
@@ -188,7 +192,7 @@ export async function updateCockrating(cockratingForm: cockratingInterface): Pro
 }
 
 export async function getAllCockratings(): Promise<cockratingInterface[]>{
-    return await client.db(process.env.DBNAME).collection("cockrating").find({}).toArray();
+    return await client.db(process.env.DBNAME).collection("cockrating").find({}).sort({num:-1}).toArray();
 }
 
 /*Mod profiles*/
@@ -218,4 +222,27 @@ export async function updateModProfile(_id:string, field:string, num: number): P
 
 export async function getAllModProfiles(): Promise<modprofile[]>{
     return await client.db(process.env.DBNAME).collection("modprofiles").find({}).toArray();
+}
+
+
+/*Temp struct*/
+
+export async function gettempStruct(_id: string): Promise<randomtempstruct> {
+    return client.db(process.env.DBNAME).collection("tempstruct").findOne({_id:_id})!;
+}
+
+export async function inserttempStruct(struct:randomtempstruct): Promise<void> {
+    await client.db(process.env.DBNAME).collection("tempstruct").insertOne(struct)!;
+}
+
+export async function updatetempStruct(_id:string, struct:randomtempstruct): Promise<void> {
+    await client.db(process.env.DBNAME).collection("tempstruct").updateOne({_id}, {$set: struct})!;
+}
+
+export async function deletetempStruct(_id:string): Promise<void>{
+    await client.db(process.env.DBNAME).collection("tempstruct").deleteOne({_id});
+}
+
+export async function getalltempStructs(): Promise<randomtempstruct[]> {
+    return client.db(process.env.DBNAME).collection("tempstruct").find({}).toArray()!;
 }

@@ -23,13 +23,9 @@ exports.grandwinner = exports.winner = exports.vs = void 0;
 const Canvas = require('canvas');
 const Discord = __importStar(require("discord.js"));
 const prefix = process.env.PREFIX;
-async function vs(message, client, users) {
+async function vs(channelid, client, users) {
     console.log(prefix);
-    var args = message.content.slice(prefix.length).trim().split(/ +/g);
-    console.log(args);
-    if (args.length < 3) {
-        return message.reply("invalid response. Command is `!vs @user1 @user2 `");
-    }
+    let ch = await client.channels.fetch(channelid);
     const canvas = Canvas.createCanvas(1917, 1168);
     const ctx = canvas.getContext('2d');
     let user1 = (await client.users.fetch(users[0]));
@@ -40,7 +36,7 @@ async function vs(message, client, users) {
     await ctx.drawImage(avatar2, ((canvas.width / 2) + 270), 300 - 26, 740, 636);
     await ctx.drawImage(await Canvas.loadImage("newbackground.png"), 0, 0, canvas.width, canvas.height);
     const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'welcome-image.jpg');
-    await message.channel.send(attachment);
+    await ch.send(attachment);
 }
 exports.vs = vs;
 async function winner(client, userid) {

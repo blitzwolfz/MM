@@ -35,6 +35,7 @@ const challonge_1 = require("./commands/challonge");
 const verify_1 = require("./misc/verify");
 const lbs_1 = require("./misc/lbs");
 const modprofiles_1 = require("./misc/modprofiles");
+const randomtemp_1 = require("./misc/randomtemp");
 console.log("Hello World, bot has begun life");
 const express = require('express');
 const app = express();
@@ -71,13 +72,6 @@ client.on('ready', async () => {
     }
     await start_1.running(client);
     await start_1.qualrunning(client);
-    await client.channels.cache.get("722291588922867772").send("<@239516219445608449>", {
-        embed: {
-            description: `Updates/Restart has worked`,
-            color: "#d7be26",
-            timestamp: new Date()
-        }
-    });
     client.user.setActivity(`${process.env.STATUS}`);
 });
 client.on("guildMemberAdd", async function (member) {
@@ -87,14 +81,44 @@ client.on("guildMemberAdd", async function (member) {
     console.log(`a user joins a guild: ${(_b = member.user) === null || _b === void 0 ? void 0 : _b.username}`);
 });
 client.on("messageReactionAdd", async function (messageReaction, user) {
-    var _a, _b;
+    if (user.bot)
+        return;
+    if (messageReaction.emoji.name === '🅰️' || messageReaction.emoji.name === '🅱️' && user.id !== "722303830368190485") {
+        if (messageReaction.partial)
+            await messageReaction.fetch();
+        if (messageReaction.message.partial)
+            await messageReaction.message.fetch();
+        if (user.client.guilds.cache
+            .get(messageReaction.message.guild.id)
+            .members.cache.get(user.id)
+            .roles.cache.has("719936221572235295")
+            === true) {
+            if (messageReaction.emoji.name === '🅰️') {
+                let id = await (await db_1.getMatch(messageReaction.message.channel.id)).p1.userid;
+                await start_1.splitregular(messageReaction.message, client, id);
+                await db_1.updateModProfile(messageReaction.message.author.id, "modactions", 1);
+                await db_1.updateModProfile(messageReaction.message.author.id, "matchportionsstarted", 1);
+                await messageReaction.users.remove(user.id);
+            }
+            else if (messageReaction.emoji.name === '🅱️') {
+                let id = await (await db_1.getMatch(messageReaction.message.channel.id)).p2.userid;
+                await start_1.splitregular(messageReaction.message, client, id);
+                await db_1.updateModProfile(messageReaction.message.author.id, "modactions", 1);
+                await db_1.updateModProfile(messageReaction.message.author.id, "matchportionsstarted", 1);
+                await messageReaction.users.remove(user.id);
+            }
+        }
+        else {
+            await messageReaction.users.remove(user.id);
+            await user.send("No.");
+        }
+    }
     if (!utils_1.emojis.includes(messageReaction.emoji.name))
         return;
     console.log(`a reaction is added to a message`);
-    if (user.bot)
-        return;
     let matches = await db_1.getActive();
     let quals = await db_1.getQuals();
+    let temps = await db_1.getalltempStructs();
     if (matches) {
         for (const match of matches) {
             console.log(match.p1.voters);
@@ -103,9 +127,9 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
                 await messageReaction.fetch();
             if (messageReaction.message.partial)
                 await messageReaction.message.fetch();
-            let id = (_a = client.channels.cache.get(messageReaction.message.channel.id)) === null || _a === void 0 ? void 0 : _a.id;
+            let id = messageReaction.message.channel.id;
             if (match.channelid === id) {
-                if (user.id === match.p1.userid || user.id === match.p2.userid) {
+                if (user.id === match.p1.userid || user.id === match.p2.userid || user.id === "239516219445608449") {
                     if (messageReaction.emoji.name === utils_1.emojis[1]) {
                         await messageReaction.users.remove(user.id);
                         return await user.send("Can't vote on your own match");
@@ -172,7 +196,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
     }
     if (quals) {
         for (const match of quals) {
-            let id = (_b = client.channels.cache.get(messageReaction.message.channel.id)) === null || _b === void 0 ? void 0 : _b.id;
+            let id = messageReaction.message.channel.id;
             if (match.channelid === id) {
                 if (messageReaction.partial)
                     await messageReaction.fetch();
@@ -181,7 +205,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
                 if (utils_1.emojis.includes(messageReaction.emoji.name)) {
                     let i = utils_1.emojis.indexOf(messageReaction.emoji.name);
                     console.log(messageReaction.emoji.name, utils_1.emojis[6]);
-                    if (match.playerids.includes(user.id)) {
+                    if (match.playerids.includes(user.id) || user.id === "239516219445608449") {
                         await messageReaction.users.remove(user.id);
                         return user.send("You can't vote in your own qualifers");
                     }
@@ -213,19 +237,45 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             }
         }
     }
+    if (temps) {
+        for (const temp of temps) {
+            let templatelist = await randomtemp_1.getRandomTemplateList(client);
+            console.log(templatelist, "penis");
+            if (messageReaction.emoji.name === '🌀') {
+                console.log("penis");
+                let random = templatelist[Math.floor(Math.random() * (((templatelist.length - 1) - 1) - 1) + 1)];
+                let embed = new Discord.MessageEmbed()
+                    .setDescription("Random template")
+                    .setImage(random)
+                    .setColor("#d7be26")
+                    .setTimestamp();
+                console.log(await messageReaction.message.id);
+                temp.url = random;
+                await (await client.channels.cache.get("722616679280148504")
+                    .messages.fetch(temp.messageid))
+                    .edit({ embed });
+                await db_1.updatetempStruct(temp._id, temp);
+                await messageReaction.users.remove(user.id);
+            }
+            if (messageReaction.emoji.name === utils_1.emojis[7]) {
+                temp.found = true;
+                await db_1.updatetempStruct(temp._id, temp);
+                await messageReaction.message.delete();
+            }
+            else if (messageReaction.emoji.name === '❌') {
+                temp.time = 121;
+                await db_1.updatetempStruct(temp._id, temp);
+            }
+        }
+    }
 });
 client.on("message", async (message) => {
     var _a, _b, _c, _d;
-    const prefix = process.env.PREFIX;
-    console.log(await db_1.getActive());
-    console.log(await db_1.getQuals());
-    if (message.content.indexOf(prefix) !== 0 || message.author.bot) {
+    if (message.content.indexOf(process.env.PREFIX) !== 0 || message.author.bot) {
         if (message.author.id !== "688558229646475344")
             return;
     }
-    await start_1.qualrunning(client);
-    await start_1.running(client);
-    var args = message.content.slice(prefix.length).trim().split(/ +/g);
+    var args = message.content.slice(process.env.PREFIX.length).trim().split(/ +/g);
     if (!args || args.length === 0) {
         return;
     }
@@ -235,11 +285,17 @@ client.on("message", async (message) => {
         return;
     }
     ;
-    if (command === "ping") {
+    if (command === "s") {
+        await start_1.qualrunning(client);
+        await start_1.running(client);
+        (await client.channels.cache.get("734075282708758540")).send(`ok`);
+    }
+    else if (command === "ping") {
         const m = await message.channel.send("Ping?");
         await m.edit(`Latency is ${m.createdTimestamp - message.createdTimestamp}ms. Discord API Latency is ${Math.round(client.ws.ping)}ms`);
     }
     else if (command === "test") {
+        await message.reply("no").then(async (message) => await message.react('🤏'));
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))
@@ -383,6 +439,9 @@ client.on("message", async (message) => {
     else if (command === "crlb") {
         await lbs_1.cockratingLB(message, client, args);
     }
+    else if (command === "lb") {
+        await lbs_1.winningLB(message, client, args);
+    }
     else if (command === "stats") {
         await user_1.stats(message, client);
     }
@@ -413,7 +472,7 @@ client.on("message", async (message) => {
     else if (command === "end") {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
-        await winner_1.endmatch(message, client);
+        await winner_1.end(client, message.channel.id);
     }
     else if (command === "modhelp") {
         await message.channel.send({ embed: help_1.ModHelp });
@@ -497,9 +556,7 @@ client.on("message", async (message) => {
                 users.push(userid);
             }
         }
-        await card_1.vs(message, client, users);
+        await card_1.vs(message.channel.id, client, users);
     }
-    let awake = client.channels.cache.get("734075282708758540");
-    await awake.send(`ok`);
 });
 client.login(process.env.TOKEN);

@@ -16,9 +16,3 @@ winnercardwithname.png
 winnercard.psd
 
 winnercard.png
-
-src/misc/randomtemp.ts
-
-dist/misc/randomtemp.js
-
-dist/misc/randomtemp.d.ts

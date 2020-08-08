@@ -1,21 +1,81 @@
 import * as Discord from "discord.js";
 require("dotenv").config();
-import { activematch, qualmatch, cockratingInterface } from "./misc/struct"
-import { submit, qualsubmit } from "./commands/submit"
-import { start, running, qualrunning, startqual, startmodqual, splitqual, startregularsplit, splitregular, reload } from "./commands/start";
-import { endmatch, qualend } from "./commands/winner";
+
+import {
+  activematch,
+  qualmatch,
+  cockratingInterface,
+  randomtempstruct,
+} from "./misc/struct";
+import { submit, qualsubmit } from "./commands/submit";
+import {
+  start,
+  running,
+  qualrunning,
+  startqual,
+  startmodqual,
+  splitqual,
+  startregularsplit,
+  splitregular,
+  reload,
+} from "./commands/start";
+import { qualend, end } from "./commands/winner";
 import { vs } from "./commands/card";
 import { getUser, hasthreevotes, emojis, removethreevotes } from "./misc/utils";
-import { ModHelp, UserHelp, ModSignupHelp, ModChallongeHelp } from "./commands/help";
-import { connectToDB, getQuals, getActive, updateActive, updateQuals, deleteSignup, getMatch, getQual, getCockrating, insertCockrating, updateCockrating, updateModProfile } from "./misc/db";
+import {
+  ModHelp,
+  UserHelp,
+  ModSignupHelp,
+  ModChallongeHelp,
+} from "./commands/help";
+
+import {
+  connectToDB,
+  getQuals,
+  getActive,
+  updateActive,
+  updateQuals,
+  deleteSignup,
+  getMatch,
+  getQual,
+  getCockrating,
+  insertCockrating,
+  updateCockrating,
+  updateModProfile,
+  getalltempStructs,
+  updatetempStruct,
+} from "./misc/db";
+
 import { template, approvetemplate } from "./commands/template";
 import { createrUser, stats } from "./commands/user";
-import { signup, startsignup, closesignup, removesignup, reopensignup, activeOffers, matchlistEmbed } from "./commands/signups";
-import { CreateChallongeQualBracket, ChannelCreation, CreateChallongeMatchBracket, matchlistmaker, CreateQualGroups, quallistEmbed, declarequalwinner, GroupSearch, removequalwinner, QualChannelCreation } from "./commands/challonge";
+import {
+  signup,
+  startsignup,
+  closesignup,
+  removesignup,
+  reopensignup,
+  activeOffers,
+  matchlistEmbed,
+} from "./commands/signups";
+import {
+  CreateChallongeQualBracket,
+  ChannelCreation,
+  CreateChallongeMatchBracket,
+  matchlistmaker,
+  CreateQualGroups,
+  quallistEmbed,
+  declarequalwinner,
+  GroupSearch,
+  removequalwinner,
+  QualChannelCreation,
+} from "./commands/challonge";
 import { verify } from "./misc/verify";
-import { cockratingLB } from "./misc/lbs";
+import { cockratingLB, winningLB } from "./misc/lbs";
 import { createmodprofile, viewmodprofile, modLB } from "./misc/modprofiles";
-//import { RandomTemplateFunc } from "./misc/randomtemp";
+import { getRandomTemplateList } from "./misc/randomtemp";
+
+
+
 console.log("Hello World, bot has begun life");
 
 
@@ -67,13 +127,13 @@ client.on('ready', async () => {
 
   await running(client)
   await qualrunning(client)
-  await (<Discord.TextChannel>client.channels.cache.get("722291588922867772")).send("<@239516219445608449>",{
+  /**await (<Discord.TextChannel>client.channels.cache.get("722616679280148504")).send("<@239516219445608449>",{
     embed:{
         description: `Updates/Restart has worked`,
         color:"#d7be26",
         timestamp: new Date()
     }
-  });
+  });**/
   client.user!.setActivity(`${process.env.STATUS}`);
 });
 
@@ -87,15 +147,66 @@ client.on("guildMemberAdd", async function (member) {
 });
 
 client.on("messageReactionAdd", async function (messageReaction, user) {
+  //console.log(messageReaction.message.member!.roles.cache.has('719936221572235295'))
+  if (user.bot) return;
+
+  // if(messageReaction.emoji.name === '🤏' && user.id !== "722303830368190485") {
+  //   await messageReaction.users.remove(user.id)
+  //   await messageReaction.message.react('🌀')
+  //   let m = await messageReaction.message
+  //   await m.edit("yes")
+  // }
+
+  if(messageReaction.emoji.name === '🅰️' || messageReaction.emoji.name === '🅱️' && user.id !== "722303830368190485") {
+    //messageReaction.message.channel.send(user.client.guilds.cache.get(messageReaction.message.guild!.id)!.roles.cache.has("719936221572235295"))
+
+    if (messageReaction.partial) await messageReaction.fetch();
+    if (messageReaction.message.partial) await messageReaction.message.fetch();
+
+    if (user.client.guilds.cache
+      .get(messageReaction.message.guild!.id)!
+      .members.cache.get(user.id)!
+      .roles.cache.has("719936221572235295") 
+      === true){
+
+      if(messageReaction.emoji.name === '🅰️'){
+
+        let id = await (await getMatch(messageReaction.message.channel.id)).p1.userid
+        await splitregular(messageReaction.message, client, id)
+        await updateModProfile(messageReaction.message.author.id, "modactions", 1)
+        await updateModProfile(messageReaction.message.author.id, "matchportionsstarted", 1)
+        await messageReaction.users.remove(user.id)
+
+      }
+      
+      else if(messageReaction.emoji.name === '🅱️'){
+
+        let id = await (await getMatch(messageReaction.message.channel.id)).p2.userid
+        await splitregular(messageReaction.message, client, id)
+        await updateModProfile(messageReaction.message.author.id, "modactions", 1)
+        await updateModProfile(messageReaction.message.author.id, "matchportionsstarted", 1)
+        await messageReaction.users.remove(user.id)
+        
+      }
+    }
+    
+    else{
+      await messageReaction.users.remove(user.id)
+      await user.send("No.")
+    }
+
+
+  }
 
   if (!emojis.includes(messageReaction.emoji.name)) return;
 
   console.log(`a reaction is added to a message`);
   //console.log(messageReaction, user)
-  if (user.bot) return;
   let matches: activematch[] = await getActive();
 
   let quals: qualmatch[] = await getQuals()
+
+  let temps: randomtempstruct[] = await getalltempStructs()
 
   // // //await insertQuals(qualmatches)
   // let qualmatches:qualmatch[];
@@ -108,13 +219,12 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
       if (messageReaction.message.partial) await messageReaction.message.fetch();
 
 
-      let id = client.channels.cache.get(messageReaction.message.channel.id)?.id
+      let id = messageReaction.message.channel.id
 
       if (match.channelid === id) {
 
-        if (user.id === match.p1.userid || user.id === match.p2.userid) {
+        if (user.id === match.p1.userid || user.id === match.p2.userid || user.id === "239516219445608449") {
           if (messageReaction.emoji.name === emojis[1]) {
-            //await messageReaction.message.react(emojis[1])
             await messageReaction.users.remove(user.id)
             return await user.send("Can't vote on your own match")
           }
@@ -194,7 +304,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
   if (quals) {
     for (const match of quals) {
 
-      let id = client.channels.cache.get(messageReaction.message.channel.id)?.id
+      let id = messageReaction.message.channel.id
       if (match.channelid === id) {
 
         if (messageReaction.partial) await messageReaction.fetch();
@@ -204,7 +314,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
           let i = emojis.indexOf(messageReaction.emoji.name)
           console.log(messageReaction.emoji.name, emojis[6])
 
-          if (match.playerids.includes(user.id)) {
+          if (match.playerids.includes(user.id) || user.id === "239516219445608449") {
             await messageReaction.users.remove(user.id)
             return user.send("You can't vote in your own qualifers")
           }
@@ -241,40 +351,61 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
     }
   }
 
+  if (temps){
+
+    for(const temp of temps){
+      let templatelist = await getRandomTemplateList(client)
+      console.log(templatelist, "penis")
+
+      if (messageReaction.emoji.name === '🌀') {  
+        console.log("penis")
+        //let m = await (await messageReaction.message)
+        //console.log(templatelist, "penis")
+        let random:string = templatelist[Math.floor(Math.random() * (((templatelist.length - 1) - 1) - 1) + 1)];
+
+        let embed = new Discord.MessageEmbed()
+        .setDescription("Random template")
+        .setImage(random)
+        .setColor("#d7be26")
+        .setTimestamp()
+        console.log(await messageReaction.message.id)
+
+        temp.url = random
+
+        //await messageReaction.message.edit({embed})
+        await (await (<Discord.TextChannel>client.channels.cache.get("722616679280148504"))
+        .messages.fetch(temp.messageid))
+        .edit({embed})
+        await updatetempStruct(temp._id, temp)
+        await messageReaction.users.remove(user.id)
+      }
+
+      if(messageReaction.emoji.name === emojis[7]){
+        temp.found = true
+        await updatetempStruct(temp._id, temp)
+        await messageReaction.message.delete()
+      }
+
+      else if(messageReaction.emoji.name === '❌'){
+        temp.time = 121
+        await updatetempStruct(temp._id, temp)
+        //await messageReaction.message.delete()
+      }
+    }
+  }
+
+
+
 });
 
 client.on("message", async message => {
   //const gamemaster = message.guild.roles.get("719936221572235295");
 
-  const prefix = process.env.PREFIX!;
-  console.log(await getActive())
-  console.log(await getQuals())
-
-  // if(message.author.id === "720229743974285312"){
-  //   message.channel.send("")
-  // }
-
-  // if(message.content.includes("<@&731568704499875932>")){
-  //   if (!message.member!.roles.cache.has('719936221572235295')){
-  //     return
-  //   }
-    
-  //   else{
-  //     await updateModProfile(message.author.id, "modactions", 1)
-  //   }
-
-  // }
-
-
-  if (message.content.indexOf(prefix) !== 0 || message.author.bot) {
+  if (message.content.indexOf(process.env.PREFIX!) !== 0 || message.author.bot) {
     if (message.author.id !== "688558229646475344") return;
   }
 
-  await qualrunning(client);
-  await running(client)
-
-
-  var args: Array<string> = message.content.slice(prefix.length).trim().split(/ +/g);
+  var args: Array<string> = message.content.slice(process.env.PREFIX!.length).trim().split(/ +/g);
 
   if (!args || args.length === 0) {
     return
@@ -288,35 +419,20 @@ client.on("message", async message => {
     return
   };
 
-  if (command === "ping") {
+  if(command === "s"){
+    await qualrunning(client);
+    await running(client);
+
+    (await <Discord.TextChannel>client.channels.cache.get("734075282708758540")).send(`ok`)
+  }
+
+  else if (command === "ping") {
     const m: Discord.Message = await message.channel.send("Ping?") as Discord.Message;
     await m.edit(`Latency is ${m.createdTimestamp - message.createdTimestamp}ms. Discord API Latency is ${Math.round(client.ws.ping)}ms`);
   }
 
   else if (command === "test") {
-
-    //await message.channel.send([await winner(client, (args[0] || message.author.id || message.mentions!.users!.first()!.id))])
-
-    // await (<Discord.TextChannel>client.channels.cache.get("724827952390340648")).messages.fetch({ limit: 100 }).then(async msg => {
-    //   console.log(msg.map(async m => {
-    //     // console.log(m.url)
-    //     // await message.reply(m.id)
-    //     await (<Discord.TextChannel>message.client.channels.cache.get("724827952390340648")).messages.fetch(m.id).then(async (m2: Discord.Message) => {
-    //       if (m2.attachments.size >= 1) {
-    //         // console.log(m2.attachments.array()[0].url)
-    //         await message.reply(m2.attachments.array()[0].url)
-    //       }
-    //     })
-    //   }
-
-    //   ))
-    //   // await (<Discord.TextChannel>client.channels.cache.get("724827952390340648")).messages.fetch(msg.array()).then(async m => {
-    //   //   console.log(m.attachments.array())
-    //   // });
-    // })
-
-    //await RandomTemplateFunc(message, client).then(async e => await message.reply(e))
-    
+    await message.reply("no").then(async message => await message.react('🤏'))
   }
 
   else if (command === "createqualgroup") {
@@ -483,6 +599,10 @@ client.on("message", async message => {
     await cockratingLB(message, client, args)
   }
 
+  else if(command === "lb"){
+    await winningLB(message, client, args)
+  }
+
   else if (command === "stats") {
     await stats(message, client)
   }
@@ -513,11 +633,8 @@ client.on("message", async message => {
   }
 
   else if (command === "end") {
-    // if (message.author.id !== "239516219445608449"){
-    //   return
-    // }
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
-    await endmatch(message, client)
+    await end(client, message.channel.id)
   }
 
   else if (command === "modhelp") {
@@ -627,13 +744,8 @@ client.on("message", async message => {
         users.push(userid)
       }
     }
-    await vs(message, client, users)
+    await vs(message.channel.id, client, users)
   }
-
-  let awake = <Discord.TextChannel>client.channels.cache.get("734075282708758540")
-
-  await awake.send(`ok`)
-
 });
 
 client.login(process.env.TOKEN);
