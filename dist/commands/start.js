@@ -382,7 +382,7 @@ async function splitqual(client, message) {
 }
 exports.splitqual = splitqual;
 async function splitregular(message, client, ...userid) {
-    let user = await (client.users.fetch(userid[0]) || client.users.fetch(message.mentions.users.first().id));
+    let user = await client.users.fetch(userid[0] || message.mentions.users.first().id);
     let matches = await db_1.getActive();
     for (let match of matches) {
         if (match.split) {

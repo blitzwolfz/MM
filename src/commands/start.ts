@@ -558,7 +558,7 @@ export async function splitqual(client: discord.Client, message: discord.Message
 }
 
 export async function splitregular(message: discord.Message, client: discord.Client, ...userid:string[]) {
-    let user = await (client.users.fetch(userid[0]) || client.users.fetch(message.mentions!.users!.first()!.id));
+    let user = await client.users.fetch(userid[0] || message.mentions!.users!.first()!.id);
     let matches: activematch[] = await getActive()
 
     for (let match of matches) {
