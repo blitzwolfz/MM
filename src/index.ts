@@ -211,7 +211,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
     if (messageReaction.partial) await messageReaction.fetch();
     if (messageReaction.message.partial) await messageReaction.message.fetch();
 
-    if (user.id){ // != match.p1.userid || user.id != match.p2.userid
+    if (user.id != match.p1.userid || user.id != match.p2.userid){ // != match.p1.userid || user.id != match.p2.userid
       if(messageReaction.emoji.name === emojis[0]){
         if(match.p1.voters.includes(user.id)){
           await user.send("You can't vote on the same meme twice")
