@@ -268,16 +268,38 @@ client.on("message", async (message) => {
         const m = await message.channel.send("Ping?");
         await m.edit(`Latency is ${m.createdTimestamp - message.createdTimestamp}ms. Discord API Latency is ${Math.round(client.ws.ping)}ms`);
     }
+    else if (command === "say") {
+        const sayMessage = args.join(" ");
+        if (sayMessage.match(/@everyone/) && !message.member.permissions.has(['MANAGE_MESSAGES'])) {
+            await message.channel.send(`-mute <@${message.author.id}>`);
+            return message.reply("YOU DARE PING EVERYONE!");
+        }
+        message.delete().catch(console.log);
+        message.channel.send(sayMessage);
+    }
     else if (command === "purge" || command === "clear") {
         if (!message.member.permissions.has(['MANAGE_MESSAGES'], true)) {
             return message.reply("you don't have those premissions");
         }
-        const deleteCount = parseInt(args[0], 10) + 1;
-        if (!deleteCount || deleteCount < 1 || deleteCount > 100)
+        console.log(args);
+        const amount = parseInt(args[0]);
+        const user = message.mentions.users.first();
+        if (!amount || amount < 1 || amount > 100)
             return message.reply("Please give a number between 1 to 100");
-        const fetched = await message.channel.messages.fetch({ limit: deleteCount });
-        message.channel.bulkDelete(fetched)
-            .catch(error => message.reply(`Couldn't delete messages because of: ${error}`));
+        await message.channel.messages.fetch({
+            limit: amount
+        })
+            .then(async (messages) => {
+            if (user) {
+                const filterBy = user;
+                let deletemessages = messages.filter(m => m.author.id === filterBy.id).array().slice(0, amount);
+                await message.channel.bulkDelete(deletemessages).catch(error => console.log(error.stack));
+            }
+            else {
+                await message.channel.bulkDelete(messages).catch(error => console.log(error.stack));
+            }
+        });
+        await message.delete();
     }
     else if (command === "test") {
         await message.reply("no").then(async (message) => await message.react('🤏'));
