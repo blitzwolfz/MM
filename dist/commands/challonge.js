@@ -190,7 +190,7 @@ async function ChannelCreation(message, disclient, args) {
     return message.reply("Made all channels");
 }
 exports.ChannelCreation = ChannelCreation;
-async function QualChannelCreation(message, disclient, args) {
+async function QualChannelCreation(message, args) {
     let groups = await db_1.getQuallist();
     console.log(groups.users);
     for (let i = 0; i < groups.users.length; i++) {
@@ -201,7 +201,11 @@ async function QualChannelCreation(message, disclient, args) {
                 if (!category)
                     throw new Error("Category channel does not exist");
                 await channel.setParent(category.id);
-                await channel.send({ embed: await quallistEmbed(message, disclient, [`${i + 1}`]) });
+                let string = "";
+                for (let u of groups.users[i]) {
+                    string += `<@${u}> `;
+                }
+                await channel.send(`${string}, your qualifier has begun. Contact a mod to being your portion!`);
             });
         }
     }

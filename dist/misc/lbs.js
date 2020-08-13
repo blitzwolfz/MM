@@ -72,8 +72,7 @@ async function winlistEmbed(page = 1, client, ratings, ...rest) {
         try {
             fields.push({
                 name: `${i + 1}) ${await (await client.users.fetch(ratings[i]._id)).username}`,
-                value: `Wins: ${ratings[i].wins}\n
-                Loss: ${ratings[i].loss}\n`
+                value: `Wins: ${ratings[i].wins}\nLoss: ${ratings[i].loss}\n`
             });
         }
         catch {

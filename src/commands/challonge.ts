@@ -273,7 +273,7 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
     return message.reply("Made all channels")
 }
 
-export async function QualChannelCreation(message: Discord.Message, disclient: Discord.Client, args: string[]) {
+export async function QualChannelCreation(message: Discord.Message, args: string[]) {
 
     let groups = await getQuallist()
     console.log(groups.users)
@@ -288,8 +288,13 @@ export async function QualChannelCreation(message: Discord.Message, disclient: D
 
                 if (!category) throw new Error("Category channel does not exist");
                 await channel.setParent(category.id);
-                //await channel.lockPermissions()
-                await channel.send({ embed: await quallistEmbed(message, disclient, [`${i+1}`]) })
+                
+                let string = ""
+
+                for (let u of groups.users[i]){
+                    string += `<@${u}> `
+                }
+                await channel.send(`${string}, your qualifier has begun. Contact a mod to being your portion!`)
             });
         }
 

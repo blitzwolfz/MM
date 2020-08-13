@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.indexOf2d = exports.forwardsFilter = exports.backwardsFilter = exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
+exports.dateBuilder = exports.indexOf2d = exports.forwardsFilter = exports.backwardsFilter = exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
 async function getUser(mention) {
     const matches = mention.match(/^<@!?(\d+)>$/);
     if (!matches)
@@ -58,3 +58,15 @@ function indexOf2d(arr, item, searchpos, returnpos) {
     return -1;
 }
 exports.indexOf2d = indexOf2d;
+function dateBuilder() {
+    let d = new Date();
+    let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    let day = days[d.getDay()];
+    let date = d.getDate();
+    console.log(d.getMonth());
+    let month = months[d.getMonth()];
+    let year = d.getFullYear();
+    return `${day}, ${month} ${date} ${year}`;
+}
+exports.dateBuilder = dateBuilder;

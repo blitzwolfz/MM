@@ -14,3 +14,4 @@ export declare const forwardsFilter: (reaction: {
     };
 }, user: Discord.User) => boolean;
 export declare function indexOf2d(arr: any[][], item: any, searchpos: number, returnpos: number): any;
+export declare function dateBuilder(): string;

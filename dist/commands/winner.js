@@ -23,6 +23,7 @@ exports.qualend = exports.end = void 0;
 const discord = __importStar(require("discord.js"));
 const db_1 = require("../misc/db");
 const card_1 = require("./card");
+const utils_1 = require("../misc/utils");
 async function end(client, id) {
     let match = await db_1.getMatch(id);
     console.log(match);
@@ -37,7 +38,7 @@ async function end(client, id) {
             .setTitle(`Match between ${user1.username} and ${user2.username}`)
             .setColor("#d7be26")
             .setDescription(`<@${user2.id}> has won!`)
-            .setTimestamp();
+            .setFooter(utils_1.dateBuilder());
         db_1.updateProfile(user2.id, "wins", 1);
         db_1.updateProfile(user1.id, "loss", 1);
         await channelid.send(embed);
@@ -50,7 +51,7 @@ async function end(client, id) {
             .setTitle(`Match between ${user1.username} and ${user2.username}`)
             .setColor("#d7be26")
             .setDescription(`<@${user1.id}> has won!`)
-            .setTimestamp();
+            .setFooter(utils_1.dateBuilder());
         db_1.updateProfile(user1.id, "wins", 1);
         db_1.updateProfile(user2.id, "loss", 1);
         await channelid.send(embed);
@@ -63,7 +64,7 @@ async function end(client, id) {
             .setTitle(`Match between ${user1.username} and ${user2.username}`)
             .setColor("#d7be26")
             .setDescription(`<@${user1.id}> & ${user2.id}have lost\n for not submitting meme on time`)
-            .setTimestamp();
+            .setFooter(utils_1.dateBuilder());
         await channelid.send(embed);
     }
     else if (match.p1.votes > match.p2.votes) {
@@ -71,7 +72,7 @@ async function end(client, id) {
             .setTitle(`Match between ${user1.username} and ${user2.username}`)
             .setColor("#d7be26")
             .setDescription(`<@${user1.id}> has won with image A!\n The final votes where ${match.p1.votes} to ${match.p2.votes}`)
-            .setTimestamp();
+            .setFooter(utils_1.dateBuilder());
         db_1.updateProfile(user1.id, "wins", 1);
         db_1.updateProfile(user2.id, "loss", 1);
         await channelid.send(embed);
@@ -80,14 +81,14 @@ async function end(client, id) {
             .setColor("#d7be26")
             .setImage(match.p1.memelink)
             .setDescription(`${(await (await channelid.guild.members.fetch(user1.id)).nickname) || await (await client.users.fetch(user1.id)).username} won with ${match.p1.votes} votes!`)
-            .setTimestamp()));
+            .setFooter(utils_1.dateBuilder())));
     }
     else if (match.p1.votes < match.p2.votes) {
         let embed = new discord.MessageEmbed()
             .setTitle(`Match between ${user1.username} and ${user2.username}`)
             .setColor("#d7be26")
             .setDescription(`<@${user2.id}> has won with image B!\n The final votes where ${match.p1.votes} to ${match.p2.votes}`)
-            .setTimestamp();
+            .setFooter(utils_1.dateBuilder());
         db_1.updateProfile(user1.id, "loss", 1);
         db_1.updateProfile(user2.id, "wins", 1);
         await channelid.send(embed);
@@ -96,14 +97,14 @@ async function end(client, id) {
             .setColor("#d7be26")
             .setDescription(`${(await (await channelid.guild.members.fetch(user2.id)).nickname) || await (await client.users.fetch(user2.id)).username} won with ${match.p2.votes} votes!`)
             .setImage(match.p2.memelink)
-            .setTimestamp()));
+            .setFooter(utils_1.dateBuilder())));
     }
     else if (match.p1.votes === match.p2.votes) {
         let embed = new discord.MessageEmbed()
             .setColor("#d7be26")
             .setTitle(`Match between ${user1.username} and ${user2.username}`)
             .setDescription(`Both users have gotten ${match.p1.votes} vote(s). Both users came to a draw.\nPlease find a new time for your rematch.`)
-            .setTimestamp();
+            .setFooter(utils_1.dateBuilder());
         await channelid.send(embed);
     }
     await db_1.deleteActive(match);
