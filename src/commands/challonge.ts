@@ -392,38 +392,38 @@ async function shuffle(a: any[]) {
     return a;
 }
 
-export async function quallistEmbed(message: Discord.Message, client: Discord.Client, args: string[]) {
+// export async function quallistEmbed(message: Discord.Message, client: Discord.Client, args: string[]) {
 
 
-    console.log(args)
-    let signup = await getQuallist()
+//     console.log(args)
+//     let signup = await getQuallist()
 
-    if (!args.length) {
-        return message.reply(`, there are ${signup.users.length} groups`)
-    }
+//     if (!args.length) {
+//         return message.reply(`, there are ${signup.users.length} groups`)
+//     }
 
-    else {
-        let page = parseInt(args[0])
+//     else {
+//         let page = parseInt(args[0])
 
-        page -= 1
+//         page -= 1
 
-        const fields = [];
+//         const fields = [];
 
-        for (let i = 0; i < signup.users[page].length; i++)
-            fields.push({
-                name: `${i + 1}) ${await (await client.users.fetch(signup.users[page][i])).username}`,
-                value: `Userid is: ${signup.users[page][i]}`
-        });
+//         for (let i = 0; i < signup.users[page].length; i++)
+//             fields.push({
+//                 name: `${i + 1}) ${await (await client.users.fetch(signup.users[page][i])).username}`,
+//                 value: `Userid is: ${signup.users[page][i]}`
+//         });
 
-        return {
-            title: `Group ${page += 1}`,
-            description: "Groups for quals",
-            fields,
-            color: "#d7be26",
-            timestamp: new Date()
-        };
-    }
-}
+//         return {
+//             title: `Group ${page += 1}`,
+//             description: "Groups for quals",
+//             fields,
+//             color: "#d7be26",
+//             timestamp: new Date()
+//         };
+//     }
+// }
 
 export async function GroupSearch(message: Discord.Message, client: Discord.Client, args: string[]) {
     let signup = await getQuallist()

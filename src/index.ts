@@ -61,14 +61,13 @@ import {
   CreateChallongeMatchBracket,
   matchlistmaker,
   CreateQualGroups,
-  quallistEmbed,
   declarequalwinner,
   GroupSearch,
   removequalwinner,
   QualChannelCreation,
 } from "./commands/challonge";
 import { verify } from "./misc/verify";
-import { cockratingLB, winningLB } from "./misc/lbs";
+import { cockratingLB, winningLB, quallistGroups } from "./misc/lbs";
 import { createmodprofile, viewmodprofile, modLB, clearmodstats } from "./misc/modprofiles";
 import { getRandomTemplateList } from "./misc/randomtemp";
 
@@ -412,9 +411,9 @@ client.on("message", async message => {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     if (message.channel.id === "722285800225505879" || message.channel.id === "722285842705547305" || message.channel.id === "724839353129369681") return;
 
-    if (!args) return await quallistEmbed(message, client, args)
+    // if (!args) return await quallistEmbed(message, client, args)
 
-    message.channel.send({ embed: await quallistEmbed(message, client, args) })
+    message.channel.send({ embed: await quallistGroups(message, client, args) })
   }
 
   else if (command === "search") {

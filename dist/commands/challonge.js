@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.matchlistmaker = exports.removequalwinner = exports.declarequalwinner = exports.GroupSearch = exports.quallistEmbed = exports.CreateQualGroups = exports.QualChannelCreation = exports.ChannelCreation = exports.CreateChallongeMatchBracket = exports.CreateChallongeQualBracket = void 0;
+exports.matchlistmaker = exports.removequalwinner = exports.declarequalwinner = exports.GroupSearch = exports.CreateQualGroups = exports.QualChannelCreation = exports.ChannelCreation = exports.CreateChallongeMatchBracket = exports.CreateChallongeQualBracket = void 0;
 const Discord = __importStar(require("discord.js"));
 const db_1 = require("../misc/db");
 const utils_1 = require("../misc/utils");
@@ -274,31 +274,6 @@ async function shuffle(a) {
     }
     return a;
 }
-async function quallistEmbed(message, client, args) {
-    console.log(args);
-    let signup = await db_1.getQuallist();
-    if (!args.length) {
-        return message.reply(`, there are ${signup.users.length} groups`);
-    }
-    else {
-        let page = parseInt(args[0]);
-        page -= 1;
-        const fields = [];
-        for (let i = 0; i < signup.users[page].length; i++)
-            fields.push({
-                name: `${i + 1}) ${await (await client.users.fetch(signup.users[page][i])).username}`,
-                value: `Userid is: ${signup.users[page][i]}`
-            });
-        return {
-            title: `Group ${page += 1}`,
-            description: "Groups for quals",
-            fields,
-            color: "#d7be26",
-            timestamp: new Date()
-        };
-    }
-}
-exports.quallistEmbed = quallistEmbed;
 async function GroupSearch(message, client, args) {
     var _a, _b, _c;
     let signup = await db_1.getQuallist();

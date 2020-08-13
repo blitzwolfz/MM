@@ -283,9 +283,7 @@ client.on("message", async (message) => {
             return message.reply("You don't have those premissions");
         if (message.channel.id === "722285800225505879" || message.channel.id === "722285842705547305" || message.channel.id === "724839353129369681")
             return;
-        if (!args)
-            return await challonge_1.quallistEmbed(message, client, args);
-        message.channel.send({ embed: await challonge_1.quallistEmbed(message, client, args) });
+        message.channel.send({ embed: await lbs_1.quallistGroups(message, client, args) });
     }
     else if (command === "search") {
         if (!message.member.roles.cache.has('719936221572235295'))

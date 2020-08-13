@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.winningLB = exports.cockratingLB = void 0;
+exports.quallistGroups = exports.winningLB = exports.cockratingLB = void 0;
 const db_1 = require("./db");
 const utils_1 = require("./utils");
 async function cockratingLB(message, client, args) {
@@ -82,6 +82,49 @@ async function winlistEmbed(page = 1, client, ratings, ...rest) {
     return {
         title: `Wins Leaderboard. You are on page ${page || 1} of ${Math.floor(ratings.length / 10) + 1}`,
         description: `Your rank is: ${ratings.findIndex(item => item._id == rest[0]) + 1}`,
+        fields,
+        color: "#d7be26",
+        timestamp: new Date()
+    };
+}
+async function quallistGroups(message, client, args) {
+    let page = parseInt(args[0]) || 1;
+    let ratings = await db_1.getQuallist();
+    const m = (await message.channel.send({ embed: await quallistEmbed(page, client, ratings) }));
+    await m.react("⬅");
+    await m.react("➡");
+    const backwards = m.createReactionCollector(utils_1.backwardsFilter, { time: 100000 });
+    const forwards = m.createReactionCollector(utils_1.forwardsFilter, { time: 100000 });
+    backwards.on('collect', async () => {
+        m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
+        m.edit({ embed: await quallistEmbed(--page, client, ratings) });
+    });
+    forwards.on('collect', async () => {
+        m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
+        m.edit({ embed: await quallistEmbed(++page, client, ratings) });
+    });
+}
+exports.quallistGroups = quallistGroups;
+async function quallistEmbed(page = 1, client, signup) {
+    page = page < 1 ? 0 : page - 1;
+    const fields = [];
+    let index = page * 10;
+    for (let i = index - 10; i < index; i++) {
+        try {
+            fields.push({
+                name: `${i + 1}) ${await (await client.users.fetch(signup.users[page][i])).username}`,
+                value: `Userid is: ${signup.users[page][i]}`
+            });
+        }
+        catch {
+            continue;
+        }
+    }
+    return {
+        title: `Qualifier Groups ${page || 1} of ${Math.floor(signup.users.length / 10) + 1}`,
+        description: fields.length === 0 ?
+            `There are no groups` :
+            `there are ${signup.users.length} groups`,
         fields,
         color: "#d7be26",
         timestamp: new Date()
