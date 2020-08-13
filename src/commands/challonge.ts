@@ -429,11 +429,12 @@ export async function GroupSearch(message: Discord.Message, client: Discord.Clie
     let signup = await getQuallist()
     let id = (message.mentions?.users?.first()?.id || args[0])
     if (!id) return message.reply("invaild input. Please use User ID or a User mention")
+    
 
     for (let i = 0; i < signup.users.length; i++) {
 
         if (signup.users[i].includes(id)) {
-            return message.reply(`${await (await client.users.fetch(id)).username} is in #group-${i + 1}`)
+            return await message.reply(`${await (await client.users.fetch(id)).username} is in <#${message.guild!.channels.cache.find(channel => channel.name === `group-${i + 1}`)!.id}>`)
         }
     }
 

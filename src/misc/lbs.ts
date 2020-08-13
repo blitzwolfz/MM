@@ -138,10 +138,14 @@ async function quallistEmbed(page: number = 1, client: Discord.Client, signup: q
     //let signup = await getSignups()
     //let guild = client.guilds.cache.get("719406444109103117")
 
-    page = page < 1 ? 0 : page - 1 ;
+    page = page < 0 ? 0 : page - 1 ;
     const fields = [];
     let index = page * 10
-    for (let i = index - 10; i < index; i++){
+    console.log(page)
+    console.log(index)
+    for (let i = 0; i < signup.users[page].length; i++){
+
+        console.log(signup.users[page][i])
 
         try{
             fields.push({
@@ -154,6 +158,8 @@ async function quallistEmbed(page: number = 1, client: Discord.Client, signup: q
         }
 
     }
+
+    console.log(fields)
 
 
     return {

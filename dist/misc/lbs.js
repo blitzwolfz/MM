@@ -106,10 +106,13 @@ async function quallistGroups(message, client, args) {
 }
 exports.quallistGroups = quallistGroups;
 async function quallistEmbed(page = 1, client, signup) {
-    page = page < 1 ? 0 : page - 1;
+    page = page < 0 ? 0 : page - 1;
     const fields = [];
     let index = page * 10;
-    for (let i = index - 10; i < index; i++) {
+    console.log(page);
+    console.log(index);
+    for (let i = 0; i < signup.users[page].length; i++) {
+        console.log(signup.users[page][i]);
         try {
             fields.push({
                 name: `${i + 1}) ${await (await client.users.fetch(signup.users[page][i])).username}`,
@@ -120,6 +123,7 @@ async function quallistEmbed(page = 1, client, signup) {
             continue;
         }
     }
+    console.log(fields);
     return {
         title: `Qualifier Groups ${page || 1} of ${Math.floor(signup.users.length / 10) + 1}`,
         description: fields.length === 0 ?
