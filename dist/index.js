@@ -72,6 +72,13 @@ client.on('ready', async () => {
     }
     await start_1.running(client);
     await start_1.qualrunning(client);
+    await client.channels.cache.get("722616679280148504").send("<@239516219445608449>", {
+        embed: {
+            description: `Updates/Restart has worked`,
+            color: "#d7be26",
+            timestamp: new Date()
+        }
+    });
     client.user.setActivity(`${process.env.STATUS}`);
 });
 client.on("guildMemberAdd", async function (member) {
@@ -373,6 +380,11 @@ client.on("message", async (message) => {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
         await modprofiles_1.modLB(message, client, args);
+    }
+    else if (command === "resetmodprofiles") {
+        if (message.author.id !== "239516219445608449")
+            return message.reply("You don't have those premissions");
+        await modprofiles_1.clearmodstats(message);
     }
     else if (command === "cr" || command === "cockrating") {
         if (!message.member.roles.cache.has('719936221572235295')) {

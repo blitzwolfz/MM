@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.modLB = exports.viewmodprofile = exports.createmodprofile = void 0;
+exports.clearmodstats = exports.modLB = exports.viewmodprofile = exports.createmodprofile = void 0;
 const Discord = __importStar(require("discord.js"));
 const db_1 = require("./db");
 const utils_1 = require("./utils");
@@ -120,3 +120,14 @@ async function modLb(page = 1, client, ratings, args, ...rest) {
         timestamp: new Date()
     };
 }
+async function clearmodstats(message) {
+    let profiles = await db_1.getAllModProfiles();
+    for (let i = 0; i < profiles.length; i++) {
+        profiles[i].matchesstarted = 0;
+        profiles[i].matchportionsstarted = 0;
+        profiles[i].modactions = 0;
+        await db_1.resetModProfile(profiles[i]._id, profiles[i]);
+    }
+    await message.reply("Mod profiles have been cleared");
+}
+exports.clearmodstats = clearmodstats;

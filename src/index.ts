@@ -69,7 +69,7 @@ import {
 } from "./commands/challonge";
 import { verify } from "./misc/verify";
 import { cockratingLB, winningLB } from "./misc/lbs";
-import { createmodprofile, viewmodprofile, modLB } from "./misc/modprofiles";
+import { createmodprofile, viewmodprofile, modLB, clearmodstats } from "./misc/modprofiles";
 import { getRandomTemplateList } from "./misc/randomtemp";
 
 
@@ -125,13 +125,13 @@ client.on('ready', async () => {
 
   await running(client)
   await qualrunning(client)
-  /**await (<Discord.TextChannel>client.channels.cache.get("722616679280148504")).send("<@239516219445608449>",{
+  await (<Discord.TextChannel>client.channels.cache.get("722616679280148504")).send("<@239516219445608449>",{
     embed:{
         description: `Updates/Restart has worked`,
         color:"#d7be26",
         timestamp: new Date()
     }
-  });**/
+  });
   client.user!.setActivity(`${process.env.STATUS}`);
 });
 
@@ -519,6 +519,11 @@ client.on("message", async message => {
   else if(command === "modlb"){
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await modLB(message, client, args)
+  }
+
+  else if (command === "resetmodprofiles"){
+    if (message.author.id !== "239516219445608449") return message.reply("You don't have those premissions")
+    await clearmodstats(message)
   }
 
   else if (command === "cr" || command === "cockrating") {

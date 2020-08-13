@@ -205,7 +205,7 @@ export async function addModProfile(User:modprofile): Promise<void> {
     await client.db(process.env.DBNAME).collection("modprofiles").insertOne(User)!;
 }
 
-export async function updateModProfile(_id:string, field:string, num: number): Promise<void> {
+export async function updateModProfile(_id:string, field:string, num: number, ): Promise<void> {
     
     if(field === "modactions"){
         await client.db(process.env.DBNAME).collection("modprofiles").updateOne({_id:_id}, {$inc:{"modactions":num}})!;
@@ -218,6 +218,10 @@ export async function updateModProfile(_id:string, field:string, num: number): P
     else if(field === "matchportionsstarted"){
         await client.db(process.env.DBNAME).collection("modprofiles").updateOne({_id:_id}, {$inc:{"matchportionsstarted":num}})!;
     }
+}
+
+export async function resetModProfile(_id:string, profile:modprofile){
+    await client.db(process.env.DBNAME).collection("modprofiles").updateOne({_id:_id}, {$set:profile})!;
 }
 
 export async function getAllModProfiles(): Promise<modprofile[]>{

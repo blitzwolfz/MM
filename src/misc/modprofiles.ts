@@ -1,6 +1,6 @@
 import * as Discord from "discord.js";
 import { modprofile } from "./struct";
-import { addModProfile, getModProfile, getAllModProfiles } from "./db";
+import { addModProfile, getModProfile, getAllModProfiles, resetModProfile } from "./db";
 import { backwardsFilter, forwardsFilter } from "./utils";
 
 export async function createmodprofile(message: Discord.Message){
@@ -135,5 +135,23 @@ async function modLb(page: number = 1, client: Discord.Client, ratings: modprofi
         color: "#d7be26",
         timestamp: new Date()
     };
+}
+
+
+export async function clearmodstats(message: Discord.Message){
+
+    let profiles = await getAllModProfiles()
+
+    for(let i = 0; i < profiles.length; i++){
+        profiles[i].matchesstarted = 0
+        profiles[i].matchportionsstarted = 0
+        profiles[i].modactions = 0
+
+
+        await resetModProfile(profiles[i]._id, profiles[i])
+    }
+
+    await message.reply("Mod profiles have been cleared")
+
 }
 
