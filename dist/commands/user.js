@@ -23,20 +23,21 @@ exports.createAtUsermatch = exports.createrUser = exports.stats = void 0;
 const discord = __importStar(require("discord.js"));
 const db_1 = require("../misc/db");
 async function stats(message, client) {
-    var _a;
     let args = message.content.slice(process.env.PREFIX.length).trim().split(/ +/g);
     let user = await db_1.getProfile(args[1] ? (message.mentions.users.first().id) : message.author.id);
-    console.log((_a = client.user) === null || _a === void 0 ? void 0 : _a.avatarURL({ format: 'png' }));
-    console.log(user);
+    let imgurl = args[1] ? (client.users.cache.get(message.mentions.users.first().id).displayAvatarURL()) : message.author.displayAvatarURL();
     if (!user) {
         return message.reply("That user profile does not exist! Please do `!create` to create your own user profile");
     }
     else if (user) {
+        if (imgurl !== user.img) {
+            user.img = imgurl;
+        }
         let UserEmbed = new discord.MessageEmbed()
             .setTitle(`${user.name}`)
-            .setThumbnail(`${user.img}`)
+            .setThumbnail(user.img)
             .setColor("#d7be26")
-            .addFields({ name: 'Total wins', value: `${user.wins}` }, { name: 'Total loss', value: `${user.loss}` }, { name: 'Win/Loss Ratio', value: `${((user.wins / user.loss) * 100 === Infinity ? 1 : (Math.floor(user.wins / user.loss)))} W/L` });
+            .addFields({ name: 'Total wins', value: `${user.wins}` }, { name: 'Total loss', value: `${user.loss}` }, { name: 'Win/Loss Ratio', value: `${(Math.floor(user.wins / user.loss))} W/L` });
         await message.channel.send(UserEmbed);
     }
 }

@@ -274,7 +274,7 @@ async function shuffle(a) {
     }
     return a;
 }
-async function GroupSearch(message, client, args) {
+async function GroupSearch(message, args) {
     var _a, _b, _c;
     let signup = await db_1.getQuallist();
     let id = (((_c = (_b = (_a = message.mentions) === null || _a === void 0 ? void 0 : _a.users) === null || _b === void 0 ? void 0 : _b.first()) === null || _c === void 0 ? void 0 : _c.id) || args[0]);
@@ -282,7 +282,7 @@ async function GroupSearch(message, client, args) {
         return message.reply("invaild input. Please use User ID or a User mention");
     for (let i = 0; i < signup.users.length; i++) {
         if (signup.users[i].includes(id)) {
-            return await message.reply(`${await (await client.users.fetch(id)).username} is in <#${message.guild.channels.cache.find(channel => channel.name === `group-${i + 1}`).id}>`);
+            return await message.reply(`${await (await message.guild.members.cache.get(id)).nickname} is in <#${message.guild.channels.cache.find(channel => channel.name === `group-${i + 1}`).id}>`);
         }
     }
     return message.reply("they are not in a group");
