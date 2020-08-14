@@ -19,7 +19,7 @@
   "homepage": "https://github.com/blitzwolfz/ACERoyale#readme",
   "dependencies": {
     "@types/dotenv": "^8.2.0",
-    "@types/mongodb": "^3.5.23",
+    "@types/mongodb": "^3.5.25",
     "canvas": "^2.6.0",
     "challonge-js": "^1.1.1",
     "discord.js": "^12.2.0",
