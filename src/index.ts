@@ -273,10 +273,10 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
     if (messageReaction.partial) await messageReaction.fetch();
     if (messageReaction.message.partial) await messageReaction.message.fetch();
 
-    // if (match.playerids.includes(user.id) || user.id === "239516219445608449") {
-    //   await messageReaction.users.remove(user.id)
-    //   return user.send("You can't vote in your own qualifers")
-    // }
+    if (match.playerids.includes(user.id)) {
+      await messageReaction.users.remove(user.id)
+      return user.send("You can't vote in your own qualifers")
+    }
 
     if (messageReaction.emoji.name === emojis[6]) {
       match.votes = removethreevotes(match.votes, user.id)

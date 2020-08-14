@@ -185,6 +185,10 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             await messageReaction.fetch();
         if (messageReaction.message.partial)
             await messageReaction.message.fetch();
+        if (match.playerids.includes(user.id)) {
+            await messageReaction.users.remove(user.id);
+            return user.send("You can't vote in your own qualifers");
+        }
         if (messageReaction.emoji.name === utils_1.emojis[6]) {
             match.votes = utils_1.removethreevotes(match.votes, user.id);
             await db_1.updateQuals(match);
