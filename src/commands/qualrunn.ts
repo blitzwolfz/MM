@@ -99,7 +99,11 @@ export async function qualrunn(match: qualmatch, channelid: string, client: disc
                             .setDescription("You failed to submit meme on time")
                             .setColor("#d7be26")
                             .setTimestamp()
-                        await (await client.users.fetch(player.userid)).send(embed2)
+                        
+                        try{
+                            await (await client.users.fetch(player.userid)).send(embed2)
+                        } catch { console.log(Error) }
+                        
                         match.playersdone.push(player.userid)
                         await updateQuals(match)
 

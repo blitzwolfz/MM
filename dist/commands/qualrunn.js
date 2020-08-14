@@ -89,7 +89,12 @@ async function qualrunn(match, channelid, client) {
                             .setDescription("You failed to submit meme on time")
                             .setColor("#d7be26")
                             .setTimestamp();
-                        await (await client.users.fetch(player.userid)).send(embed2);
+                        try {
+                            await (await client.users.fetch(player.userid)).send(embed2);
+                        }
+                        catch {
+                            console.log(Error);
+                        }
                         match.playersdone.push(player.userid);
                         await db_1.updateQuals(match);
                         await channel.send(new discord.MessageEmbed()
