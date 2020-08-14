@@ -97,8 +97,9 @@ async function qualrunn(match, channelid, client) {
                         }
                         match.playersdone.push(player.userid);
                         await db_1.updateQuals(match);
-                        await channel.send(new discord.MessageEmbed()
-                            .setDescription(`<@${player.userid}> has completed their portion`)
+                        await client.channels.cache.get("722616679280148504")
+                            .send(new discord.MessageEmbed()
+                            .setDescription(`<@${player.userid}> has failed to submit a meme`)
                             .setColor("#d7be26")
                             .setTimestamp());
                     }
