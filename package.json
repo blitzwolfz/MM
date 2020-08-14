@@ -20,7 +20,7 @@
   "dependencies": {
     "@types/dotenv": "^8.2.0",
     "@types/mongodb": "^3.5.23",
-    "canvas": "^2.6.0",
+    "canvas": "^2.6.1",
     "challonge-js": "^1.1.1",
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
