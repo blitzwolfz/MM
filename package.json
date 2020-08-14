@@ -22,7 +22,7 @@
     "@types/mongodb": "^3.5.23",
     "canvas": "^2.6.0",
     "challonge-js": "^1.1.1",
-    "discord.js": "^12.2.0",
+    "discord.js": "^12.3.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "mongodb": "^3.5.9",
