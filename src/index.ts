@@ -431,8 +431,6 @@ client.on("message", async message => {
   if(command === "s"){
     await qualrunning(client);
     await running(client);
-
-    (await <Discord.TextChannel>client.channels.cache.get("734075282708758540")).send(`ok`)
   }
 
   else if (command === "ping") {
@@ -836,6 +834,7 @@ client.on("message", async message => {
     }
     await vs(message.channel.id, client, users)
   }
+  (await <Discord.TextChannel>client.channels.cache.get("734075282708758540")).send(`ok`)
 });
 
 client.login(process.env.TOKEN);

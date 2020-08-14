@@ -263,7 +263,6 @@ client.on("message", async (message) => {
     if (command === "s") {
         await start_1.qualrunning(client);
         await start_1.running(client);
-        (await client.channels.cache.get("734075282708758540")).send(`ok`);
     }
     else if (command === "ping") {
         const m = await message.channel.send("Ping?");
@@ -581,5 +580,6 @@ client.on("message", async (message) => {
         }
         await card_1.vs(message.channel.id, client, users);
     }
+    (await client.channels.cache.get("734075282708758540")).send(`ok`);
 });
 client.login(process.env.TOKEN);
