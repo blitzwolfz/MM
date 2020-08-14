@@ -594,6 +594,25 @@ client.on("message", async message => {
     await updateModProfile(message.author.id, "matchesstarted", 1)
   }
 
+  else if (command === "settheme" || command === "themeset"){
+    //let id = message.mentions.channels.first()!.id
+    if(!message.mentions.channels.first()) return message.reply("please, state the channel for the qualifier")
+
+    if(!args[1]) return message.reply("please enter a theme")
+
+    let match = await getQual(message.mentions.channels.first()!.id)
+
+    match.template = args.slice(1).join(" ")
+
+    await (<Discord.TextChannel>client.channels.cache.get("738047732312309870"))
+    .send(`<#${message.channel.id}> theme is ${args.slice(1).join(" ")}`);
+
+    await updateQuals(match)
+
+    await message.reply("Theme has been set!")
+
+  }
+
   else if (command === "approve") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     if (message.channel.id === "722285800225505879" || message.channel.id === "722285842705547305" || message.channel.id === "724839353129369681") return;

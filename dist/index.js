@@ -387,6 +387,18 @@ client.on("message", async (message) => {
         await db_1.updateModProfile(message.author.id, "modactions", 1);
         await db_1.updateModProfile(message.author.id, "matchesstarted", 1);
     }
+    else if (command === "settheme" || command === "themeset") {
+        if (!message.mentions.channels.first())
+            return message.reply("please, state the channel for the qualifier");
+        if (!args[1])
+            return message.reply("please enter a theme");
+        let match = await db_1.getQual(message.mentions.channels.first().id);
+        match.template = args.slice(1).join(" ");
+        await client.channels.cache.get("738047732312309870")
+            .send(`<#${message.channel.id}> theme is ${args.slice(1).join(" ")}`);
+        await db_1.updateQuals(match);
+        await message.reply("Theme has been set!");
+    }
     else if (command === "approve") {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
