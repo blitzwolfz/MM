@@ -3,7 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.qualsubmit = exports.submit = void 0;
 const db_1 = require("../misc/db");
 async function submit(message, client) {
-    let matches = await db_1.getActive();
+    if (message.content.includes("imgur")) {
+        return message.reply("You can't submit imgur links");
+    }
     if (message.attachments.size > 1) {
         return message.reply("You can't submit more than one image");
     }
@@ -16,6 +18,7 @@ async function submit(message, client) {
     else {
         if (message.attachments.array()[0].url.toString().includes("mp4"))
             return message.reply("Video submissions aren't allowed");
+        let matches = await db_1.getActive();
         for (const match of matches) {
             if (match.p1.userid === message.author.id && !match.p1.memedone) {
                 match.p1.memedone = true;
@@ -68,7 +71,9 @@ async function submit(message, client) {
 }
 exports.submit = submit;
 async function qualsubmit(message, client) {
-    let matches = await db_1.getQuals();
+    if (message.content.includes("imgur")) {
+        return message.reply("You can't submit imgur links");
+    }
     if (message.attachments.size > 1) {
         return message.reply("You can't submit more than one image");
     }
@@ -78,7 +83,10 @@ async function qualsubmit(message, client) {
     else if (message.channel.type !== "dm") {
         return message.reply("You didn't not submit this in the DM with the bot.\nPlease delete and try again.");
     }
+    else if (message.attachments.array()[0].url.toString().includes("mp4"))
+        return message.reply("Video submissions aren't allowed");
     else {
+        let matches = await db_1.getQuals();
         for (const match of matches) {
             for (let player of match.players) {
                 if (player.split === true || match.split === false) {

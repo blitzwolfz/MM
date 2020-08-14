@@ -4,7 +4,11 @@ import { updateQuals, updateActive, getActive, getQuals } from "../misc/db";
 
 
 export async function submit(message: Discord.Message, client: Discord.Client) {
-    let matches: activematch[] = await getActive()
+    
+    if(message.content.includes("imgur")){
+        return message.reply("You can't submit imgur links")
+    }
+
     if (message.attachments.size > 1){
         return message.reply("You can't submit more than one image")
     }
@@ -17,8 +21,12 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
         return message.reply("You didn't not submit this in the DM with the bot.\nPlease delete and try again.")
     }
 
+
     else{
         if(message.attachments.array()[0].url.toString().includes("mp4")) return message.reply("Video submissions aren't allowed")
+
+        let matches: activematch[] = await getActive()
+
         for (const match of matches){
             if(match.p1.userid === message.author.id && !match.p1.memedone){
                 match.p1.memedone = true
@@ -81,7 +89,11 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
 
 export async function qualsubmit(message: Discord.Message, client: Discord.Client) {
 
-    let matches: qualmatch[] = await getQuals()
+    
+
+    if(message.content.includes("imgur")){
+        return message.reply("You can't submit imgur links")
+    }
 
     if (message.attachments.size > 1){
         return message.reply("You can't submit more than one image")
@@ -94,8 +106,12 @@ export async function qualsubmit(message: Discord.Message, client: Discord.Clien
     else if(message.channel.type !== "dm"){
         return message.reply("You didn't not submit this in the DM with the bot.\nPlease delete and try again.")
     }
+    
+    else if(message.attachments.array()[0].url.toString().includes("mp4")) return message.reply("Video submissions aren't allowed")
 
     else{
+        let matches: qualmatch[] = await getQuals()
+
         for (const match of matches){
             for(let player of match.players){
                 if(player.split === true || match.split === false){
