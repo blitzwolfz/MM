@@ -395,7 +395,7 @@ client.on("message", async (message) => {
         let match = await db_1.getQual(message.mentions.channels.first().id);
         match.template = args.slice(1).join(" ");
         await client.channels.cache.get("738047732312309870")
-            .send(`<#${message.channel.id}> theme is ${args.slice(1).join(" ")}`);
+            .send(`<#${match.channelid}> theme is ${args.slice(1).join(" ")}`);
         await db_1.updateQuals(match);
         await message.reply("Theme has been set!");
     }

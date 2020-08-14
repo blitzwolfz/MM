@@ -605,7 +605,7 @@ client.on("message", async message => {
     match.template = args.slice(1).join(" ")
 
     await (<Discord.TextChannel>client.channels.cache.get("738047732312309870"))
-    .send(`<#${message.channel.id}> theme is ${args.slice(1).join(" ")}`);
+    .send(`<#${match.channelid}> theme is ${args.slice(1).join(" ")}`);
 
     await updateQuals(match)
 
