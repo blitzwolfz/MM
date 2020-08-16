@@ -1,7 +1,7 @@
 import * as discord from "discord.js"
 // import {getUser} from "../misc/utils"
 // import {prefix} from "../misc/config.json"
-import { activematch} from "../misc/struct"
+import { activematch } from "../misc/struct"
 import { deleteActive, deleteQuals, updateProfile, getSingularQuals, getMatch } from "../misc/db"
 import { winner } from "./card"
 import { dateBuilder } from "../misc/utils"
@@ -183,22 +183,53 @@ export async function qualend(client: discord.Client, id: string) {
 
             let totalvotes:number = 0;
 
+
             for(let votes of match.votes){
                 totalvotes += votes.length
             }
 
-            for (let i = 0; i < match.votes.length; i++)
+            for (let i = 0; i < match.votes.length; i++){
                 fields.push({
                     name: `${await (await client.users.fetch(match.players[i].userid)).username} | Meme #${match.players.indexOf(match.players[i]) + 1}`,
                     //value: `${match.votes[i].length > 0 ? `Came in with ${match.votes[i].length} vote(s)` : `Failed to submit meme`}`
-                    value: `${match.players[i].memedone ? `Finished with ${match.votes[i].length} | ${Math.floor(match.votes[i].length/totalvotes*100)}% of the votes ` : `Failed to submit meme`}`, //`Came in with ${match.votes[i].length}`,
+                    value: `${match.players[i].memedone ? `Finished with ${match.votes[i].length} | Earned: ${Math.floor(match.votes[i].length/totalvotes*100)} points` : `Failed to submit meme`}`, //`Came in with ${match.votes[i].length}`,
                 });
+            }
+
+            var list = [];
+            for (var j = 0; j < match.votes.length; j++) 
+                list.push({'votes': match.votes[j], 'field': fields[j]});
+
+            //2) sort:
+            list.sort(function(a, b) {
+                //ratings.sort((a: modprofile, b: modprofile) => (b.modactions) - (a.modactions));
+                return ((b.votes.length) - (a.votes.length));
+                //Sort could be modified to, for example, sort on the age 
+                // if the name is the same.
+            });
+
+            //3) separate them back out:
+            for (var k = 0; k < list.length; k++) {
+                match.votes[k] = list[k].votes;
+                fields[k] = list[k].field;
+            }
 
             await deleteQuals(match)
 
+            await (await (<discord.TextChannel>client.channels.cache.get("722291182461386804")))
+            .send({
+                embed: {
+                    title: `Votes for ${channel.name} are in!`,
+                    description: `${totalvotes} votes for this qualifier`,
+                    fields,
+                    color: "#d7be26",
+                    timestamp: new Date()
+                }
+            });
+
             return channel.send({
                 embed: {
-                    title: `Votes for this qualifier are in!`,
+                    title: `Votes for ${channel.name} are in!`,
                     description: `${totalvotes} votes for this qualifier`,
                     fields,
                     color: "#d7be26",

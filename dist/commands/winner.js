@@ -157,15 +157,36 @@ async function qualend(client, id) {
             for (let votes of match.votes) {
                 totalvotes += votes.length;
             }
-            for (let i = 0; i < match.votes.length; i++)
+            for (let i = 0; i < match.votes.length; i++) {
                 fields.push({
                     name: `${await (await client.users.fetch(match.players[i].userid)).username} | Meme #${match.players.indexOf(match.players[i]) + 1}`,
-                    value: `${match.players[i].memedone ? `Finished with ${match.votes[i].length} | ${Math.floor(match.votes[i].length / totalvotes * 100)}% of the votes ` : `Failed to submit meme`}`,
+                    value: `${match.players[i].memedone ? `Finished with ${match.votes[i].length} | Earned: ${Math.floor(match.votes[i].length / totalvotes * 100)} points` : `Failed to submit meme`}`,
                 });
+            }
+            var list = [];
+            for (var j = 0; j < match.votes.length; j++)
+                list.push({ 'votes': match.votes[j], 'field': fields[j] });
+            list.sort(function (a, b) {
+                return ((b.votes.length) - (a.votes.length));
+            });
+            for (var k = 0; k < list.length; k++) {
+                match.votes[k] = list[k].votes;
+                fields[k] = list[k].field;
+            }
             await db_1.deleteQuals(match);
+            await (await client.channels.cache.get("722291182461386804"))
+                .send({
+                embed: {
+                    title: `Votes for ${channel.name} are in!`,
+                    description: `${totalvotes} votes for this qualifier`,
+                    fields,
+                    color: "#d7be26",
+                    timestamp: new Date()
+                }
+            });
             return channel.send({
                 embed: {
-                    title: `Votes for this qualifier are in!`,
+                    title: `Votes for ${channel.name} are in!`,
                     description: `${totalvotes} votes for this qualifier`,
                     fields,
                     color: "#d7be26",

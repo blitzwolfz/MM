@@ -9,6 +9,8 @@ export async function qualrunn(match: qualmatch, channelid: string, client: disc
     // let match = await getSingularQuals(channelid)
 
     let channel = <discord.TextChannel>client.channels.cache.get(channelid)
+    console.log((Math.floor(Date.now() / 1000) - match.votetime > 7200))
+    console.log((Math.floor(Date.now() / 1000) - match.votetime))
     
     // console.log(qual)
     if(!match) {
@@ -18,6 +20,7 @@ export async function qualrunn(match: qualmatch, channelid: string, client: disc
     
 
     if(match.votingperiod === false){
+        
         console.log("Check 2")
         if(!match.split){
             console.log("Check 3")
@@ -45,12 +48,12 @@ export async function qualrunn(match: qualmatch, channelid: string, client: disc
                     }
     
                     else if(!player.memedone){
-                        let embed2 = new discord.MessageEmbed()
-                            .setDescription("Player failed to submit meme on time")
+                            
+                            await (<discord.TextChannel>client.channels.cache.get("722616679280148504"))
+                            .send(new discord.MessageEmbed()
+                            .setDescription(`<@${player.userid}> has failed to submit a meme`)
                             .setColor("#d7be26")
-                            .setTimestamp()
-    
-                        await channel.send(embed2)
+                            .setTimestamp())
                     }
                 }
     

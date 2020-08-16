@@ -223,8 +223,8 @@ async function resetModProfile(_id, profile) {
     await client.db(process.env.DBNAME).collection("modprofiles").updateOne({ _id: _id }, { $set: profile });
 }
 exports.resetModProfile = resetModProfile;
-async function getAllModProfiles() {
-    return await client.db(process.env.DBNAME).collection("modprofiles").find({}).toArray();
+async function getAllModProfiles(sortby) {
+    return await client.db(process.env.DBNAME).collection("modprofiles").find({}).sort({ [sortby]: -1 }).toArray();
 }
 exports.getAllModProfiles = getAllModProfiles;
 async function gettempStruct(_id) {

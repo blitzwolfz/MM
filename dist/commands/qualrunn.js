@@ -26,6 +26,8 @@ const winner_1 = require("./winner");
 const db_1 = require("../misc/db");
 async function qualrunn(match, channelid, client) {
     let channel = client.channels.cache.get(channelid);
+    console.log((Math.floor(Date.now() / 1000) - match.votetime > 7200));
+    console.log((Math.floor(Date.now() / 1000) - match.votetime));
     if (!match) {
         console.log("Check 1");
         return;
@@ -51,11 +53,11 @@ async function qualrunn(match, channelid, client) {
                         await channel.send(embed);
                     }
                     else if (!player.memedone) {
-                        let embed2 = new discord.MessageEmbed()
-                            .setDescription("Player failed to submit meme on time")
+                        await client.channels.cache.get("722616679280148504")
+                            .send(new discord.MessageEmbed()
+                            .setDescription(`<@${player.userid}> has failed to submit a meme`)
                             .setColor("#d7be26")
-                            .setTimestamp();
-                        await channel.send(embed2);
+                            .setTimestamp());
                     }
                 }
                 let em = new discord.MessageEmbed()

@@ -224,8 +224,8 @@ export async function resetModProfile(_id:string, profile:modprofile){
     await client.db(process.env.DBNAME).collection("modprofiles").updateOne({_id:_id}, {$set:profile})!;
 }
 
-export async function getAllModProfiles(): Promise<modprofile[]>{
-    return await client.db(process.env.DBNAME).collection("modprofiles").find({}).toArray();
+export async function getAllModProfiles(sortby: string): Promise<modprofile[]>{
+    return await client.db(process.env.DBNAME).collection("modprofiles").find({}).sort({[sortby]:-1}).toArray();
 }
 
 
