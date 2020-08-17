@@ -942,7 +942,7 @@ export async function matchstats(message: discord.Message, client: discord.Clien
                 { name: '\u200B', value: '\u200B' },
 
                 {name: `Voting period:`, value: `${match.votingperiod ? `Yes` : `No`}`, inline:true},
-                {name: `Voting time:`, value: `${match.votingperiod ? `${(Math.floor(Date.now() / 1000))-match.votetime} mins left` : "Voting hasn't started"}`, inline:true}
+                {name: `Voting time:`, value: `${match.votingperiod ? `${match.votetime - (Math.floor(Date.now() / 1000))} mins left` : "Voting hasn't started"}`, inline:true}
 
                 
 
