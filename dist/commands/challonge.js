@@ -193,6 +193,7 @@ exports.ChannelCreation = ChannelCreation;
 async function QualChannelCreation(message, args) {
     let groups = await db_1.getQuallist();
     console.log(groups.users);
+    let time = args[1];
     for (let i = 0; i < groups.users.length; i++) {
         if (groups.users[i].length > 0) {
             await message.guild.channels.create(`Group ${i + 1}`, { type: 'text', topic: `Round ${args[0]}` })
@@ -205,7 +206,7 @@ async function QualChannelCreation(message, args) {
                 for (let u of groups.users[i]) {
                     string += `<@${u}> `;
                 }
-                await channel.send(`${string}, your qualifier has begun. Contact a mod to being your portion!`);
+                await channel.send(`${string}, Round ${args[0]} has begun, and you have ${time}h. Contact a mod to being your portion!`);
             });
         }
     }

@@ -8,3 +8,4 @@ export declare function splitqual(client: discord.Client, message: discord.Messa
 export declare function splitregular(message: discord.Message, client: discord.Client, ...userid: string[]): Promise<void>;
 export declare function startregularsplit(message: discord.Message, client: discord.Client): Promise<discord.Message | undefined>;
 export declare function reload(message: discord.Message, client: discord.Client): Promise<discord.Message | undefined>;
+export declare function matchstats(message: discord.Message, client: discord.Client): Promise<discord.Message | undefined>;

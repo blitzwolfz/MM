@@ -478,6 +478,11 @@ client.on("message", async (message) => {
         await db_1.updateModProfile(message.author.id, "modactions", 1);
         await db_1.updateModProfile(message.author.id, "matchportionsstarted", 1);
     }
+    else if (command === "matchstats") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
+        await start_1.matchstats(message, client);
+    }
     else if (command === "startsplit") {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");

@@ -17,6 +17,7 @@ import {
   startregularsplit,
   splitregular,
   reload,
+  matchstats,
 } from "./commands/start";
 import { qualend, end } from "./commands/winner";
 import { vs } from "./commands/card";
@@ -700,6 +701,11 @@ client.on("message", async message => {
     await splitqual(client, message)
     await updateModProfile(message.author.id, "modactions", 1)
     await updateModProfile(message.author.id, "matchportionsstarted", 1)
+  }
+
+  else if(command === "matchstats"){
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
+    await matchstats(message, client)
   }
 
   else if (command === "startsplit") {

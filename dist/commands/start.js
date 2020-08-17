@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.reload = exports.startregularsplit = exports.splitregular = exports.splitqual = exports.qualrunning = exports.running = exports.startmodqual = exports.startqual = exports.start = void 0;
+exports.matchstats = exports.reload = exports.startregularsplit = exports.splitregular = exports.splitqual = exports.qualrunning = exports.running = exports.startmodqual = exports.startqual = exports.start = void 0;
 const discord = __importStar(require("discord.js"));
 const utils_1 = require("../misc/utils");
 const prefix = process.env.PREFIX;
@@ -251,13 +251,13 @@ async function running(client) {
     let matches = await db_1.getActive();
     for (const match of matches) {
         console.log(Math.floor(Date.now() / 1000) - match.votetime);
-        console.log((Math.floor(Date.now() / 1000) - match.votetime) >= 1800);
+        console.log((Math.floor(Date.now() / 1000) - match.votetime) >= 2410);
         let channelid = client.channels.cache.get(match.channelid);
         let user1 = (await client.users.fetch(match.p1.userid));
         let user2 = (await client.users.fetch(match.p2.userid));
         if (match.votingperiod === false) {
-            if (((Math.floor(Date.now() / 1000) - match.p2.time > 2400) && match.p2.memedone === false)
-                && ((Math.floor(Date.now() / 1000) - match.p1.time > 2400) && match.p1.memedone === false)) {
+            if (((Math.floor(Date.now() / 1000) - match.p2.time > 2410) && match.p2.memedone === false)
+                && ((Math.floor(Date.now() / 1000) - match.p1.time > 2410) && match.p1.memedone === false)) {
                 user1.send("You have lost because did not submit your meme");
                 user2.send("You have lost because did not submit your meme");
                 let embed = new discord.MessageEmbed()
@@ -267,9 +267,8 @@ async function running(client) {
                     .setTimestamp();
                 channelid.send(embed);
                 await db_1.deleteActive(match);
-                break;
             }
-            else if ((Math.floor(Date.now() / 1000) - match.p1.time > 2400)
+            else if ((Math.floor(Date.now() / 1000) - match.p1.time > 2410)
                 && match.p1.memedone === false && match.p1.donesplit) {
                 user1.send("You have failed to submit your meme, your opponet is the winner.");
                 let embed = new discord.MessageEmbed()
@@ -280,7 +279,7 @@ async function running(client) {
                 channelid.send(embed);
                 await db_1.deleteActive(match);
             }
-            else if ((Math.floor(Date.now() / 1000) - match.p2.time > 2400)
+            else if ((Math.floor(Date.now() / 1000) - match.p2.time > 2410)
                 && match.p2.memedone === false && match.p2.donesplit) {
                 console.log(Date.now() - match.p2.time);
                 user2.send("You have failed to submit your meme, your opponet is the winner.");
@@ -292,8 +291,8 @@ async function running(client) {
                 channelid.send(embed);
                 await db_1.deleteActive(match);
             }
-            else if ((!(match.split) && ((Math.floor(Date.now() / 1000) - match.p2.time <= 2400) && match.p2.memedone === true)
-                && ((Math.floor(Date.now() / 1000) - match.p1.time <= 2400) && match.p1.memedone === true))) {
+            else if ((!(match.split) && ((Math.floor(Date.now() / 1000) - match.p2.time <= 2410) && match.p2.memedone === true)
+                && ((Math.floor(Date.now() / 1000) - match.p1.time <= 2410) && match.p1.memedone === true))) {
                 if (Math.floor(Math.random() * (5 - 1) + 1) % 2 === 1) {
                     let temp = match.p1;
                     match.p1 = match.p2;
@@ -316,9 +315,9 @@ async function running(client) {
                     .setColor("#d7be26")
                     .setTimestamp();
                 let embed3 = new discord.MessageEmbed()
-                    .setTitle("Please vote")
+                    .setTitle("Vote for the best meme!")
                     .setColor("#d7be26")
-                    .setDescription(`Vote for Meme 1 reacting with ${utils_1.emojis[0]}\nMeme 2 by reacting with ${utils_1.emojis[1]}`);
+                    .setDescription(`Vote for Meme 1 reacting with ${utils_1.emojis[0]}\nVote for Meme 2 by reacting with ${utils_1.emojis[1]}`);
                 await channelid.send(embed1);
                 await channelid.send(embed2);
                 await channelid.send(embed3).then(async (msg) => {
@@ -395,7 +394,7 @@ async function splitregular(message, client, ...userid) {
                             .setTimestamp());
                         match.p1.donesplit = true;
                         match.p1.time = Math.floor(Date.now() / 1000);
-                        await (await client.users.fetch(match.p1.userid)).send(`Your match has been split.\nYou have 40 mins to complete your portion\nUse \`!submit\` to submit`);
+                        await (await client.users.fetch(match.p1.userid)).send(`Your match has been split.\nYou have 40 mins to complete your portion\nUse ${`!submit`} to submit`);
                         if (match.template) {
                             await (await client.users.fetch(match.p1.userid)).send(new discord.MessageEmbed()
                                 .setTitle("Your template")
@@ -410,12 +409,12 @@ async function splitregular(message, client, ...userid) {
                 if (user.id === match.p2.userid) {
                     if (!(match.p2.donesplit)) {
                         await message.channel.send(new discord.MessageEmbed()
-                            .setDescription(`<@${user.id}> your match has been split.\nYou have 40 mins to complete your memes`)
+                            .setDescription(`<@${user.id}> your match has been split.\nYou have 40 mins to complete your memes\nUse ${`!submit`} to submit`)
                             .setColor("#d7be26")
                             .setTimestamp());
                         match.p2.donesplit = true;
                         match.p2.time = Math.floor(Date.now() / 1000);
-                        await (await client.users.fetch(match.p2.userid)).send(`Your match has been split.\nYou have 40 mins to complete your portion\nUse \`!submit\` to submit`);
+                        await (await client.users.fetch(match.p2.userid)).send(`Your match has been split.\nYou have 40 mins to complete your portion\nUse ${`!submit`} to submit`);
                         if (match.template) {
                             await (await client.users.fetch(match.p2.userid)).send(new discord.MessageEmbed()
                                 .setTitle("Your template")
@@ -489,7 +488,7 @@ async function startregularsplit(message, client) {
             await (await client.channels.cache.get("722616679280148504").messages.fetch(rantemp.messageid)).delete();
             return await message.channel.send(new discord.MessageEmbed()
                 .setTitle(`Random Template Selection failed `)
-                .setColor("red")
+                .setColor("RED")
                 .setDescription(`Mods please restart this match`)
                 .setTimestamp());
         }
@@ -644,3 +643,24 @@ async function reload(message, client) {
     }
 }
 exports.reload = reload;
+async function matchstats(message, client) {
+    let channel = message.mentions.channels.first();
+    try {
+        if (!channel) {
+            return message.reply("No active matche exists in this channel");
+        }
+        else {
+            let match = await db_1.getMatch(channel.id);
+            let em = new discord.MessageEmbed()
+                .setTitle(`${channel.name}`)
+                .setColor("BLUE")
+                .addFields({ name: `${(await client.users.cache.get(match.p1.userid)).username} Meme Done:`, value: `${match.p1.memedone ? `Yes` : `No`}`, inline: true }, { name: 'Match Portion Done:', value: `${match.p1.donesplit ? `${match.split ? `Yes` : `Not a split match`}` : `No`}`, inline: true }, { name: 'Time left', value: `${match.p1.donesplit ? `${(Math.floor(Date.now() / 1000) - match.p1.time)} left` : `${match.split ? `Hasn't started portion` : `Time up`}`}`, inline: true }, { name: '\u200B', value: '\u200B' }, { name: `${(await client.users.cache.get(match.p2.userid)).username} Meme Done:`, value: `${match.p2.memedone ? `Yes` : `No`}`, inline: true }, { name: 'Match Portion Done:', value: `${match.p2.donesplit ? `${match.split ? `Yes` : `Not a split match`}` : `No`}`, inline: true }, { name: 'Time left', value: `${match.p2.donesplit ? `${(Math.floor(Date.now() / 1000) - match.p2.time)} left` : `${match.split ? `Hasn't started portion` : `Time up`}`}`, inline: true }, { name: '\u200B', value: '\u200B' }, { name: `Voting period:`, value: `${match.votingperiod ? `Yes` : `No`}`, inline: true }, { name: `Voting time:`, value: `${match.votingperiod ? `${(Math.floor(Date.now() / 1000) - match.votetime)} mins left` : "Voting hasn't started"}`, inline: true });
+            await message.channel.send(em);
+        }
+    }
+    catch (err) {
+        message.channel.send("```" + err + "```");
+        return message.reply("there is an error! Ping blitz and show him the error.");
+    }
+}
+exports.matchstats = matchstats;
