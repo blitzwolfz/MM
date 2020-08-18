@@ -1,4 +1,5 @@
 import * as Discord from "discord.js"
+import { getMatch } from "./db";
 
 export async function getUser(mention: string) {
   // The id is the first and only match found by the RegEx.
@@ -91,4 +92,75 @@ export function dateBuilder () {
   let month = months[d.getMonth()];
   let year = d.getFullYear();
   return `${day}, ${month} ${date} ${year}`;
+}
+
+
+export async function reminders(message: Discord.Message, client:Discord.Client, args:string[]) {
+  let catchannels = message!.guild!.channels.cache.array()!
+
+  for(let channel of catchannels){
+
+    if(channel.parent && channel.parent!.name === "matches"){
+      if (await getMatch(channel.id)) {
+        let match = await getMatch(channel.id)
+
+        if(match.split){
+          if(!match.p1.memedone && !match.p2.memedone){
+            await (<Discord.TextChannel>client.channels.cache.get(channel.id))
+            .send(`<@${match.p1.userid}> and <@${match.p2.userid}> you have ${args[0]}h left to complete your match`)
+          }
+          
+          else if(match.p1.memedone){
+            await (<Discord.TextChannel>client.channels.cache.get(channel.id))
+            .send(`<@${match.p2.userid}> you have ${args[0]}h left to complete your match`)
+          }
+  
+          else if(match.p2.memedone){
+            await (<Discord.TextChannel>client.channels.cache.get(channel.id))
+            .send(`<@${match.p1.userid}> you have ${args[0]}h left to complete your match`)
+          }
+        }
+      }
+
+      else{
+        let m = (await (<Discord.TextChannel>await client.channels.fetch(channel.id)!)
+        .messages.fetch({limit:100})).last()!
+
+        await m.channel
+        .send(`<@${m.mentions.users.first()!.id}> and <@${m.mentions.users.array()[1]!.id}>, you have ${args[0]}h left to complete your match`)
+      }
+    }
+
+    else if(channel.parent && channel.parent!.name === "matches"){
+      if (await getMatch(channel.id)) {
+        let match = await getMatch(channel.id)
+
+        if(match.split){
+          if(!match.p1.memedone && !match.p2.memedone){
+            await (<Discord.TextChannel>client.channels.cache.get(channel.id))
+            .send(`<@${match.p1.userid}> and <@${match.p2.userid}> you have ${args[0]}h left to complete your match`)
+          }
+          
+          else if(match.p1.memedone){
+            await (<Discord.TextChannel>client.channels.cache.get(channel.id))
+            .send(`<@${match.p2.userid}> you have ${args[0]}h left to complete your match`)
+          }
+  
+          else if(match.p2.memedone){
+            await (<Discord.TextChannel>client.channels.cache.get(channel.id))
+            .send(`<@${match.p1.userid}> you have ${args[0]}h left to complete your match`)
+          }
+        }
+      }
+
+      else{
+        let m = (await (<Discord.TextChannel>await client.channels.fetch(channel.id)!)
+        .messages.fetch({limit:100})).last()!
+
+        await m.channel
+        .send(`<@${m.mentions.users.first()!.id}> and <@${m.mentions.users.array()[1]!.id}>, you have ${args[0]}h left to complete your match`)
+      }
+    }
+  }
+
 }

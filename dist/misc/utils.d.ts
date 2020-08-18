@@ -15,3 +15,4 @@ export declare const forwardsFilter: (reaction: {
 }, user: Discord.User) => boolean;
 export declare function indexOf2d(arr: any[][], item: any, searchpos: number, returnpos: number): any;
 export declare function dateBuilder(): string;
+export declare function reminders(message: Discord.Message, client: Discord.Client, args: string[]): Promise<void>;

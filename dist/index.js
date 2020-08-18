@@ -305,6 +305,9 @@ client.on("message", async (message) => {
         });
         await message.delete();
     }
+    else if (command === "reminders") {
+        await utils_1.reminders(message, client, args);
+    }
     else if (command === "test") {
         await message.reply("no").then(async (message) => await message.react('🤏'));
     }
