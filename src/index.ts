@@ -504,6 +504,7 @@ client.on("message", async message => {
   }
 
   else if(command === "deletechannels"){
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await deletechannels(message, args)
   }
 

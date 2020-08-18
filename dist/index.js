@@ -319,6 +319,8 @@ client.on("message", async (message) => {
         await utils_1.reminders(message, client, args);
     }
     else if (command === "deletechannels") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
         await utils_1.deletechannels(message, args);
     }
     else if (command === "test") {
