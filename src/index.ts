@@ -21,7 +21,7 @@ import {
 } from "./commands/start";
 import { qualend, end, cancelmatch } from "./commands/winner";
 import { vs } from "./commands/card";
-import { getUser, hasthreevotes, emojis, removethreevotes, reminders } from "./misc/utils";
+import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels } from "./misc/utils";
 import {
   ModHelp,
   UserHelp,
@@ -499,8 +499,12 @@ client.on("message", async message => {
     await message.delete()
   }
 
-  else if(command === "reminders" ){
+  else if(command === "reminder" ){
     await reminders(message, client, args)
+  }
+
+  else if(command === "deletechannels"){
+    await deletechannels(message, args)
   }
 
   else if (command === "test") {

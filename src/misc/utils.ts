@@ -145,3 +145,22 @@ export async function reminders(message: Discord.Message, client:Discord.Client,
   }
 
 }
+
+export async function deletechannels(message: Discord.Message, args:string[]) {
+  let catchannels = message!.guild!.channels.cache.array()!
+
+  for(let channel of catchannels){
+
+    try{
+      if(channel.parent && channel.parent!.name === args[0]){
+        await channel.delete()
+      }
+    
+    }  catch {
+      continue
+    }
+
+  }
+
+
+}

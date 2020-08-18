@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.reminders = exports.dateBuilder = exports.indexOf2d = exports.forwardsFilter = exports.backwardsFilter = exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
+exports.deletechannels = exports.reminders = exports.dateBuilder = exports.indexOf2d = exports.forwardsFilter = exports.backwardsFilter = exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
 const db_1 = require("./db");
 async function getUser(mention) {
     const matches = mention.match(/^<@!?(\d+)>$/);
@@ -111,3 +111,17 @@ async function reminders(message, client, args) {
     }
 }
 exports.reminders = reminders;
+async function deletechannels(message, args) {
+    let catchannels = message.guild.channels.cache.array();
+    for (let channel of catchannels) {
+        try {
+            if (channel.parent && channel.parent.name === args[0]) {
+                await channel.delete();
+            }
+        }
+        catch {
+            continue;
+        }
+    }
+}
+exports.deletechannels = deletechannels;
