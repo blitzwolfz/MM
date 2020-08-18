@@ -19,7 +19,7 @@ import {
   reload,
   matchstats,
 } from "./commands/start";
-import { qualend, end } from "./commands/winner";
+import { qualend, end, cancelmatch } from "./commands/winner";
 import { vs } from "./commands/card";
 import { getUser, hasthreevotes, emojis, removethreevotes, reminders } from "./misc/utils";
 import {
@@ -206,13 +206,23 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
 
 
   if((messageReaction.emoji.name === emojis[1] || messageReaction.emoji.name === emojis[0]) 
-    && user.id !== "722303830368190485" && await getMatch(messageReaction.message.channel.id)) {
+    && await getMatch(messageReaction.message.channel.id)) {
     let match = await getMatch(messageReaction.message.channel.id)
 
     if (messageReaction.partial) await messageReaction.fetch();
     if (messageReaction.message.partial) await messageReaction.message.fetch();
     if (!match) return;
+    
+    if(!messageReaction.message.reactions.cache.has(emojis[0])) {
+      await messageReaction.message.react(emojis[0])
+      return;
+    }
 
+    if(!messageReaction.message.reactions.cache.has(emojis[1])) {
+      await messageReaction.message.react(emojis[1])
+      return;
+    }
+    
     if (user.id != match.p1.userid || user.id != match.p2.userid){ // != match.p1.userid || user.id != match.p2.userid
       if(messageReaction.emoji.name === emojis[0]){
         if(match.p1.voters.includes(user.id)){
@@ -263,6 +273,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
       await messageReaction.users.remove(user.id)
       await user.send("Can't vote on your own match")
     }
+    return;
   }
 
   //removethreevotes() now only checks if it's 2 votes or less
@@ -311,6 +322,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
         return user.send(`Your vote for meme ${i+1} in <#${match.channelid}> been counted.`);
       }
     }
+    return;
   }
   // let quals: qualmatch[] = await getQuals()
   
@@ -429,7 +441,7 @@ client.on("message", async message => {
     return
   };
 
-  if(command === "s"){
+  if(command === "s" || message.content.includes("!s")){
     await qualrunning(client);
     await running(client);
   }
@@ -573,7 +585,6 @@ client.on("message", async message => {
     else {
       message.reply(", there are no matches")
     }
-
   }
 
   else if (command === "startqual") {
@@ -733,6 +744,11 @@ client.on("message", async message => {
   else if (command === "end") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await end(client, message.channel.id)
+  }
+  
+  else if (command === "cancel") {
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
+    await cancelmatch(message)
   }
 
   else if (command === "modhelp") {

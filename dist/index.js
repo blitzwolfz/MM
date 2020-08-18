@@ -125,7 +125,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
     console.log(`a reaction is added to a message`);
     let temps = await db_1.getalltempStructs();
     if ((messageReaction.emoji.name === utils_1.emojis[1] || messageReaction.emoji.name === utils_1.emojis[0])
-        && user.id !== "722303830368190485" && await db_1.getMatch(messageReaction.message.channel.id)) {
+        && await db_1.getMatch(messageReaction.message.channel.id)) {
         let match = await db_1.getMatch(messageReaction.message.channel.id);
         if (messageReaction.partial)
             await messageReaction.fetch();
@@ -133,6 +133,14 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             await messageReaction.message.fetch();
         if (!match)
             return;
+        if (!messageReaction.message.reactions.cache.has(utils_1.emojis[0])) {
+            await messageReaction.message.react(utils_1.emojis[0]);
+            return;
+        }
+        if (!messageReaction.message.reactions.cache.has(utils_1.emojis[1])) {
+            await messageReaction.message.react(utils_1.emojis[1]);
+            return;
+        }
         if (user.id != match.p1.userid || user.id != match.p2.userid) {
             if (messageReaction.emoji.name === utils_1.emojis[0]) {
                 if (match.p1.voters.includes(user.id)) {
@@ -176,6 +184,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             await messageReaction.users.remove(user.id);
             await user.send("Can't vote on your own match");
         }
+        return;
     }
     if (utils_1.emojis.includes(messageReaction.emoji.name) && await db_1.getQual(messageReaction.message.channel.id)) {
         let match = await db_1.getQual(messageReaction.message.channel.id);
@@ -216,6 +225,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
                 return user.send(`Your vote for meme ${i + 1} in <#${match.channelid}> been counted.`);
             }
         }
+        return;
     }
     if (temps) {
         for (const temp of temps) {
@@ -264,7 +274,7 @@ client.on("message", async (message) => {
         return;
     }
     ;
-    if (command === "s") {
+    if (command === "s" || message.content.includes("!s")) {
         await start_1.qualrunning(client);
         await start_1.running(client);
     }
@@ -507,6 +517,11 @@ client.on("message", async (message) => {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
         await winner_1.end(client, message.channel.id);
+    }
+    else if (command === "cancel") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
+        await winner_1.cancelmatch(message);
     }
     else if (command === "modhelp") {
         await message.channel.send({ embed: help_1.ModHelp });

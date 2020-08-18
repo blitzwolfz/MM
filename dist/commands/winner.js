@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.qualend = exports.end = void 0;
+exports.cancelmatch = exports.qualend = exports.end = void 0;
 const discord = __importStar(require("discord.js"));
 const db_1 = require("../misc/db");
 const card_1 = require("./card");
@@ -77,6 +77,8 @@ async function end(client, id) {
         db_1.updateProfile(user2.id, "loss", 1);
         await channelid.send(embed);
         await channelid.send([await card_1.winner(client, user1.id)]);
+        await user1.send(`Your match is over, here is the final result.`, { embed: embed });
+        await user2.send(`Your match is over, here is the final result.`, { embed: embed });
         await client.channels.cache.get("734565012378746950").send((new discord.MessageEmbed()
             .setColor("#d7be26")
             .setImage(match.p1.memelink)
@@ -98,6 +100,8 @@ async function end(client, id) {
             .setDescription(`${(await (await channelid.guild.members.fetch(user2.id)).nickname) || await (await client.users.fetch(user2.id)).username} won with ${match.p2.votes} votes!`)
             .setImage(match.p2.memelink)
             .setFooter(utils_1.dateBuilder())));
+        await user1.send(`Your match is over, here is the final result.`, { embed: embed });
+        await user2.send(`Your match is over, here is the final result.`, { embed: embed });
     }
     else if (match.p1.votes === match.p2.votes) {
         let embed = new discord.MessageEmbed()
@@ -106,6 +110,8 @@ async function end(client, id) {
             .setDescription(`Both users have gotten ${match.p1.votes} vote(s). Both users came to a draw.\nPlease find a new time for your rematch.`)
             .setFooter(utils_1.dateBuilder());
         await channelid.send(embed);
+        await user1.send(`Your match is over,both of you ended in a tie of ${match.p1.votes}`);
+        await user2.send(`Your match is over, both of you ended in a tie of ${match.p1.votes}`);
     }
     await db_1.deleteActive(match);
     return;
@@ -208,3 +214,17 @@ async function qualend(client, id) {
     }
 }
 exports.qualend = qualend;
+async function cancelmatch(message) {
+    if (await db_1.getMatch(message.channel.id)) {
+        await db_1.deleteActive(await db_1.getMatch(message.channel.id));
+        return await message.reply("this match has been cancelled");
+    }
+    else if (await db_1.getQual(message.channel.id)) {
+        await db_1.deleteQuals(await db_1.getQual(message.channel.id));
+        return await message.reply("this qualifier has been cancelled");
+    }
+    else {
+        return await message.reply("there are no matches");
+    }
+}
+exports.cancelmatch = cancelmatch;

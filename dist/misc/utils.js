@@ -74,55 +74,39 @@ exports.dateBuilder = dateBuilder;
 async function reminders(message, client, args) {
     let catchannels = message.guild.channels.cache.array();
     for (let channel of catchannels) {
-        if (channel.parent && channel.parent.name === "matches") {
-            if (await db_1.getMatch(channel.id)) {
-                let match = await db_1.getMatch(channel.id);
-                if (match.split) {
-                    if (!match.p1.memedone && !match.p2.memedone) {
-                        await client.channels.cache.get(channel.id)
-                            .send(`<@${match.p1.userid}> and <@${match.p2.userid}> you have ${args[0]}h left to complete your match`);
-                    }
-                    else if (match.p1.memedone) {
-                        await client.channels.cache.get(channel.id)
-                            .send(`<@${match.p2.userid}> you have ${args[0]}h left to complete your match`);
-                    }
-                    else if (match.p2.memedone) {
-                        await client.channels.cache.get(channel.id)
-                            .send(`<@${match.p1.userid}> you have ${args[0]}h left to complete your match`);
+        try {
+            if (channel.parent && channel.parent.name === "matches") {
+                if (await db_1.getMatch(channel.id)) {
+                    let match = await db_1.getMatch(channel.id);
+                    if (match.split) {
+                        if (!match.p1.memedone && !match.p2.memedone) {
+                            await client.channels.cache.get(channel.id)
+                                .send(`<@${match.p1.userid}> and <@${match.p2.userid}> you have ${args[0]}h left to complete your match`);
+                        }
+                        else if (match.p1.memedone) {
+                            await client.channels.cache.get(channel.id)
+                                .send(`<@${match.p2.userid}> you have ${args[0]}h left to complete your match`);
+                        }
+                        else if (match.p2.memedone) {
+                            await client.channels.cache.get(channel.id)
+                                .send(`<@${match.p1.userid}> you have ${args[0]}h left to complete your match`);
+                        }
                     }
                 }
-            }
-            else {
-                let m = (await (await client.channels.fetch(channel.id))
-                    .messages.fetch({ limit: 100 })).last();
-                await m.channel
-                    .send(`<@${m.mentions.users.first().id}> and <@${m.mentions.users.array()[1].id}>, you have ${args[0]}h left to complete your match`);
+                else {
+                    let all = (await (await client.channels.fetch(channel.id))
+                        .messages.fetch({ limit: 100 }));
+                    console.log(`The length is: ${all.array().length}`);
+                    if (all.array().length === 1) {
+                        let m = all.last();
+                        await m.channel
+                            .send(`<@${m.mentions.users.first().id}> and <@${m.mentions.users.array()[1].id}>, you have ${args[0]}h left to complete your match`);
+                    }
+                }
             }
         }
-        else if (channel.parent && channel.parent.name === "matches") {
-            if (await db_1.getMatch(channel.id)) {
-                let match = await db_1.getMatch(channel.id);
-                if (match.split) {
-                    if (!match.p1.memedone && !match.p2.memedone) {
-                        await client.channels.cache.get(channel.id)
-                            .send(`<@${match.p1.userid}> and <@${match.p2.userid}> you have ${args[0]}h left to complete your match`);
-                    }
-                    else if (match.p1.memedone) {
-                        await client.channels.cache.get(channel.id)
-                            .send(`<@${match.p2.userid}> you have ${args[0]}h left to complete your match`);
-                    }
-                    else if (match.p2.memedone) {
-                        await client.channels.cache.get(channel.id)
-                            .send(`<@${match.p1.userid}> you have ${args[0]}h left to complete your match`);
-                    }
-                }
-            }
-            else {
-                let m = (await (await client.channels.fetch(channel.id))
-                    .messages.fetch({ limit: 100 })).last();
-                await m.channel
-                    .send(`<@${m.mentions.users.first().id}> and <@${m.mentions.users.array()[1].id}>, you have ${args[0]}h left to complete your match`);
-            }
+        catch {
+            continue;
         }
     }
 }

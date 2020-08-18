@@ -2,7 +2,7 @@ import * as discord from "discord.js"
 // import {getUser} from "../misc/utils"
 // import {prefix} from "../misc/config.json"
 import { activematch } from "../misc/struct"
-import { deleteActive, deleteQuals, updateProfile, getSingularQuals, getMatch } from "../misc/db"
+import { deleteActive, deleteQuals, updateProfile, getSingularQuals, getMatch, getQual } from "../misc/db"
 import { winner } from "./card"
 import { dateBuilder } from "../misc/utils"
 
@@ -78,6 +78,8 @@ export async function end(client: discord.Client, id: string) {
 
 
         await channelid.send([await winner(client, user1.id)!])
+        await user1.send(`Your match is over, here is the final result.`, {embed:embed})
+        await user2.send(`Your match is over, here is the final result.`, {embed:embed})
 
         // let d = new Date()
         
@@ -113,6 +115,9 @@ export async function end(client: discord.Client, id: string) {
             .setFooter(dateBuilder())
             //.setTimestamp()
         ))
+
+        await user1.send(`Your match is over, here is the final result.`, {embed:embed})
+        await user2.send(`Your match is over, here is the final result.`, {embed:embed})
     }
 
     else if (match.p1.votes === match.p2.votes) {
@@ -123,6 +128,8 @@ export async function end(client: discord.Client, id: string) {
             .setFooter(dateBuilder())
 
         await channelid.send(embed)
+        await user1.send(`Your match is over,both of you ended in a tie of ${match.p1.votes}`)
+        await user2.send(`Your match is over, both of you ended in a tie of ${match.p1.votes}`)
     }
 
     // matches.splice(matches.indexOf(match), 1)
@@ -251,4 +258,21 @@ export async function qualend(client: discord.Client, id: string) {
             }
         });
     }
+}
+
+
+export async function cancelmatch(message: discord.Message){
+    if (await getMatch(message.channel.id)) {
+        await deleteActive(await getMatch(message.channel.id))
+        return await message.reply("this match has been cancelled")
+      }
+  
+    else if (await getQual(message.channel.id)) {
+        await deleteQuals(await getQual(message.channel.id))
+        return await message.reply("this qualifier has been cancelled")
+      }
+  
+    else {
+        return await message.reply("there are no matches")
+      }
 }
