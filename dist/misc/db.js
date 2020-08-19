@@ -92,8 +92,8 @@ async function addProfile(User) {
     await client.db(process.env.DBNAME).collection("users").insertOne(User);
 }
 exports.addProfile = addProfile;
-async function getAllProfiles() {
-    return await client.db(process.env.DBNAME).collection("users").find({}).sort({ wins: -1 }).toArray();
+async function getAllProfiles(field) {
+    return await client.db(process.env.DBNAME).collection("users").find({}).sort({ [field]: -1 }).toArray();
 }
 exports.getAllProfiles = getAllProfiles;
 async function getProfile(_id) {
@@ -101,12 +101,7 @@ async function getProfile(_id) {
 }
 exports.getProfile = getProfile;
 async function updateProfile(_id, field, num) {
-    if (field === "wins") {
-        client.db(process.env.DBNAME).collection("users").updateOne({ _id: _id }, { $inc: { "wins": num } });
-    }
-    else {
-        client.db(process.env.DBNAME).collection("users").updateOne({ _id: _id }, { $inc: { "loss": num } });
-    }
+    await client.db(process.env.DBNAME).collection("users").updateOne({ _id: _id }, { $inc: { [field]: num } });
 }
 exports.updateProfile = updateProfile;
 async function addUser(user) {
@@ -208,15 +203,7 @@ async function addModProfile(User) {
 }
 exports.addModProfile = addModProfile;
 async function updateModProfile(_id, field, num) {
-    if (field === "modactions") {
-        await client.db(process.env.DBNAME).collection("modprofiles").updateOne({ _id: _id }, { $inc: { "modactions": num } });
-    }
-    else if (field === "matchesstarted") {
-        await client.db(process.env.DBNAME).collection("modprofiles").updateOne({ _id: _id }, { $inc: { "matchesstarted": num } });
-    }
-    else if (field === "matchportionsstarted") {
-        await client.db(process.env.DBNAME).collection("modprofiles").updateOne({ _id: _id }, { $inc: { "matchportionsstarted": num } });
-    }
+    await client.db(process.env.DBNAME).collection("modprofiles").updateOne({ _id: _id }, { $inc: { [field]: num } });
 }
 exports.updateModProfile = updateModProfile;
 async function resetModProfile(_id, profile) {

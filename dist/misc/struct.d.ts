@@ -50,6 +50,7 @@ export interface players {
 export interface user {
     _id: string;
     name: string;
+    points: number;
     wins: number;
     loss: number;
     img: string;

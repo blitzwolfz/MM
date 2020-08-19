@@ -42,6 +42,7 @@ export async function createrUser(message: discord.Message){
         let NewUser:user = {
             _id: message.author.id,
             name:message.author.username,
+            points:0,
             wins: 0,
             loss: 0,
             img:message.author.displayAvatarURL({ format: 'png', dynamic: true, size: 1024 })
@@ -73,6 +74,7 @@ export async function createAtUsermatch(User: discord.User){
         let NewUser:user = {
             _id: User.id,
             name:User.username,
+            points:0,
             wins: 0,
             loss: 0,
             img:User.displayAvatarURL({ format: 'png', dynamic: true, size: 1024 })

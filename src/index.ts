@@ -21,7 +21,7 @@ import {
 } from "./commands/start";
 import { qualend, end, cancelmatch } from "./commands/winner";
 import { vs } from "./commands/card";
-import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels } from "./misc/utils";
+import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, updatesomething } from "./misc/utils";
 import {
   ModHelp,
   UserHelp,
@@ -43,6 +43,7 @@ import {
   updateModProfile,
   getalltempStructs,
   updatetempStruct,
+  updateProfile,
 } from "./misc/db";
 
 import { template, approvetemplate } from "./commands/template";
@@ -238,10 +239,12 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
           if(match.p2.voters.includes(user.id)){
             match.p2.votes -= 1
             match.p2.voters.splice(match.p1.voters.indexOf(user.id), 1)
+            updateProfile(user.id, "points", -2)
           }
           await messageReaction.users.remove(user.id)
           await messageReaction.message.react(emojis[0])
-          await user.send(`Vote counted for meme 1 in <#${match.channelid}>`)
+          await user.send(`Vote counted for meme 1 in <#${match.channelid}>. You gained 2 points for voting`)
+          updateProfile(user.id, "points", 2)
         }
       }
 
@@ -255,14 +258,16 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
         else{
           match.p2.votes += 1
           match.p2.voters.push(user.id)
-          await user.send(`Vote counted for meme 2 in <#${match.channelid}>`)
+          await user.send(`Vote counted for meme 2 in <#${match.channelid}>. You gained 2 points for voting`)
 
           if(match.p1.voters.includes(user.id)){
             match.p1.votes -= 1
             match.p1.voters.splice(match.p1.voters.indexOf(user.id), 1)
+            updateProfile(user.id, "points", -2)
           }
           await messageReaction.users.remove(user.id)
           await messageReaction.message.react(emojis[1])
+          updateProfile(user.id, "points", 2)
         }
       }
 
@@ -294,6 +299,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
       match.votes = removethreevotes(match.votes, user.id)
       await updateQuals(match)
       messageReaction.users.remove(user.id)
+      updateProfile(user.id, "points", -4)
       return user.send("Your votes have been reset")
     }
 
@@ -319,7 +325,8 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
         match.votes[i].push(user.id)
         await messageReaction.users.remove(user.id)
         await updateQuals(match)
-        return user.send(`Your vote for meme ${i+1} in <#${match.channelid}> been counted.`);
+        updateProfile(user.id, "points", 2)
+        return user.send(`Your vote for meme ${i+1} in <#${match.channelid}> been counted. You gained 2 points for voting.`);
       }
     }
     return;
@@ -496,7 +503,6 @@ client.on("message", async message => {
     // message.channel.bulkDelete(fetched)
     //   .catch(error => message.reply(`Couldn't delete messages because of: ${error}`));
 
-    await message.delete()
   }
 
   else if(command === "reminder" ){
@@ -509,7 +515,8 @@ client.on("message", async message => {
   }
 
   else if (command === "test") {
-    await message.reply("no").then(async message => await message.react('🤏'))
+    await updatesomething(message)
+    //await message.reply("no").then(async message => await message.react('🤏'))
 
     // await (<Discord.TextChannel>client.channels.cache.get("734565012378746950")).send((new Discord.MessageEmbed()
     // .setColor("#d7be26")

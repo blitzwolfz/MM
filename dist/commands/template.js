@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.approvetemplate = exports.template = void 0;
+const db_1 = require("../misc/db");
 async function template(message, client) {
     let channel = client.channels.cache.get("722291683030466621");
     if (message.attachments.size > 10) {
@@ -20,6 +21,8 @@ async function template(message, client) {
         for (let i = 0; i < message.attachments.array().length; i++) {
             await channel.send(`Template link is: ${message.attachments.array()[i].url}`);
         }
+        db_1.updateProfile(message.author.id, "points", (message.attachments.array().length * 2));
+        await message.reply(`Thank you for submitting templates. You gained ${message.attachments.array().length * 2} points`);
     }
 }
 exports.template = template;

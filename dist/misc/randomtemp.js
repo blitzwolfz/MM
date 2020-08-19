@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RandomTemplateFunc = exports.RandomTemplate = exports.getRandomTemplateList = exports.disapprovefilter = exports.redofilter = exports.approvefilter = void 0;
+exports.RandomTemplateFunc = exports.getRandomTemplateList = exports.disapprovefilter = exports.redofilter = exports.approvefilter = void 0;
 const Discord = __importStar(require("discord.js"));
 const utils_1 = require("./utils");
 const db_1 = require("./db");
@@ -66,9 +66,6 @@ async function getRandomTemplateList(client) {
     return templatelist;
 }
 exports.getRandomTemplateList = getRandomTemplateList;
-function RandomTemplate() {
-}
-exports.RandomTemplate = RandomTemplate;
 async function RandomTemplateEmbed(random, id) {
     let embed = new Discord.MessageEmbed()
         .setTitle("Random template")
@@ -88,7 +85,7 @@ async function RandomTemplateFunc(message, client, _id) {
         messageid: "",
         time: Math.floor(Date.now() / 1000)
     };
-    await client.channels.cache.get("722616679280148504").send(await RandomTemplateEmbed(random, message.channel.id)).then(async (message) => {
+    await client.channels.cache.get("722616679280148504").send(`<@${message.author.id}>`, await RandomTemplateEmbed(random, message.channel.id)).then(async (message) => {
         await message.react(utils_1.emojis[7]);
         await message.react('❌');
         await message.react('🌀');

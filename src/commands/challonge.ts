@@ -488,6 +488,7 @@ export async function declarequalwinner(message: Discord.Message, client: Discor
                     match.users.push(id)
                     await updateMatchlist(match)
                     updateProfile(id, "wins", 1)
+                    updateProfile(id, "points", 25)
                     return message.reply(" added user.")
                 }
             }

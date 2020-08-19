@@ -15,5 +15,4 @@ export declare const disapprovefilter: (reaction: {
     };
 }, user: Discord.User) => boolean;
 export declare function getRandomTemplateList(client: Discord.Client): Promise<string[]>;
-export declare function RandomTemplate(): void;
 export declare function RandomTemplateFunc(message: Discord.Message, client: Discord.Client, _id: string): Promise<void>;

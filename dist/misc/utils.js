@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deletechannels = exports.reminders = exports.dateBuilder = exports.indexOf2d = exports.forwardsFilter = exports.backwardsFilter = exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
+exports.updatesomething = exports.deletechannels = exports.reminders = exports.dateBuilder = exports.indexOf2d = exports.forwardsFilter = exports.backwardsFilter = exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
 const db_1 = require("./db");
 async function getUser(mention) {
     const matches = mention.match(/^<@!?(\d+)>$/);
@@ -125,3 +125,21 @@ async function deletechannels(message, args) {
     }
 }
 exports.deletechannels = deletechannels;
+async function updatesomething(message) {
+    let allusers = await db_1.getAllProfiles("wins");
+    try {
+        for (let u of allusers) {
+            try {
+                await db_1.updateProfile(u._id, "points", 0);
+            }
+            catch (err) {
+                await message.channel.send("```" + err + "```");
+            }
+        }
+    }
+    catch (err) {
+        message.channel.send("```" + err + "```");
+    }
+    await message.channel.send("Done");
+}
+exports.updatesomething = updatesomething;

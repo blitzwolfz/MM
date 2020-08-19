@@ -72,14 +72,16 @@ export async function end(client: discord.Client, id: string) {
             .setFooter(dateBuilder())
         
         updateProfile(user1.id, "wins", 1)
+        updateProfile(user1.id, "points", (25 + (match.p1.votes * 5)))
         updateProfile(user2.id, "loss", 1)
+        updateProfile(user1.id, "points", match.p2.votes * 5)
 
         await channelid.send(embed)
 
 
         await channelid.send([await winner(client, user1.id)!])
-        await user1.send(`Your match is over, here is the final result.`, {embed:embed})
-        await user2.send(`Your match is over, here is the final result.`, {embed:embed})
+        await user1.send(`Your match is over, here is the final result. You gained 25 points for winning your match, and ${(match.p1.votes * 5)} points from your votes.`, {embed:embed})
+        await user2.send(`Your match is over, here is the final result. You gained ${(match.p2.votes * 5)} points from your votes.`, {embed:embed})
 
         // let d = new Date()
         
@@ -101,7 +103,9 @@ export async function end(client: discord.Client, id: string) {
             .setFooter(dateBuilder())
 
         updateProfile(user1.id, "loss", 1)
+        updateProfile(user1.id, "points", match.p1.votes * 5)
         updateProfile(user2.id, "wins", 1)
+        updateProfile(user2.id, "points", (25 + (match.p2.votes * 5)))
 
         await channelid.send(embed)
         await channelid.send([await winner(client, user2.id)!])
@@ -116,8 +120,8 @@ export async function end(client: discord.Client, id: string) {
             //.setTimestamp()
         ))
 
-        await user1.send(`Your match is over, here is the final result.`, {embed:embed})
-        await user2.send(`Your match is over, here is the final result.`, {embed:embed})
+        await user1.send(`Your match is over, here is the final result. You gained ${(match.p1.votes * 5)} points from your votes.`, {embed:embed})
+        await user2.send(`Your match is over, here is the final result. You gained 25 points for winning your match, and gained ${(match.p2.votes * 5)} points from your votes.`, {embed:embed})
     }
 
     else if (match.p1.votes === match.p2.votes) {

@@ -51,6 +51,7 @@ async function createrUser(message) {
         let NewUser = {
             _id: message.author.id,
             name: message.author.username,
+            points: 0,
             wins: 0,
             loss: 0,
             img: message.author.displayAvatarURL({ format: 'png', dynamic: true, size: 1024 })
@@ -73,6 +74,7 @@ async function createAtUsermatch(User) {
         let NewUser = {
             _id: User.id,
             name: User.username,
+            points: 0,
             wins: 0,
             loss: 0,
             img: User.displayAvatarURL({ format: 'png', dynamic: true, size: 1024 })

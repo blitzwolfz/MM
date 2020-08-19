@@ -1,5 +1,5 @@
 import * as Discord from "discord.js"
-import { getMatch } from "./db";
+import { getMatch, getAllProfiles, updateProfile } from "./db";
 
 export async function getUser(mention: string) {
   // The id is the first and only match found by the RegEx.
@@ -163,4 +163,26 @@ export async function deletechannels(message: Discord.Message, args:string[]) {
   }
 
 
+}
+
+
+export async function updatesomething(message:Discord.Message){
+  let allusers = await getAllProfiles("wins")
+
+  try{
+    for(let u of allusers){
+      try{
+        await updateProfile(u._id, "points", 0)
+      }
+
+      catch (err) {
+        await message.channel.send("```" + err + "```")
+      }
+      
+    }
+  } catch (err) {
+    message.channel.send("```" + err + "```")
+  }
+
+  await message.channel.send("Done")
 }

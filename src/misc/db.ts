@@ -77,8 +77,8 @@ export async function addProfile(User:user): Promise<void> {
     await client.db(process.env.DBNAME).collection("users").insertOne(User)!;
 }
 
-export async function getAllProfiles(): Promise<user[]> {
-    return await client.db(process.env.DBNAME).collection("users").find({}).sort({wins: -1}).toArray();
+export async function getAllProfiles(field:string): Promise<user[]> {
+    return await client.db(process.env.DBNAME).collection("users").find({}).sort({[field]: -1}).toArray();
 }
 
 export async function getProfile(_id: string): Promise<user> {
@@ -86,14 +86,9 @@ export async function getProfile(_id: string): Promise<user> {
 }
 
 export async function updateProfile(_id:string, field:string, num: number): Promise<void> {
-    if(field === "wins"){
-        client.db(process.env.DBNAME).collection("users").updateOne({_id:_id}, {$inc:{"wins":num}})!;
-    }
+    //await client.db(process.env.DBNAME).collection("modprofiles").updateOne({_id:_id}, {$inc:{[field]:num}})!
 
-    else{
-        client.db(process.env.DBNAME).collection("users").updateOne({_id:_id}, {$inc:{"loss":num}})!;
-    }
-    
+    await client.db(process.env.DBNAME).collection("users").updateOne({_id:_id}, {$inc:{[field]:num}})!;
 }
 
 export async function addUser(user:user): Promise<void> {
@@ -206,18 +201,8 @@ export async function addModProfile(User:modprofile): Promise<void> {
 }
 
 export async function updateModProfile(_id:string, field:string, num: number, ): Promise<void> {
-    
-    if(field === "modactions"){
-        await client.db(process.env.DBNAME).collection("modprofiles").updateOne({_id:_id}, {$inc:{"modactions":num}})!;
-    }
 
-    else if(field === "matchesstarted"){
-        await client.db(process.env.DBNAME).collection("modprofiles").updateOne({_id:_id}, {$inc:{"matchesstarted":num}})!;
-    }
-
-    else if(field === "matchportionsstarted"){
-        await client.db(process.env.DBNAME).collection("modprofiles").updateOne({_id:_id}, {$inc:{"matchportionsstarted":num}})!;
-    }
+    await client.db(process.env.DBNAME).collection("modprofiles").updateOne({_id:_id}, {$inc:{[field]:num}})!
 }
 
 export async function resetModProfile(_id:string, profile:modprofile){

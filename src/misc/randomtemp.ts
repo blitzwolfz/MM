@@ -65,11 +65,6 @@ export async function getRandomTemplateList(client: Discord.Client): Promise<str
   //await message.reply(`\`\`\`${templatelist}\`\`\``)
 }
 
-export function RandomTemplate(){
-
-}
-
-
 async function RandomTemplateEmbed(random: string, id:string){
 
   let embed = new Discord.MessageEmbed()
@@ -97,7 +92,7 @@ export async function RandomTemplateFunc(message: Discord.Message, client: Disco
     }
 
     
-    await (<Discord.TextChannel>client.channels.cache.get("722616679280148504")).send(await RandomTemplateEmbed(random, message.channel.id)).then(async message => {
+    await (<Discord.TextChannel>client.channels.cache.get("722616679280148504")).send(`<@${message.author.id}>`,await RandomTemplateEmbed(random, message.channel.id)).then(async message => {
       await message.react(emojis[7])
       await message.react('❌')
       await message.react('🌀')

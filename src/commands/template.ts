@@ -1,4 +1,5 @@
 import * as discord from "discord.js"
+import { updateProfile } from "../misc/db"
 
 export async function template(message: discord.Message, client:discord.Client){
     let channel = <discord.TextChannel>client.channels.cache.get("722291683030466621")
@@ -23,6 +24,10 @@ export async function template(message: discord.Message, client:discord.Client){
         for (let i = 0; i < message.attachments.array().length; i++) {
             await channel.send(`Template link is: ${message.attachments.array()[i].url}`)
         }
+
+        updateProfile(message.author.id, "points", (message.attachments.array().length * 2))
+        await message.reply(`Thank you for submitting templates. You gained ${message.attachments.array().length * 2} points`)
+        
     }
 
 }
