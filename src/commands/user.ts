@@ -22,6 +22,7 @@ export async function stats(message: discord.Message, client: discord.Client){
             .setThumbnail(user.img)
             .setColor("#d7be26")
             .addFields(
+                { name: 'Total points', value: `${user.points}` },
                 { name: 'Total wins', value: `${user.wins}` },
                 { name: 'Total loss', value: `${user.loss}`  },
                 { name: 'Win/Loss Ratio', value: `${(Math.floor(user.wins/user.loss))} W/L` },

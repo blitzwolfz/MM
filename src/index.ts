@@ -206,7 +206,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
 
 
   if((messageReaction.emoji.name === emojis[1] || messageReaction.emoji.name === emojis[0]) 
-    && user.id !== "722303830368190485" && await getMatch(messageReaction.message.channel.id)) {
+    && await getMatch(messageReaction.message.channel.id)) {
     let match = await getMatch(messageReaction.message.channel.id)
 
     if (messageReaction.partial) await messageReaction.fetch();

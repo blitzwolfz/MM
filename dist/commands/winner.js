@@ -76,7 +76,7 @@ async function end(client, id) {
         db_1.updateProfile(user1.id, "wins", 1);
         db_1.updateProfile(user1.id, "points", (25 + (match.p1.votes * 5)));
         db_1.updateProfile(user2.id, "loss", 1);
-        db_1.updateProfile(user1.id, "points", match.p2.votes * 5);
+        db_1.updateProfile(user2.id, "points", match.p2.votes * 5);
         await channelid.send(embed);
         await channelid.send([await card_1.winner(client, user1.id)]);
         await user1.send(`Your match is over, here is the final result. You gained 25 points for winning your match, and ${(match.p1.votes * 5)} points from your votes.`, { embed: embed });

@@ -125,7 +125,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
     console.log(`a reaction is added to a message`);
     let temps = await db_1.getalltempStructs();
     if ((messageReaction.emoji.name === utils_1.emojis[1] || messageReaction.emoji.name === utils_1.emojis[0])
-        && user.id !== "722303830368190485" && await db_1.getMatch(messageReaction.message.channel.id)) {
+        && await db_1.getMatch(messageReaction.message.channel.id)) {
         let match = await db_1.getMatch(messageReaction.message.channel.id);
         if (messageReaction.partial)
             await messageReaction.fetch();
