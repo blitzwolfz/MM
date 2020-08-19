@@ -136,6 +136,14 @@ export async function end(client: discord.Client, id: string) {
         await user2.send(`Your match is over, both of you ended in a tie of ${match.p1.votes}`)
     }
 
+    for(let s = 0; s <  match.p1.voters.length; s++){
+        await await updateProfile(match.p1.voters[s], "points", 2)
+    }
+
+    for(let t = 0; t <  match.p2.voters.length; t++){
+        await await updateProfile(match.p2.voters[t], "points", 2)
+    }
+
     // matches.splice(matches.indexOf(match), 1)
     await deleteActive(match)
     return;
@@ -223,6 +231,12 @@ export async function qualend(client: discord.Client, id: string) {
             for (var k = 0; k < list.length; k++) {
                 match.votes[k] = list[k].votes;
                 fields[k] = list[k].field;
+            }
+
+            for(let i = 0; i <  match.votes.length; i++){
+                for(let x = 0; x < match.votes[i].length; x++){
+                    await updateProfile(match.votes[i][x], "points", 2)
+                }
             }
 
             await deleteQuals(match)

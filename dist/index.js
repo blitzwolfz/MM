@@ -154,12 +154,10 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
                     if (match.p2.voters.includes(user.id)) {
                         match.p2.votes -= 1;
                         match.p2.voters.splice(match.p1.voters.indexOf(user.id), 1);
-                        db_1.updateProfile(user.id, "points", -2);
                     }
                     await messageReaction.users.remove(user.id);
                     await messageReaction.message.react(utils_1.emojis[0]);
                     await user.send(`Vote counted for meme 1 in <#${match.channelid}>. You gained 2 points for voting`);
-                    db_1.updateProfile(user.id, "points", 2);
                 }
             }
             else if (messageReaction.emoji.name === utils_1.emojis[1]) {
@@ -175,11 +173,9 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
                     if (match.p1.voters.includes(user.id)) {
                         match.p1.votes -= 1;
                         match.p1.voters.splice(match.p1.voters.indexOf(user.id), 1);
-                        db_1.updateProfile(user.id, "points", -2);
                     }
                     await messageReaction.users.remove(user.id);
                     await messageReaction.message.react(utils_1.emojis[1]);
-                    db_1.updateProfile(user.id, "points", 2);
                 }
             }
             await db_1.updateActive(match);
@@ -206,7 +202,6 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             match.votes = utils_1.removethreevotes(match.votes, user.id);
             await db_1.updateQuals(match);
             messageReaction.users.remove(user.id);
-            db_1.updateProfile(user.id, "points", -4);
             return user.send("Your votes have been reset");
         }
         else {

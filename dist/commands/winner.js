@@ -117,6 +117,12 @@ async function end(client, id) {
         await user1.send(`Your match is over,both of you ended in a tie of ${match.p1.votes}`);
         await user2.send(`Your match is over, both of you ended in a tie of ${match.p1.votes}`);
     }
+    for (let s = 0; s < match.p1.voters.length; s++) {
+        await await db_1.updateProfile(match.p1.voters[s], "points", 2);
+    }
+    for (let t = 0; t < match.p2.voters.length; t++) {
+        await await db_1.updateProfile(match.p2.voters[t], "points", 2);
+    }
     await db_1.deleteActive(match);
     return;
 }
@@ -182,6 +188,11 @@ async function qualend(client, id) {
             for (var k = 0; k < list.length; k++) {
                 match.votes[k] = list[k].votes;
                 fields[k] = list[k].field;
+            }
+            for (let i = 0; i < match.votes.length; i++) {
+                for (let x = 0; x < match.votes[i].length; x++) {
+                    await db_1.updateProfile(match.votes[i][x], "points", 2);
+                }
             }
             await db_1.deleteQuals(match);
             await (await client.channels.cache.get("722291182461386804"))
