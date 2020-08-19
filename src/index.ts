@@ -43,7 +43,6 @@ import {
   updateModProfile,
   getalltempStructs,
   updatetempStruct,
-  updateProfile,
 } from "./misc/db";
 
 import { template, approvetemplate } from "./commands/template";
@@ -207,23 +206,13 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
 
 
   if((messageReaction.emoji.name === emojis[1] || messageReaction.emoji.name === emojis[0]) 
-    && await getMatch(messageReaction.message.channel.id)) {
+    && user.id !== "722303830368190485" && await getMatch(messageReaction.message.channel.id)) {
     let match = await getMatch(messageReaction.message.channel.id)
 
     if (messageReaction.partial) await messageReaction.fetch();
     if (messageReaction.message.partial) await messageReaction.message.fetch();
     if (!match) return;
-    
-    if(!messageReaction.message.reactions.cache.has(emojis[0])) {
-      await messageReaction.message.react(emojis[0])
-      return;
-    }
 
-    if(!messageReaction.message.reactions.cache.has(emojis[1])) {
-      await messageReaction.message.react(emojis[1])
-      return;
-    }
-    
     if (user.id != match.p1.userid || user.id != match.p2.userid){ // != match.p1.userid || user.id != match.p2.userid
       if(messageReaction.emoji.name === emojis[0]){
         if(match.p1.voters.includes(user.id)){
@@ -238,7 +227,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
          
           if(match.p2.voters.includes(user.id)){
             match.p2.votes -= 1
-            match.p2.voters.splice(match.p1.voters.indexOf(user.id), 1)
+            match.p2.voters.splice(match.p2.voters.indexOf(user.id), 1)
           }
           await messageReaction.users.remove(user.id)
           await messageReaction.message.react(emojis[0])
@@ -274,7 +263,6 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
       await messageReaction.users.remove(user.id)
       await user.send("Can't vote on your own match")
     }
-    return;
   }
 
   //removethreevotes() now only checks if it's 2 votes or less
@@ -320,11 +308,9 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
         match.votes[i].push(user.id)
         await messageReaction.users.remove(user.id)
         await updateQuals(match)
-        updateProfile(user.id, "points", 2)
-        return user.send(`Your vote for meme ${i+1} in <#${match.channelid}> been counted. You gained 2 points for voting.`);
+        return user.send(`Your vote for meme ${i+1} in <#${match.channelid}> been counted. You gained 2 points for voting`);
       }
     }
-    return;
   }
   // let quals: qualmatch[] = await getQuals()
   
@@ -417,8 +403,6 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
       }
     }
   }
-
-
 
 });
 

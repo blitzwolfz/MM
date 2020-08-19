@@ -125,7 +125,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
     console.log(`a reaction is added to a message`);
     let temps = await db_1.getalltempStructs();
     if ((messageReaction.emoji.name === utils_1.emojis[1] || messageReaction.emoji.name === utils_1.emojis[0])
-        && await db_1.getMatch(messageReaction.message.channel.id)) {
+        && user.id !== "722303830368190485" && await db_1.getMatch(messageReaction.message.channel.id)) {
         let match = await db_1.getMatch(messageReaction.message.channel.id);
         if (messageReaction.partial)
             await messageReaction.fetch();
@@ -133,14 +133,6 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             await messageReaction.message.fetch();
         if (!match)
             return;
-        if (!messageReaction.message.reactions.cache.has(utils_1.emojis[0])) {
-            await messageReaction.message.react(utils_1.emojis[0]);
-            return;
-        }
-        if (!messageReaction.message.reactions.cache.has(utils_1.emojis[1])) {
-            await messageReaction.message.react(utils_1.emojis[1]);
-            return;
-        }
         if (user.id != match.p1.userid || user.id != match.p2.userid) {
             if (messageReaction.emoji.name === utils_1.emojis[0]) {
                 if (match.p1.voters.includes(user.id)) {
@@ -153,7 +145,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
                     match.p1.voters.push(user.id);
                     if (match.p2.voters.includes(user.id)) {
                         match.p2.votes -= 1;
-                        match.p2.voters.splice(match.p1.voters.indexOf(user.id), 1);
+                        match.p2.voters.splice(match.p2.voters.indexOf(user.id), 1);
                     }
                     await messageReaction.users.remove(user.id);
                     await messageReaction.message.react(utils_1.emojis[0]);
@@ -184,7 +176,6 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             await messageReaction.users.remove(user.id);
             await user.send("Can't vote on your own match");
         }
-        return;
     }
     if (utils_1.emojis.includes(messageReaction.emoji.name) && await db_1.getQual(messageReaction.message.channel.id)) {
         let match = await db_1.getQual(messageReaction.message.channel.id);
@@ -222,11 +213,9 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
                 match.votes[i].push(user.id);
                 await messageReaction.users.remove(user.id);
                 await db_1.updateQuals(match);
-                db_1.updateProfile(user.id, "points", 2);
-                return user.send(`Your vote for meme ${i + 1} in <#${match.channelid}> been counted. You gained 2 points for voting.`);
+                return user.send(`Your vote for meme ${i + 1} in <#${match.channelid}> been counted. You gained 2 points for voting`);
             }
         }
-        return;
     }
     if (temps) {
         for (const temp of temps) {
