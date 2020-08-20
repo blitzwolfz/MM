@@ -660,10 +660,10 @@ client.on("message", async message => {
       let id = (message.mentions?.users?.first()?.id || message.author.id)
       let form = await getCockrating(id)
       let max = 100
-      let min = (id === "239516219445608449" ? 100 : Math.floor(Math.random() * ((max - 1) - 1) + 1))
+      let min = (id === "239516219445608449" ? Math.floor(Math.random() * ((max - 35) - 35) + 1) : Math.floor(Math.random() * ((max - 1) - 1) + 1))
 
       if (!form) {
-        message.reply(`<@${id}> has ${max === min ? `100% good cock` : `${min}/${max} cock`}`)
+        message.reply(`<@${id}> has ${max === min ? `100% good cock` : `${min}/${max} cock.`}`)
 
         
 
@@ -681,7 +681,7 @@ client.on("message", async message => {
       }
 
       else {
-        message.reply(`<@${id}> has ${max === min ? `100% good cock` : `${min}/${max} cock`}`)
+        message.reply(`<@${id}> has ${max === min ? `100% good cock` : `${min}/${max} cock. The previous rating was ${form.num}/${max} cock`}`)
 
         form.num = min
         form.time = Math.floor(Date.now() / 1000)

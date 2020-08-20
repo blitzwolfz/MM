@@ -448,9 +448,9 @@ client.on("message", async (message) => {
             let id = (((_d = (_c = (_b = message.mentions) === null || _b === void 0 ? void 0 : _b.users) === null || _c === void 0 ? void 0 : _c.first()) === null || _d === void 0 ? void 0 : _d.id) || message.author.id);
             let form = await db_1.getCockrating(id);
             let max = 100;
-            let min = (id === "239516219445608449" ? 100 : Math.floor(Math.random() * ((max - 1) - 1) + 1));
+            let min = (id === "239516219445608449" ? Math.floor(Math.random() * ((max - 35) - 35) + 1) : Math.floor(Math.random() * ((max - 1) - 1) + 1));
             if (!form) {
-                message.reply(`<@${id}> has ${max === min ? `100% good cock` : `${min}/${max} cock`}`);
+                message.reply(`<@${id}> has ${max === min ? `100% good cock` : `${min}/${max} cock.`}`);
                 let newform = {
                     _id: id,
                     num: min,
@@ -462,7 +462,7 @@ client.on("message", async (message) => {
                 return message.reply("It has not been 3 days");
             }
             else {
-                message.reply(`<@${id}> has ${max === min ? `100% good cock` : `${min}/${max} cock`}`);
+                message.reply(`<@${id}> has ${max === min ? `100% good cock` : `${min}/${max} cock. The previous rating was ${form.num}/${max} cock`}`);
                 form.num = min;
                 form.time = Math.floor(Date.now() / 1000);
                 await db_1.updateCockrating(form);
