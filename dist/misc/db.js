@@ -101,7 +101,12 @@ async function getProfile(_id) {
 }
 exports.getProfile = getProfile;
 async function updateProfile(_id, field, num) {
-    await client.db(process.env.DBNAME).collection("users").updateOne({ _id: _id }, { $inc: { [field]: num } });
+    if (field === "name") {
+        await client.db(process.env.DBNAME).collection("users").updateOne({ _id: _id }, { $set: { [field]: num } });
+    }
+    else {
+        await client.db(process.env.DBNAME).collection("users").updateOne({ _id: _id }, { $inc: { [field]: num } });
+    }
 }
 exports.updateProfile = updateProfile;
 async function addUser(user) {
