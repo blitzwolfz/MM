@@ -26,12 +26,16 @@ async function stats(message, client) {
     let args = message.content.slice(process.env.PREFIX.length).trim().split(/ +/g);
     let user = await db_1.getProfile(args[1] ? (message.mentions.users.first().id) : message.author.id);
     let imgurl = args[1] ? (client.users.cache.get(message.mentions.users.first().id).displayAvatarURL()) : message.author.displayAvatarURL();
+    let name = args[1] ? (client.users.cache.get(message.mentions.users.first().id).username) : message.author.username;
     if (!user) {
         return message.reply("That user profile does not exist! Please do `!create` to create your own user profile");
     }
     else if (user) {
-        if (imgurl !== user.img) {
+        if (imgurl !== user.img || name !== user.name) {
             user.img = imgurl;
+            user.name = name;
+            await db_1.updateProfile(user._id, "img", imgurl);
+            await db_1.updateProfile(user._id, "img", name);
         }
         let UserEmbed = new discord.MessageEmbed()
             .setTitle(`${user.name}`)

@@ -85,7 +85,7 @@ export async function getProfile(_id: string): Promise<user> {
     return client.db(process.env.DBNAME).collection("users").findOne({_id:_id})!;
 }
 
-export async function updateProfile(_id:string, field:string, num: number): Promise<void> {
+export async function updateProfile(_id:string, field:string, num: any): Promise<void> {
     //await client.db(process.env.DBNAME).collection("modprofiles").updateOne({_id:_id}, {$inc:{[field]:num}})!
 
     await client.db(process.env.DBNAME).collection("users").updateOne({_id:_id}, {$inc:{[field]:num}})!;

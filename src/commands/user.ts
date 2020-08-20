@@ -1,5 +1,5 @@
 import * as discord from "discord.js"
-import { getProfile, addProfile } from "../misc/db"
+import { getProfile, addProfile, updateProfile } from "../misc/db"
 import { user } from "../misc/struct";
 
 
@@ -7,14 +7,18 @@ export async function stats(message: discord.Message, client: discord.Client){
     let args: Array<string> = message.content.slice(process.env.PREFIX!.length).trim().split(/ +/g);
     let user:user = await getProfile(args[1] ? (message.mentions.users.first()!.id): message.author.id)//message.mentions?.users?.first()?.id || args[0] || 
     let imgurl = args[1] ? (client.users.cache.get(message.mentions.users.first()!.id)!.displayAvatarURL()): message.author.displayAvatarURL()
+    let name = args[1] ? (client.users.cache.get(message.mentions.users.first()!.id)!.username): message.author.username
     if (!user){
         return message.reply("That user profile does not exist! Please do `!create` to create your own user profile")
     }
 
     else if(user){
 
-        if (imgurl !== user.img){
+        if (imgurl !== user.img || name !== user.name){
             user.img = imgurl
+            user.name = name
+            await updateProfile(user._id, "img", imgurl)
+            await updateProfile(user._id, "img", name)
         }
 
         let UserEmbed = new discord.MessageEmbed()
@@ -29,6 +33,7 @@ export async function stats(message: discord.Message, client: discord.Client){
             )
         
         await message.channel.send(UserEmbed)
+        
     }
 }
 
