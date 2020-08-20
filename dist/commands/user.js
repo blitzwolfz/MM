@@ -34,8 +34,7 @@ async function stats(message, client) {
         if (imgurl !== user.img || name !== user.name) {
             user.img = imgurl;
             user.name = name;
-            await db_1.updateProfile(user._id, "img", imgurl);
-            await db_1.updateProfile(user._id, "img", name);
+            await db_1.updateProfile(user._id, "name", name);
         }
         let UserEmbed = new discord.MessageEmbed()
             .setTitle(`${user.name}`)

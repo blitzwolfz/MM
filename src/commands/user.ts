@@ -17,8 +17,7 @@ export async function stats(message: discord.Message, client: discord.Client){
         if (imgurl !== user.img || name !== user.name){
             user.img = imgurl
             user.name = name
-            await updateProfile(user._id, "img", imgurl)
-            await updateProfile(user._id, "img", name)
+            await updateProfile(user._id, "name", name)
         }
 
         let UserEmbed = new discord.MessageEmbed()
