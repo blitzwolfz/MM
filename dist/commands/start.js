@@ -256,7 +256,7 @@ async function running(client) {
         let user1 = (await client.users.fetch(match.p1.userid));
         let user2 = (await client.users.fetch(match.p2.userid));
         if (match.votingperiod === false) {
-            if (((Math.floor(Date.now() / 1000) - match.p2.time > 2410) && match.p2.memedone === false)
+            if (!(match.split) && ((Math.floor(Date.now() / 1000) - match.p2.time > 2410) && match.p2.memedone === false)
                 && ((Math.floor(Date.now() / 1000) - match.p1.time > 2410) && match.p1.memedone === false)) {
                 user1.send("You have lost because did not submit your meme");
                 user2.send("You have lost because did not submit your meme");
