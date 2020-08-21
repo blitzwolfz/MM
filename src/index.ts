@@ -743,6 +743,7 @@ client.on("message", async message => {
   }
 
   else if (command === "modhelp") {
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await message.channel.send({ embed: ModHelp })
   }
 
@@ -751,10 +752,12 @@ client.on("message", async message => {
   }
 
   else if (command === "signuphelp") {
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await message.channel.send({ embed: ModSignupHelp })
   }
 
   else if (command === "challongehelp") {
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await message.channel.send({ embed: ModChallongeHelp })
   }
 

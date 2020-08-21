@@ -369,5 +369,10 @@ async function matchlistmaker() {
         };
         db_1.insertMatchlist(newmatch);
     }
+    else {
+        match.users = [];
+        match.url = "";
+        await db_1.updateMatchlist(match);
+    }
 }
 exports.matchlistmaker = matchlistmaker;

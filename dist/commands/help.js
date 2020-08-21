@@ -7,31 +7,39 @@ exports.ModHelp = {
     color: "#d7be26",
     fields: [
         {
-            name: '`!start @user1 @user2 <template | theme>`',
-            value: `If you pass the template flag, you must attach an image with the image or it won't send.\nIf you do theme flag, then write you theme after the flag`,
+            name: '`!start @user1 @user2`',
+            value: `Template is randomly picked. You have to approve in <#722616679280148504>`,
         },
         {
             name: '`!end`',
             value: `This will end any match in the channel which this command is used.\nIf you end a match before voting period, the stats of a user won't change.`,
         },
         {
+            name: '`!qualend`',
+            value: `Forces the ending of a qualifer regardless if a user completes their portion or not`,
+        },
+        {
+            name: '`!cancelmatch`',
+            value: `Will cancel a match, and delete it from the db. This doesn't end a match, just cancels it`,
+        },
+        {
             name: '`!s`',
             value: `This a utility command that should force the bot to display the polls.`,
         },
         {
-            name: '`!startqual`',
+            name: '`!startqual @mention x <3-5>`',
             value: `Starts a regular qualifier.\nMatch runs like a normal match where they have 30 mins to make a meme.\nJust like regular matches you can pass temp and theme flags`,
         },
         {
-            name: '`!splitqual @mention x 3`',
+            name: '`!splitqual @mention x <3-5>`',
             value: `Creates a split qualifier. The memes will be sent once all the players have finised their portion.`,
         },
         {
-            name: '`!startsplitqual @mention x 3`',
+            name: '`!startsplitqual @mention`',
             value: `This is to start a split match for a user who is competing in qualifiers.`,
         },
         {
-            name: '`!splitmatch`',
+            name: '`!splitmatch @mention x 2`',
             value: `Creates a split regular match.\nThe memes will be sent once all the players have finised their portion.`,
         },
         {
@@ -39,9 +47,29 @@ exports.ModHelp = {
             value: `This is to start the portion of match for a user who is competing in a regular split math.`,
         },
         {
-            name: '`!qualend`',
-            value: `Forces the ending of a qualifer regardless if a user completes their portion or not`,
+            name: '`!search`',
+            value: `Will search for a user's qualifier channel`,
         },
+        {
+            name: '`!declarequalwinner`',
+            value: `Use this to declare a qualifier winner`,
+        },
+        {
+            name: '`!removequalwinner`',
+            value: `Use this to remove a qualifier winner`,
+        },
+        {
+            name: '`!settheme`',
+            value: `Use this to set a theme for a qualifier match`,
+        },
+        {
+            name: '`!reload`',
+            value: `Use this to set polling for any type of match`,
+        },
+        {
+            name: '`!matchlistmaker`',
+            value: `Use this when right after starting a new tournament.`
+        }
     ],
     timestamp: new Date()
 };
@@ -90,7 +118,7 @@ exports.UserHelp = {
 };
 exports.ModSignupHelp = {
     title: "Admin Signup help menu",
-    color: "#d7be26",
+    color: "RED",
     fields: [
         {
             name: '`!startsignup`',
@@ -121,19 +149,26 @@ exports.ModSignupHelp = {
 };
 exports.ModChallongeHelp = {
     title: "Admin Challonge help menu",
-    color: "#d7be26",
+    color: "RED",
     fields: [
         {
-            name: '`!createqualbracket <challonge url>`',
-            value: `Must close signups!! You must also provide a challonge url. Only need to do this once, as it saves it`,
-        },
-        {
             name: '`!createbracket <challonge url>`',
-            value: `Must have the qual tournament finished. You must also provide a challonge url. Only need to do this once, as it saves it.`
+            value: `Must have the qual tournament finished.\n` +
+                `You must also provide a challonge url.\n` +
+                `Only need to do this once, as it saves it.`
         },
         {
-            name: '`!channelcreate <number>`',
-            value: `The tournament must be running on challonge. You have to provide a round number such round 1 or round 2`
+            name: '`!channelcreate <round number> <hours>`',
+            value: `You need to provide a round number for which round's channel you want to create.\n` +
+                `You provide a hour number for however long the match lasts.`
+        },
+        {
+            name: '`!qualchannelcreate <hours>`',
+            value: `You provide a hour number for however long the match lasts.`
+        },
+        {
+            name: '`!deletechannels <category>`',
+            value: `This command deletes all the channels in a category.`
         },
     ],
     timestamp: new Date()

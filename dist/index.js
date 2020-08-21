@@ -518,15 +518,21 @@ client.on("message", async (message) => {
         await winner_1.cancelmatch(message);
     }
     else if (command === "modhelp") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
         await message.channel.send({ embed: help_1.ModHelp });
     }
     else if (command === "help") {
         await message.channel.send({ embed: help_1.UserHelp });
     }
     else if (command === "signuphelp") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
         await message.channel.send({ embed: help_1.ModSignupHelp });
     }
     else if (command === "challongehelp") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
         await message.channel.send({ embed: help_1.ModChallongeHelp });
     }
     else if (command === "pullout" || command === "goingformilk" || command === "unsignup" || command === "withdraw" || command === "removesignup") {

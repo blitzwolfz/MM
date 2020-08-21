@@ -575,6 +575,13 @@ export async function matchlistmaker() {
 
         insertMatchlist(newmatch)
     }
+
+    else{
+        match.users = []
+        match.url = ""
+
+        await updateMatchlist(match)
+    }
 }
 
 
