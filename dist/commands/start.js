@@ -256,7 +256,71 @@ async function running(client) {
         let user1 = (await client.users.fetch(match.p1.userid));
         let user2 = (await client.users.fetch(match.p2.userid));
         if (match.votingperiod === false) {
-            if (!(match.split) && ((Math.floor(Date.now() / 1000) - match.p2.time > 2410) && match.p2.memedone === false)
+            if (((Math.floor(Date.now() / 1000) - match.p1.time === 1200) && match.p1.memedone === false && match.p1.donesplit)) {
+                let embed = new discord.MessageEmbed()
+                    .setColor("#d7be26")
+                    .setTitle(`Match between ${user1.username} and ${user2.username}`)
+                    .setDescription(`You have 20 mins left.\nUse \`!submit\` to submit`)
+                    .setTimestamp();
+                try {
+                    user1.send(embed);
+                }
+                catch (err) {
+                    await client.channels.cache.get("722616679280148504")
+                        .send("```" + err + "```");
+                    await client.channels.cache.get("722616679280148504")
+                        .send(`Can't send embed to <@${user1.id}>`);
+                }
+            }
+            else if ((Math.floor(Date.now() / 1000) - match.p2.time === 1200) && match.p2.memedone === false && match.p2.donesplit) {
+                let embed = new discord.MessageEmbed()
+                    .setColor("#d7be26")
+                    .setTitle(`Match between ${user1.username} and ${user2.username}`)
+                    .setDescription(`You have 20 mins left.\nUse \`!submit\` to submit`)
+                    .setTimestamp();
+                try {
+                    user2.send(embed);
+                }
+                catch (err) {
+                    await client.channels.cache.get("722616679280148504")
+                        .send("```" + err + "```");
+                    await client.channels.cache.get("722616679280148504")
+                        .send(`Can't send embed to <@${user2.id}>`);
+                }
+            }
+            else if (((Math.floor(Date.now() / 1000) - match.p1.time === 300) && match.p1.memedone === false && match.p1.donesplit)) {
+                let embed = new discord.MessageEmbed()
+                    .setColor("#d7be26")
+                    .setTitle(`Match between ${user1.username} and ${user2.username}`)
+                    .setDescription(`You have 5 mins left.\nUse \`!submit\` to submit`)
+                    .setTimestamp();
+                try {
+                    user1.send(embed);
+                }
+                catch (err) {
+                    await client.channels.cache.get("722616679280148504")
+                        .send("```" + err + "```");
+                    await client.channels.cache.get("722616679280148504")
+                        .send(`Can't send embed to <@${user1.id}>`);
+                }
+            }
+            else if (((Math.floor(Date.now() / 1000) - match.p2.time === 300) && match.p2.memedone === false && match.p2.donesplit)) {
+                let embed = new discord.MessageEmbed()
+                    .setColor("#d7be26")
+                    .setTitle(`Match between ${user1.username} and ${user2.username}`)
+                    .setDescription(`You have 5 mins left.\nUse \`!submit\` to submit`)
+                    .setTimestamp();
+                try {
+                    user2.send(embed);
+                }
+                catch (err) {
+                    await client.channels.cache.get("722616679280148504")
+                        .send("```" + err + "```");
+                    await client.channels.cache.get("722616679280148504")
+                        .send(`Can't send embed to <@${user2.id}>`);
+                }
+            }
+            else if (!(match.split) && ((Math.floor(Date.now() / 1000) - match.p2.time > 2410) && match.p2.memedone === false)
                 && ((Math.floor(Date.now() / 1000) - match.p1.time > 2410) && match.p1.memedone === false)) {
                 user1.send("You have lost because did not submit your meme");
                 user2.send("You have lost because did not submit your meme");

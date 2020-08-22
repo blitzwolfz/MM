@@ -21,7 +21,7 @@ import {
 } from "./commands/start";
 import { qualend, end, cancelmatch } from "./commands/winner";
 import { vs } from "./commands/card";
-import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, updatesomething } from "./misc/utils";
+import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels } from "./misc/utils";
 import {
   ModHelp,
   UserHelp,
@@ -494,17 +494,9 @@ client.on("message", async message => {
   }
 
   else if (command === "test") {
-    await updatesomething(message)
-    //await message.reply("no").then(async message => await message.react('🤏'))
-
-    // await (<Discord.TextChannel>client.channels.cache.get("734565012378746950")).send((new Discord.MessageEmbed()
-    // .setColor("#d7be26")
-    // .setDescription(`Test`)
-    // .setImage("https://cdn.discordapp.com/emojis/741651776595296277.gif?v=1")
-    // .setFooter(dateBuilder())
-    // .setTimestamp()))
-
-    //message.channel.send(await grandwinner(client, args[0]))
+    await message.reply("no").then(async message => await message.react('🤏'))
+    // for(let i = 0; i < parseInt(args[0]); i++)
+    //   await message.channel.send(`<@${message.author.id}>`)
   }
 
   else if (command === "createqualgroup") {
