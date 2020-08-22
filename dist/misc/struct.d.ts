@@ -13,6 +13,8 @@ export interface activematch {
         memelink: string;
         votes: number;
         voters: Array<string>;
+        halfreminder: boolean;
+        fivereminder: boolean;
     };
     p2: {
         userid: string;
@@ -22,6 +24,8 @@ export interface activematch {
         memelink: string;
         votes: number;
         voters: Array<string>;
+        halfreminder: boolean;
+        fivereminder: boolean;
     };
     votetime: number;
     votingperiod: boolean;

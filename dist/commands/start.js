@@ -60,6 +60,8 @@ async function start(message, client) {
             memelink: "",
             votes: 0,
             voters: [],
+            halfreminder: false,
+            fivereminder: false,
         },
         p2: {
             userid: user2.id,
@@ -69,6 +71,8 @@ async function start(message, client) {
             memelink: "",
             votes: 0,
             voters: [],
+            halfreminder: false,
+            fivereminder: false,
         },
         votetime: Math.floor(Date.now() / 1000),
         votingperiod: false,
@@ -250,13 +254,17 @@ exports.startmodqual = startmodqual;
 async function running(client) {
     let matches = await db_1.getActive();
     for (const match of matches) {
-        console.log(Math.floor(Date.now() / 1000) - match.votetime);
-        console.log((Math.floor(Date.now() / 1000) - match.votetime) >= 2410);
+        console.log(Math.floor(Date.now() / 1000) - match.p1.time, "time");
+        console.log(Math.floor(Date.now() / 1000) - match.p1.time <= 1260 && Math.floor(Date.now() / 1000) - match.p1.time >= 1200);
         let channelid = client.channels.cache.get(match.channelid);
         let user1 = (await client.users.fetch(match.p1.userid));
         let user2 = (await client.users.fetch(match.p2.userid));
         if (match.votingperiod === false) {
-            if (((Math.floor(Date.now() / 1000) - match.p1.time === 1200) && match.p1.memedone === false && match.p1.donesplit)) {
+            console.log('okk');
+            if (((Math.floor(Date.now() / 1000) - match.p1.time <= 1260 && Math.floor(Date.now() / 1000) - match.p1.time >= 1200)
+                && match.p1.memedone === false && match.p1.donesplit && match.p1.halfreminder === false)) {
+                console.log("OK");
+                match.p1.halfreminder = true;
                 let embed = new discord.MessageEmbed()
                     .setColor("#d7be26")
                     .setTitle(`Match between ${user1.username} and ${user2.username}`)
@@ -272,7 +280,10 @@ async function running(client) {
                         .send(`Can't send embed to <@${user1.id}>`);
                 }
             }
-            else if ((Math.floor(Date.now() / 1000) - match.p2.time === 1200) && match.p2.memedone === false && match.p2.donesplit) {
+            else if ((Math.floor(Date.now() / 1000) - match.p2.time <= 1260 && Math.floor(Date.now() / 1000) - match.p2.time >= 1200)
+                && match.p2.memedone === false && match.p2.donesplit && match.p2.halfreminder === false) {
+                console.log("OK");
+                match.p2.halfreminder = true;
                 let embed = new discord.MessageEmbed()
                     .setColor("#d7be26")
                     .setTitle(`Match between ${user1.username} and ${user2.username}`)
@@ -288,7 +299,10 @@ async function running(client) {
                         .send(`Can't send embed to <@${user2.id}>`);
                 }
             }
-            else if (((Math.floor(Date.now() / 1000) - match.p1.time === 300) && match.p1.memedone === false && match.p1.donesplit)) {
+            else if (((Math.floor(Date.now() / 1000) - match.p1.time <= 2160 && Math.floor(Date.now() / 1000) - match.p1.time >= 2100)
+                && match.p1.memedone === false && match.p1.donesplit && match.p1.fivereminder === false)) {
+                match.p1.fivereminder = true;
+                console.log("OK");
                 let embed = new discord.MessageEmbed()
                     .setColor("#d7be26")
                     .setTitle(`Match between ${user1.username} and ${user2.username}`)
@@ -304,7 +318,10 @@ async function running(client) {
                         .send(`Can't send embed to <@${user1.id}>`);
                 }
             }
-            else if (((Math.floor(Date.now() / 1000) - match.p2.time === 300) && match.p2.memedone === false && match.p2.donesplit)) {
+            else if (((Math.floor(Date.now() / 1000) - match.p2.time <= 2160 && Math.floor(Date.now() / 1000) - match.p2.time >= 2100) && match.p2.memedone === false
+                && match.p2.donesplit && match.p2.fivereminder === false)) {
+                match.p2.fivereminder = true;
+                console.log("OK");
                 let embed = new discord.MessageEmbed()
                     .setColor("#d7be26")
                     .setTitle(`Match between ${user1.username} and ${user2.username}`)
@@ -391,10 +408,10 @@ async function running(client) {
                 });
                 match.votingperiod = true;
                 match.votetime = (Math.floor(Date.now() / 1000));
-                await db_1.updateActive(match);
                 await channelid.send(`<@&719936221572235295>`);
                 await channelid.send("You have 2 hours to vote!");
             }
+            await db_1.updateActive(match);
         }
         if (match.votingperiod === true && !match.split) {
             if ((Math.floor(Date.now() / 1000) - match.votetime > 7200) && !match.split) {
@@ -526,6 +543,8 @@ async function startregularsplit(message, client) {
             memelink: "",
             votes: 0,
             voters: [],
+            halfreminder: false,
+            fivereminder: false,
         },
         p2: {
             userid: user2.id,
@@ -535,6 +554,8 @@ async function startregularsplit(message, client) {
             memelink: "",
             votes: 0,
             voters: [],
+            halfreminder: false,
+            fivereminder: false,
         },
         votetime: Math.floor(Date.now() / 1000),
         votingperiod: false,

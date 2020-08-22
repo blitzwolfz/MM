@@ -409,6 +409,13 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
 client.on("message", async message => {
   //const gamemaster = message.guild.roles.get("719936221572235295");
 
+  
+  // if(message.content.includes("!s")){
+  //   await qualrunning(client);
+  //   await running(client);
+  //   console.log("Ran!")
+  // }
+
   if (message.content.indexOf(process.env.PREFIX!) !== 0 || message.author.bot) {
     if (message.author.id !== "688558229646475344") return;
   }
@@ -495,8 +502,6 @@ client.on("message", async message => {
 
   else if (command === "test") {
     await message.reply("no").then(async message => await message.react('🤏'))
-    // for(let i = 0; i < parseInt(args[0]); i++)
-    //   await message.channel.send(`<@${message.author.id}>`)
   }
 
   else if (command === "createqualgroup") {

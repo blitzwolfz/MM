@@ -51,6 +51,8 @@ export async function start(message: discord.Message, client: discord.Client) {
             memelink: "",
             votes: 0,
             voters: [],
+            halfreminder: false,
+            fivereminder: false,
         },
         p2: {
             userid: user2.id,
@@ -60,6 +62,8 @@ export async function start(message: discord.Message, client: discord.Client) {
             memelink: "",
             votes: 0,
             voters: [],
+            halfreminder: false,
+            fivereminder: false,
         },
         votetime: Math.floor(Date.now() / 1000),
         votingperiod: false,
@@ -369,16 +373,21 @@ export async function startmodqual(message: discord.Message, client: discord.Cli
 export async function running(client: discord.Client): Promise<void> {
     let matches: activematch[] = await getActive()
     for (const match of matches) {
-        console.log(Math.floor(Date.now() / 1000) - match.votetime)
-        console.log((Math.floor(Date.now() / 1000) - match.votetime) >= 2410)
+        //console.log(Math.floor(Date.now() / 1000) - match.votetime)
+        console.log(Math.floor(Date.now() / 1000) - match.p1.time, "time")
+        console.log(Math.floor(Date.now() / 1000) - match.p1.time <= 1260 && Math.floor(Date.now() / 1000) - match.p1.time >= 1200)
         let channelid = <discord.TextChannel>client.channels.cache.get(match.channelid)
         let user1 = (await client.users.fetch(match.p1.userid))
         let user2 = (await client.users.fetch(match.p2.userid))
       
         if (match.votingperiod === false) {
 
+            console.log('okk')
+            if (((Math.floor(Date.now() / 1000) - match.p1.time <= 1260 && Math.floor(Date.now() / 1000) - match.p1.time >= 1200) 
+            && match.p1.memedone === false && match.p1.donesplit && match.p1.halfreminder === false)) {
 
-            if (((Math.floor(Date.now() / 1000) - match.p1.time === 1200) && match.p1.memedone === false && match.p1.donesplit)) {
+                console.log("OK")
+                match.p1.halfreminder = true
 
                 let embed = new discord.MessageEmbed()
                     .setColor("#d7be26")
@@ -397,13 +406,16 @@ export async function running(client: discord.Client): Promise<void> {
                 // matches.splice(matches.indexOf(match), 1)
             }
 
-            else if ((Math.floor(Date.now() / 1000) - match.p2.time === 1200) && match.p2.memedone === false && match.p2.donesplit) {
-
+            else if ((Math.floor(Date.now() / 1000) - match.p2.time <= 1260 && Math.floor(Date.now() / 1000) - match.p2.time >= 1200) 
+            && match.p2.memedone === false && match.p2.donesplit && match.p2.halfreminder === false) {
+                console.log("OK")
+                match.p2.halfreminder = true
                 let embed = new discord.MessageEmbed()
                     .setColor("#d7be26")
                     .setTitle(`Match between ${user1.username} and ${user2.username}`)
                     .setDescription(`You have 20 mins left.\nUse \`!submit\` to submit`)
                     .setTimestamp()
+                
 
                 try{
                     user2.send(embed)
@@ -414,10 +426,14 @@ export async function running(client: discord.Client): Promise<void> {
                     .send(`Can't send embed to <@${user2.id}>`)
                 }
                 // matches.splice(matches.indexOf(match), 1)
+
+                
             }
 
-            else if (((Math.floor(Date.now() / 1000) - match.p1.time === 300) && match.p1.memedone === false && match.p1.donesplit)) {
-
+            else if (((Math.floor(Date.now() / 1000) - match.p1.time <= 2160 && Math.floor(Date.now() / 1000) - match.p1.time >= 2100) 
+            && match.p1.memedone === false && match.p1.donesplit && match.p1.fivereminder === false)) {
+                match.p1.fivereminder = true
+                console.log("OK")
                 let embed = new discord.MessageEmbed()
                     .setColor("#d7be26")
                     .setTitle(`Match between ${user1.username} and ${user2.username}`)
@@ -435,8 +451,11 @@ export async function running(client: discord.Client): Promise<void> {
                 // matches.splice(matches.indexOf(match), 1)
             }
 
-            else if (((Math.floor(Date.now() / 1000) - match.p2.time === 300) && match.p2.memedone === false && match.p2.donesplit)) {
-
+            else if (((Math.floor(Date.now() / 1000) - match.p2.time <= 2160 && Math.floor(Date.now() / 1000) - match.p2.time >= 2100) && match.p2.memedone === false 
+            && match.p2.donesplit && match.p2.fivereminder === false)){
+                
+                match.p2.fivereminder = true
+                console.log("OK")
                 let embed = new discord.MessageEmbed()
                     .setColor("#d7be26")
                     .setTitle(`Match between ${user1.username} and ${user2.username}`)
@@ -562,11 +581,13 @@ export async function running(client: discord.Client): Promise<void> {
 
                 match.votingperiod = true
                 match.votetime = (Math.floor(Date.now() / 1000))
-                await updateActive(match)
+                
                 await channelid.send(`<@&719936221572235295>`)
 
                 await channelid.send("You have 2 hours to vote!")
             }
+
+            await updateActive(match)
         }
 
         if (match.votingperiod === true && !match.split) {
@@ -737,6 +758,8 @@ export async function startregularsplit(message: discord.Message, client: discor
             memelink: "",
             votes: 0,
             voters: [],
+            halfreminder: false,
+            fivereminder: false,
         },
         p2: {
             userid: user2.id,
@@ -746,6 +769,8 @@ export async function startregularsplit(message: discord.Message, client: discor
             memelink: "",
             votes: 0,
             voters: [],
+            halfreminder: false,
+            fivereminder: false,
         },
         votetime: Math.floor(Date.now() / 1000),
         votingperiod: false,
