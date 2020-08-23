@@ -3,7 +3,7 @@ import * as discord from "discord.js"
 // import {prefix} from "../misc/config.json"
 import { activematch } from "../misc/struct"
 import { deleteActive, deleteQuals, updateProfile, getSingularQuals, getMatch, getQual } from "../misc/db"
-import { winner } from "./card"
+import { grandwinner } from "./card"
 import { dateBuilder } from "../misc/utils"
 
 export async function end(client: discord.Client, id: string) {
@@ -30,7 +30,7 @@ export async function end(client: discord.Client, id: string) {
         updateProfile(user1.id, "loss", 1)
 
         await channelid.send(embed)
-        await channelid.send([await winner(client, user2.id)!])
+        await channelid.send([await grandwinner(client, user2.id)!])
     }
 
     else if ((Math.floor(Date.now() / 1000) - match.p2.time > 1800) && match.p2.memedone === false) {
@@ -47,7 +47,7 @@ export async function end(client: discord.Client, id: string) {
         updateProfile(user2.id, "loss", 1)
 
         await channelid.send(embed)
-        await channelid.send([await winner(client, user1.id)!])
+        await channelid.send([await grandwinner(client, user1.id)!])
 
     }
 
@@ -79,7 +79,7 @@ export async function end(client: discord.Client, id: string) {
         await channelid.send(embed)
 
 
-        await channelid.send([await winner(client, user1.id)!])
+        await channelid.send([await grandwinner(client, user1.id)!])
         await user1.send(`Your match is over, here is the final result. You gained 25 points for winning your match, and ${(match.p1.votes * 5)} points from your votes.`, {embed:embed})
         await user2.send(`Your match is over, here is the final result. You gained ${(match.p2.votes * 5)} points from your votes.`, {embed:embed})
 
@@ -108,7 +108,7 @@ export async function end(client: discord.Client, id: string) {
         updateProfile(user2.id, "points", (25 + (match.p2.votes * 5)))
 
         await channelid.send(embed)
-        await channelid.send([await winner(client, user2.id)!])
+        await channelid.send([await grandwinner(client, user2.id)!])
 
         // let d = new Date()
         
