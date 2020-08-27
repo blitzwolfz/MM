@@ -3,14 +3,14 @@ export interface activematch {
     channelid: string;
     messageID: string;
     split: boolean;
-    template: string;
+    template: Array<string>;
     tempfound: boolean;
     p1: {
         userid: string;
         memedone: boolean;
         donesplit: boolean;
         time: number;
-        memelink: string;
+        memelink: Array<string>;
         votes: number;
         voters: Array<string>;
         halfreminder: boolean;
@@ -21,7 +21,7 @@ export interface activematch {
         memedone: boolean;
         donesplit: boolean;
         time: number;
-        memelink: string;
+        memelink: Array<string>;
         votes: number;
         voters: Array<string>;
         halfreminder: boolean;
@@ -42,6 +42,22 @@ export interface qualmatch {
     playersdone: Array<string>;
     votingperiod: boolean;
     votetime: number;
+}
+export interface groupmatch {
+    _id: string;
+    split: boolean;
+    template: Array<string>;
+    groups: Array<groupstruct>;
+    votingperiod: boolean;
+    votetime: number;
+}
+export interface groupstruct {
+    groupsplit: boolean;
+    groupplayers: Array<string>;
+    captain: string;
+    memes: Array<string>;
+    halfreminder: boolean;
+    fivereminder: boolean;
 }
 export interface players {
     userid: string;

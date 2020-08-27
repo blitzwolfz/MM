@@ -87,9 +87,16 @@ export async function end(client: discord.Client, id: string) {
         
         await (<discord.TextChannel>client.channels.cache.get("734565012378746950")).send((new discord.MessageEmbed()
             .setColor("#d7be26")
-            .setImage(match.p1.memelink)
+            .setImage(match.p1.memelink[0])
             .setDescription(`${(await (await channelid.guild!.members.fetch(user1.id)).nickname) || await (await client.users.fetch(user1.id)).username} won with ${match.p1.votes} votes!`)
             .setFooter(dateBuilder())
+        ))
+
+        await (<discord.TextChannel>client.channels.cache.get("734565012378746950")).send((new discord.MessageEmbed()
+        .setColor("#d7be26")
+        .setImage(match.p1.memelink[1])
+        .setDescription(`${(await (await channelid.guild!.members.fetch(user1.id)).nickname) || await (await client.users.fetch(user1.id)).username} won with ${match.p1.votes} votes!`)
+        .setFooter(dateBuilder())
         ))
 
     
@@ -115,9 +122,17 @@ export async function end(client: discord.Client, id: string) {
         await (<discord.TextChannel>client.channels.cache.get("734565012378746950")).send((new discord.MessageEmbed()
             .setColor("#d7be26")
             .setDescription(`${(await (await channelid.guild!.members.fetch(user2.id)).nickname) || await (await client.users.fetch(user2.id)).username} won with ${match.p2.votes} votes!`)
-            .setImage(match.p2.memelink)
+            .setImage(match.p2.memelink[0])
             .setFooter(dateBuilder())
             //.setTimestamp()
+        ))
+
+        await (<discord.TextChannel>client.channels.cache.get("734565012378746950")).send((new discord.MessageEmbed()
+        .setColor("#d7be26")
+        .setDescription(`${(await (await channelid.guild!.members.fetch(user2.id)).nickname) || await (await client.users.fetch(user2.id)).username} won with ${match.p2.votes} votes!`)
+        .setImage(match.p2.memelink[1])
+        .setFooter(dateBuilder())
+        //.setTimestamp()
         ))
 
         await user1.send(`Your match is over, here is the final result. You gained ${(match.p1.votes * 5)} points from your votes.`, {embed:embed})
@@ -154,7 +169,6 @@ export async function qualend(client: discord.Client, id: string) {
 
     const match = await getSingularQuals(id)
     let channel = <discord.TextChannel>client.channels.cache.get(id)
-    let guild = client.guilds.cache.get("719406444109103117")
 
     if (match.votingperiod) {
 
@@ -164,13 +178,13 @@ export async function qualend(client: discord.Client, id: string) {
             for (let i = 0; i < match.votes.length; i++)
                 if(match.players[i].memedone){
                     fields.push({
-                        name: `${(await (await guild!.members.fetch(match.players[i].userid)).nickname) || await (await client.users.fetch(match.players[i].userid)).username}`,
+                        name: `<@${match.players[i].userid}>`,
                         value: `Has automatically won!`
                     });
                 }
                 else if(match.players[i].memedone === false){
                     fields.push({
-                        name: `${(await (await guild!.members.fetch(match.players[i].userid)).nickname) || await (await client.users.fetch(match.players[i].userid)).username}`,
+                        name: `<@${match.players[i].userid}>`,
                         value: `Failed to submit meme!`
                     });
                 }
@@ -209,7 +223,7 @@ export async function qualend(client: discord.Client, id: string) {
 
             for (let i = 0; i < match.votes.length; i++){
                 fields.push({
-                    name: `${await (await client.users.fetch(match.players[i].userid)).username} | Meme #${match.players.indexOf(match.players[i]) + 1}`,
+                    name: `<@${match.players[i].userid}> | Meme #${match.players.indexOf(match.players[i]) + 1}`,
                     //value: `${match.votes[i].length > 0 ? `Came in with ${match.votes[i].length} vote(s)` : `Failed to submit meme`}`
                     value: `${match.players[i].memedone ? `Finished with ${match.votes[i].length} | Earned: ${Math.floor(match.votes[i].length/totalvotes*100)} points` : `Failed to submit meme`}`, //`Came in with ${match.votes[i].length}`,
                 });

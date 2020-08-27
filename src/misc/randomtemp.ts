@@ -84,7 +84,7 @@ export async function RandomTemplateFunc(message: Discord.Message, client: Disco
     let random:string = templatelist[Math.floor(Math.random() * (((templatelist.length - 1) - 1) - 1) + 1)];
 
     let tempstruct :randomtempstruct = {
-      _id: message.channel.id,
+      _id: _id,
       found: false,
       url: random,
       messageid: "",

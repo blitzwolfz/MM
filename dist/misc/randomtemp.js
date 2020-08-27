@@ -79,7 +79,7 @@ async function RandomTemplateFunc(message, client, _id) {
     let templatelist = await getRandomTemplateList(client);
     let random = templatelist[Math.floor(Math.random() * (((templatelist.length - 1) - 1) - 1) + 1)];
     let tempstruct = {
-        _id: message.channel.id,
+        _id: _id,
         found: false,
         url: random,
         messageid: "",

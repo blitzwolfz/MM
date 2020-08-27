@@ -2,7 +2,7 @@ import * as mongo from "mongodb"
 
 require("dotenv").config();
 
-import { activematch, qualmatch, user, signups, matchlist, verificationform, quallist, cockratingInterface, modprofile, randomtempstruct } from "./struct";
+import { activematch, qualmatch, user, signups, matchlist, verificationform, quallist, cockratingInterface, modprofile, randomtempstruct, groupmatch } from "./struct";
 
 const MongoClient = mongo.MongoClient
 //const assert = require("assert")
@@ -239,4 +239,33 @@ export async function deletetempStruct(_id:string): Promise<void>{
 
 export async function getalltempStructs(): Promise<randomtempstruct[]> {
     return client.db(process.env.DBNAME).collection("tempstruct").find({}).toArray()!;
+}
+
+/*Group struct*/
+
+export async function insertGroupmatch(match: groupmatch): Promise<void> {
+    await client.db(process.env.DBNAME).collection("groupmatch").insertOne(match);
+    console.log("Inserted ActiveMatches!")
+}
+
+export async function updateGroupmatch(activematch: groupmatch): Promise<void> {
+    let _id = activematch._id
+    await client.db(process.env.DBNAME).collection("groupmatch").updateOne({_id}, {$set: activematch});
+    console.log("Updated Group Match!")
+}
+
+export async function getGroupmatches(): Promise<groupmatch[]>{
+    console.log("Getting groupmatches")
+    // return await client.db(process.env.DBNAME).collection("activematch").find({}, {projection:{ _id: 0 }}).select(['activematch']).toArray();
+    return await client.db(process.env.DBNAME).collection("groupmatch").find({}, {projection:{_id:0}}).toArray();
+}
+
+export async function getGroupmatch(_id:string): Promise<groupmatch>{
+    return await client.db(process.env.DBNAME).collection("groupmatch").findOne({_id})!;
+}
+
+export async function deleteGroupmatch(match: groupmatch): Promise<void>{
+    let _id = match._id
+    await client.db(process.env.DBNAME).collection("groupmatch").deleteOne({_id})
+    console.log("deleted group match")
 }
