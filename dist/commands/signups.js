@@ -212,8 +212,8 @@ async function viewsignup(message, client) {
     }
 }
 exports.viewsignup = viewsignup;
-async function activeOffers(message, client) {
-    let page = 1;
+async function activeOffers(message, client, args) {
+    let page = parseInt(args[0]) || 1;
     let signups = await db_1.getSignups();
     const m = (await message.channel.send({ embed: await listEmbed(page, client, signups) }));
     await m.react("⬅");

@@ -108,7 +108,7 @@ async function winlistEmbed(page: number = 1, client: Discord.Client, ratings: u
             fields.push({
                 name: `${i+1}) ${await (await client.users.fetch(ratings[i]._id)).username}`,
                 //@ts-ignore
-                value: `${rest[1] === "votes" ? "Memes voted on" : `${rest[1][0].toUpperCase()}${rest[1].substring(1)}`}: ${obj[`${rest[1] === "votes" ? "memesvoted" : rest[1]}`]}`
+                value: `${rest[1] === "votes" ? "Memes voted on" : `${rest[1][0].toUpperCase()}${rest[1].substring(1)}`}: ${obj[`${rest[1] === "votes" ? "Memes voted for" : rest[1]}`]}`
             });
         }
         catch{

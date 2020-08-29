@@ -313,7 +313,6 @@ client.on("message", async (message) => {
         await utils_1.deletechannels(message, args);
     }
     else if (command === "test") {
-        await utils_1.updatesomething(message);
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))
@@ -539,8 +538,7 @@ client.on("message", async (message) => {
         await signups_1.removesignup(message);
     }
     else if (command === "viewsignup" || command === "viewlist") {
-        await signups_1.activeOffers(message, client);
-        signups_1.matchlistEmbed;
+        await signups_1.activeOffers(message, client, args);
     }
     else if (command === "viewmatchlist" || command === "matchlist") {
         await signups_1.matchlistEmbed(message, client);

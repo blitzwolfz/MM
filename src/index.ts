@@ -21,13 +21,8 @@ import {
 } from "./commands/start";
 import { qualend, end, cancelmatch } from "./commands/winner";
 import { vs } from "./commands/card";
-import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, updatesomething } from "./misc/utils";
-import {
-  ModHelp,
-  UserHelp,
-  ModSignupHelp,
-  ModChallongeHelp,
-} from "./commands/help";
+import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels } from "./misc/utils";
+import { ModHelp, UserHelp, ModSignupHelp, ModChallongeHelp } from "./commands/help";
 
 import {
   connectToDB,
@@ -47,8 +42,7 @@ import {
 
 import { template, approvetemplate } from "./commands/template";
 import { createrUser, stats } from "./commands/user";
-import {
-  signup,
+import { signup,
   startsignup,
   closesignup,
   removesignup,
@@ -502,7 +496,7 @@ client.on("message", async message => {
 
   else if (command === "test") {
     //await message.reply("no").then(async message => await message.react('🤏'))
-    await updatesomething(message)
+    //await updatesomething(message)
   }
 
   else if (command === "createqualgroup") {
@@ -765,8 +759,8 @@ client.on("message", async message => {
 
   else if (command === "viewsignup" || command === "viewlist") {
     //await viewsignup(message, client)
-    await activeOffers(message, client)
-    matchlistEmbed
+    await activeOffers(message, client, args)
+    //matchlistEmbed
   }
 
   else if (command === "viewmatchlist" || command === "matchlist") {

@@ -246,8 +246,8 @@ export async function viewsignup(message: Discord.Message, client: Discord.Clien
 
 
 
-export async function activeOffers(message: Discord.Message, client: Discord.Client) {
-    let page: number = 1
+export async function activeOffers(message: Discord.Message, client: Discord.Client, args: string[]) {
+    let page: number = parseInt(args[0]) || 1
     let signups = await getSignups()
     const m = <Discord.Message>(await message.channel.send({ embed: await listEmbed(page!, client, signups) }));
     await m.react("⬅")
