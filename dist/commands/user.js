@@ -54,6 +54,7 @@ async function createrUser(message) {
         let NewUser = {
             _id: message.author.id,
             name: message.author.username,
+            memesvoted: 0,
             points: 0,
             wins: 0,
             loss: 0,
@@ -77,6 +78,7 @@ async function createAtUsermatch(User) {
         let NewUser = {
             _id: User.id,
             name: User.username,
+            memesvoted: 0,
             points: 0,
             wins: 0,
             loss: 0,

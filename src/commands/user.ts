@@ -47,6 +47,7 @@ export async function createrUser(message: discord.Message){
         let NewUser:user = {
             _id: message.author.id,
             name:message.author.username,
+            memesvoted:0,
             points:0,
             wins: 0,
             loss: 0,
@@ -79,6 +80,7 @@ export async function createAtUsermatch(User: discord.User){
         let NewUser:user = {
             _id: User.id,
             name:User.username,
+            memesvoted:0,
             points:0,
             wins: 0,
             loss: 0,

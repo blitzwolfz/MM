@@ -130,7 +130,7 @@ async function updatesomething(message) {
     try {
         for (let u of allusers) {
             try {
-                await db_1.updateProfile(u._id, "points", 0);
+                await db_1.updateProfile(u._id, "memesvoted", 0);
             }
             catch (err) {
                 await message.channel.send("```" + err + "```");

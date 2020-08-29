@@ -153,10 +153,12 @@ export async function end(client: discord.Client, id: string) {
 
     for(let s = 0; s <  match.p1.voters.length; s++){
         await await updateProfile(match.p1.voters[s], "points", 2)
+        await await updateProfile(match.p1.voters[s], "memesvoted", 1)
     }
 
     for(let t = 0; t <  match.p2.voters.length; t++){
         await await updateProfile(match.p2.voters[t], "points", 2)
+        await await updateProfile(match.p2.voters[t], "memesvoted", 1)
     }
 
     // matches.splice(matches.indexOf(match), 1)
@@ -250,6 +252,7 @@ export async function qualend(client: discord.Client, id: string) {
             for(let i = 0; i <  match.votes.length; i++){
                 for(let x = 0; x < match.votes[i].length; x++){
                     await updateProfile(match.votes[i][x], "points", 2)
+                    await updateProfile(match.votes[i][x], "memesvoted", 1)
                 }
             }
 

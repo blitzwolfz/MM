@@ -313,7 +313,7 @@ client.on("message", async (message) => {
         await utils_1.deletechannels(message, args);
     }
     else if (command === "test") {
-        await message.reply("no").then(async (message) => await message.react('🤏'));
+        await utils_1.updatesomething(message);
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))

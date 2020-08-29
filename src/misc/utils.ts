@@ -172,7 +172,7 @@ export async function updatesomething(message:Discord.Message){
   try{
     for(let u of allusers){
       try{
-        await updateProfile(u._id, "points", 0)
+        await updateProfile(u._id, "memesvoted", 0)
       }
 
       catch (err) {

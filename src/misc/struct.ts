@@ -79,7 +79,8 @@ export interface players{
 
 export interface user{
     _id:string;
-    name:string
+    name:string;
+    memesvoted:number;
     points:number;
     wins: number;
     loss: number;

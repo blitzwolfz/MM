@@ -90,10 +90,14 @@ export async function updateProfile(_id:string, field:string, num: any): Promise
     if(field === "name"){
         await client.db(process.env.DBNAME).collection("users").updateOne({_id:_id}, {$set:{[field]:num}})!;
     }
-    
     else{
         await client.db(process.env.DBNAME).collection("users").updateOne({_id:_id}, {$inc:{[field]:num}})!;
     }
+}
+
+export async function changefield(): Promise<void> {
+    await client.db(process.env.DBNAME).collection("users").updateMany( {}, { $rename: { "votes": "memesvoted" } } )  
+    
 }
 
 export async function addUser(user:user): Promise<void> {

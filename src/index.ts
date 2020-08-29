@@ -21,7 +21,7 @@ import {
 } from "./commands/start";
 import { qualend, end, cancelmatch } from "./commands/winner";
 import { vs } from "./commands/card";
-import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels } from "./misc/utils";
+import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, updatesomething } from "./misc/utils";
 import {
   ModHelp,
   UserHelp,
@@ -501,7 +501,8 @@ client.on("message", async message => {
   }
 
   else if (command === "test") {
-    await message.reply("no").then(async message => await message.react('🤏'))
+    //await message.reply("no").then(async message => await message.react('🤏'))
+    await updatesomething(message)
   }
 
   else if (command === "createqualgroup") {

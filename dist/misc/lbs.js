@@ -58,6 +58,9 @@ async function winningLB(message, client, args) {
         case "l":
             symbol = "loss";
             break;
+        case "v":
+            symbol = "memesvoted";
+            break;
         default: symbol = "wins";
     }
     let ratings = await db_1.getAllProfiles(symbol);
@@ -81,10 +84,11 @@ async function winlistEmbed(page = 1, client, ratings, ...rest) {
     const fields = [];
     let index = (0 + page - 1) * 10;
     for (let i = index; i < index + 10; i++) {
+        let obj = ratings[i];
         try {
             fields.push({
                 name: `${i + 1}) ${await (await client.users.fetch(ratings[i]._id)).username}`,
-                value: `Points: ${ratings[i].points}\nWins: ${ratings[i].wins}\nLoss: ${ratings[i].loss}\n`
+                value: `${rest[1] === "votes" ? "Memes voted on" : `${rest[1][0].toUpperCase()}${rest[1].substring(1)}`}: ${obj[`${rest[1] === "votes" ? "memesvoted" : rest[1]}`]}`
             });
         }
         catch {
@@ -92,7 +96,7 @@ async function winlistEmbed(page = 1, client, ratings, ...rest) {
         }
     }
     return {
-        title: `Leaderboard sorted by ${rest[1]}. You are on page ${page || 1} of ${Math.floor(ratings.length / 10) + 1}`,
+        title: `Leaderboard sorted by ${rest[1] === "votes" ? "Memes voted for" : rest[1]}. You are on page ${page || 1} of ${Math.floor(ratings.length / 10) + 1}`,
         description: `Your rank is: ${ratings.findIndex(item => item._id == rest[0]) + 1}`,
         fields,
         color: "#d7be26",

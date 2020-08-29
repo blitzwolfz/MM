@@ -129,9 +129,11 @@ async function end(client, id) {
     }
     for (let s = 0; s < match.p1.voters.length; s++) {
         await await db_1.updateProfile(match.p1.voters[s], "points", 2);
+        await await db_1.updateProfile(match.p1.voters[s], "memesvoted", 1);
     }
     for (let t = 0; t < match.p2.voters.length; t++) {
         await await db_1.updateProfile(match.p2.voters[t], "points", 2);
+        await await db_1.updateProfile(match.p2.voters[t], "memesvoted", 1);
     }
     await db_1.deleteActive(match);
     return;
@@ -201,6 +203,7 @@ async function qualend(client, id) {
             for (let i = 0; i < match.votes.length; i++) {
                 for (let x = 0; x < match.votes[i].length; x++) {
                     await db_1.updateProfile(match.votes[i][x], "points", 2);
+                    await db_1.updateProfile(match.votes[i][x], "memesvoted", 1);
                 }
             }
             await db_1.deleteQuals(match);
