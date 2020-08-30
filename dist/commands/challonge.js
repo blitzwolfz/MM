@@ -198,7 +198,7 @@ async function QualChannelCreation(message, args) {
         if (groups.users[i].length > 0) {
             await message.guild.channels.create(`Group ${i + 1}`, { type: 'text', topic: `Round ${args[0]}` })
                 .then(async (channel) => {
-                let category = await message.guild.channels.cache.find(c => c.name == "qualifiers" && c.type == "category");
+                let category = await message.guild.channels.cache.find(c => c.name == "matches" && c.type == "category");
                 if (!category)
                     throw new Error("Category channel does not exist");
                 await channel.setParent(category.id);
@@ -206,7 +206,7 @@ async function QualChannelCreation(message, args) {
                 for (let u of groups.users[i]) {
                     string += `<@${u}> `;
                 }
-                await channel.send(`${string}, Round ${args[0]} has begun, and you have ${time}h. Contact a mod to being your portion!`);
+                await channel.send(`${string}, Portion ${args[0]} has begun, and you have ${time}h to complete it. Contact a ref to being your portion!`);
             });
         }
     }
