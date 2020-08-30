@@ -45,6 +45,7 @@ export async function start(message: discord.Message, client: discord.Client) {
         tempfound: false,
         p1: {
             userid: user1.id,
+            partner: message.mentions.users.array()[1].id,
             memedone: false,
             donesplit: true,
             time: Math.floor(Date.now() / 1000),
@@ -56,6 +57,7 @@ export async function start(message: discord.Message, client: discord.Client) {
         },
         p2: {
             userid: user2.id,
+            partner: message.mentions.users.array()[3].id,
             memedone: false,
             donesplit: true,
             time: Math.floor(Date.now() / 1000),
@@ -811,6 +813,7 @@ export async function startregularsplit(message: discord.Message, client: discor
         tempfound: false,
         p1: {
             userid: user1.id,
+            partner: message.mentions.users.array()[1].id,
             memedone: false,
             donesplit: false,
             time: Math.floor(Date.now() / 1000),
@@ -822,6 +825,7 @@ export async function startregularsplit(message: discord.Message, client: discor
         },
         p2: {
             userid: user2.id,
+            partner: message.mentions.users.array()[3].id,
             memedone: false,
             donesplit: false,
             time: Math.floor(Date.now() / 1000),
@@ -1129,12 +1133,14 @@ export async function matchstats(message: discord.Message, client: discord.Clien
             .setTitle(`${channel.name}`)
             .setColor("BLUE")
             .addFields(
+                { name: `Partner:`, value: `${(await client.users.cache.get(match.p1.partner)!).username}`, inline:true},
                 { name: `${(await client.users.cache.get(match.p1.userid)!).username} Meme Done:`, value: `${match.p1.memedone ? `Yes` : `No` }`, inline:true},
                 { name: 'Match Portion Done:', value: `${match.p1.donesplit ? `${match.split ? `Yes` : `Not a split match` }` : `No` }`, inline:true},
                 { name: 'Meme Link:', value: `${match.p1.memedone ?   `${match.p1.memelink}` : `No meme submitted yet` }`, inline:true},
                 { name: 'Time left', value: `${match.p1.donesplit ? `${match.p1.memedone ? "Submitted meme" : `${120 - Math.floor(((Date.now() / 1000) - match.p1.time)/60)} mins left`}` : `${match.split ? `Hasn't started portion` : `Time up` }` }`, inline:true},
                 { name: '\u200B', value: '\u200B' },
 
+                { name: `Partner:`, value: `${(await client.users.cache.get(match.p2.partner)!).username}`, inline:true},
                 { name: `${(await client.users.cache.get(match.p2.userid)!).username} Meme Done:`, value: `${match.p2.memedone ? `Yes` : `No` }`, inline:true},
                 { name: 'Match Portion Done:', value: `${match.p2.donesplit ? `${match.split ? `Yes` : `Not a split match` }` : `No` }`, inline:true},
                 { name: 'Meme Link:', value: `${match.p2.memedone ?   `${match.p2.memelink}` : `No meme submitted yet`}`, inline:true},

@@ -7,6 +7,7 @@ export interface activematch {
     tempfound: boolean;
     p1: {
         userid: string;
+        partner: string;
         memedone: boolean;
         donesplit: boolean;
         time: number;
@@ -18,6 +19,7 @@ export interface activematch {
     };
     p2: {
         userid: string;
+        partner: string;
         memedone: boolean;
         donesplit: boolean;
         time: number;

@@ -275,7 +275,7 @@ async function shuffle(a) {
     }
     return a;
 }
-async function GroupSearch(message, client, args) {
+async function GroupSearch(message, args) {
     var _a, _b, _c;
     let signup = await db_1.getQuallist();
     let id = (((_c = (_b = (_a = message.mentions) === null || _a === void 0 ? void 0 : _a.users) === null || _b === void 0 ? void 0 : _b.first()) === null || _c === void 0 ? void 0 : _c.id) || args[0]);
