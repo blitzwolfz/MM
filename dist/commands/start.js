@@ -109,6 +109,7 @@ async function start(message, client) {
         rantemp2 = await db_1.gettempStruct(message.channel.id);
     }
     newmatch.template.push(rantemp2.url);
+    await db_1.insertActive(newmatch);
     await db_1.deletetempStruct(rantemp2._id);
     await card_1.vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[2].id]);
     await card_1.vs(message.channel.id, client, [message.mentions.users.array()[1].id, message.mentions.users.array()[3].id]);
@@ -166,7 +167,6 @@ async function start(message, client) {
     message.mentions.users.array()[1].send(`Your match has been split.\nYou have 2 hours to complete your portion\nUse \`!submit\` to submit`);
     await user2.send(`Your match has been split.\nYou have 2 hours to complete your portion\nUse \`!submit\` to submit`);
     message.mentions.users.array()[1].send(`Your match has been split.\nYou have 2 hours to complete your portion\nUse \`!submit\` to submit`);
-    await db_1.insertActive(newmatch);
 }
 exports.start = start;
 async function startqual(message, client) {
@@ -644,6 +644,8 @@ async function startregularsplit(message, client) {
         }
         rantemp2 = await db_1.gettempStruct(message.channel.id);
     }
+    newmatch.template.push(rantemp2.url);
+    await db_1.insertActive(newmatch);
     await card_1.vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[2].id]);
     await card_1.vs(message.channel.id, client, [message.mentions.users.array()[1].id, message.mentions.users.array()[3].id]);
     let embed = new discord.MessageEmbed()
@@ -655,8 +657,6 @@ async function startregularsplit(message, client) {
         await message.react('🅰️');
         await message.react('🅱️');
     });
-    newmatch.template.push(rantemp2.url);
-    await db_1.insertActive(newmatch);
     await db_1.deletetempStruct(rantemp2._id);
 }
 exports.startregularsplit = startregularsplit;

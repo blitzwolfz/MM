@@ -139,6 +139,8 @@ export async function start(message: discord.Message, client: discord.Client) {
 
     
     newmatch.template.push(rantemp2.url)
+    await insertActive(newmatch)
+
     await deletetempStruct(rantemp2._id)
 
     
@@ -234,8 +236,6 @@ export async function start(message: discord.Message, client: discord.Client) {
     await user2.send(`Your match has been split.\nYou have 2 hours to complete your portion\nUse \`!submit\` to submit`)
     message.mentions.users.array()[1].send(`Your match has been split.\nYou have 2 hours to complete your portion\nUse \`!submit\` to submit`)
 
-
-    await insertActive(newmatch)
     // // return matches;
 }
 
@@ -954,6 +954,9 @@ export async function startregularsplit(message: discord.Message, client: discor
         rantemp2 = await gettempStruct(message.channel.id)
         //console.log(rantemp)
     }
+    
+    newmatch.template.push(rantemp2.url)
+    await insertActive(newmatch)
 
     
     await vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[2].id])
@@ -971,8 +974,6 @@ export async function startregularsplit(message: discord.Message, client: discor
     })
 
     
-    newmatch.template.push(rantemp2.url)
-    await insertActive(newmatch)
     await deletetempStruct(rantemp2._id)
 }
 
