@@ -196,12 +196,9 @@ async function QualChannelCreation(message, args) {
     let time = args[1];
     for (let i = 0; i < groups.users.length; i++) {
         if (groups.users[i].length > 0) {
-            await message.guild.channels.create(`Group ${i + 1}`, { type: 'text', topic: `Round ${args[0]}` })
+            let category = await message.guild.channels.cache.find(c => c.name == "qualifiers" && c.type == "category");
+            await message.guild.channels.create(`Group ${i + 1}`, { type: 'text', topic: `Round ${args[0]}`, parent: category.id })
                 .then(async (channel) => {
-                let category = await message.guild.channels.cache.find(c => c.name == "matches" && c.type == "category");
-                if (!category)
-                    throw new Error("Category channel does not exist");
-                await channel.setParent(category.id);
                 let string = "";
                 for (let u of groups.users[i]) {
                     string += `<@${u}> `;

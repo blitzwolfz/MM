@@ -495,7 +495,8 @@ client.on("message", async message => {
   }
 
   else if (command === "test") {
-    //await message.reply("no").then(async message => await message.react('🤏'))
+
+    await message.reply("no").then(async message => await message.react('🤏'))
     //await updatesomething(message)
   }
 
