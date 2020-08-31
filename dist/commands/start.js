@@ -645,9 +645,8 @@ async function startregularsplit(message, client) {
         rantemp2 = await db_1.gettempStruct(message.channel.id);
     }
     newmatch.template.push(rantemp2.url);
+    await db_1.deletetempStruct(rantemp2._id);
     await db_1.insertActive(newmatch);
-    await card_1.vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[2].id]);
-    await card_1.vs(message.channel.id, client, [message.mentions.users.array()[1].id, message.mentions.users.array()[3].id]);
     let embed = new discord.MessageEmbed()
         .setTitle(`Match between ${user1.username} & ${message.mentions.users.array()[1].username} and ${user2.username} & ${message.mentions.users.array()[3].username}`)
         .setColor("#d7be26")
@@ -657,7 +656,8 @@ async function startregularsplit(message, client) {
         await message.react('🅰️');
         await message.react('🅱️');
     });
-    await db_1.deletetempStruct(rantemp2._id);
+    await card_1.vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[2].id]);
+    await card_1.vs(message.channel.id, client, [message.mentions.users.array()[1].id, message.mentions.users.array()[3].id]);
 }
 exports.startregularsplit = startregularsplit;
 async function reload(message, client) {

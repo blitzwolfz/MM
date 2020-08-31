@@ -954,13 +954,10 @@ export async function startregularsplit(message: discord.Message, client: discor
         rantemp2 = await gettempStruct(message.channel.id)
         //console.log(rantemp)
     }
-    
-    newmatch.template.push(rantemp2.url)
-    await insertActive(newmatch)
 
-    
-    await vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[2].id])
-    await vs(message.channel.id, client, [message.mentions.users.array()[1].id, message.mentions.users.array()[3].id])
+    newmatch.template.push(rantemp2.url)
+    await deletetempStruct(rantemp2._id)
+    await insertActive(newmatch)
 
     let embed = new discord.MessageEmbed()
         .setTitle(`Match between ${user1.username} & ${message.mentions.users.array()[1].username} and ${user2.username} & ${message.mentions.users.array()[3].username}`)
@@ -974,7 +971,10 @@ export async function startregularsplit(message: discord.Message, client: discor
     })
 
     
-    await deletetempStruct(rantemp2._id)
+    
+
+    await vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[2].id])
+    await vs(message.channel.id, client, [message.mentions.users.array()[1].id, message.mentions.users.array()[3].id])
 }
 
 export async function reload(message: discord.Message, client: discord.Client) {
