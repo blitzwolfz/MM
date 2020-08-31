@@ -9,3 +9,4 @@ export declare function splitregular(message: discord.Message, client: discord.C
 export declare function startregularsplit(message: discord.Message, client: discord.Client): Promise<discord.Message | undefined>;
 export declare function reload(message: discord.Message, client: discord.Client): Promise<discord.Message | undefined>;
 export declare function matchstats(message: discord.Message, client: discord.Client): Promise<discord.Message | undefined>;
+export declare function forfeit(message: discord.Message): Promise<discord.Message | undefined>;

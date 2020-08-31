@@ -17,7 +17,7 @@ import {
   startregularsplit,
   splitregular,
   reload,
-  matchstats,
+  matchstats
 } from "./commands/start";
 import { qualend, end, cancelmatch } from "./commands/winner";
 import { vs } from "./commands/card";
@@ -555,19 +555,25 @@ client.on("message", async message => {
     await updateModProfile(message.author.id, "matchesstarted", 1)
   }
 
+  else if (command === "forefeit"){
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
+    await message.reply("Not ready")
+    //await forfeit(message, client)
+  }
+
   else if (command === "checkmatch") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
 
     if (await getMatch(message.channel.id)) {
-      message.reply(", there is an active match")
+      message.reply("there is an active match")
     }
 
     else if (await getQual(message.channel.id)) {
-      message.reply(", there is an active qualifier match")
+      message.reply("there is an active qualifier match")
     }
 
     else {
-      message.reply(", there are no matches")
+      message.reply("there are no matches")
     }
   }
 

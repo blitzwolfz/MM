@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.matchstats = exports.reload = exports.startregularsplit = exports.splitregular = exports.splitqual = exports.qualrunning = exports.running = exports.startmodqual = exports.startqual = exports.start = void 0;
+exports.forfeit = exports.matchstats = exports.reload = exports.startregularsplit = exports.splitregular = exports.splitqual = exports.qualrunning = exports.running = exports.startmodqual = exports.startqual = exports.start = void 0;
 const discord = __importStar(require("discord.js"));
 const utils_1 = require("../misc/utils");
 const prefix = process.env.PREFIX;
@@ -833,3 +833,49 @@ async function matchstats(message, client) {
     }
 }
 exports.matchstats = matchstats;
+async function forfeit(message) {
+    if (await db_1.getMatch(message.channel.id)) {
+        let match = await db_1.getMatch(message.channel.id);
+        if (match.p1.userid === message.mentions.users.array()[0].id) {
+            match.p1.memedone = false;
+            match.p1.donesplit = true;
+            match.p1.time = (match.p1.time - 7200);
+        }
+        else if (match.p2.userid === message.mentions.users.array()[0].id) {
+            match.p2.memedone = false;
+            match.p2.donesplit = true;
+            match.p2.time = (match.p2.time - 7200);
+        }
+        await db_1.updateActive(match);
+        return message.reply("Player has been forfeited.");
+    }
+    else if (await db_1.getQual(message.channel.id)) {
+        let match = await db_1.getQual(message.channel.id);
+        let i = 0;
+        for (i < match.players.length; i++;) {
+            if (match.players[i].userid === message.mentions.users.array()[0].id) {
+                break;
+            }
+        }
+        match.players[i].failed = true;
+        match.players[i].memedone = false;
+        match.players[i].split = true;
+        match.players[i].time = (match.players[i].time - 1800);
+        match.playersdone.push(match.players[i].userid);
+        if (match.players.length - match.playersdone.length === 2) {
+            for (let e = 0; e < match.players.length; e++) {
+                if (!match.playersdone.includes(match.players[e].userid)) {
+                    match.players[e].memedone = true;
+                    match.players[e].split = true;
+                    match.playersdone.push(match.players[e].userid);
+                }
+            }
+        }
+        await db_1.updateQuals(match);
+        return message.reply("Player has been forfeited.");
+    }
+    else {
+        message.reply("there are no matches");
+    }
+}
+exports.forfeit = forfeit;

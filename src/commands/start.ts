@@ -6,7 +6,7 @@ import { end, qualend } from "./winner"
 import { vs } from "./card"
 import { updateActive, deleteActive, insertActive, insertQuals, 
     updateQuals, getActive, getQuals, getSingularQuals, 
-    getMatch, gettempStruct, deletetempStruct} from "../misc/db"
+    getMatch, gettempStruct, deletetempStruct, getQual} from "../misc/db"
 import { createAtUsermatch } from "./user"
 import { qualrunn } from "./qualrunn"
 import { RandomTemplateFunc } from "../misc/randomtemp"
@@ -1195,7 +1195,6 @@ export async function reload(message: discord.Message, client: discord.Client) {
     }
 }
 
-
 export async function matchstats(message: discord.Message, client: discord.Client){
     let channel = message.mentions.channels.first()
     
@@ -1241,6 +1240,65 @@ export async function matchstats(message: discord.Message, client: discord.Clien
 
 }
 
+export async function forfeit(message: discord.Message){
+    if (await getMatch(message.channel.id)) {
+        let match = await getMatch(message.channel.id)
+
+        if(match.p1.userid === message.mentions.users.array()[0].id){
+            match.p1.memedone = false
+            match.p1.donesplit = true
+            match.p1.time = (match.p1.time - 7200)
+        }
+
+        else if(match.p2.userid === message.mentions.users.array()[0].id){
+            match.p2.memedone = false
+            match.p2.donesplit = true
+            match.p2.time = (match.p2.time - 7200)
+        }
+
+        await updateActive(match)
+
+        return message.reply("Player has been forfeited.")
+      }
+  
+      else if (await getQual(message.channel.id)) {
+
+        let match = await getQual(message.channel.id)
+
+        let i = 0;
+
+        for (i < match.players.length; i++;){
+            if (match.players[i].userid === message.mentions.users.array()[0].id){
+                break;
+            }
+        }
+
+        match.players[i].failed = true
+        match.players[i].memedone = false
+        match.players[i].split = true
+        match.players[i].time = (match.players[i].time - 1800)
+        match.playersdone.push(match.players[i].userid)
+
+        if(match.players.length - match.playersdone.length === 2){
+            for (let e = 0; e < match.players.length; e++){
+                if(!match.playersdone.includes(match.players[e].userid)){
+                    match.players[e].memedone = true
+                    match.players[e].split = true
+                    match.playersdone.push(match.players[e].userid)
+                }
+            }
+        }
+
+
+
+        await updateQuals(match)
+        return message.reply("Player has been forfeited.")
+      }
+  
+      else {
+        message.reply("there are no matches")
+      }
+}
 
 
 
