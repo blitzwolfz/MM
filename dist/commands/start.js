@@ -78,7 +78,9 @@ async function start(message, client) {
         .setTimestamp();
     message.channel.send(templook);
     await randomtemp_1.RandomTemplateFunc(message, client, message.channel.id);
+    setTimeout(() => { console.log("Waited 2 seconds"); }, 2000);
     let rantemp = await db_1.gettempStruct(message.channel.id);
+    rantemp.time = rantemp.time - 2.5;
     console.log(rantemp);
     while (rantemp.found === false) {
         if (Math.floor(Date.now() / 1000) - rantemp.time > 120) {
@@ -95,7 +97,9 @@ async function start(message, client) {
     newmatch.template.push(rantemp.url);
     await db_1.deletetempStruct(rantemp._id);
     await randomtemp_1.RandomTemplateFunc(message, client, message.channel.id);
+    setTimeout(() => { console.log("Waited 2 seconds"); }, 2000);
     let rantemp2 = await db_1.gettempStruct(message.channel.id);
+    rantemp2.time = rantemp2.time - 2.5;
     while (rantemp2.found === false) {
         if (Math.floor(Date.now() / 1000) - rantemp.time > 120) {
             await db_1.deletetempStruct(rantemp2._id);
@@ -116,7 +120,7 @@ async function start(message, client) {
     let embed = new discord.MessageEmbed()
         .setTitle(`Match between ${user1.username} & ${message.mentions.users.array()[1].username} and ${user2.username} & ${message.mentions.users.array()[3].username}`)
         .setColor("#d7be26")
-        .setDescription(`<@${user1.id}> and <@${user2.id}> both have 2 hours to complete your memes.\n Contact admins if you have an issue.`)
+        .setDescription(`<@${user1.id}> & <@${message.mentions.users.array()[1].id}> and <@${user2.id}> & <@${message.mentions.users.array()[3].id}> both have 2 hours to complete your memes.\n Contact admins if you have an issue.`)
         .setTimestamp();
     message.channel.send({ embed });
     await user1.send(new discord.MessageEmbed()
@@ -615,7 +619,9 @@ async function startregularsplit(message, client) {
         .setTimestamp();
     message.channel.send(templook);
     await randomtemp_1.RandomTemplateFunc(message, client, message.channel.id);
+    setTimeout(() => { console.log("Waited 2 seconds"); }, 2000);
     let rantemp = await db_1.gettempStruct(message.channel.id);
+    rantemp.time = rantemp.time - 2.5;
     while (rantemp.found === false) {
         if (Math.floor(Date.now() / 1000) - rantemp.time > 120) {
             await db_1.deletetempStruct(rantemp._id);
@@ -631,7 +637,9 @@ async function startregularsplit(message, client) {
     newmatch.template.push(rantemp.url);
     await db_1.deletetempStruct(rantemp._id);
     await randomtemp_1.RandomTemplateFunc(message, client, message.channel.id);
+    setTimeout(() => { console.log("Waited 2 seconds"); }, 2000);
     let rantemp2 = await db_1.gettempStruct(message.channel.id);
+    rantemp2.time = rantemp2.time - 2.5;
     while (rantemp2.found === false) {
         if (Math.floor(Date.now() / 1000) - rantemp.time > 120) {
             await db_1.deletetempStruct(rantemp2._id);
@@ -647,6 +655,8 @@ async function startregularsplit(message, client) {
     newmatch.template.push(rantemp2.url);
     await db_1.deletetempStruct(rantemp2._id);
     await db_1.insertActive(newmatch);
+    await card_1.vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[2].id]);
+    await card_1.vs(message.channel.id, client, [message.mentions.users.array()[1].id, message.mentions.users.array()[3].id]);
     let embed = new discord.MessageEmbed()
         .setTitle(`Match between ${user1.username} & ${message.mentions.users.array()[1].username} and ${user2.username} & ${message.mentions.users.array()[3].username}`)
         .setColor("#d7be26")
@@ -656,8 +666,6 @@ async function startregularsplit(message, client) {
         await message.react('🅰️');
         await message.react('🅱️');
     });
-    await card_1.vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[2].id]);
-    await card_1.vs(message.channel.id, client, [message.mentions.users.array()[1].id, message.mentions.users.array()[3].id]);
 }
 exports.startregularsplit = startregularsplit;
 async function reload(message, client) {

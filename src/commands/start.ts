@@ -85,7 +85,12 @@ export async function start(message: discord.Message, client: discord.Client) {
     await RandomTemplateFunc(message, client, message.channel.id)
 
 
+    setTimeout(() => { console.log("Waited 2 seconds"); }, 2000);
+
     let rantemp = await gettempStruct(message.channel.id)
+
+    rantemp.time = rantemp.time - 2.5
+
     console.log(rantemp)
     // await message.channel.send(new discord.MessageEmbed()
     //         .setTitle(`Random Template Selection failed `)
@@ -118,7 +123,11 @@ export async function start(message: discord.Message, client: discord.Client) {
 
     await RandomTemplateFunc(message, client, message.channel.id)
 
+    setTimeout(() => { console.log("Waited 2 seconds"); }, 2000);
+
     let rantemp2 = await gettempStruct(message.channel.id)
+
+    rantemp2.time = rantemp2.time - 2.5
  
 
     while(rantemp2.found === false){
@@ -150,7 +159,7 @@ export async function start(message: discord.Message, client: discord.Client) {
     let embed = new discord.MessageEmbed()
         .setTitle(`Match between ${user1.username} & ${message.mentions.users.array()[1].username} and ${user2.username} & ${message.mentions.users.array()[3].username}`)
         .setColor("#d7be26")
-        .setDescription(`<@${user1.id}> and <@${user2.id}> both have 2 hours to complete your memes.\n Contact admins if you have an issue.`)
+        .setDescription(`<@${user1.id}> & <@${message.mentions.users.array()[1].id}> and <@${user2.id}> & <@${message.mentions.users.array()[3].id}> both have 2 hours to complete your memes.\n Contact admins if you have an issue.`)
         .setTimestamp()
 
 
@@ -913,8 +922,11 @@ export async function startregularsplit(message: discord.Message, client: discor
 
     await RandomTemplateFunc(message, client, message.channel.id)
 
+    setTimeout(() => { console.log("Waited 2 seconds"); }, 2000);
 
     let rantemp = await gettempStruct(message.channel.id)
+
+    rantemp.time = rantemp.time - 2.5
  
     while(rantemp.found === false){
         //console.log(rantemp)
@@ -936,7 +948,11 @@ export async function startregularsplit(message: discord.Message, client: discor
 
     await RandomTemplateFunc(message, client, message.channel.id)
 
+    setTimeout(() => { console.log("Waited 2 seconds"); }, 2000);
+
     let rantemp2 = await gettempStruct(message.channel.id)
+
+    rantemp2.time = rantemp2.time - 2.5
  
 
     while(rantemp2.found === false){
@@ -959,6 +975,9 @@ export async function startregularsplit(message: discord.Message, client: discor
     await deletetempStruct(rantemp2._id)
     await insertActive(newmatch)
 
+    await vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[2].id])
+    await vs(message.channel.id, client, [message.mentions.users.array()[1].id, message.mentions.users.array()[3].id])
+
     let embed = new discord.MessageEmbed()
         .setTitle(`Match between ${user1.username} & ${message.mentions.users.array()[1].username} and ${user2.username} & ${message.mentions.users.array()[3].username}`)
         .setColor("#d7be26")
@@ -970,11 +989,6 @@ export async function startregularsplit(message: discord.Message, client: discor
         await message.react('🅱️')
     })
 
-    
-    
-
-    await vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[2].id])
-    await vs(message.channel.id, client, [message.mentions.users.array()[1].id, message.mentions.users.array()[3].id])
 }
 
 export async function reload(message: discord.Message, client: discord.Client) {
