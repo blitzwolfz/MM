@@ -67,7 +67,6 @@ import { createmodprofile, viewmodprofile, modLB, clearmodstats } from "./misc/m
 import { getRandomTemplateList } from "./misc/randomtemp";
 
 
-
 console.log("Hello World, bot has begun life");
 
 
@@ -428,7 +427,7 @@ client.on("message", async message => {
     return
   };
 
-  if(command === "s" || message.content.includes("!s")){
+  if(command === "s"){
     await qualrunning(client);
     await running(client);
   }
@@ -684,6 +683,41 @@ client.on("message", async message => {
 
         form.num = min
         form.time = Math.floor(Date.now() / 1000)
+        await updateCockrating(form)
+      }
+    }
+  }
+
+  else if (command === "mr" || command === "manualrating" || command === "powercock") {
+
+    if (!message.member!.roles.cache.has('719936221572235295')) {
+      return message.reply("You are not cock rating master.")
+    }
+
+    else {
+      let id = (message.mentions?.users?.first()?.id || message.author.id)
+      let form = await getCockrating(id)
+      let max = 100
+      let min = parseInt(args[1] || args[0])
+
+      if (!form) {
+        message.reply(`<@${id}> has ${max === min ? `100% good cock` : `${min}/${max} cock.`}`)
+
+        
+
+        let newform: cockratingInterface = {
+          _id: id,
+          num: min,
+          time: Math.floor(Date.now() / 1000)
+        }
+
+        await insertCockrating(newform)
+      }
+
+      else {
+        message.reply(`<@${id}> has ${max === min ? `100% good cock` : `${min}/${max} cock. The previous rating was ${form.num}/${max} cock`}`)
+
+        form.num = min
         await updateCockrating(form)
       }
     }

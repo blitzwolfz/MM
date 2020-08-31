@@ -249,7 +249,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
     }
 });
 client.on("message", async (message) => {
-    var _a, _b, _c, _d;
+    var _a, _b, _c, _d, _e, _f, _g;
     if (message.content.indexOf(process.env.PREFIX) !== 0 || message.author.bot) {
         if (message.author.id !== "688558229646475344")
             return;
@@ -264,7 +264,7 @@ client.on("message", async (message) => {
         return;
     }
     ;
-    if (command === "s" || message.content.includes("!s")) {
+    if (command === "s") {
         await start_1.qualrunning(client);
         await start_1.running(client);
     }
@@ -470,6 +470,31 @@ client.on("message", async (message) => {
                 message.reply(`<@${id}> has ${max === min ? `100% good cock` : `${min}/${max} cock. The previous rating was ${form.num}/${max} cock`}`);
                 form.num = min;
                 form.time = Math.floor(Date.now() / 1000);
+                await db_1.updateCockrating(form);
+            }
+        }
+    }
+    else if (command === "mr" || command === "manualrating" || command === "powercock") {
+        if (!message.member.roles.cache.has('719936221572235295')) {
+            return message.reply("You are not cock rating master.");
+        }
+        else {
+            let id = (((_g = (_f = (_e = message.mentions) === null || _e === void 0 ? void 0 : _e.users) === null || _f === void 0 ? void 0 : _f.first()) === null || _g === void 0 ? void 0 : _g.id) || message.author.id);
+            let form = await db_1.getCockrating(id);
+            let max = 100;
+            let min = parseInt(args[1] || args[0]);
+            if (!form) {
+                message.reply(`<@${id}> has ${max === min ? `100% good cock` : `${min}/${max} cock.`}`);
+                let newform = {
+                    _id: id,
+                    num: min,
+                    time: Math.floor(Date.now() / 1000)
+                };
+                await db_1.insertCockrating(newform);
+            }
+            else {
+                message.reply(`<@${id}> has ${max === min ? `100% good cock` : `${min}/${max} cock. The previous rating was ${form.num}/${max} cock`}`);
+                form.num = min;
                 await db_1.updateCockrating(form);
             }
         }
