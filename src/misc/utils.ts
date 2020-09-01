@@ -172,7 +172,7 @@ export async function reminders(message: Discord.Message, client:Discord.Client,
           }
   
           await m.channel
-          .send(`<@${s}>, you have ${args[0]}h left to complete portion ${args[0]}`)
+          .send(`<@${s}>, you have ${args[0]}h left to complete portion ${args[1]}`)
 
         }
       }

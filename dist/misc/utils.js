@@ -126,7 +126,7 @@ async function reminders(message, client, args) {
                         s += `<@${m.mentions.users.array()[e]}>`;
                     }
                     await m.channel
-                        .send(`<@${s}>, you have ${args[0]}h left to complete portion ${args[0]}`);
+                        .send(`<@${s}>, you have ${args[0]}h left to complete portion ${args[1]}`);
                 }
             }
         }
