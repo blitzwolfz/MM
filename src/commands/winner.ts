@@ -255,7 +255,7 @@ export async function qualend(client: discord.Client, id: string) {
                 fields.push({
                     name: `<@${await (await client.users.fetch(match.players[i].userid)).username}> | Meme #${match.players.indexOf(match.players[i]) + 1}`,
                     //value: `${match.votes[i].length > 0 ? `Came in with ${match.votes[i].length} vote(s)` : `Failed to submit meme`}`
-                    value: `${match.players[i].memedone ? `Finished with ${match.votes[i].length} | Earned: ${Math.floor(match.votes[i].length/totalvotes*100)} points` : `Failed to submit meme`}`, //`Came in with ${match.votes[i].length}`,
+                    value: `${match.players[i].memedone ? `Finished with ${match.votes[i].length} | Earned: ${Math.floor(match.votes[i].length/totalvotes*100)}% of the votes` : `Failed to submit meme`}`, //`Came in with ${match.votes[i].length}`,
                 });
             }
 
