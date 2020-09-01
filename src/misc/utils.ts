@@ -1,5 +1,5 @@
 import * as Discord from "discord.js"
-import { getMatch, getAllProfiles, updateProfile } from "./db";
+import { getMatch, getAllProfiles, updateProfile, getQual } from "./db";
 
 export async function getUser(mention: string) {
   // The id is the first and only match found by the RegEx.
@@ -135,6 +135,44 @@ export async function reminders(message: Discord.Message, client:Discord.Client,
             await m.channel
             .send(`<@${m.mentions.users.first()!.id}> and <@${m.mentions.users.array()[1]!.id}>, you have ${args[0]}h left to complete your match`)
           }
+
+        }
+      }
+
+      else if(channel.parent && channel.parent!.name === "qualifiers"){
+        if (await getQual(channel.id) && !args[3]) {
+          let match = await getQual(channel.id)
+
+          let s = ""
+
+          for (let i = 0; i < match.players.length; i++){
+            if(!match.playersdone.includes(match.players[i].userid)){
+              s += `<@${match.players[i].userid}>`
+            }
+          }
+
+          
+          await (<Discord.TextChannel>client.channels.cache.get(channel.id))
+          .send(`${s} you have ${args[0]}h left to complete portion ${args[1]}`)
+
+        }
+  
+        if(args[2] === "start"){
+          let all = (await (<Discord.TextChannel>await client.channels.fetch(channel.id)!)
+          .messages.fetch({limit:100}))
+
+          console.log(`The length is: ${all.array().length}`)
+
+          let m = all.last()!
+
+          let s = ""
+
+          for(let e = 0; e < m.mentions.users.array().length; e++){
+            s += `<@${m.mentions.users.array()[e]}>`
+          }
+  
+          await m.channel
+          .send(`<@${s}>, you have ${args[0]}h left to complete portion ${args[0]}`)
 
         }
       }

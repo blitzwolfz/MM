@@ -104,6 +104,31 @@ async function reminders(message, client, args) {
                     }
                 }
             }
+            else if (channel.parent && channel.parent.name === "qualifiers") {
+                if (await db_1.getQual(channel.id) && !args[3]) {
+                    let match = await db_1.getQual(channel.id);
+                    let s = "";
+                    for (let i = 0; i < match.players.length; i++) {
+                        if (!match.playersdone.includes(match.players[i].userid)) {
+                            s += `<@${match.players[i].userid}>`;
+                        }
+                    }
+                    await client.channels.cache.get(channel.id)
+                        .send(`${s} you have ${args[0]}h left to complete portion ${args[1]}`);
+                }
+                if (args[2] === "start") {
+                    let all = (await (await client.channels.fetch(channel.id))
+                        .messages.fetch({ limit: 100 }));
+                    console.log(`The length is: ${all.array().length}`);
+                    let m = all.last();
+                    let s = "";
+                    for (let e = 0; e < m.mentions.users.array().length; e++) {
+                        s += `<@${m.mentions.users.array()[e]}>`;
+                    }
+                    await m.channel
+                        .send(`<@${s}>, you have ${args[0]}h left to complete portion ${args[0]}`);
+                }
+            }
         }
         catch {
             continue;
