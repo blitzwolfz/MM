@@ -140,7 +140,7 @@ export async function reminders(message: Discord.Message, client:Discord.Client,
       }
 
       else if(channel.parent && channel.parent!.name === "qualifiers"){
-        if (await getQual(channel.id) && !args[3]) {
+        if (await getQual(channel.id) && !args[2]) {
           let match = await getQual(channel.id)
 
           let s = ""
@@ -168,7 +168,7 @@ export async function reminders(message: Discord.Message, client:Discord.Client,
           let s = ""
 
           for(let e = 0; e < m.mentions.users.array().length; e++){
-            s += `<@${m.mentions.users.array()[e]}>`
+            s += `<@${m.mentions.users.array()[e].id}>`
           }
   
           await m.channel

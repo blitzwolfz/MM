@@ -644,7 +644,7 @@ export async function running(client: discord.Client): Promise<void> {
                 let embed5 = new discord.MessageEmbed()
                     .setTitle("Vote for the best meme!")
                     .setColor("#d7be26")
-                    .setDescription(`Vote for Meme 1 reacting with ${emojis[0]}\nVote for Meme 2 by reacting with ${emojis[1]}`)
+                    .setDescription(`Vote for Group 1 reacting with ${emojis[0]}\nVote for Group 2 by reacting with ${emojis[1]}`)
                 
                
 

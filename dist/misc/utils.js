@@ -105,7 +105,7 @@ async function reminders(message, client, args) {
                 }
             }
             else if (channel.parent && channel.parent.name === "qualifiers") {
-                if (await db_1.getQual(channel.id) && !args[3]) {
+                if (await db_1.getQual(channel.id) && !args[2]) {
                     let match = await db_1.getQual(channel.id);
                     let s = "";
                     for (let i = 0; i < match.players.length; i++) {
@@ -123,7 +123,7 @@ async function reminders(message, client, args) {
                     let m = all.last();
                     let s = "";
                     for (let e = 0; e < m.mentions.users.array().length; e++) {
-                        s += `<@${m.mentions.users.array()[e]}>`;
+                        s += `<@${m.mentions.users.array()[e].id}>`;
                     }
                     await m.channel
                         .send(`<@${s}>, you have ${args[0]}h left to complete portion ${args[1]}`);

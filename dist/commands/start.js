@@ -424,7 +424,7 @@ async function running(client) {
                 let embed5 = new discord.MessageEmbed()
                     .setTitle("Vote for the best meme!")
                     .setColor("#d7be26")
-                    .setDescription(`Vote for Meme 1 reacting with ${utils_1.emojis[0]}\nVote for Meme 2 by reacting with ${utils_1.emojis[1]}`);
+                    .setDescription(`Vote for Group 1 reacting with ${utils_1.emojis[0]}\nVote for Group 2 by reacting with ${utils_1.emojis[1]}`);
                 await channelid.send(embed1);
                 await channelid.send(embed2);
                 await channelid.send(embed3);
