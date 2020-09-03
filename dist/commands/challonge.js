@@ -22,7 +22,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.matchlistmaker = exports.removequalwinner = exports.declarequalwinner = exports.GroupSearch = exports.CreateQualGroups = exports.QualChannelCreation = exports.ChannelCreation = exports.CreateChallongeMatchBracket = exports.CreateChallongeQualBracket = void 0;
 const Discord = __importStar(require("discord.js"));
 const db_1 = require("../misc/db");
-const utils_1 = require("../misc/utils");
 const challonge = require("challonge-js");
 async function CreateChallongeQualBracket(message, disclient, args) {
     if (message.member.roles.cache.has('724818272922501190')
@@ -170,9 +169,9 @@ async function ChannelCreation(message, disclient, args) {
                                             let category = await message.guild.channels.cache.find(c => c.name == "matches" && c.type == "category");
                                             console.log(name1);
                                             console.log(name1);
-                                            let id1 = utils_1.indexOf2d(names, name1, 0, 1);
-                                            let id2 = utils_1.indexOf2d(names, name2, 0, 1);
-                                            await channel.send(`<@${id1}> <@${id2}> You have ${args[1]}h to complete this match. Contact a ref to begin, you may also split your match`);
+                                            let r1 = message.guild.roles.cache.find(role => role.name.toLowerCase() == name1.toLowerCase());
+                                            let r2 = message.guild.roles.cache.find(role => role.name.toLowerCase() == name2.toLowerCase());
+                                            await channel.send(`${r1} ${r2} You have ${args[1]}h to complete this match. Contact a ref to begin, you may also split your match`);
                                             if (!category)
                                                 throw new Error("Category channel does not exist");
                                             await channel.setParent(category.id);

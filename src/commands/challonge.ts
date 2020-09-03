@@ -2,7 +2,7 @@
 import * as Discord from "discord.js";
 import { getSignups, getMatchlist, updateMatchlist, insertMatchlist, insertQuallist, getQuallist, updateQuallist, updateProfile } from "../misc/db";
 import { matchlist, quallist } from "../misc/struct";
-import { indexOf2d } from "../misc/utils";
+//import { indexOf2d } from "../misc/utils";
 
 
 const challonge = require("challonge-js")
@@ -249,11 +249,13 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
 
                                                     console.log(name1)
                                                     console.log(name1)
+                                                    let r1 = message.guild!.roles.cache.find(role => role.name.toLowerCase() == name1.toLowerCase())!;
+                                                    let r2 = message.guild!.roles.cache.find(role => role.name.toLowerCase() == name2.toLowerCase())!;
 
-                                                    let id1 = indexOf2d(names, name1, 0, 1)
-                                                    let id2 = indexOf2d(names, name2, 0, 1)
+                                                    // let id1 = indexOf2d(names, name1, 0, 1)
+                                                    // let id2 = indexOf2d(names, name2, 0, 1)
                                             
-                                                    await channel.send(`<@${id1}> <@${id2}> You have ${args[1]}h to complete this match. Contact a ref to begin, you may also split your match`)
+                                                    await channel.send(`${r1} ${r2} You have ${args[1]}h to complete this match. Contact a ref to begin, you may also split your match`)
                                                     if (!category) throw new Error("Category channel does not exist");
                                                     await channel.setParent(category.id);
                                                     await channel.lockPermissions()

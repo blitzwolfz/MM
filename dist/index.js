@@ -149,7 +149,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
                     }
                     await messageReaction.users.remove(user.id);
                     await messageReaction.message.react(utils_1.emojis[0]);
-                    await user.send(`Vote counted for meme 1 in <#${match.channelid}>. You gained 2 points for voting`);
+                    await user.send(`Vote counted for Group 1's memes in <#${match.channelid}>. You gained 2 points for voting`);
                 }
             }
             else if (messageReaction.emoji.name === utils_1.emojis[1]) {
@@ -161,7 +161,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
                 else {
                     match.p2.votes += 1;
                     match.p2.voters.push(user.id);
-                    await user.send(`Vote counted for meme 2 in <#${match.channelid}>. You gained 2 points for voting`);
+                    await user.send(`Vote counted for Group 2's memes in <#${match.channelid}>. You gained 2 points for voting`);
                     if (match.p1.voters.includes(user.id)) {
                         match.p1.votes -= 1;
                         match.p1.voters.splice(match.p1.voters.indexOf(user.id), 1);
@@ -307,13 +307,19 @@ client.on("message", async (message) => {
     else if (command === "reminder") {
         await utils_1.reminders(message, client, args);
     }
+    else if (command === "createrole") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
+        await utils_1.createrole(message, args);
+    }
     else if (command === "deletechannels") {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
         await utils_1.deletechannels(message, args);
     }
     else if (command === "test") {
-        await message.reply("no").then(async (message) => await message.react('🤏'));
+        let r = message.guild.roles.cache.find(role => role.name.toLowerCase() == args.join(" ").toLowerCase());
+        await message.channel.send(`${r}`);
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))

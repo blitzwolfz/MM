@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updatesomething = exports.deletechannels = exports.reminders = exports.dateBuilder = exports.indexOf2d = exports.forwardsFilter = exports.backwardsFilter = exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
+exports.createrole = exports.updatesomething = exports.deletechannels = exports.reminders = exports.dateBuilder = exports.indexOf2d = exports.forwardsFilter = exports.backwardsFilter = exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
 const db_1 = require("./db");
 async function getUser(mention) {
     const matches = mention.match(/^<@!?(\d+)>$/);
@@ -168,3 +168,48 @@ async function updatesomething(message) {
     await message.channel.send("Done");
 }
 exports.updatesomething = updatesomething;
+async function createrole(message, args) {
+    if (!args)
+        return message.reply("you forgot to add command flags. `!createrole <name> <multiple | deafult is 1>`");
+    let name = args[0];
+    if (!args[0])
+        return message.reply("Please give a name!!!!");
+    let amount = typeof args[1] == "undefined" ? 1 : parseInt(args[1]);
+    if (amount === 1) {
+        try {
+            message.guild.roles.create({
+                data: {
+                    name: name,
+                    color: 'GREY',
+                },
+                reason: 'idfk',
+            })
+                .then(console.log)
+                .catch(console.error);
+        }
+        catch (err) {
+            message.channel.send("```" + err + "```");
+            return message.reply(", there is an error! Ping blitz and show him the error.");
+        }
+    }
+    else if (amount > 1 && amount <= 20) {
+        for (let x = 0; x < amount; x++) {
+            try {
+                message.guild.roles.create({
+                    data: {
+                        name: `${name}${x + 1}`,
+                        color: 'GREY',
+                    },
+                    reason: 'idfk',
+                }).then(async (r) => {
+                    message.channel.send(`Role ${name}${x}: <@&${r.id}>`);
+                });
+            }
+            catch (err) {
+                message.channel.send("```" + err + "```");
+                return message.reply(", there is an error! Ping blitz and show him the error.");
+            }
+        }
+    }
+}
+exports.createrole = createrole;

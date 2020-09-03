@@ -21,7 +21,7 @@ import {
 } from "./commands/start";
 import { qualend, end, cancelmatch } from "./commands/winner";
 import { vs } from "./commands/card";
-import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels } from "./misc/utils";
+import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, createrole } from "./misc/utils";
 import { ModHelp, UserHelp, ModSignupHelp, ModChallongeHelp } from "./commands/help";
 
 import {
@@ -224,7 +224,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
           }
           await messageReaction.users.remove(user.id)
           await messageReaction.message.react(emojis[0])
-          await user.send(`Vote counted for meme 1 in <#${match.channelid}>. You gained 2 points for voting`)
+          await user.send(`Vote counted for Group 1's memes in <#${match.channelid}>. You gained 2 points for voting`)
         }
       }
 
@@ -238,7 +238,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
         else{
           match.p2.votes += 1
           match.p2.voters.push(user.id)
-          await user.send(`Vote counted for meme 2 in <#${match.channelid}>. You gained 2 points for voting`)
+          await user.send(`Vote counted for Group 2's memes in <#${match.channelid}>. You gained 2 points for voting`)
 
           if(match.p1.voters.includes(user.id)){
             match.p1.votes -= 1
@@ -488,14 +488,23 @@ client.on("message", async message => {
     await reminders(message, client, args)
   }
 
+  else if (command === "createrole"){
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
+    await createrole(message, args)
+  }
+
   else if(command === "deletechannels"){
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await deletechannels(message, args)
   }
 
   else if (command === "test") {
+    let r = message.guild!.roles.cache.find(role => role.name.toLowerCase() == args.join(" ").toLowerCase())!;
 
-    await message.reply("no").then(async message => await message.react('🤏'))
+    // console.log(r)
+
+    await message.channel.send(`${r}`)
+    //await message.reply("no").then(async message => await message.react('🤏'))
     //await updatesomething(message)
   }
 
