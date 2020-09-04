@@ -20,7 +20,7 @@ async function submit(message, client) {
             return message.reply("Video submissions aren't allowed");
         let matches = await db_1.getActive();
         for (const match of matches) {
-            if (match.p1.userid === message.author.id && !match.p1.memedone && match.p1.memelink.length !== 2) {
+            if ((match.p1.userid === message.author.id || match.p1.partner === message.author.id) && !match.p1.memedone && match.p1.memelink.length !== 2) {
                 match.p1.memelink.push(message.attachments.array()[0].url);
                 message.channel.send(match.p1.memelink.length);
                 if (match.p1.memelink.length === 2) {
@@ -40,13 +40,13 @@ async function submit(message, client) {
                 if (match.p1.donesplit && match.p2.donesplit && match.split) {
                     console.log("not a split match");
                     match.split = false;
-                    match.p1.time = Math.floor(Date.now() / 1000) - 1800;
-                    match.p2.time = Math.floor(Date.now() / 1000) - 1800;
+                    match.p1.time = Math.floor(Date.now() / 1000) - 7200;
+                    match.p2.time = Math.floor(Date.now() / 1000) - 7200;
                 }
                 await db_1.updateActive(match);
                 return;
             }
-            if (match.p2.userid === message.author.id && !match.p2.memedone && match.p2.memelink.length !== 2) {
+            if ((match.p2.userid === message.author.id || match.p2.partner === message.author.id) && !match.p2.memedone && match.p2.memelink.length !== 2) {
                 match.p2.memelink.push(message.attachments.array()[0].url);
                 message.channel.send(match.p2.memelink.length);
                 if (match.p2.memelink.length === 2) {
@@ -66,8 +66,8 @@ async function submit(message, client) {
                 if (match.p1.donesplit && match.p2.donesplit && match.split) {
                     console.log("not a split match");
                     match.split = false;
-                    match.p1.time = Math.floor(Date.now() / 1000) - 1800;
-                    match.p2.time = Math.floor(Date.now() / 1000) - 1800;
+                    match.p1.time = Math.floor(Date.now() / 1000) - 7200;
+                    match.p2.time = Math.floor(Date.now() / 1000) - 7200;
                 }
                 await db_1.updateActive(match);
                 return;

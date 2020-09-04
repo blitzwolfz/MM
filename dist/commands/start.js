@@ -167,10 +167,10 @@ async function start(message, client) {
         await user1.send(`Your theme is: ${args.splice(4).join(" ")}`);
         await user2.send(`Your theme is: ${args.splice(4).join(" ")}`);
     }
-    await user1.send(`Your match has been split.\nYou have 2 hours to complete your portion\nUse \`!submit\` to submit`);
-    message.mentions.users.array()[1].send(`Your match has been split.\nYou have 2 hours to complete your portion\nUse \`!submit\` to submit`);
-    await user2.send(`Your match has been split.\nYou have 2 hours to complete your portion\nUse \`!submit\` to submit`);
-    message.mentions.users.array()[1].send(`Your match has been split.\nYou have 2 hours to complete your portion\nUse \`!submit\` to submit`);
+    await user1.send(`Your match has been split.\nYou have 2 hours to complete your portion\nUse \`!submit\` to submit each image seperately`);
+    message.mentions.users.array()[1].send(`Your match has been split.\nYou have 2 hours to complete your portion\nUse \`!submit\` to submit to submit each image seperately`);
+    await user2.send(`Your match has been split.\nYou have 2 hours to complete your portion\nUse \`!submit\` to submit to submit each image seperately`);
+    message.mentions.users.array()[1].send(`Your match has been split.\nYou have 2 hours to complete your portion\nUse \`!submit\` to submit to submit each image seperately`);
 }
 exports.start = start;
 async function startqual(message, client) {
@@ -498,12 +498,13 @@ async function splitregular(message, client, ...userid) {
                 if (user.id === match.p1.userid) {
                     if (!(match.p1.donesplit)) {
                         await message.channel.send(new discord.MessageEmbed()
-                            .setDescription(`<@${user.id}> & <@${match.p1.partner}> your match has been split.\nYou have 2 hours to complete your memes\nUse ${`!submit`} to submit`)
+                            .setDescription(`<@${user.id}> & <@${match.p1.partner}> your match has been split.\nYou have 2 hours to complete your memes\nUse ${`!submit`} to submit to submit each image seperately`)
                             .setColor("#d7be26")
                             .setTimestamp());
                         match.p1.donesplit = true;
                         match.p1.time = Math.floor(Date.now() / 1000);
-                        await (await client.users.fetch(match.p1.userid)).send(`Your match has been split.\nYou have 2 hours to complete your portion\nUse ${`!submit`} to submit`);
+                        await (await client.users.fetch(match.p1.userid)).send(`Your match has been split.\nYou have 2 hours to complete your portion\nUse ${`!submit`} to submit to submit each image seperately`);
+                        await (await client.users.fetch(match.p1.partner)).send(`Your match has been split.\nYou have 2 hours to complete your portion\nUse ${`!submit`} to submit to submit each image seperately`);
                         if (match.template) {
                             await (await client.users.fetch(match.p1.userid)).send(new discord.MessageEmbed()
                                 .setTitle("Your first template")
@@ -533,12 +534,13 @@ async function splitregular(message, client, ...userid) {
                 if (user.id === match.p2.userid) {
                     if (!(match.p2.donesplit)) {
                         await message.channel.send(new discord.MessageEmbed()
-                            .setDescription(`<@${user.id}> & <@${match.p2.partner}> your match has been split.\nYou have 2 hours to complete your memes\nUse ${`!submit`} to submit`)
+                            .setDescription(`<@${user.id}> & <@${match.p2.partner}> your match has been split.\nYou have 2 hours to complete your memes\nUse ${`!submit`} to submit to submit each image seperately`)
                             .setColor("#d7be26")
                             .setTimestamp());
                         match.p2.donesplit = true;
                         match.p2.time = Math.floor(Date.now() / 1000);
-                        await (await client.users.fetch(match.p2.userid)).send(`Your match has been split.\nYou have 2 hours to complete your portion\nUse ${`!submit`} to submit`);
+                        await (await client.users.fetch(match.p2.userid)).send(`Your match has been split.\nYou have 2 hours to complete your portion\nUse ${`!submit`} to submit to submit each image seperately`);
+                        await (await client.users.fetch(match.p2.partner)).send(`Your match has been split.\nYou have 2 hours to complete your portion\nUse ${`!submit`} to submit to submit each image seperately`);
                         if (match.template) {
                             await (await client.users.fetch(match.p2.userid)).send(new discord.MessageEmbed()
                                 .setTitle("Your template")

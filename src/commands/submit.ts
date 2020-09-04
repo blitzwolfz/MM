@@ -28,7 +28,7 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
         let matches: activematch[] = await getActive()
 
         for (const match of matches){
-            if(match.p1.userid === message.author.id && !match.p1.memedone && match.p1.memelink.length !== 2){
+            if((match.p1.userid === message.author.id || match.p1.partner === message.author.id) && !match.p1.memedone && match.p1.memelink.length !== 2){
                 match.p1.memelink.push(message.attachments.array()[0].url)
                 message.channel.send(match.p1.memelink.length)
                 if(match.p1.memelink.length === 2){
@@ -50,8 +50,8 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
                 if(match.p1.donesplit && match.p2.donesplit && match.split){
                     console.log("not a split match")
                     match.split = false
-                    match.p1.time = Math.floor(Date.now() / 1000) - 1800
-                    match.p2.time = Math.floor(Date.now() / 1000) - 1800
+                    match.p1.time = Math.floor(Date.now() / 1000) - 7200
+                    match.p2.time = Math.floor(Date.now() / 1000) - 7200
                     // match.votingperiod = true
                     // match.votetime = Math.floor(Date.now() / 1000)
                 }
@@ -59,7 +59,7 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
                 return;
             }
 
-            if(match.p2.userid === message.author.id && !match.p2.memedone && match.p2.memelink.length !== 2){
+            if((match.p2.userid === message.author.id || match.p2.partner === message.author.id) && !match.p2.memedone && match.p2.memelink.length !== 2){
 
                 match.p2.memelink.push(message.attachments.array()[0].url)
                 message.channel.send(match.p2.memelink.length)
@@ -83,8 +83,8 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
                 if(match.p1.donesplit && match.p2.donesplit && match.split){
                     console.log("not a split match")
                     match.split = false
-                    match.p1.time = Math.floor(Date.now() / 1000) - 1800
-                    match.p2.time = Math.floor(Date.now() / 1000) - 1800
+                    match.p1.time = Math.floor(Date.now() / 1000) - 7200
+                    match.p2.time = Math.floor(Date.now() / 1000) - 7200
                     // match.votingperiod = true
                     // match.votetime = Math.floor(Date.now() / 1000)
                 }
