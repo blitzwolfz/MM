@@ -133,7 +133,7 @@ export async function reminders(message: Discord.Message, client:Discord.Client,
             let m = all.last()!
   
             await m.channel
-            .send(`<@${m.mentions.roles.first()!.id}> and <@${m.mentions.roles.array()[1]!.id}>, you have ${args[0]}h left to complete your match`)
+            .send(`<@&${m.mentions.roles.first()!.id}> and <@&${m.mentions.roles.array()[1]!.id}>, you have ${args[0]}h left to complete your match`)
           }
 
         }

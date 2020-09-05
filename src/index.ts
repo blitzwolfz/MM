@@ -432,6 +432,18 @@ client.on("message", async message => {
     await running(client);
   }
 
+  if(command === "forcepoll"){
+
+    let match = await getMatch(message.channel.id)
+
+    match.votingperiod = true
+    match.votetime = (Math.floor(Date.now() / 1000))
+
+    await updateActive(match)
+
+    await reload(message, client)
+  }
+
   else if (command === "ping") {
     const m: Discord.Message = await message.channel.send("Ping?") as Discord.Message;
     await m.edit(`Latency is ${m.createdTimestamp - message.createdTimestamp}ms. Discord API Latency is ${Math.round(client.ws.ping)}ms`);
