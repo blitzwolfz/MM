@@ -443,7 +443,8 @@ client.on("message", async message => {
 
       match.p2 = temp
   }
-
+    match.p1.time = (Math.floor(Date.now() / 1000)) - 7200
+    match.p2.time = (Math.floor(Date.now() / 1000)) - 7200
     match.votingperiod = true
     match.votetime = (Math.floor(Date.now() / 1000))
 

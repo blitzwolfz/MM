@@ -766,8 +766,8 @@ async function reload(message, client) {
             channelid.send(embed);
             await db_1.deleteActive(match);
         }
-        else if ((!(match.split) && ((Math.floor(Date.now() / 1000) - match.p2.time < 2400) && match.p2.memedone === true)
-            && ((Math.floor(Date.now() / 1000) - match.p2.time < 2400) && match.p1.memedone === true))) {
+        else if ((!(match.split) && ((Math.floor(Date.now() / 1000) - match.p2.time <= 7200) && match.p2.memedone === true)
+            && ((Math.floor(Date.now() / 1000) - match.p1.time <= 7200) && match.p1.memedone === true))) {
             let embed1 = new discord.MessageEmbed()
                 .setDescription("Group 1 Meme #1")
                 .setImage(match.p1.memelink[0])

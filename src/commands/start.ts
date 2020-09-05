@@ -1129,8 +1129,8 @@ export async function reload(message: discord.Message, client: discord.Client) {
 
 
 
-        else if ((!(match.split) && ((Math.floor(Date.now() / 1000) - match.p2.time < 2400) && match.p2.memedone === true)
-            && ((Math.floor(Date.now() / 1000) - match.p2.time < 2400) && match.p1.memedone === true))) {
+        else if ((!(match.split) && ((Math.floor(Date.now() / 1000) - match.p2.time <= 7200) && match.p2.memedone === true)
+        && ((Math.floor(Date.now() / 1000) - match.p1.time <= 7200) && match.p1.memedone === true))) {
 
 
             let embed1 = new discord.MessageEmbed()
