@@ -436,6 +436,14 @@ client.on("message", async message => {
 
     let match = await getMatch(message.channel.id)
 
+    if (Math.floor(Math.random() * (5 - 1) + 1) % 2 === 1) {
+      let temp = match.p1
+
+      match.p1 = match.p2
+
+      match.p2 = temp
+  }
+
     match.votingperiod = true
     match.votetime = (Math.floor(Date.now() / 1000))
 
