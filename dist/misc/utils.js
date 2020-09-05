@@ -81,15 +81,15 @@ async function reminders(message, client, args) {
                     if (match.split) {
                         if (!match.p1.memedone && !match.p2.memedone) {
                             await client.channels.cache.get(channel.id)
-                                .send(`<@${match.p1.userid}> and <@${match.p2.userid}> you have ${args[0]}h left to complete your match`);
+                                .send(`<@${match.p1.userid}> & <@${match.p1.partner}> and <@${match.p2.userid}> & <@${match.p2.partner}> you have ${args[0]}h left to complete your match`);
                         }
                         else if (match.p1.memedone) {
                             await client.channels.cache.get(channel.id)
-                                .send(`<@${match.p2.userid}> you have ${args[0]}h left to complete your match`);
+                                .send(`<@${match.p2.userid}> & <@${match.p2.partner}> you have ${args[0]}h left to complete your match`);
                         }
                         else if (match.p2.memedone) {
                             await client.channels.cache.get(channel.id)
-                                .send(`<@${match.p1.userid}> you have ${args[0]}h left to complete your match`);
+                                .send(`<@${match.p1.userid}> & <@${match.p1.partner}> you have ${args[0]}h left to complete your match`);
                         }
                     }
                 }
@@ -100,7 +100,7 @@ async function reminders(message, client, args) {
                     if (all.array().length === 1) {
                         let m = all.last();
                         await m.channel
-                            .send(`<@${m.mentions.users.first().id}> and <@${m.mentions.users.array()[1].id}>, you have ${args[0]}h left to complete your match`);
+                            .send(`<@${m.mentions.roles.first().id}> and <@${m.mentions.roles.array()[1].id}>, you have ${args[0]}h left to complete your match`);
                     }
                 }
             }
