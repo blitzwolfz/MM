@@ -505,28 +505,6 @@ async function splitregular(message, client, ...userid) {
                         match.p1.time = Math.floor(Date.now() / 1000);
                         await (await client.users.fetch(match.p1.userid)).send(`Your match has been split.\nYou have 2 hours to complete your portion\nUse ${`!submit`} to submit to submit each image seperately`);
                         await (await client.users.fetch(match.p1.partner)).send(`Your match has been split.\nYou have 2 hours to complete your portion\nUse ${`!submit`} to submit to submit each image seperately`);
-                        if (match.template) {
-                            await (await client.users.fetch(match.p1.userid)).send(new discord.MessageEmbed()
-                                .setTitle("Your first template")
-                                .setImage(match.template[0])
-                                .setColor("#d7be26")
-                                .setTimestamp());
-                            await (await client.users.fetch(match.p1.userid)).send(new discord.MessageEmbed()
-                                .setTitle("Your second template")
-                                .setImage(match.template[1])
-                                .setColor("#d7be26")
-                                .setTimestamp());
-                            await (await client.users.fetch(match.p1.partner)).send(new discord.MessageEmbed()
-                                .setTitle("Your template")
-                                .setImage(match.template[0])
-                                .setColor("#d7be26")
-                                .setTimestamp());
-                            await (await client.users.fetch(match.p1.partner)).send(new discord.MessageEmbed()
-                                .setTitle("Your template")
-                                .setImage(match.template[1])
-                                .setColor("#d7be26")
-                                .setTimestamp());
-                        }
                         await db_1.updateActive(match);
                         return;
                     }
@@ -541,28 +519,6 @@ async function splitregular(message, client, ...userid) {
                         match.p2.time = Math.floor(Date.now() / 1000);
                         await (await client.users.fetch(match.p2.userid)).send(`Your match has been split.\nYou have 2 hours to complete your portion\nUse ${`!submit`} to submit to submit each image seperately`);
                         await (await client.users.fetch(match.p2.partner)).send(`Your match has been split.\nYou have 2 hours to complete your portion\nUse ${`!submit`} to submit to submit each image seperately`);
-                        if (match.template) {
-                            await (await client.users.fetch(match.p2.userid)).send(new discord.MessageEmbed()
-                                .setTitle("Your template")
-                                .setImage(match.template[0])
-                                .setColor("#d7be26")
-                                .setTimestamp());
-                            await (await client.users.fetch(match.p2.userid)).send(new discord.MessageEmbed()
-                                .setTitle("Your template")
-                                .setImage(match.template[1])
-                                .setColor("#d7be26")
-                                .setTimestamp());
-                            await (await client.users.fetch(match.p2.partner)).send(new discord.MessageEmbed()
-                                .setTitle("Your template")
-                                .setImage(match.template[0])
-                                .setColor("#d7be26")
-                                .setTimestamp());
-                            await (await client.users.fetch(match.p2.partner)).send(new discord.MessageEmbed()
-                                .setTitle("Your template")
-                                .setImage(match.template[1])
-                                .setColor("#d7be26")
-                                .setTimestamp());
-                        }
                         await db_1.updateActive(match);
                         return;
                     }
@@ -664,10 +620,50 @@ async function startregularsplit(message, client) {
         .setColor("#d7be26")
         .setDescription(`${user1.username} & ${message.mentions.users.array()[1].username} and ${user2.username} & ${message.mentions.users.array()[3].username} your match has been split.\nContact mods to start your portion\nUse ${`!submit`} to submit`)
         .setTimestamp();
-    message.channel.send({ embed }).then(async (message) => {
+    await message.channel.send({ embed }).then(async (message) => {
         await message.react('🅰️');
         await message.react('🅱️');
     });
+    await user1.send(new discord.MessageEmbed()
+        .setTitle("Your first template")
+        .setImage(newmatch.template[0])
+        .setColor("#d7be26")
+        .setTimestamp());
+    await user1.send(new discord.MessageEmbed()
+        .setTitle("Your second template")
+        .setImage(newmatch.template[1])
+        .setColor("#d7be26")
+        .setTimestamp());
+    await user2.send(new discord.MessageEmbed()
+        .setTitle("Your first template")
+        .setImage(newmatch.template[0])
+        .setColor("#d7be26")
+        .setTimestamp());
+    await user2.send(new discord.MessageEmbed()
+        .setTitle("Your second template")
+        .setImage(newmatch.template[1])
+        .setColor("#d7be26")
+        .setTimestamp());
+    await message.mentions.users.array()[1].send(new discord.MessageEmbed()
+        .setTitle("Your first template")
+        .setImage(newmatch.template[0])
+        .setColor("#d7be26")
+        .setTimestamp());
+    await message.mentions.users.array()[1].send(new discord.MessageEmbed()
+        .setTitle("Your second template")
+        .setImage(newmatch.template[1])
+        .setColor("#d7be26")
+        .setTimestamp());
+    await message.mentions.users.array()[3].send(new discord.MessageEmbed()
+        .setTitle("Your first template")
+        .setImage(newmatch.template[0])
+        .setColor("#d7be26")
+        .setTimestamp());
+    await message.mentions.users.array()[3].send(new discord.MessageEmbed()
+        .setTitle("Your second template")
+        .setImage(newmatch.template[1])
+        .setColor("#d7be26")
+        .setTimestamp());
 }
 exports.startregularsplit = startregularsplit;
 async function reload(message, client) {
