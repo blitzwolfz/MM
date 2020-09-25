@@ -2,6 +2,7 @@
 import * as Discord from "discord.js";
 import { getSignups, getMatchlist, updateMatchlist, insertMatchlist, insertQuallist, getQuallist, updateQuallist, updateProfile } from "../misc/db";
 import { matchlist, quallist } from "../misc/struct";
+import { indexOf2d } from "../misc/utils";
 //import { indexOf2d } from "../misc/utils";
 
 
@@ -163,8 +164,7 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
 
         for(let i = 0; i < match.users.length; i++){
             console.log(match.users[i])
-            //let name = ((await (await guild!.members.fetch(match.users[i])).nickname) || await (await disclient.users.fetch(match.users[i])).username)
-            let name = match.users[i]
+            let name = ((await (await guild!.members.fetch(match.users[i])).nickname) || await (await disclient.users.fetch(match.users[i])).username)
             names.push([name, match.users[i]])
             //names.concat([((await (await message.guild!.members.fetch(i)).nickname) || await (await disclient.users.fetch(i)).username), i])
         }
@@ -251,13 +251,11 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
 
                                                     console.log(name1)
                                                     console.log(name1)
-                                                    let r1 = message.guild!.roles.cache.find(role => role.name.toLowerCase() == name1.toLowerCase())!;
-                                                    let r2 = message.guild!.roles.cache.find(role => role.name.toLowerCase() == name2.toLowerCase())!;
 
-                                                    // let id1 = indexOf2d(names, name1, 0, 1)
-                                                    // let id2 = indexOf2d(names, name2, 0, 1)
+                                                    let id1 = indexOf2d(names, name1, 0, 1)
+                                                    let id2 = indexOf2d(names, name2, 0, 1)
                                             
-                                                    await channel.send(`${r1} ${r2} You have ${args[1]}h to complete this match. Contact a ref to begin, you may also split your match`)
+                                                    await channel.send(`<@${id1}> <@${id2}> You have ${args[1]}h to complete this match. Contact a ref to begin, you may also split your match`)
                                                     if (!category) throw new Error("Category channel does not exist");
                                                     await channel.setParent(category.id);
                                                     await channel.lockPermissions()

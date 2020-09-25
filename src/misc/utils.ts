@@ -108,17 +108,17 @@ export async function reminders(message: Discord.Message, client:Discord.Client,
           if(match.split){
             if(!match.p1.memedone && !match.p2.memedone){
               await (<Discord.TextChannel>client.channels.cache.get(channel.id))
-              .send(`<@${match.p1.userid}> & <@${match.p1.partner}> and <@${match.p2.userid}> & <@${match.p2.partner}> you have ${args[0]}h left to complete your match`)
+              .send(`<@${match.p1.userid}>and <@${match.p2.userid}> you have ${args[0]}h left to complete your match`)
             }
             
             else if(match.p1.memedone){
               await (<Discord.TextChannel>client.channels.cache.get(channel.id))
-              .send(`<@${match.p2.userid}> & <@${match.p2.partner}> you have ${args[0]}h left to complete your match`)
+              .send(`<@${match.p2.userid}>you have ${args[0]}h left to complete your match`)
             }
     
             else if(match.p2.memedone){
               await (<Discord.TextChannel>client.channels.cache.get(channel.id))
-              .send(`<@${match.p1.userid}> & <@${match.p1.partner}> you have ${args[0]}h left to complete your match`)
+              .send(`<@${match.p1.userid}>you have ${args[0]}h left to complete your match`)
             }
           }
         }

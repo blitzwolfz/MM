@@ -4,15 +4,14 @@ export interface activematch{
     channelid:string;
     messageID:string;
     split:boolean;
-    template:Array<string>,
+    template:string,
     tempfound:boolean,
     p1:{
         userid: string;
-        partner: string;
         memedone: boolean;
         donesplit:boolean;
         time: number;
-        memelink: Array<string>;
+        memelink: string;
         votes: number;
         voters: Array<string>;
         halfreminder: boolean
@@ -20,11 +19,10 @@ export interface activematch{
     },
     p2:{
         userid: string;
-        partner: string;
         memedone: boolean;
         donesplit:boolean;
         time: number;
-        memelink: Array<string>;
+        memelink: string;
         votes: number;
         voters: Array<string>;
         halfreminder: boolean,

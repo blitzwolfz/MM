@@ -14,14 +14,11 @@ export async function end(client: discord.Client, id: string) {
     let channelid = <discord.TextChannel>client.channels.cache.get(match.channelid)
     let user1 = (await client.users.fetch(match.p1.userid))
     let user2 = (await client.users.fetch(match.p2.userid))
-    let partner1 = (await client.users.fetch(match.p1.partner))
-    let partner2 = (await client.users.fetch(match.p2.partner))
 
     console.log(Math.floor(Date.now() / 1000) - match.votetime)
     console.log((Math.floor(Date.now() / 1000) - match.votetime) >= 35)
     if ((Math.floor(Date.now() / 1000) - match.p1.time > 1800) && match.p1.memedone === false) {
         user1.send("You have failed to submit your meme, your opponet is the winner.")
-        partner1.send("You have failed to submit your meme, your opponet is the winner.")
 
         let embed = new discord.MessageEmbed()
             .setTitle(`Match between ${user1.username} and ${user2.username}`)
@@ -31,18 +28,15 @@ export async function end(client: discord.Client, id: string) {
 
         updateProfile(user2.id, "wins", 1)
         updateProfile(user1.id, "loss", 1)
-        updateProfile(match.p2.partner, "wins", 1)
-        updateProfile(match.p1.partner, "loss", 1)
+
 
         await channelid.send(embed)
         await channelid.send([await winner(client, user2.id)!])
-        await channelid.send([await winner(client, partner2.id)!])
     }
 
     else if ((Math.floor(Date.now() / 1000) - match.p2.time > 1800) && match.p2.memedone === false) {
         console.log(Date.now() - match.p2.time)
         user2.send("You have failed to submit your meme, your opponet is the winner.")
-        partner2.send("You have failed to submit your meme, your opponet is the winner.")
 
 
         let embed = new discord.MessageEmbed()
@@ -53,12 +47,10 @@ export async function end(client: discord.Client, id: string) {
 
         updateProfile(user1.id, "wins", 1)
         updateProfile(user2.id, "loss", 1)
-        updateProfile(match.p2.partner, "loss", 1)
-        updateProfile(match.p1.partner, "wins", 1)
+
 
         await channelid.send(embed)
         await channelid.send([await winner(client, user1.id)!])
-        await channelid.send([await winner(client, partner1.id)!])
 
     }
 
@@ -87,21 +79,14 @@ export async function end(client: discord.Client, id: string) {
         updateProfile(user2.id, "loss", 1)
         updateProfile(user2.id, "points", match.p2.votes * 5)
         
-        updateProfile(match.p1.partner, "wins", 1)
-        updateProfile(match.p1.partner, "points", (25 + (match.p1.votes * 5)))
-        updateProfile(match.p2.partner, "loss", 1)
-        updateProfile(match.p2.partner, "points", match.p2.votes * 5)
 
         await channelid.send(embed)
 
 
         await channelid.send([await winner(client, user1.id)!])
-        await channelid.send([await winner(client, partner1.id)!])
 
         await user1.send(`Your match is over, here is the final result. You gained 25 points for winning your match, and ${(match.p1.votes * 5)} points from your votes.`, {embed:embed})
-        await partner1.send(`Your match is over, here is the final result. You gained 25 points for winning your match, and ${(match.p1.votes * 5)} points from your votes.`, {embed:embed})
         await user2.send(`Your match is over, here is the final result. You gained ${(match.p2.votes * 5)} points from your votes.`, {embed:embed})
-        await partner2.send(`Your match is over, here is the final result. You gained ${(match.p2.votes * 5)} points from your votes.`, {embed:embed})
 
         // let d = new Date()
         
@@ -134,14 +119,8 @@ export async function end(client: discord.Client, id: string) {
         updateProfile(user2.id, "wins", 1)
         updateProfile(user2.id, "points", (25 + (match.p2.votes * 5)))
 
-        updateProfile(match.p1.partner, "loss", 1)
-        updateProfile(match.p1.partner, "points", ((match.p1.votes * 5)))
-        updateProfile(match.p2.partner, "wins", 1)
-        updateProfile(match.p2.partner, "points", (25 + (match.p2.votes * 5)))
-
         await channelid.send(embed)
         await channelid.send([await winner(client, user2.id)!])
-        await channelid.send([await winner(client, partner2.id)!])
 
         // let d = new Date()
         
@@ -162,9 +141,7 @@ export async function end(client: discord.Client, id: string) {
         ))
 
         await user1.send(`Your match is over, here is the final result. You gained ${(match.p1.votes * 5)} points from your votes.`, {embed:embed})
-        await partner1.send(`Your match is over, here is the final result. You gained ${(match.p1.votes * 5)} points from your votes.`, {embed:embed})
         await user2.send(`Your match is over, here is the final result. You gained 25 points for winning your match, and gained ${(match.p2.votes * 5)} points from your votes.`, {embed:embed})
-        await partner2.send(`Your match is over, here is the final result. You gained 25 points for winning your match, and gained ${(match.p2.votes * 5)} points from your votes.`, {embed:embed})
     }
 
     else if (match.p1.votes === match.p2.votes) {

@@ -28,12 +28,10 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
         let matches: activematch[] = await getActive()
 
         for (const match of matches){
-            if((match.p1.userid === message.author.id || match.p1.partner === message.author.id) && !match.p1.memedone && match.p1.memelink.length !== 2){
-                match.p1.memelink.push(message.attachments.array()[0].url)
+            if((match.p1.userid === message.author.id) && !match.p1.memedone && match.p1.memelink.length !== 2){
+                match.p1.memelink = (message.attachments.array()[0].url)
                 message.channel.send(match.p1.memelink.length)
-                if(match.p1.memelink.length === 2){
-                    match.p1.memedone = true
-                }
+                match.p1.memedone = true
 
                 if(match.split){
                     match.p1.donesplit = true
@@ -59,13 +57,11 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
                 return;
             }
 
-            if((match.p2.userid === message.author.id || match.p2.partner === message.author.id) && !match.p2.memedone && match.p2.memelink.length !== 2){
+            if((match.p2.userid === message.author.id) && !match.p2.memedone && match.p2.memelink.length !== 2){
 
-                match.p2.memelink.push(message.attachments.array()[0].url)
+                match.p2.memelink = (message.attachments.array()[0].url)
                 message.channel.send(match.p2.memelink.length)
-                if(match.p2.memelink.length === 2){
-                    match.p2.memedone = true
-                }
+                match.p2.memedone = true
 
                 if(match.split){
                     match.p2.donesplit = true

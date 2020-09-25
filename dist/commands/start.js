@@ -43,27 +43,25 @@ async function start(message, client) {
         channelid: message.channel.id,
         split: false,
         messageID: "",
-        template: [],
+        template: "",
         tempfound: false,
         p1: {
             userid: message.mentions.users.array()[0].id,
-            partner: message.mentions.users.array()[1].id,
             memedone: false,
             donesplit: true,
             time: Math.floor(Date.now() / 1000),
-            memelink: [],
+            memelink: "",
             votes: 0,
             voters: [],
             halfreminder: false,
             fivereminder: false,
         },
         p2: {
-            userid: message.mentions.users.array()[2].id,
-            partner: message.mentions.users.array()[3].id,
+            userid: message.mentions.users.array()[1].id,
             memedone: false,
             donesplit: true,
             time: Math.floor(Date.now() / 1000),
-            memelink: [],
+            memelink: "",
             votes: 0,
             voters: [],
             halfreminder: false,
@@ -94,31 +92,13 @@ async function start(message, client) {
         }
         rantemp = await db_1.gettempStruct(message.channel.id);
     }
-    newmatch.template.push(rantemp.url);
+    newmatch.template = rantemp.url;
     await db_1.deletetempStruct(rantemp._id);
     await randomtemp_1.RandomTemplateFunc(message, client, message.channel.id);
     setTimeout(() => { console.log("Waited 2 seconds"); }, 2000);
-    let rantemp2 = await db_1.gettempStruct(message.channel.id);
-    rantemp2.time = rantemp2.time - 2.5;
-    while (rantemp2.found === false) {
-        if (Math.floor(Date.now() / 1000) - rantemp.time > 120) {
-            await db_1.deletetempStruct(rantemp2._id);
-            await (await client.channels.cache.get("722616679280148504").messages.fetch(rantemp2.messageid)).delete();
-            return await message.channel.send(new discord.MessageEmbed()
-                .setTitle(`Random Template Selection failed `)
-                .setColor("RED")
-                .setDescription(`Mods please restart this match`)
-                .setTimestamp());
-        }
-        rantemp2 = await db_1.gettempStruct(message.channel.id);
-    }
-    newmatch.template.push(rantemp2.url);
-    await db_1.insertActive(newmatch);
-    await db_1.deletetempStruct(rantemp2._id);
-    await card_1.vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[2].id]);
-    await card_1.vs(message.channel.id, client, [message.mentions.users.array()[1].id, message.mentions.users.array()[3].id]);
+    await card_1.vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[1].id]);
     let embed = new discord.MessageEmbed()
-        .setTitle(`Match between ${user1.username} & ${message.mentions.users.array()[1].username} and ${user2.username} & ${message.mentions.users.array()[3].username}`)
+        .setTitle(`Match between ${user1.username} and ${user2.username}`)
         .setColor("#d7be26")
         .setDescription(`<@${user1.id}> & <@${message.mentions.users.array()[1].id}> and <@${user2.id}> & <@${message.mentions.users.array()[3].id}> both have 2 hours to complete your memes.\n Contact admins if you have an issue.`)
         .setTimestamp();
@@ -128,39 +108,9 @@ async function start(message, client) {
         .setImage(rantemp.url)
         .setColor("#d7be26")
         .setTimestamp());
-    await user1.send(new discord.MessageEmbed()
-        .setTitle("Your second template")
-        .setImage(rantemp2.url)
-        .setColor("#d7be26")
-        .setTimestamp());
     await user2.send(new discord.MessageEmbed()
         .setTitle("Your first template")
         .setImage(rantemp.url)
-        .setColor("#d7be26")
-        .setTimestamp());
-    await user2.send(new discord.MessageEmbed()
-        .setTitle("Your second template")
-        .setImage(rantemp2.url)
-        .setColor("#d7be26")
-        .setTimestamp());
-    await message.mentions.users.array()[1].send(new discord.MessageEmbed()
-        .setTitle("Your first template")
-        .setImage(rantemp.url)
-        .setColor("#d7be26")
-        .setTimestamp());
-    await message.mentions.users.array()[1].send(new discord.MessageEmbed()
-        .setTitle("Your second template")
-        .setImage(rantemp2.url)
-        .setColor("#d7be26")
-        .setTimestamp());
-    await message.mentions.users.array()[3].send(new discord.MessageEmbed()
-        .setTitle("Your first template")
-        .setImage(rantemp.url)
-        .setColor("#d7be26")
-        .setTimestamp());
-    await message.mentions.users.array()[3].send(new discord.MessageEmbed()
-        .setTitle("Your second template")
-        .setImage(rantemp2.url)
         .setColor("#d7be26")
         .setTimestamp());
     if (["th", "theme"].includes(args[3])) {
@@ -498,13 +448,12 @@ async function splitregular(message, client, ...userid) {
                 if (user.id === match.p1.userid) {
                     if (!(match.p1.donesplit)) {
                         await message.channel.send(new discord.MessageEmbed()
-                            .setDescription(`<@${user.id}> & <@${match.p1.partner}> your match has been split.\nYou have 2 hours to complete your memes\nUse ${`!submit`} to submit to submit each image seperately`)
+                            .setDescription(`<@${user.id}> your match has been split.\nYou have 2 hours to complete your memes\nUse ${`!submit`} to submit to submit each image seperately`)
                             .setColor("#d7be26")
                             .setTimestamp());
                         match.p1.donesplit = true;
                         match.p1.time = Math.floor(Date.now() / 1000);
                         await (await client.users.fetch(match.p1.userid)).send(`Your match has been split.\nYou have 2 hours to complete your portion\nUse ${`!submit`} to submit to submit each image seperately`);
-                        await (await client.users.fetch(match.p1.partner)).send(`Your match has been split.\nYou have 2 hours to complete your portion\nUse ${`!submit`} to submit to submit each image seperately`);
                         await db_1.updateActive(match);
                         return;
                     }
@@ -512,13 +461,12 @@ async function splitregular(message, client, ...userid) {
                 if (user.id === match.p2.userid) {
                     if (!(match.p2.donesplit)) {
                         await message.channel.send(new discord.MessageEmbed()
-                            .setDescription(`<@${user.id}> & <@${match.p2.partner}> your match has been split.\nYou have 2 hours to complete your memes\nUse ${`!submit`} to submit to submit each image seperately`)
+                            .setDescription(`<@${user.id}> your match has been split.\nYou have 2 hours to complete your memes\nUse ${`!submit`} to submit to submit each image seperately`)
                             .setColor("#d7be26")
                             .setTimestamp());
                         match.p2.donesplit = true;
                         match.p2.time = Math.floor(Date.now() / 1000);
                         await (await client.users.fetch(match.p2.userid)).send(`Your match has been split.\nYou have 2 hours to complete your portion\nUse ${`!submit`} to submit to submit each image seperately`);
-                        await (await client.users.fetch(match.p2.partner)).send(`Your match has been split.\nYou have 2 hours to complete your portion\nUse ${`!submit`} to submit to submit each image seperately`);
                         await db_1.updateActive(match);
                         return;
                     }
@@ -534,7 +482,7 @@ async function startregularsplit(message, client) {
         return message.reply("invalid response. Command is `!start @user1 @user2 template link`\n or `!start @user1 @user2 theme description`");
     }
     let user1 = message.mentions.users.array()[0];
-    let user2 = message.mentions.users.array()[2];
+    let user2 = message.mentions.users.array()[1];
     user_1.createAtUsermatch(user1);
     user_1.createAtUsermatch(user2);
     let newmatch = {
@@ -542,15 +490,14 @@ async function startregularsplit(message, client) {
         channelid: message.channel.id,
         split: true,
         messageID: "",
-        template: [],
+        template: "",
         tempfound: false,
         p1: {
             userid: user1.id,
-            partner: message.mentions.users.array()[1].id,
             memedone: false,
             donesplit: false,
             time: Math.floor(Date.now() / 1000),
-            memelink: [],
+            memelink: "",
             votes: 0,
             voters: [],
             halfreminder: false,
@@ -558,11 +505,10 @@ async function startregularsplit(message, client) {
         },
         p2: {
             userid: user2.id,
-            partner: message.mentions.users.array()[3].id,
             memedone: false,
             donesplit: false,
             time: Math.floor(Date.now() / 1000),
-            memelink: [],
+            memelink: "",
             votes: 0,
             voters: [],
             halfreminder: false,
@@ -592,78 +538,21 @@ async function startregularsplit(message, client) {
         }
         rantemp = await db_1.gettempStruct(message.channel.id);
     }
-    newmatch.template.push(rantemp.url);
+    newmatch.template = rantemp.url;
     await db_1.deletetempStruct(rantemp._id);
     await randomtemp_1.RandomTemplateFunc(message, client, message.channel.id);
     setTimeout(() => { console.log("Waited 2 seconds"); }, 2000);
-    let rantemp2 = await db_1.gettempStruct(message.channel.id);
-    rantemp2.time = rantemp2.time - 2.5;
-    while (rantemp2.found === false) {
-        if (Math.floor(Date.now() / 1000) - rantemp.time > 120) {
-            await db_1.deletetempStruct(rantemp2._id);
-            await (await client.channels.cache.get("722616679280148504").messages.fetch(rantemp2.messageid)).delete();
-            return await message.channel.send(new discord.MessageEmbed()
-                .setTitle(`Random Template Selection failed `)
-                .setColor("RED")
-                .setDescription(`Mods please restart this match`)
-                .setTimestamp());
-        }
-        rantemp2 = await db_1.gettempStruct(message.channel.id);
-    }
-    newmatch.template.push(rantemp2.url);
-    await db_1.deletetempStruct(rantemp2._id);
     await db_1.insertActive(newmatch);
-    await card_1.vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[2].id]);
-    await card_1.vs(message.channel.id, client, [message.mentions.users.array()[1].id, message.mentions.users.array()[3].id]);
+    await card_1.vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[1].id]);
     let embed = new discord.MessageEmbed()
-        .setTitle(`Match between ${user1.username} & ${message.mentions.users.array()[1].username} and ${user2.username} & ${message.mentions.users.array()[3].username}`)
+        .setTitle(`Match between ${user1.username} and ${user2.username}`)
         .setColor("#d7be26")
-        .setDescription(`${user1.username} & ${message.mentions.users.array()[1].username} and ${user2.username} & ${message.mentions.users.array()[3].username} your match has been split.\nContact mods to start your portion\nUse ${`!submit`} to submit`)
+        .setDescription(`${user1.username} and ${user2.username} your match has been split.\nContact mods to start your portion\nUse ${`!submit`} to submit`)
         .setTimestamp();
     await message.channel.send({ embed }).then(async (message) => {
         await message.react('🅰️');
         await message.react('🅱️');
     });
-    await user1.send(new discord.MessageEmbed()
-        .setTitle("Your first template")
-        .setImage(newmatch.template[0])
-        .setColor("#d7be26")
-        .setTimestamp());
-    await user1.send(new discord.MessageEmbed()
-        .setTitle("Your second template")
-        .setImage(newmatch.template[1])
-        .setColor("#d7be26")
-        .setTimestamp());
-    await user2.send(new discord.MessageEmbed()
-        .setTitle("Your first template")
-        .setImage(newmatch.template[0])
-        .setColor("#d7be26")
-        .setTimestamp());
-    await user2.send(new discord.MessageEmbed()
-        .setTitle("Your second template")
-        .setImage(newmatch.template[1])
-        .setColor("#d7be26")
-        .setTimestamp());
-    await message.mentions.users.array()[1].send(new discord.MessageEmbed()
-        .setTitle("Your first template")
-        .setImage(newmatch.template[0])
-        .setColor("#d7be26")
-        .setTimestamp());
-    await message.mentions.users.array()[1].send(new discord.MessageEmbed()
-        .setTitle("Your second template")
-        .setImage(newmatch.template[1])
-        .setColor("#d7be26")
-        .setTimestamp());
-    await message.mentions.users.array()[3].send(new discord.MessageEmbed()
-        .setTitle("Your first template")
-        .setImage(newmatch.template[0])
-        .setColor("#d7be26")
-        .setTimestamp());
-    await message.mentions.users.array()[3].send(new discord.MessageEmbed()
-        .setTitle("Your second template")
-        .setImage(newmatch.template[1])
-        .setColor("#d7be26")
-        .setTimestamp());
 }
 exports.startregularsplit = startregularsplit;
 async function reload(message, client) {
@@ -821,7 +710,7 @@ async function matchstats(message, client) {
             let em = new discord.MessageEmbed()
                 .setTitle(`${channel.name}`)
                 .setColor("BLUE")
-                .addFields({ name: `Partner:`, value: `${(await client.users.cache.get(match.p1.partner)).username}`, inline: true }, { name: `${(await client.users.cache.get(match.p1.userid)).username} Meme Done:`, value: `${match.p1.memedone ? `Yes` : `No`}`, inline: true }, { name: 'Match Portion Done:', value: `${match.p1.donesplit ? `${match.split ? `Yes` : `Not a split match`}` : `No`}`, inline: true }, { name: 'Meme Link:', value: `${match.p1.memedone ? `${match.p1.memelink}` : `No meme submitted yet`}`, inline: true }, { name: 'Time left', value: `${match.p1.donesplit ? `${match.p1.memedone ? "Submitted meme" : `${120 - Math.floor(((Date.now() / 1000) - match.p1.time) / 60)} mins left`}` : `${match.split ? `Hasn't started portion` : `Time up`}`}`, inline: true }, { name: '\u200B', value: '\u200B' }, { name: `Partner:`, value: `${(await client.users.cache.get(match.p2.partner)).username}`, inline: true }, { name: `${(await client.users.cache.get(match.p2.userid)).username} Meme Done:`, value: `${match.p2.memedone ? `Yes` : `No`}`, inline: true }, { name: 'Match Portion Done:', value: `${match.p2.donesplit ? `${match.split ? `Yes` : `Not a split match`}` : `No`}`, inline: true }, { name: 'Meme Link:', value: `${match.p2.memedone ? `${match.p2.memelink}` : `No meme submitted yet`}`, inline: true }, { name: 'Time left', value: `${match.p2.donesplit ? `${match.p2.memedone ? "Submitted meme" : `${120 - Math.floor(((Date.now() / 1000) - match.p2.time) / 60)} mins left`}` : `${match.split ? `Hasn't started portion` : `Time up`}`}`, inline: true }, { name: '\u200B', value: '\u200B' }, { name: `Voting period:`, value: `${match.votingperiod ? `Yes` : `No`}`, inline: true }, { name: `Voting time:`, value: `${match.votingperiod ? `${(10800 / 60) - Math.floor((Math.floor(Date.now() / 1000) - match.votetime) / 60)} mins left` : "Voting hasn't started"}`, inline: true });
+                .addFields({ name: `${(await client.users.cache.get(match.p1.userid)).username} Meme Done:`, value: `${match.p1.memedone ? `Yes` : `No`}`, inline: true }, { name: 'Match Portion Done:', value: `${match.p1.donesplit ? `${match.split ? `Yes` : `Not a split match`}` : `No`}`, inline: true }, { name: 'Meme Link:', value: `${match.p1.memedone ? `${match.p1.memelink}` : `No meme submitted yet`}`, inline: true }, { name: 'Time left', value: `${match.p1.donesplit ? `${match.p1.memedone ? "Submitted meme" : `${120 - Math.floor(((Date.now() / 1000) - match.p1.time) / 60)} mins left`}` : `${match.split ? `Hasn't started portion` : `Time up`}`}`, inline: true }, { name: '\u200B', value: '\u200B' }, { name: `${(await client.users.cache.get(match.p2.userid)).username} Meme Done:`, value: `${match.p2.memedone ? `Yes` : `No`}`, inline: true }, { name: 'Match Portion Done:', value: `${match.p2.donesplit ? `${match.split ? `Yes` : `Not a split match`}` : `No`}`, inline: true }, { name: 'Meme Link:', value: `${match.p2.memedone ? `${match.p2.memelink}` : `No meme submitted yet`}`, inline: true }, { name: 'Time left', value: `${match.p2.donesplit ? `${match.p2.memedone ? "Submitted meme" : `${120 - Math.floor(((Date.now() / 1000) - match.p2.time) / 60)} mins left`}` : `${match.split ? `Hasn't started portion` : `Time up`}`}`, inline: true }, { name: '\u200B', value: '\u200B' }, { name: `Voting period:`, value: `${match.votingperiod ? `Yes` : `No`}`, inline: true }, { name: `Voting time:`, value: `${match.votingperiod ? `${(10800 / 60) - Math.floor((Math.floor(Date.now() / 1000) - match.votetime) / 60)} mins left` : "Voting hasn't started"}`, inline: true });
             await message.channel.send(em);
         }
     }
