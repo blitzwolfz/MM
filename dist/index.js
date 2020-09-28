@@ -185,6 +185,8 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             await messageReaction.fetch();
         if (messageReaction.message.partial)
             await messageReaction.message.fetch();
+        if (match.votingperiod === false)
+            return;
         if (match.playerids.includes(user.id)) {
             await messageReaction.users.remove(user.id);
             return user.send("You can't vote in your own qualifers");
