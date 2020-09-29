@@ -274,7 +274,6 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
     }
     return message.reply("Made all channels")
 }
-
 export async function QualChannelCreation(message: Discord.Message, args: string[]) {
 
     let groups = await getQuallist()

@@ -72,8 +72,11 @@ export function indexOf2d (arr:any[][], item:any, searchpos: number, returnpos: 
   for (let i = 0; i < arr.length; i++){
     console.log(arr[i][searchpos])
     console.log(arr[i][returnpos])
+    
     if(arr[i][searchpos] == item){
+      
       console.log(arr[i][returnpos])
+      
       return arr[i][returnpos]
     }
   }
