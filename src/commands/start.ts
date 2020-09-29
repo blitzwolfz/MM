@@ -117,8 +117,8 @@ export async function start(message: discord.Message, client: discord.Client) {
     newmatch.template = rantemp.url
     await deletetempStruct(rantemp._id)
 
+    await insertActive(newmatch)
 
-    
     await vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[1].id])
 
     let embed = new discord.MessageEmbed()
