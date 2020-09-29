@@ -38,8 +38,8 @@ async function submit(message, client) {
                 if (match.p1.donesplit && match.p2.donesplit && match.split) {
                     console.log("not a split match");
                     match.split = false;
-                    match.p1.time = Math.floor(Date.now() / 1000) - 7200;
-                    match.p2.time = Math.floor(Date.now() / 1000) - 7200;
+                    match.p1.time = Math.floor(Date.now() / 1000) - 3600;
+                    match.p2.time = Math.floor(Date.now() / 1000) - 3600;
                 }
                 await db_1.updateActive(match);
                 return;
@@ -62,8 +62,8 @@ async function submit(message, client) {
                 if (match.p1.donesplit && match.p2.donesplit && match.split) {
                     console.log("not a split match");
                     match.split = false;
-                    match.p1.time = Math.floor(Date.now() / 1000) - 7200;
-                    match.p2.time = Math.floor(Date.now() / 1000) - 7200;
+                    match.p1.time = Math.floor(Date.now() / 1000) - 3600;
+                    match.p2.time = Math.floor(Date.now() / 1000) - 3600;
                 }
                 await db_1.updateActive(match);
                 return;
