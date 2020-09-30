@@ -149,7 +149,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
                     }
                     await messageReaction.users.remove(user.id);
                     await messageReaction.message.react(utils_1.emojis[0]);
-                    await user.send(`Vote counted for Group 1's memes in <#${match.channelid}>. You gained 2 points for voting`);
+                    await user.send(`Vote counted for Player 1's memes in <#${match.channelid}>. You gained 2 points for voting`);
                 }
             }
             else if (messageReaction.emoji.name === utils_1.emojis[1]) {
@@ -161,7 +161,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
                 else {
                     match.p2.votes += 1;
                     match.p2.voters.push(user.id);
-                    await user.send(`Vote counted for Group 2's memes in <#${match.channelid}>. You gained 2 points for voting`);
+                    await user.send(`Vote counted for Player 2's memes in <#${match.channelid}>. You gained 2 points for voting`);
                     if (match.p1.voters.includes(user.id)) {
                         match.p1.votes -= 1;
                         match.p1.voters.splice(match.p1.voters.indexOf(user.id), 1);

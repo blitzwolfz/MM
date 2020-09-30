@@ -101,7 +101,7 @@ async function start(message, client) {
     newmatch.template = rantemp.url;
     await db_1.deletetempStruct(rantemp._id);
     await db_1.insertActive(newmatch);
-    await card_1.vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[1].id]);
+    await card_1.vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[0].id]);
     let embed = new discord.MessageEmbed()
         .setTitle(`Match between ${user1.username ? user1.username : (await message.guild.members.fetch(user1.id)).nickname} and ${user2.username ? user2.username : (await message.guild.members.fetch(user2.id)).nickname}`)
         .setColor("#d7be26")
