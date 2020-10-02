@@ -119,7 +119,7 @@ export async function start(message: discord.Message, client: discord.Client) {
 
     await insertActive(newmatch)
 
-    await vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[0].id])
+    await vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[1].id])
 
     let embed = new discord.MessageEmbed()
         .setTitle(`Match between ${user1.username ? user1.username : (await message.guild!.members.fetch(user1.id)).nickname} and ${user2.username ? user2.username :(await message.guild!.members.fetch(user2.id)).nickname}`)

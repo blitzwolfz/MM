@@ -92,12 +92,7 @@ async function end(client, id) {
         await user2.send(`Your match is over, here is the final result. You gained ${(match.p2.votes * 5)} points from your votes.`, { embed: embed });
         await client.channels.cache.get("734565012378746950").send((new discord.MessageEmbed()
             .setColor("#d7be26")
-            .setImage(match.p1.memelink[0])
-            .setDescription(`${(await (await channelid.guild.members.fetch(user1.id)).nickname) || await (await client.users.fetch(user1.id)).username} won with ${match.p1.votes} votes!`)
-            .setFooter(utils_1.dateBuilder())));
-        await client.channels.cache.get("734565012378746950").send((new discord.MessageEmbed()
-            .setColor("#d7be26")
-            .setImage(match.p1.memelink[1])
+            .setImage(match.p1.memelink)
             .setDescription(`${(await (await channelid.guild.members.fetch(user1.id)).nickname) || await (await client.users.fetch(user1.id)).username} won with ${match.p1.votes} votes!`)
             .setFooter(utils_1.dateBuilder())));
     }
@@ -116,12 +111,7 @@ async function end(client, id) {
         await client.channels.cache.get("734565012378746950").send((new discord.MessageEmbed()
             .setColor("#d7be26")
             .setDescription(`${(await (await channelid.guild.members.fetch(user2.id)).nickname) || await (await client.users.fetch(user2.id)).username} won with ${match.p2.votes} votes!`)
-            .setImage(match.p2.memelink[0])
-            .setFooter(utils_1.dateBuilder())));
-        await client.channels.cache.get("734565012378746950").send((new discord.MessageEmbed()
-            .setColor("#d7be26")
-            .setDescription(`${(await (await channelid.guild.members.fetch(user2.id)).nickname) || await (await client.users.fetch(user2.id)).username} won with ${match.p2.votes} votes!`)
-            .setImage(match.p2.memelink[1])
+            .setImage(match.p2.memelink)
             .setFooter(utils_1.dateBuilder())));
         await user1.send(`Your match is over, here is the final result. You gained ${(match.p1.votes * 5)} points from your votes.`, { embed: embed });
         await user2.send(`Your match is over, here is the final result. You gained 25 points for winning your match, and gained ${(match.p2.votes * 5)} points from your votes.`, { embed: embed });
