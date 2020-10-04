@@ -164,8 +164,10 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
 
         for(let i = 0; i < match.users.length; i++){
             console.log(match.users[i])
-            let name = ((await (await guild!.members.fetch(match.users[i])).nickname) || await (await disclient.users.fetch(match.users[i])).username)
-            names.push([name, match.users[i]])
+            try{
+                let name = ((await (await guild!.members.fetch(match.users[i])).nickname) || await (await disclient.users.fetch(match.users[i])).username)
+                names.push([name, match.users[i]])
+            } catch { message.channel.send(`${match.users[i]} is fucked`)}
             //names.concat([((await (await message.guild!.members.fetch(i)).nickname) || await (await disclient.users.fetch(i)).username), i])
         }
 

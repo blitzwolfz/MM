@@ -121,8 +121,13 @@ async function ChannelCreation(message, disclient, args) {
         let match = await db_1.getMatchlist();
         for (let i = 0; i < match.users.length; i++) {
             console.log(match.users[i]);
-            let name = ((await (await guild.members.fetch(match.users[i])).nickname) || await (await disclient.users.fetch(match.users[i])).username);
-            names.push([name, match.users[i]]);
+            try {
+                let name = ((await (await guild.members.fetch(match.users[i])).nickname) || await (await disclient.users.fetch(match.users[i])).username);
+                names.push([name, match.users[i]]);
+            }
+            catch {
+                message.channel.send(`${match.users[i]} is fucked`);
+            }
         }
         const client = challonge.createClient({
             apiKey: process.env.CHALLONGE
