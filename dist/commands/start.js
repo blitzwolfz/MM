@@ -686,7 +686,7 @@ async function reload(message, client) {
             await channelid.send(`<@&719936221572235295>`);
             await channelid.send("You have 2 hours to vote!");
         }
-        await db_1.updateActive(match);
+        return await db_1.updateActive(match);
     }
 }
 exports.reload = reload;

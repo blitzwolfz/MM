@@ -20,9 +20,8 @@ async function submit(message, client) {
             return message.reply("Video submissions aren't allowed");
         let matches = await db_1.getActive();
         for (const match of matches) {
-            if ((match.p1.userid === message.author.id) && !match.p1.memedone && match.p1.memelink.length !== 2) {
+            if ((match.p1.userid === message.author.id) && !match.p1.memedone && !match.p1.memelink.length) {
                 match.p1.memelink = (message.attachments.array()[0].url);
-                message.channel.send(match.p1.memelink.length);
                 match.p1.memedone = true;
                 if (match.split) {
                     match.p1.donesplit = true;
@@ -44,9 +43,8 @@ async function submit(message, client) {
                 await db_1.updateActive(match);
                 return;
             }
-            if ((match.p2.userid === message.author.id) && !match.p2.memedone && match.p2.memelink.length !== 2) {
+            if ((match.p2.userid === message.author.id) && !match.p2.memedone && !match.p2.memelink.length) {
                 match.p2.memelink = (message.attachments.array()[0].url);
-                message.channel.send(match.p2.memelink.length);
                 match.p2.memedone = true;
                 if (match.split) {
                     match.p2.donesplit = true;

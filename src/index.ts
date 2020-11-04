@@ -483,9 +483,9 @@ client.on("message", async message => {
 
     const user = message.mentions.users.first();
 
-    if (!amount || amount < 1 || amount > 100)
-      return message.reply("Please give a number between 1 to 100");
+    if (!amount || amount < 1 || amount > 100) return message.reply("Please give a number between 1 to 100");
 
+    
     await message.channel.messages.fetch({
       limit: amount })
       .then(async (messages) => {

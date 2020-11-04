@@ -1017,7 +1017,7 @@ export async function reload(message: discord.Message, client: discord.Client) {
                 await channelid.send("You have 2 hours to vote!")
             }
 
-            await updateActive(match)
+            return await updateActive(match)
     }
 }
 

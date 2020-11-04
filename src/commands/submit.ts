@@ -28,9 +28,8 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
         let matches: activematch[] = await getActive()
 
         for (const match of matches){
-            if((match.p1.userid === message.author.id) && !match.p1.memedone && match.p1.memelink.length !== 2){
+            if((match.p1.userid === message.author.id) && !match.p1.memedone && !match.p1.memelink.length){
                 match.p1.memelink = (message.attachments.array()[0].url)
-                message.channel.send(match.p1.memelink.length)
                 match.p1.memedone = true
 
                 if(match.split){
@@ -57,10 +56,9 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
                 return;
             }
 
-            if((match.p2.userid === message.author.id) && !match.p2.memedone && match.p2.memelink.length !== 2){
+            if((match.p2.userid === message.author.id) && !match.p2.memedone && !match.p2.memelink.length){
 
                 match.p2.memelink = (message.attachments.array()[0].url)
-                message.channel.send(match.p2.memelink.length)
                 match.p2.memedone = true
 
                 if(match.split){
