@@ -569,9 +569,10 @@ export async function running(client: discord.Client): Promise<void> {
                 await channelid.send(`<@&719936221572235295>`)
 
                 await channelid.send("You have 2 hours to vote!")
-            }
 
-            await updateActive(match)
+                await updateActive(match)
+            }
+            
         }
 
         if (match.votingperiod === true && !match.split) {

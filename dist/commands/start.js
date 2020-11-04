@@ -373,8 +373,8 @@ async function running(client) {
                 match.votetime = (Math.floor(Date.now() / 1000));
                 await channelid.send(`<@&719936221572235295>`);
                 await channelid.send("You have 2 hours to vote!");
+                await db_1.updateActive(match);
             }
-            await db_1.updateActive(match);
         }
         if (match.votingperiod === true && !match.split) {
             if ((Math.floor(Date.now() / 1000) - match.votetime > 7200) && !match.split) {
