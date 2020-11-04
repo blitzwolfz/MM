@@ -47,8 +47,8 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
                 if(match.p1.donesplit && match.p2.donesplit && match.split){
                     console.log("not a split match")
                     match.split = false
-                    match.p1.time = Math.floor(Date.now() / 1000) - 3600
-                    match.p2.time = Math.floor(Date.now() / 1000) - 3600
+                    match.p1.time = Math.floor(Date.now() / 1000) - 3200
+                    match.p2.time = Math.floor(Date.now() / 1000) - 3200
                     // match.votingperiod = true
                     // match.votetime = Math.floor(Date.now() / 1000)
                 }
@@ -77,8 +77,8 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
                 if(match.p1.donesplit && match.p2.donesplit && match.split){
                     console.log("not a split match")
                     match.split = false
-                    match.p1.time = Math.floor(Date.now() / 1000) - 3600
-                    match.p2.time = Math.floor(Date.now() / 1000) - 3600
+                    match.p1.time = Math.floor(Date.now() / 1000) - 3200
+                    match.p2.time = Math.floor(Date.now() / 1000) - 3200
                     // match.votingperiod = true
                     // match.votetime = Math.floor(Date.now() / 1000)
                 }
