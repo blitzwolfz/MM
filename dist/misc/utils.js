@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createrole = exports.updatesomething = exports.deletechannels = exports.reminders = exports.dateBuilder = exports.indexOf2d = exports.forwardsFilter = exports.backwardsFilter = exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
+exports.clearstats = exports.createrole = exports.updatesomething = exports.deletechannels = exports.reminders = exports.dateBuilder = exports.indexOf2d = exports.forwardsFilter = exports.backwardsFilter = exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
 const db_1 = require("./db");
+const modprofiles_1 = require("./modprofiles");
 async function getUser(mention) {
     const matches = mention.match(/^<@!?(\d+)>$/);
     if (!matches)
@@ -213,3 +214,12 @@ async function createrole(message, args) {
     }
 }
 exports.createrole = createrole;
+async function clearstats(message) {
+    let profiles = await db_1.getAllProfiles("memesvoted");
+    for (let i = 0; i < profiles.length; i++) {
+        await db_1.updateProfile(profiles[i]._id, "memesvoted", -(profiles[i].memesvoted));
+    }
+    await message.reply("Voting stats been cleared have been cleared");
+    await modprofiles_1.clearmodstats(message);
+}
+exports.clearstats = clearstats;

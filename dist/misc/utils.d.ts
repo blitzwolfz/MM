@@ -19,3 +19,4 @@ export declare function reminders(message: Discord.Message, client: Discord.Clie
 export declare function deletechannels(message: Discord.Message, args: string[]): Promise<void>;
 export declare function updatesomething(message: Discord.Message): Promise<void>;
 export declare function createrole(message: Discord.Message, args: string[]): Promise<Discord.Message | undefined>;
+export declare function clearstats(message: Discord.Message): Promise<void>;

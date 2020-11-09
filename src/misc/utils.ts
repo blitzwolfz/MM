@@ -1,5 +1,6 @@
 import * as Discord from "discord.js"
 import { getMatch, getAllProfiles, updateProfile, getQual } from "./db";
+import { clearmodstats } from "./modprofiles";
 
 export async function getUser(mention: string) {
   // The id is the first and only match found by the RegEx.
@@ -275,5 +276,20 @@ export async function createrole(message: Discord.Message, args: string[]){
       }
     }
   }
+}
+
+
+export async function clearstats(message: Discord.Message){
+
+  let profiles = await getAllProfiles("memesvoted")
+
+  for(let i = 0; i < profiles.length; i++){
+    await updateProfile(profiles[i]._id, "memesvoted", -(profiles[i].memesvoted))
+  }
+
+  await message.reply("Voting stats been cleared have been cleared")
+
+  await clearmodstats(message)
+
 }
 

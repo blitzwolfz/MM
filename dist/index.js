@@ -527,6 +527,11 @@ client.on("message", async (message) => {
     else if (command === "lb") {
         await lbs_1.winningLB(message, client, args);
     }
+    else if (command === "clearstats") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
+        await utils_1.clearstats(message);
+    }
     else if (command === "stats") {
         await user_1.stats(message, client);
     }

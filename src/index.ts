@@ -21,7 +21,7 @@ import {
 } from "./commands/start";
 import { qualend, end, cancelmatch } from "./commands/winner";
 import { vs } from "./commands/card";
-import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, createrole } from "./misc/utils";
+import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, createrole, clearstats } from "./misc/utils";
 import { ModHelp, UserHelp, ModSignupHelp, ModChallongeHelp } from "./commands/help";
 
 import {
@@ -761,6 +761,11 @@ client.on("message", async message => {
 
   else if(command === "lb"){
     await winningLB(message, client, args)
+  }
+
+  else if (command === "clearstats"){
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
+    await clearstats(message)
   }
 
   else if (command === "stats") {
