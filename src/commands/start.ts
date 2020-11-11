@@ -1050,10 +1050,68 @@ export async function matchstats(message: discord.Message, client: discord.Clien
                 { name: '\u200B', value: '\u200B' },
 
                 {name: `Voting period:`, value: `${match.votingperiod ? `Yes` : `No`}`, inline:true},
-                {name: `Voting time:`, value: `${match.votingperiod ? `${(10800/60) - Math.floor((Math.floor(Date.now() / 1000) - match.votetime)/60)} mins left` : "Voting hasn't started"}`, inline:true}
+                {name: `Voting time:`, value: `${match.votingperiod ? `${(7200/60) - Math.floor((Math.floor(Date.now() / 1000) - match.votetime)/60)} mins left` : "Voting hasn't started"}`, inline:true}
 
                 
 
+            )
+
+            await message.channel.send(em)
+        }
+    } catch (err) {
+        message.channel.send("```" + err + "```")
+        return message.reply("there is an error! Ping blitz and show him the error.")
+    }
+
+}
+
+export async function qualstats(message: discord.Message, client: discord.Client){
+    let channel = message.mentions.channels.first()
+    
+    try{
+        if(!channel){
+            return message.reply("No active qualifer exists in this channel")
+        }
+    
+        else{
+            let match = await getQual(channel.id)
+    
+            let em = new discord.MessageEmbed()
+            .setTitle(`${channel.name}`)
+            .setColor("LUMINOUS_VIVID_PINK")
+            // .addFields(
+            //     { name: `${(await client.users.cache.get(match.)!).username} Meme Done:`, value: `${match.p1.memedone ? `Yes` : `No` }`, inline:true},
+            //     { name: 'Match Portion Done:', value: `${match.p1.donesplit ? `${match.split ? `Yes` : `Not a split match` }` : `No` }`, inline:true},
+            //     { name: 'Meme Link:', value: `${match.p1.memedone ?   `${match.p1.memelink}` : `No meme submitted yet` }`, inline:true},
+            //     { name: 'Time left', value: `${match.p1.donesplit ? `${match.p1.memedone ? "Submitted meme" : `${60 - Math.floor(((Date.now() / 1000) - match.p1.time)/60)} mins left`}` : `${match.split ? `Hasn't started portion` : `Time up` }` }`, inline:true},
+            //     { name: '\u200B', value: '\u200B' },
+
+            //     { name: `${(await client.users.cache.get(match.p2.userid)!).username} Meme Done:`, value: `${match.p2.memedone ? `Yes` : `No` }`, inline:true},
+            //     { name: 'Match Portion Done:', value: `${match.p2.donesplit ? `${match.split ? `Yes` : `Not a split match` }` : `No` }`, inline:true},
+            //     { name: 'Meme Link:', value: `${match.p2.memedone ?   `${match.p2.memelink}` : `No meme submitted yet`}`, inline:true},
+            //     { name: 'Time left', value: `${match.p2.donesplit ? `${match.p2.memedone ? "Submitted meme" : `${60 - Math.floor(((Date.now() / 1000) - match.p2.time)/60)} mins left`}` : `${match.split ? `Hasn't started portion` : `Time up` }` }`, inline:true},
+            //     { name: '\u200B', value: '\u200B' },
+
+            //     {name: `Voting period:`, value: `${match.votingperiod ? `Yes` : `No`}`, inline:true},
+            //     {name: `Voting time:`, value: `${match.votingperiod ? `${(10800/60) - Math.floor((Math.floor(Date.now() / 1000) - match.votetime)/60)} mins left` : "Voting hasn't started"}`, inline:true}
+
+                
+
+            // )
+
+            for(let i = 0; i < match.players.length; i++){
+                em.addFields(
+                    { name: `${(await client.users.cache.get(match.players[i].userid)!).username} Meme Done:`, value: `${match.players[i].memedone ? `Yes` : `No` }`, inline:true},
+                    { name: 'Match Portion Done:', value: `${match.players[i].split ? `${match.split ? `Yes` : `Not a split match` }` : `No` }`, inline:true},
+                    { name: 'Meme Link:', value: `${match.players[i].memedone ?   `${match.players[i].memelink}` : `No meme submitted yet` }`, inline:true},
+                    { name: 'Time left', value: `${match.players[i].split ? `${match.players[i].memedone ? "Submitted meme" : `${30 - Math.floor(((Date.now() / 1000) - match.players[i].time)/60)} mins left`}` : `${match.split ? `Hasn't started portion` : `Time up` }` }`, inline:true},
+                    { name: '\u200B', value: '\u200B' },
+                )
+            }
+
+            em.addFields(
+                {name: `Voting period:`, value: `${match.votingperiod ? `Yes` : `No`}`, inline:true},
+                {name: `Voting time:`, value: `${match.votingperiod ? `${(7200/60) - Math.floor((Math.floor(Date.now() / 1000) - match.votetime)/60)} mins left` : "Voting hasn't started"}`, inline:true}
             )
 
             await message.channel.send(em)

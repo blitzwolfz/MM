@@ -17,7 +17,8 @@ import {
   startregularsplit,
   splitregular,
   reload,
-  matchstats
+  matchstats,
+  qualstats
 } from "./commands/start";
 import { qualend, end, cancelmatch } from "./commands/winner";
 import { vs } from "./commands/card";
@@ -522,12 +523,8 @@ client.on("message", async message => {
   }
 
   else if (command === "test") {
-    let r = message.guild!.roles.cache.find(role => role.name.toLowerCase() == args.join(" ").toLowerCase())!;
-
-    // console.log(r)
-
-    await message.channel.send(`${r}`)
-    //await message.reply("no").then(async message => await message.react('🤏'))
+    
+    await message.reply("no").then(async message => await message.react('🤏'))
     //await updatesomething(message)
   }
 
@@ -782,6 +779,11 @@ client.on("message", async message => {
   else if(command === "matchstats"){
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await matchstats(message, client)
+  }
+
+  else if(command === "qualstats"){
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
+    await qualstats(message,client)
   }
 
   else if (command === "startsplit") {

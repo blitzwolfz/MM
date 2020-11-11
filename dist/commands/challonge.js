@@ -208,7 +208,7 @@ async function QualChannelCreation(message, args) {
                 for (let u of groups.users[i]) {
                     string += `<@${u}> `;
                 }
-                await channel.send(`${string}, Portion ${args[0]} has begun, and you have ${time}h to complete it. Contact a ref to being your portion!`);
+                await channel.send(`${string}, Portion ${args[0]} has begun, and you have ${time}h to complete it. Contact a ref to begin your portion!`);
             });
         }
     }

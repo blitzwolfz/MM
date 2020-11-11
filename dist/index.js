@@ -334,8 +334,7 @@ client.on("message", async (message) => {
         await utils_1.deletechannels(message, args);
     }
     else if (command === "test") {
-        let r = message.guild.roles.cache.find(role => role.name.toLowerCase() == args.join(" ").toLowerCase());
-        await message.channel.send(`${r}`);
+        await message.reply("no").then(async (message) => await message.react('🤏'));
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))
@@ -546,6 +545,11 @@ client.on("message", async (message) => {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
         await start_1.matchstats(message, client);
+    }
+    else if (command === "qualstats") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
+        await start_1.qualstats(message, client);
     }
     else if (command === "startsplit") {
         if (!message.member.roles.cache.has('719936221572235295'))
