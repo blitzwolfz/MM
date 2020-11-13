@@ -292,6 +292,7 @@ async function GroupSearch(message, args) {
 }
 exports.GroupSearch = GroupSearch;
 async function declarequalwinner(message, client) {
+    var _a, _b;
     if (message.member.roles.cache.has('724818272922501190')
         || message.member.roles.cache.has('724818272922501190')
         || message.member.roles.cache.has('724832462286356590') || !message.member.roles.cache.has('719936221572235295')) {
@@ -307,7 +308,8 @@ async function declarequalwinner(message, client) {
                     await db_1.updateMatchlist(match);
                     db_1.updateProfile(id, "wins", 1);
                     db_1.updateProfile(id, "points", 25);
-                    return message.reply(" added user.");
+                    await ((_a = message.mentions.users.first()) === null || _a === void 0 ? void 0 : _a.send("Congrats on winning your qualifer. Now get ready for the bracket portion"));
+                    return message.reply("added user.");
                 }
             }
             else {
@@ -319,7 +321,8 @@ async function declarequalwinner(message, client) {
                 };
                 newmatch.users.push(id);
                 await db_1.insertMatchlist(newmatch);
-                return message.reply(", added user.");
+                await ((_b = message.mentions.users.first()) === null || _b === void 0 ? void 0 : _b.send("Congrats on winning your qualifer. Now get ready for the bracket portion"));
+                return message.reply("added user.");
             }
         }
         catch (err) {

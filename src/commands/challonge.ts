@@ -495,7 +495,8 @@ export async function declarequalwinner(message: Discord.Message, client: Discor
                     await updateMatchlist(match)
                     updateProfile(id, "wins", 1)
                     updateProfile(id, "points", 25)
-                    return message.reply(" added user.")
+                    await message.mentions!.users!.first()?.send("Congrats on winning your qualifer. Now get ready for the bracket portion")
+                    return message.reply("added user.")
                 }
             }
 
@@ -512,7 +513,8 @@ export async function declarequalwinner(message: Discord.Message, client: Discor
                 newmatch.users.push(id)
 
                 await insertMatchlist(newmatch)
-                return message.reply(", added user.")
+                await message.mentions!.users!.first()?.send("Congrats on winning your qualifer. Now get ready for the bracket portion")
+                return message.reply("added user.")
 
             }
 
