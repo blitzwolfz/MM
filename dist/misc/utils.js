@@ -74,6 +74,7 @@ function dateBuilder() {
 exports.dateBuilder = dateBuilder;
 async function reminders(message, client, args) {
     let catchannels = message.guild.channels.cache.array();
+    let pp = 0;
     for (let channel of catchannels) {
         try {
             if (channel.parent && channel.parent.name === "matches") {
@@ -134,7 +135,9 @@ async function reminders(message, client, args) {
         catch {
             continue;
         }
+        pp += 1;
     }
+    await message.channel.send(`<@${message.author.id}> gets ${pp} good boy points`);
 }
 exports.reminders = reminders;
 async function deletechannels(message, args) {

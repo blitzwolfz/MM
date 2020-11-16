@@ -102,6 +102,8 @@ export function dateBuilder () {
 export async function reminders(message: Discord.Message, client:Discord.Client, args:string[]) {
   let catchannels = message!.guild!.channels.cache.array()!
 
+  let pp = 0
+
   for(let channel of catchannels){
 
     try{
@@ -184,8 +186,10 @@ export async function reminders(message: Discord.Message, client:Discord.Client,
       continue
     }
 
-  }
+    pp += 1;
 
+  }
+  await message.channel.send(`<@${message.author.id}> gets ${pp} good boy points`)
 }
 
 export async function deletechannels(message: Discord.Message, args:string[]) {
