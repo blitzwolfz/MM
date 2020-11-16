@@ -334,7 +334,14 @@ client.on("message", async (message) => {
         await utils_1.deletechannels(message, args);
     }
     else if (command === "test") {
-        await message.reply("no").then(async (message) => await message.react('🤏'));
+        let all = (await (await client.channels.fetch("777226760366456852"))
+            .messages.fetch({ limit: 100 }));
+        console.log(`The length is: ${all.array().length}`);
+        if (all.array().length === 2) {
+            let m = all.first();
+            await m.channel
+                .send(`<@${m.mentions.users.first().id}> and <@${m.mentions.users.array()[1].id}>, you have ${args[0]}h left to complete your match`);
+        }
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))
