@@ -388,7 +388,7 @@ async function running(client) {
                     await channelid.send("You have 2 hours to vote!");
                 }
                 if (match.exhibition) {
-                    match.votetime = ((Math.floor(Date.now() / 1000)) + 7200) - 35;
+                    match.votetime = ((Math.floor(Date.now() / 1000)) - 7200) + (2100);
                     await channelid.send("You have 30 mins to vote!");
                 }
                 await db_1.updateActive(match);
