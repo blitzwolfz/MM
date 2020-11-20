@@ -31,21 +31,30 @@ async function exhibition(message, client, args) {
     if (args.length < 2) {
         return message.reply("Please use flag theme or template");
     }
+    if (args.length >= 3) {
+        return message.reply("No too many args.");
+    }
     let ex = await db_1.getExhibition();
     if (ex.cooldowns.some(x => x.user === message.author.id)) {
         return message.reply("It hasn't been 3h yet");
     }
     let m = message;
+    ex.cooldowns.push({
+        user: m.author.id,
+        time: Math.floor(Date.now() / 1000)
+    });
+    await db_1.updateExhibition(ex);
+    ex = await db_1.getExhibition();
     const filter = (response) => {
         return (("accept").toLowerCase() === response.content.toLowerCase());
     };
     var res;
     console.log(`Value of res is: ${res}`);
-    await ((_a = message.mentions.users.first()) === null || _a === void 0 ? void 0 : _a.send("Do you accept this match?").then(async (userdm) => {
+    await ((_a = message.mentions.users.first()) === null || _a === void 0 ? void 0 : _a.send("Do you accept this match? Type accept to accept").then(async (userdm) => {
         console.log(userdm.channel.id);
         await userdm.channel.awaitMessages(filter, { max: 1, time: 90000, errors: ['time'] })
             .then(async (collected) => {
-            await m.channel.send(`${collected.first().author} got the correct answer!`);
+            await m.channel.send(`${collected.first().author} accepted, <@${m.author.id}>!`);
             res = true;
         })
             .catch(async (collected) => {
@@ -56,13 +65,10 @@ async function exhibition(message, client, args) {
     }));
     console.log(`Value of res is: ${res}`);
     if (res) {
-        await message.channel.send("OK");
         let guild = client.guilds.cache.get("719406444109103117");
         let category = await guild.channels.cache.find(c => c.name == "matches" && c.type == "category");
         await (guild === null || guild === void 0 ? void 0 : guild.channels.create(`${message.author.username}-vs-${(_b = message.mentions.users.first()) === null || _b === void 0 ? void 0 : _b.username}`, { type: 'text', topic: `Exhibition Match`, parent: category.id }).then(async (channel) => {
             await channel.lockPermissions();
-            await channel.createOverwrite(message.author.id, { "READ_MESSAGE_HISTORY": true, "SEND_MESSAGES": true });
-            await channel.createOverwrite(message.mentions.users.first().id, { "READ_MESSAGE_HISTORY": true, "SEND_MESSAGES": true });
             let newmatch = {
                 _id: channel.id,
                 channelid: channel.id,
@@ -129,15 +135,11 @@ async function exhibition(message, client, args) {
                     .setColor("#d7be26")
                     .setTimestamp());
             }
-            await user1.send(`Your match has been split.\nYou have 30 mins to complete your portion\nUse \`!submit\` to submit each image seperately`);
-            await user2.send(`Your match has been split.\nYou have 30 mins to complete your portion\nUse \`!submit\` to submit each image seperately`);
-            ex.activematches.push(channel.id);
-            ex.cooldowns.push({
-                user: user1.id,
-                time: Math.floor(Date.now() / 1000)
-            });
-            await db_1.updateExhibition(ex);
+            await user1.send(`You have 30 mins to complete your meme\nUse \`!submit\` to submit each image`);
+            await user2.send(`You have 30 mins to complete your meme\nUse \`!submit\` to submit each image`);
             await db_1.insertActive(newmatch);
+            ex.activematches.push(channel.id);
+            await db_1.updateExhibition(ex);
         }));
     }
 }

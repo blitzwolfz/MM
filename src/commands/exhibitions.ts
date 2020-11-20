@@ -13,6 +13,10 @@ export async function exhibition(message: Discord.Message, client: Discord.Clien
         return message.reply("Please use flag theme or template")
     }
 
+    if (args.length >= 3){
+        return message.reply("No too many args.")
+    }
+
     let ex = await getExhibition()
 
     if(ex.cooldowns.some(x => x.user === message.author.id)){
@@ -20,6 +24,15 @@ export async function exhibition(message: Discord.Message, client: Discord.Clien
     }
 
     let m = message
+
+    ex.cooldowns.push({
+        user:m.author.id,
+        time:Math.floor(Date.now() / 1000)
+    })
+
+    await updateExhibition(ex)
+
+    ex = await getExhibition()
 
     // if (ex.cooldowns.findIndex(x => (x.user === (message.author.id)) || (x.user === (message.mentions.users.first()?.id)))){
     //     return message.reply("it has not been 3 hours yet")
@@ -39,11 +52,11 @@ export async function exhibition(message: Discord.Message, client: Discord.Clien
     var res;
     console.log(`Value of res is: ${res}`)
     
-    await message.mentions.users.first()?.send("Do you accept this match?").then(async (userdm:Discord.Message) => {
+    await message.mentions.users.first()?.send("Do you accept this match? Type accept to accept").then(async (userdm:Discord.Message) => {
         console.log(userdm.channel.id)
         await userdm.channel.awaitMessages(filter, { max: 1, time: 90000, errors: ['time'] })
             .then(async collected => {
-                await m.channel.send(`${collected.first()!.author} got the correct answer!`);
+                await m.channel.send(`${collected.first()!.author} accepted, <@${m.author.id}>!`);
                 res = true;
             })
 
@@ -58,7 +71,6 @@ export async function exhibition(message: Discord.Message, client: Discord.Clien
     
 
     if(res){
-        await message.channel.send("OK")
         let guild = client.guilds.cache.get("719406444109103117")
         let category = await guild!.channels.cache.find(c => c.name == "matches" && c.type == "category")!;
 
@@ -69,8 +81,8 @@ export async function exhibition(message: Discord.Message, client: Discord.Clien
             // if (!category) throw new Error("Category channel does not exist");
             await channel.lockPermissions()
             //console.log(`Channel made on: ${channel.createdTimestamp}, ${channel.createdAt}`)
-            await channel.createOverwrite(message.author.id, {"READ_MESSAGE_HISTORY": true, "SEND_MESSAGES":true})
-            await channel.createOverwrite(message.mentions.users.first()!.id, {"READ_MESSAGE_HISTORY": true, "SEND_MESSAGES":true})
+            // await channel.createOverwrite(message.author.id, {"READ_MESSAGE_HISTORY": true, "SEND_MESSAGES":true})
+            // await channel.createOverwrite(message.mentions.users.first()!.id, {"READ_MESSAGE_HISTORY": true, "SEND_MESSAGES":true})
 
             let newmatch: activematch = {
                 _id: channel.id,
@@ -156,17 +168,13 @@ export async function exhibition(message: Discord.Message, client: Discord.Clien
         
       
         
-            await user1.send(`Your match has been split.\nYou have 30 mins to complete your portion\nUse \`!submit\` to submit each image seperately`)
-            await user2.send(`Your match has been split.\nYou have 30 mins to complete your portion\nUse \`!submit\` to submit each image seperately`)
+            await user1.send(`You have 30 mins to complete your meme\nUse \`!submit\` to submit each image`)
+            await user2.send(`You have 30 mins to complete your meme\nUse \`!submit\` to submit each image`)
 
-            ex.activematches.push(channel.id)
-            ex.cooldowns.push({
-                user:user1.id,
-                time:Math.floor(Date.now() / 1000)
-            })
-
-            await updateExhibition(ex)
             await insertActive(newmatch)
+            ex.activematches.push(channel.id)
+            await updateExhibition(ex)
+            
         });
     }
 
