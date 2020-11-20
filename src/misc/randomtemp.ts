@@ -1,7 +1,7 @@
 import * as Discord from "discord.js"
 import { emojis } from "./utils";
 import { randomtempstruct } from "./struct";
-import { inserttempStruct } from "./db";
+import { getthemes, inserttempStruct } from "./db";
 
 
 export const approvefilter = (reaction: { emoji: { name: string; }; }, user: Discord.User) => reaction.emoji.name === emojis[7] && !user.bot;
@@ -63,6 +63,11 @@ export async function getRandomTemplateList(client: Discord.Client): Promise<str
 
   return templatelist
   //await message.reply(`\`\`\`${templatelist}\`\`\``)
+}
+
+export async function getRandomThemeList(client: Discord.Client): Promise<string[]>{
+  let e = await getthemes()
+ return await e.list
 }
 
 async function RandomTemplateEmbed(random: string, id:string){
@@ -147,3 +152,52 @@ export async function RandomTemplateFunc(message: Discord.Message, client: Disco
 //     })
 
 // }
+
+
+
+
+// var templatelist:string[] = []
+//   let lastmsg:string[] = []
+//   console.time("start")
+  
+//   await (<Discord.TextChannel>client.channels.cache.get("724837977838059560")).messages.fetch({ limit: 100 }).then(async msg => {
+//     console.log(msg.map(async m => {
+//       // console.log(m.url)
+//       // await message.reply(m.id)
+//       await (<Discord.TextChannel>client.channels.cache.get("724837977838059560")).messages.fetch(m.id).then(async (m2: Discord.Message) => {
+
+//           // console.log(m2.attachments.array()[0].url)
+//           for(let x = 0; x < m2.content.length; x++){
+//               templatelist.push(m2.content)
+//             }
+//           lastmsg.push(m2.id)
+//           // await message.reply(m2.attachments.array()[0].url)
+//       })
+//     }));
+//   })
+
+//   for(let i = 0; i < 4; i++){
+//     await (<Discord.TextChannel>client.channels.cache.get("724837977838059560")).messages.fetch({ before:lastmsg[0], limit:100 }).then(async msg => {
+//       msg.map(async m => {
+//         // console.log(m.url)
+//         // await message.reply(m.id)
+//         await (<Discord.TextChannel>client.channels.cache.get("724837977838059560")).messages.fetch(m.id).then(async (m2: Discord.Message) => {
+//             // console.log(m2.attachments.array()[0].url)
+//             for(let x = 0; x < m2.content.length; x++){
+//               templatelist.push(m2.content)
+//             }
+//             lastmsg[0] = (m2.id)
+//             // await message.reply(m2.attachments.array()[0].url)
+//         })
+//       });
+//     })
+//   }
+
+//   let set = await new Set(templatelist)
+
+//   templatelist = []
+
+//   templatelist = Array.from(set)
+
+//   await insertlist(templatelist)
+//   //await message.reply(`\`\`\`${templatelist}\`\`\``)

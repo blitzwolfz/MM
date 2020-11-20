@@ -4,7 +4,9 @@ export interface activematch{
     channelid:string;
     messageID:string;
     split:boolean;
+    exhibition:boolean;
     template:string,
+    theme:string,
     tempfound:boolean,
     p1:{
         userid: string;
@@ -131,4 +133,16 @@ export interface randomtempstruct{
     messageid: string,
     url:string,
     time:number
+}
+
+export interface exhibition{
+    _id:5,
+    cooldowns:Array<cooldown>,
+    activematches:Array<string>,
+    activeoffers:Array<cooldown>
+}
+
+export interface cooldown{
+    user:string,
+    time:number,
 }

@@ -1,4 +1,4 @@
-import { activematch, qualmatch, user, signups, matchlist, verificationform, quallist, cockratingInterface, modprofile, randomtempstruct, groupmatch } from "./struct";
+import { activematch, qualmatch, user, signups, matchlist, verificationform, quallist, cockratingInterface, modprofile, randomtempstruct, groupmatch, exhibition } from "./struct";
 export declare function connectToDB(): Promise<void>;
 export declare function insertActive(activematch: activematch): Promise<void>;
 export declare function updateActive(activematch: activematch): Promise<void>;
@@ -41,6 +41,8 @@ export declare function updateModProfile(_id: string, field: string, num: number
 export declare function resetModProfile(_id: string, profile: modprofile): Promise<void>;
 export declare function getAllModProfiles(sortby: string): Promise<modprofile[]>;
 export declare function gettempStruct(_id: string): Promise<randomtempstruct>;
+export declare function insertlist(lists: any[]): Promise<void>;
+export declare function getthemes(): Promise<any>;
 export declare function inserttempStruct(struct: randomtempstruct): Promise<void>;
 export declare function updatetempStruct(_id: string, struct: randomtempstruct): Promise<void>;
 export declare function deletetempStruct(_id: string): Promise<void>;
@@ -50,3 +52,6 @@ export declare function updateGroupmatch(activematch: groupmatch): Promise<void>
 export declare function getGroupmatches(): Promise<groupmatch[]>;
 export declare function getGroupmatch(_id: string): Promise<groupmatch>;
 export declare function deleteGroupmatch(match: groupmatch): Promise<void>;
+export declare function getExhibition(): Promise<exhibition>;
+export declare function updateExhibition(ex: exhibition): Promise<void>;
+export declare function insertExhibition(): Promise<void>;

@@ -9,14 +9,17 @@ import { dateBuilder } from "../misc/utils"
 export async function end(client: discord.Client, id: string) {
     let match: activematch = await getMatch(id)
 
-    for(let s = 0; s <  match.p1.voters.length; s++){
-        await await updateProfile(match.p1.voters[s], "points", 2)
-        await await updateProfile(match.p1.voters[s], "memesvoted", 1)
-    }
+    if(!match.exhibition){
 
-    for(let t = 0; t <  match.p2.voters.length; t++){
-        await await updateProfile(match.p2.voters[t], "points", 2)
-        await await updateProfile(match.p2.voters[t], "memesvoted", 1)
+        for(let s = 0; s <  match.p1.voters.length; s++){
+            await await updateProfile(match.p1.voters[s], "points", 2)
+            await await updateProfile(match.p1.voters[s], "memesvoted", 1)
+        }
+
+        for(let t = 0; t <  match.p2.voters.length; t++){
+            await await updateProfile(match.p2.voters[t], "points", 2)
+            await await updateProfile(match.p2.voters[t], "memesvoted", 1)
+        }
     }
     
     await deleteActive(match)
@@ -38,8 +41,11 @@ export async function end(client: discord.Client, id: string) {
             .setDescription(`<@${user2.id}> has won!`)
             .setFooter(dateBuilder())
 
-        updateProfile(user2.id, "wins", 1)
-        updateProfile(user1.id, "loss", 1)
+        if(!match.exhibition){
+        
+            updateProfile(user2.id, "wins", 1)
+            updateProfile(user1.id, "loss", 1)
+        }
 
 
         await channelid.send(embed)
@@ -56,9 +62,11 @@ export async function end(client: discord.Client, id: string) {
             .setColor("#d7be26")
             .setDescription(`<@${user1.id}> has won!`)
             .setFooter(dateBuilder())
-
-        updateProfile(user1.id, "wins", 1)
-        updateProfile(user2.id, "loss", 1)
+            
+        if(!match.exhibition){
+            updateProfile(user1.id, "wins", 1)
+            updateProfile(user2.id, "loss", 1)
+        }
 
 
         await channelid.send(embed)
@@ -86,10 +94,12 @@ export async function end(client: discord.Client, id: string) {
             .setDescription(`<@${user1.id}> has won with image A!\n The final votes where ${match.p1.votes} to ${match.p2.votes}`)
             .setFooter(dateBuilder())
         
-        updateProfile(user1.id, "wins", 1)
-        updateProfile(user1.id, "points", (25 + (match.p1.votes * 5)))
-        updateProfile(user2.id, "loss", 1)
-        updateProfile(user2.id, "points", match.p2.votes * 5)
+        if(!match.exhibition){
+            updateProfile(user1.id, "wins", 1)
+            updateProfile(user1.id, "points", (25 + (match.p1.votes * 5)))
+            updateProfile(user2.id, "loss", 1)
+            updateProfile(user2.id, "points", match.p2.votes * 5)
+        }
         
 
         await channelid.send(embed)
@@ -97,8 +107,10 @@ export async function end(client: discord.Client, id: string) {
 
         await channelid.send([await winner(client, user1.id)!])
 
-        await user1.send(`Your match is over, here is the final result. You gained 25 points for winning your match, and ${(match.p1.votes * 5)} points from your votes.`, {embed:embed})
-        await user2.send(`Your match is over, here is the final result. You gained ${(match.p2.votes * 5)} points from your votes.`, {embed:embed})
+        if(!match.exhibition){
+            await user1.send(`Your match is over, here is the final result. You gained 25 points for winning your match, and ${(match.p1.votes * 5)} points from your votes.`, {embed:embed})
+            await user2.send(`Your match is over, here is the final result. You gained ${(match.p2.votes * 5)} points from your votes.`, {embed:embed})
+        }
 
         // let d = new Date()
         
@@ -119,10 +131,12 @@ export async function end(client: discord.Client, id: string) {
             .setDescription(`<@${user2.id}> has won with image B!\n The final votes where ${match.p1.votes} to ${match.p2.votes}`)
             .setFooter(dateBuilder())
 
-        updateProfile(user1.id, "loss", 1)
-        updateProfile(user1.id, "points", match.p1.votes * 5)
-        updateProfile(user2.id, "wins", 1)
-        updateProfile(user2.id, "points", (25 + (match.p2.votes * 5)))
+        if(!match.exhibition){
+            updateProfile(user1.id, "loss", 1)
+            updateProfile(user1.id, "points", match.p1.votes * 5)
+            updateProfile(user2.id, "wins", 1)
+            updateProfile(user2.id, "points", (25 + (match.p2.votes * 5)))
+        }
 
         await channelid.send(embed)
         await channelid.send([await winner(client, user2.id)!])
@@ -137,8 +151,10 @@ export async function end(client: discord.Client, id: string) {
             //.setTimestamp()
         ))
 
-        await user1.send(`Your match is over, here is the final result. You gained ${(match.p1.votes * 5)} points from your votes.`, {embed:embed})
-        await user2.send(`Your match is over, here is the final result. You gained 25 points for winning your match, and gained ${(match.p2.votes * 5)} points from your votes.`, {embed:embed})
+        if(!match.exhibition){
+            await user1.send(`Your match is over, here is the final result. You gained ${(match.p1.votes * 5)} points from your votes.`, {embed:embed})
+            await user2.send(`Your match is over, here is the final result. You gained 25 points for winning your match, and gained ${(match.p2.votes * 5)} points from your votes.`, {embed:embed})
+        }
     }
 
     else if (match.p1.votes === match.p2.votes) {

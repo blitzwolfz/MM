@@ -10,6 +10,7 @@ import { updateActive, deleteActive, insertActive, insertQuals,
 import { createAtUsermatch } from "./user"
 import { qualrunn } from "./qualrunn"
 import { RandomTemplateFunc } from "../misc/randomtemp"
+import { deleteExhibitionchannels } from "./exhibitions"
 //const Canvas = require('canvas');
 
 export async function start(message: discord.Message, client: discord.Client) {
@@ -41,8 +42,10 @@ export async function start(message: discord.Message, client: discord.Client) {
         _id: message.channel.id,
         channelid: message.channel.id,
         split: false,
+        exhibition:false,
         messageID: "",
         template: "",
+        theme: "",
         tempfound: false,
         p1: {
             userid: message.mentions.users.array()[0].id,
@@ -171,7 +174,7 @@ export async function start(message: discord.Message, client: discord.Client) {
 
 
     await user1.send(`Your match has been split.\nYou have 1 hour to complete your portion\nUse \`!submit\` to submit each image seperately`)
-    await user2.send(`Your match has been split.\nYou have 1 hour to complete your portion\nUse \`!submit\` to submit to submit each image seperately`)
+    await user2.send(`Your match has been split.\nYou have 1 hour to complete your portion\nUse \`!submit\` to submit each image seperately`)
     // // return matches;
 }
 
@@ -367,7 +370,7 @@ export async function running(client: discord.Client): Promise<void> {
         if (match.votingperiod === false) {
 
             console.log('okk')
-            if (((Math.floor(Date.now() / 1000) - match.p1.time <= 1860 && Math.floor(Date.now() / 1000) - match.p1.time >= 1800) 
+            if (!match.exhibition && ((Math.floor(Date.now() / 1000) - match.p1.time <= 1860 && Math.floor(Date.now() / 1000) - match.p1.time >= 1800) 
             && match.p1.memedone === false && match.p1.donesplit && match.p1.halfreminder === false)) {
 
                 console.log("OK")
@@ -390,7 +393,7 @@ export async function running(client: discord.Client): Promise<void> {
                 // matches.splice(matches.indexOf(match), 1)
             }
 
-            else if ((Math.floor(Date.now() / 1000) - match.p2.time <= 1860 && Math.floor(Date.now() / 1000) - match.p2.time >= 1800) 
+            else if (!match.exhibition && (Math.floor(Date.now() / 1000) - match.p2.time <= 1860 && Math.floor(Date.now() / 1000) - match.p2.time >= 1800) 
             && match.p2.memedone === false && match.p2.donesplit && match.p2.halfreminder === false) {
                 console.log("OK")
                 match.p2.halfreminder = true
@@ -519,14 +522,26 @@ export async function running(client: discord.Client): Promise<void> {
                     //await updateActive(match)
                 }
 
+                if(match.template){
+                    channelid.send(
+                        new discord.MessageEmbed()
+                            .setTitle("Template")
+                        .setImage(match.template)
+                        .setColor("#07da63")
+                        .setTimestamp()
+                        )
+                }
 
-                channelid.send(
-                new discord.MessageEmbed()
-                    .setTitle("Template")
-                .setImage(match.template)
-                .setColor("#07da63")
-                .setTimestamp()
-                )
+                if(match.theme){
+                    channelid.send(
+                        new discord.MessageEmbed()
+                            .setTitle("Theme")
+                        .setDescription(`Theme is: ${match.theme}`)
+                        .setColor("#07da63")
+                        .setTimestamp()
+                        )
+                }
+
 
 
                 let embed1 = new discord.MessageEmbed()
@@ -548,7 +563,7 @@ export async function running(client: discord.Client): Promise<void> {
                 let embed3 = new discord.MessageEmbed()
                     .setTitle("Vote for the best meme!")
                     .setColor("#d7be26")
-                    .setDescription(`Vote for Group 1 reacting with ${emojis[0]}\nVote for Group 2 by reacting with ${emojis[1]}`)
+                    .setDescription(`Vote for User 1 reacting with ${emojis[0]}\nVote for User 2 by reacting with ${emojis[1]}`)
                 
                
 
@@ -566,9 +581,18 @@ export async function running(client: discord.Client): Promise<void> {
                 match.votingperiod = true
                 match.votetime = (Math.floor(Date.now() / 1000))
                 
-                await channelid.send(`<@&719936221572235295>`)
+                if(!match.exhibition){
+                    await channelid.send(`<@&719936221572235295>`)
+                    await channelid.send("You have 2 hours to vote!")
+                }
 
-                await channelid.send("You have 2 hours to vote!")
+
+                
+
+                if(match.exhibition){
+                    match.votetime = ((Math.floor(Date.now() / 1000)) + 7200) - 35
+                    await channelid.send("You have 30 mins to vote!")
+                }
 
                 await updateActive(match)
             }
@@ -581,8 +605,9 @@ export async function running(client: discord.Client): Promise<void> {
                 await end(client, match.channelid)
             }
         }
-    }
 
+    }
+    await deleteExhibitionchannels(client)
     //await qualrunning(client)
 }
 
@@ -738,8 +763,10 @@ export async function startregularsplit(message: discord.Message, client: discor
         _id: message.channel.id,
         channelid: message.channel.id,
         split: true,
+        exhibition:false,
         messageID: "",
         template: "",
+        theme: "",
         tempfound: false,
         p1: {
             userid: user1.id,

@@ -29,6 +29,7 @@ const db_1 = require("../misc/db");
 const user_1 = require("./user");
 const qualrunn_1 = require("./qualrunn");
 const randomtemp_1 = require("../misc/randomtemp");
+const exhibitions_1 = require("./exhibitions");
 async function start(message, client) {
     var args = message.content.slice(prefix.length).trim().split(/ +/g);
     if (args.length < 3) {
@@ -49,8 +50,10 @@ async function start(message, client) {
         _id: message.channel.id,
         channelid: message.channel.id,
         split: false,
+        exhibition: false,
         messageID: "",
         template: "",
+        theme: "",
         tempfound: false,
         p1: {
             userid: message.mentions.users.array()[0].id,
@@ -123,7 +126,7 @@ async function start(message, client) {
         await user2.send(`Your theme is: ${args.splice(4).join(" ")}`);
     }
     await user1.send(`Your match has been split.\nYou have 1 hour to complete your portion\nUse \`!submit\` to submit each image seperately`);
-    await user2.send(`Your match has been split.\nYou have 1 hour to complete your portion\nUse \`!submit\` to submit to submit each image seperately`);
+    await user2.send(`Your match has been split.\nYou have 1 hour to complete your portion\nUse \`!submit\` to submit each image seperately`);
 }
 exports.start = start;
 async function startqual(message, client) {
@@ -262,7 +265,7 @@ async function running(client) {
         let user2 = (await client.users.fetch(match.p2.userid));
         if (match.votingperiod === false) {
             console.log('okk');
-            if (((Math.floor(Date.now() / 1000) - match.p1.time <= 1860 && Math.floor(Date.now() / 1000) - match.p1.time >= 1800)
+            if (!match.exhibition && ((Math.floor(Date.now() / 1000) - match.p1.time <= 1860 && Math.floor(Date.now() / 1000) - match.p1.time >= 1800)
                 && match.p1.memedone === false && match.p1.donesplit && match.p1.halfreminder === false)) {
                 console.log("OK");
                 match.p1.halfreminder = true;
@@ -281,7 +284,7 @@ async function running(client) {
                         .send(`Can't send embed to <@${user1.id}>`);
                 }
             }
-            else if ((Math.floor(Date.now() / 1000) - match.p2.time <= 1860 && Math.floor(Date.now() / 1000) - match.p2.time >= 1800)
+            else if (!match.exhibition && (Math.floor(Date.now() / 1000) - match.p2.time <= 1860 && Math.floor(Date.now() / 1000) - match.p2.time >= 1800)
                 && match.p2.memedone === false && match.p2.donesplit && match.p2.halfreminder === false) {
                 console.log("OK");
                 match.p2.halfreminder = true;
@@ -342,11 +345,20 @@ async function running(client) {
                     match.p1 = match.p2;
                     match.p2 = temp;
                 }
-                channelid.send(new discord.MessageEmbed()
-                    .setTitle("Template")
-                    .setImage(match.template)
-                    .setColor("#07da63")
-                    .setTimestamp());
+                if (match.template) {
+                    channelid.send(new discord.MessageEmbed()
+                        .setTitle("Template")
+                        .setImage(match.template)
+                        .setColor("#07da63")
+                        .setTimestamp());
+                }
+                if (match.theme) {
+                    channelid.send(new discord.MessageEmbed()
+                        .setTitle("Theme")
+                        .setDescription(`Theme is: ${match.theme}`)
+                        .setColor("#07da63")
+                        .setTimestamp());
+                }
                 let embed1 = new discord.MessageEmbed()
                     .setDescription("Player 1")
                     .setImage(match.p1.memelink)
@@ -361,7 +373,7 @@ async function running(client) {
                 let embed3 = new discord.MessageEmbed()
                     .setTitle("Vote for the best meme!")
                     .setColor("#d7be26")
-                    .setDescription(`Vote for Group 1 reacting with ${utils_1.emojis[0]}\nVote for Group 2 by reacting with ${utils_1.emojis[1]}`);
+                    .setDescription(`Vote for User 1 reacting with ${utils_1.emojis[0]}\nVote for User 2 by reacting with ${utils_1.emojis[1]}`);
                 await channelid.send(embed1);
                 await channelid.send(embed2);
                 await channelid.send(embed3).then(async (msg) => {
@@ -371,8 +383,14 @@ async function running(client) {
                 });
                 match.votingperiod = true;
                 match.votetime = (Math.floor(Date.now() / 1000));
-                await channelid.send(`<@&719936221572235295>`);
-                await channelid.send("You have 2 hours to vote!");
+                if (!match.exhibition) {
+                    await channelid.send(`<@&719936221572235295>`);
+                    await channelid.send("You have 2 hours to vote!");
+                }
+                if (match.exhibition) {
+                    match.votetime = ((Math.floor(Date.now() / 1000)) + 7200) - 35;
+                    await channelid.send("You have 30 mins to vote!");
+                }
                 await db_1.updateActive(match);
             }
         }
@@ -382,6 +400,7 @@ async function running(client) {
             }
         }
     }
+    await exhibitions_1.deleteExhibitionchannels(client);
 }
 exports.running = running;
 async function qualrunning(client) {
@@ -488,8 +507,10 @@ async function startregularsplit(message, client) {
         _id: message.channel.id,
         channelid: message.channel.id,
         split: true,
+        exhibition: false,
         messageID: "",
         template: "",
+        theme: "",
         tempfound: false,
         p1: {
             userid: user1.id,

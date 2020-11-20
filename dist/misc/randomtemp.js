@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RandomTemplateFunc = exports.getRandomTemplateList = exports.disapprovefilter = exports.redofilter = exports.approvefilter = void 0;
+exports.RandomTemplateFunc = exports.getRandomThemeList = exports.getRandomTemplateList = exports.disapprovefilter = exports.redofilter = exports.approvefilter = void 0;
 const Discord = __importStar(require("discord.js"));
 const utils_1 = require("./utils");
 const db_1 = require("./db");
@@ -66,6 +66,11 @@ async function getRandomTemplateList(client) {
     return templatelist;
 }
 exports.getRandomTemplateList = getRandomTemplateList;
+async function getRandomThemeList(client) {
+    let e = await db_1.getthemes();
+    return await e.list;
+}
+exports.getRandomThemeList = getRandomThemeList;
 async function RandomTemplateEmbed(random, id) {
     let embed = new Discord.MessageEmbed()
         .setTitle("Random template")

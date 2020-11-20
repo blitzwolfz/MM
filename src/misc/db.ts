@@ -2,7 +2,9 @@ import * as mongo from "mongodb"
 
 require("dotenv").config();
 
-import { activematch, qualmatch, user, signups, matchlist, verificationform, quallist, cockratingInterface, modprofile, randomtempstruct, groupmatch } from "./struct";
+import { activematch, qualmatch, user, signups, matchlist, 
+    verificationform, quallist, cockratingInterface, 
+    modprofile, randomtempstruct, groupmatch, exhibition } from "./struct";
 
 const MongoClient = mongo.MongoClient
 //const assert = require("assert")
@@ -229,6 +231,18 @@ export async function gettempStruct(_id: string): Promise<randomtempstruct> {
     return client.db(process.env.DBNAME).collection("tempstruct").findOne({_id:_id})!;
 }
 
+export async function insertlist(lists:any[]) {
+    let e = {
+        _id:"templatelist",
+        list:lists
+    }
+    await client.db(process.env.DBNAME).collection("tempstruct").insertOne(e)    
+}
+
+export async function getthemes(){
+    return client.db(process.env.DBNAME).collection("tempstruct").findOne({_id:"themelist"})!;   
+}
+
 export async function inserttempStruct(struct:randomtempstruct): Promise<void> {
     await client.db(process.env.DBNAME).collection("tempstruct").insertOne(struct)!;
 }
@@ -242,7 +256,11 @@ export async function deletetempStruct(_id:string): Promise<void>{
 }
 
 export async function getalltempStructs(): Promise<randomtempstruct[]> {
-    return client.db(process.env.DBNAME).collection("tempstruct").find({}).toArray()!;
+    let e = await client.db(process.env.DBNAME).collection("tempstruct").find({}).toArray()!;
+
+    e.splice(0, 1)
+
+    return e
 }
 
 /*Group struct*/
@@ -272,4 +290,26 @@ export async function deleteGroupmatch(match: groupmatch): Promise<void>{
     let _id = match._id
     await client.db(process.env.DBNAME).collection("groupmatch").deleteOne({_id})
     console.log("deleted group match")
+}
+
+
+//exhibition matches
+
+export async function getExhibition(): Promise<exhibition>{
+    return await client.db(process.env.DBNAME).collection("signup").findOne({ _id: 5 })!;
+}
+
+export async function updateExhibition(ex: exhibition){
+    await client.db(process.env.DBNAME).collection("signup").updateOne({_id: 5}, {$set: ex});        
+}
+
+export async function insertExhibition(){
+
+    let e:exhibition ={
+        _id: 5,
+        cooldowns: [],
+        activematches: [],
+        activeoffers: []
+    }
+    await client.db(process.env.DBNAME).collection("signup").insertOne(e);        
 }

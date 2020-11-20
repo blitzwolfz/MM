@@ -18,8 +18,9 @@ import {
   splitregular,
   reload,
   matchstats,
-  qualstats
+  qualstats,
 } from "./commands/start";
+import { exhibition } from "./commands/exhibitions"
 import { qualend, end, cancelmatch } from "./commands/winner";
 import { vs } from "./commands/card";
 import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, createrole, clearstats } from "./misc/utils";
@@ -196,7 +197,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
   //console.log(messageReaction, user)
   // let quals: qualmatch[] = await getQuals()
 
-  let temps: randomtempstruct[] = await getalltempStructs()
+  
 
 
   if((messageReaction.emoji.name === emojis[1] || messageReaction.emoji.name === emojis[0]) 
@@ -208,7 +209,9 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
     if (!match) return;
 
     if (user.id !== match.p1.userid && user.id !== match.p2.userid){ // != match.p1.userid || user.id != match.p2.userid
+      console.log("checkq1")
       if(messageReaction.emoji.name === emojis[0]){
+      console.log("checkq2")
         if(match.p1.voters.includes(user.id)){
           await user.send("You can't vote on the same meme twice")
           await messageReaction.users.remove(user.id)
@@ -225,11 +228,21 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
           }
           await messageReaction.users.remove(user.id)
           await messageReaction.message.react(emojis[0])
-          await user.send(`Vote counted for Player 1's memes in <#${match.channelid}>. You gained 2 points for voting`)
+          if(!match.exhibition){
+            await user.send(`Vote counted for Player 1's memes in <#${match.channelid}>. You gained 2 points for voting`)
+          }
+
+          else{
+            await user.send(`Vote counted for Player 1's memes in <#${match.channelid}>.`)
+          }
+          console.log("checkq3")
+
         }
       }
 
       else if(messageReaction.emoji.name === emojis[1]){
+      console.log("checkq4")
+
         if(match.p2.voters.includes(user.id)){
           await user.send("You can't vote on the same meme twice")
           await messageReaction.users.remove(user.id)
@@ -239,7 +252,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
         else{
           match.p2.votes += 1
           match.p2.voters.push(user.id)
-          await user.send(`Vote counted for Player 2's memes in <#${match.channelid}>. You gained 2 points for voting`)
+
 
           if(match.p1.voters.includes(user.id)){
             match.p1.votes -= 1
@@ -247,6 +260,14 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
           }
           await messageReaction.users.remove(user.id)
           await messageReaction.message.react(emojis[1])
+          if(!match.exhibition){
+            await user.send(`Vote counted for Player 2's memes in <#${match.channelid}>. You gained 2 points for voting`)
+          }
+
+          else{
+            await user.send(`Vote counted for Player 2's memes in <#${match.channelid}>.`)
+          }
+          console.log("checkq5")
         }
       }
 
@@ -360,10 +381,12 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
   //   }
   // }
 
+  let temps: randomtempstruct[] = await getalltempStructs()
+
   if (temps){
 
     for(const temp of temps){
-      console.log(temp)
+      //console.log(temp)
       let templatelist = await getRandomTemplateList(client)
 
       if (messageReaction.emoji.name === '🌀' && user.id !== "722303830368190485") {  
@@ -524,21 +547,24 @@ client.on("message", async message => {
   }
 
   else if (command === "test") {
-    
-    //await message.reply("no").then(async message => await message.react('🤏'))
+
+    //await insertExhibition()
+    await message.reply("no").then(async message => await message.react('🤏'))
+
+
     //await updatesomething(message)
 
-    let all = (await (<Discord.TextChannel>await client.channels.fetch("777226760366456852"))!
-    .messages.fetch({limit:100}))
+    // let all = (await (<Discord.TextChannel>await client.channels.fetch("777226760366456852"))!
+    // .messages.fetch({limit:100}))
 
-    console.log(`The length is: ${all.array().length}`)
+    // console.log(`The length is: ${all.array().length}`)
 
-    if(all.array().length === 2){
-      let m = all.first()!
+    // if(all.array().length === 2){
+    //   let m = all.first()!
 
-      await m.channel
-      .send(`<@${m.mentions.users.first()!.id}> and <@${m.mentions.users.array()[1]!.id}>, you have ${args[0]}h left to complete your match`)
-    }
+    //   await m.channel
+    //   .send(`<@${m.mentions.users.first()!.id}> and <@${m.mentions.users.array()[1]!.id}>, you have ${args[0]}h left to complete your match`)
+    // }
   }
 
   else if (command === "createqualgroup") {
@@ -561,6 +587,12 @@ client.on("message", async message => {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
 
     await GroupSearch(message, args)
+  }
+
+  else if (command === "exhibition" || command === "duel") {
+    //if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
+
+    await exhibition(message, client, args)
   }
 
   else if (command === "dqw" || command === "declarequalwinner") {
