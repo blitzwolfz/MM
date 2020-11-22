@@ -42,7 +42,7 @@ import {
   updatetempStruct,
 } from "./misc/db";
 
-import { template, approvetemplate } from "./commands/template";
+import { template, approvetemplate, addTheme, removeTheme, themelistLb } from "./commands/template";
 import { createrUser, stats } from "./commands/user";
 import { signup,
   startsignup,
@@ -690,6 +690,21 @@ client.on("message", async message => {
 
     await message.reply("Theme has been set!")
 
+  }
+
+  else if(command === "addtheme"){
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
+    await addTheme(message, client, args)
+  }
+
+  else if(command === "deletetheme"){
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
+    await removeTheme(message, client, args)
+  }
+
+  else if(command === "themelist"){
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
+    await themelistLb(message, client, args)
   }
 
   else if (command === "approve") {

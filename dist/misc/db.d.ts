@@ -42,7 +42,14 @@ export declare function resetModProfile(_id: string, profile: modprofile): Promi
 export declare function getAllModProfiles(sortby: string): Promise<modprofile[]>;
 export declare function gettempStruct(_id: string): Promise<randomtempstruct>;
 export declare function insertlist(lists: any[]): Promise<void>;
-export declare function getthemes(): Promise<any>;
+export declare function getthemes(): Promise<{
+    _id: "themelist";
+    list: string[];
+}>;
+export declare function updatedoc(st: {
+    _id: "themelist";
+    list: string[];
+}): Promise<void>;
 export declare function inserttempStruct(struct: randomtempstruct): Promise<void>;
 export declare function updatetempStruct(_id: string, struct: randomtempstruct): Promise<void>;
 export declare function deletetempStruct(_id: string): Promise<void>;

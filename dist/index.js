@@ -455,6 +455,21 @@ client.on("message", async (message) => {
         await db_1.updateQuals(match);
         await message.reply("Theme has been set!");
     }
+    else if (command === "addtheme") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
+        await template_1.addTheme(message, client, args);
+    }
+    else if (command === "deletetheme") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
+        await template_1.removeTheme(message, client, args);
+    }
+    else if (command === "themelist") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
+        await template_1.themelistLb(message, client, args);
+    }
     else if (command === "approve") {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
