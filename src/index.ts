@@ -24,7 +24,7 @@ import { exhibition } from "./commands/exhibitions"
 import { qualend, end, cancelmatch } from "./commands/winner";
 import { vs } from "./commands/card";
 import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, createrole, clearstats } from "./misc/utils";
-import { ModHelp, UserHelp, ModSignupHelp, ModChallongeHelp } from "./commands/help";
+import { ModHelp, UserHelp, ModSignupHelp, ModChallongeHelp, DuelHelp } from "./commands/help";
 
 import {
   connectToDB,
@@ -576,33 +576,95 @@ client.on("message", async message => {
 
     //await insertExhibition()
     await message.reply("no").then(async message => await message.react('🤏'))
+    
+    // let c = <Discord.TextChannel>await client.channels.fetch( await message.channel.id)
+
+    // await c.setTopic("777106541991559198\n776337603389554688")
+
+    // let top = c.topic!
+
+    // let arr:string[] = top.split(" ")
+
+    // await c.send(arr)
+    // console.log(arr)
 
     // let c = <Discord.TextChannel>await client.channels.fetch("722291182461386804")
 
     // let m = await c.messages.fetch("777106541991559198")
 
-    // let em = m.embeds[0]
+    // let em = m.embeds[0].fields
 
-    // for(let i = 0; i < em.fields.length; i++){
-    //   message.channel.send(`\`\`\`${em.fields[i].name}\`\`\``)
-    //   message.channel.send(`\`\`\`${em.fields[i].value}\`\`\``)
-    //   console.log(em.fields[i])
+    // for(let i = 0; i < em.length; i++){
+    //   // message.channel.send(`\`\`\`${em[i].name}\`\`\``)
+    //   // message.channel.send(`\`\`\`${em[i].value}\`\`\``)
+    //   console.log(em[i])
     // }
 
+    // em.sort(function(a, b) {
+    //   //ratings.sort((a: modprofile, b: modprofile) => (b.modactions) - (a.modactions));
+    //   return ((b.name.length) - (a.name.length));
+    //   //Sort could be modified to, for example, sort on the age 
+    //   // if the name is the same.
+    // });
 
-    //await updatesomething(message)
+    // let c1 = <Discord.TextChannel>await client.channels.fetch("722291182461386804")
 
-    // let all = (await (<Discord.TextChannel>await client.channels.fetch("777226760366456852"))!
-    // .messages.fetch({limit:100}))
+    // let m1 = await c1.messages.fetch("776337603389554688")
 
-    // console.log(`The length is: ${all.array().length}`)
+    // let em1 = m1.embeds[0].fields
 
-    // if(all.array().length === 2){
-    //   let m = all.first()!
-
-    //   await m.channel
-    //   .send(`<@${m.mentions.users.first()!.id}> and <@${m.mentions.users.array()[1]!.id}>, you have ${args[0]}h left to complete your match`)
+    // for(let i = 0; i < em1.length; i++){
+    //   // message.channel.send(`\`\`\`${em[i].name}\`\`\``)
+    //   // message.channel.send(`\`\`\`${em[i].value}\`\`\``)
+    //   console.log(em[i])
     // }
+
+    // em1.sort(function(a, b) {
+    //   //ratings.sort((a: modprofile, b: modprofile) => (b.modactions) - (a.modactions));
+    //   return ((b.name.length) - (a.name.length));
+    //   //Sort could be modified to, for example, sort on the age 
+    //   // if the name is the same.
+    // });
+
+    // const fields = [];
+
+    
+
+    // for (let i = 0; i < em1.length; i++){
+
+    //   //parseInt(em[i].value[em[i].value.split(" ").findIndex(x => x === "Earned") + 1].substr(0, 2)) + parseInt(em1[i].value[em[i].value.split(" ").findIndex(x => x === "Earned") + 1].substr(0, 2))
+    //   console.log(`${em[i].value.toLowerCase().includes("earned") ? (em[i].value.split(" ")[5].substr(0, 2)+ " ") : "0" }`)
+    //   console.log(`${em1[i].value.toLowerCase().includes("earned") ? (em1[i].value.split(" ")[5].substr(0, 2)+ " ") : "0" }`)
+    //   fields.push({
+    //       name: `${em1[i].name}`,
+    //       //value: `${match.votes[i].length > 0 ? `Came in with ${match.votes[i].length} vote(s)` : `Failed to submit meme`}`
+    //       value: `${parseInt(`${em[i].value.toLowerCase().includes("earned") ? (em[i].value.split(" ")[5].substr(0, 2)+ " ") : "0" }`) + parseInt(`${em1[i].value.toLowerCase().includes("earned") ? (em1[i].value.split(" ")[5].substr(0, 2)+ " ") : "0" }`)} `,
+    //   });
+    // }
+
+    // fields.sort(function(a, b) {
+    //   //ratings.sort((a: modprofile, b: modprofile) => (b.modactions) - (a.modactions));
+    //   return ((parseInt(b.value)) - (parseInt(a.value)));
+    //   //Sort could be modified to, for example, sort on the age 
+    //   // if the name is the same.
+    // });
+
+    // for(let v of fields){
+    //   v.value += " Points in total"
+    // }
+    
+
+    // message.channel.send({
+    //   embed: {
+    //       title: `Final Results`,
+    //       description: `Top two move on`,
+    //       fields,
+    //       color: "#d7be26",
+    //       timestamp: new Date()
+    //   }
+    // })
+
+
   }
 
   else if (command === "createqualgroup") {
@@ -630,7 +692,14 @@ client.on("message", async message => {
   else if (command === "exhibition" || command === "duel") {
     //if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
 
-    await exhibition(message, client, args)
+    if(args[0].toLowerCase() === "help"){
+      await message.channel.send({ embed: DuelHelp })
+    }
+
+    else{
+      await exhibition(message, client, args)
+    }
+
   }
 
   else if (command === "dqw" || command === "declarequalwinner") {

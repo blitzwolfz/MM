@@ -297,3 +297,76 @@ export async function clearstats(message: Discord.Message){
 
 }
 
+export async function qualifierresultadd(channel:Discord.TextChannel, client:Discord.Client, msg1:string, msg2:string){
+    //let c = <Discord.TextChannel>await client.channels.fetch("722291182461386804")
+
+    let m = await channel.messages.fetch(msg1)
+
+    let em = m.embeds[0].fields
+
+    em.sort(function(a, b) {
+      //ratings.sort((a: modprofile, b: modprofile) => (b.modactions) - (a.modactions));
+      return ((b.name.length) - (a.name.length));
+      //Sort could be modified to, for example, sort on the age 
+      // if the name is the same.
+    });
+
+    //let c1 = <Discord.TextChannel>await client.channels.fetch("722291182461386804")
+
+    let m1 = await channel.messages.fetch(msg2)
+
+    let em1 = m1.embeds[0].fields
+
+    em1.sort(function(a, b) {
+      //ratings.sort((a: modprofile, b: modprofile) => (b.modactions) - (a.modactions));
+      return ((b.name.length) - (a.name.length));
+      //Sort could be modified to, for example, sort on the age 
+      // if the name is the same.
+    });
+
+    const fields = [];
+
+    
+
+    for (let i = 0; i < em1.length; i++){
+
+      //parseInt(em[i].value[em[i].value.split(" ").findIndex(x => x === "Earned") + 1].substr(0, 2)) + parseInt(em1[i].value[em[i].value.split(" ").findIndex(x => x === "Earned") + 1].substr(0, 2))
+      console.log(`${em[i].value.toLowerCase().includes("earned") ? (em[i].value.split(" ")[5].substr(0, 2)+ " ") : "0" }`)
+      console.log(`${em1[i].value.toLowerCase().includes("earned") ? (em1[i].value.split(" ")[5].substr(0, 2)+ " ") : "0" }`)
+      fields.push({
+          name: `${em1[i].name}`,
+          //value: `${match.votes[i].length > 0 ? `Came in with ${match.votes[i].length} vote(s)` : `Failed to submit meme`}`
+          value: `${parseInt(`${em[i].value.toLowerCase().includes("earned") ? (em[i].value.split(" ")[5].substr(0, 2)+ " ") : "0" }`) + parseInt(`${em1[i].value.toLowerCase().includes("earned") ? (em1[i].value.split(" ")[5].substr(0, 2)+ " ") : "0" }`)} `,
+      });
+    }
+
+    fields.sort(function(a, b) {
+      //ratings.sort((a: modprofile, b: modprofile) => (b.modactions) - (a.modactions));
+      return ((parseInt(b.value)) - (parseInt(a.value)));
+      //Sort could be modified to, for example, sort on the age 
+      // if the name is the same.
+    });
+
+    for(let v of fields){
+      v.value += " Points in total"
+    }
+    
+    channel.send({embed: {
+      title: `Final Results for Group <#${channel.id}>`,
+      description: `Top two move on`,
+      fields,
+      color: "#d7be26",
+      timestamp: new Date()
+  }})
+
+  await (await (<Discord.TextChannel>client.channels.cache.get("722291182461386804")))
+  .send({embed: {
+    title: `Final Results for Group <#${channel.id}>`,
+    description: `Top two move on`,
+    fields,
+    color: "#d7be26",
+    timestamp: new Date()
+  }})
+
+}
+

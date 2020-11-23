@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.clearstats = exports.createrole = exports.updatesomething = exports.deletechannels = exports.reminders = exports.dateBuilder = exports.indexOf2d = exports.forwardsFilter = exports.backwardsFilter = exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
+exports.qualifierresultadd = exports.clearstats = exports.createrole = exports.updatesomething = exports.deletechannels = exports.reminders = exports.dateBuilder = exports.indexOf2d = exports.forwardsFilter = exports.backwardsFilter = exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
 const db_1 = require("./db");
 const modprofiles_1 = require("./modprofiles");
 async function getUser(mention) {
@@ -226,3 +226,46 @@ async function clearstats(message) {
     await modprofiles_1.clearmodstats(message);
 }
 exports.clearstats = clearstats;
+async function qualifierresultadd(channel, client, msg1, msg2) {
+    let m = await channel.messages.fetch(msg1);
+    let em = m.embeds[0].fields;
+    em.sort(function (a, b) {
+        return ((b.name.length) - (a.name.length));
+    });
+    let m1 = await channel.messages.fetch(msg2);
+    let em1 = m1.embeds[0].fields;
+    em1.sort(function (a, b) {
+        return ((b.name.length) - (a.name.length));
+    });
+    const fields = [];
+    for (let i = 0; i < em1.length; i++) {
+        console.log(`${em[i].value.toLowerCase().includes("earned") ? (em[i].value.split(" ")[5].substr(0, 2) + " ") : "0"}`);
+        console.log(`${em1[i].value.toLowerCase().includes("earned") ? (em1[i].value.split(" ")[5].substr(0, 2) + " ") : "0"}`);
+        fields.push({
+            name: `${em1[i].name}`,
+            value: `${parseInt(`${em[i].value.toLowerCase().includes("earned") ? (em[i].value.split(" ")[5].substr(0, 2) + " ") : "0"}`) + parseInt(`${em1[i].value.toLowerCase().includes("earned") ? (em1[i].value.split(" ")[5].substr(0, 2) + " ") : "0"}`)} `,
+        });
+    }
+    fields.sort(function (a, b) {
+        return ((parseInt(b.value)) - (parseInt(a.value)));
+    });
+    for (let v of fields) {
+        v.value += " Points in total";
+    }
+    channel.send({ embed: {
+            title: `Final Results for Group <#${channel.id}>`,
+            description: `Top two move on`,
+            fields,
+            color: "#d7be26",
+            timestamp: new Date()
+        } });
+    await (await client.channels.cache.get("722291182461386804"))
+        .send({ embed: {
+            title: `Final Results for Group <#${channel.id}>`,
+            description: `Top two move on`,
+            fields,
+            color: "#d7be26",
+            timestamp: new Date()
+        } });
+}
+exports.qualifierresultadd = qualifierresultadd;

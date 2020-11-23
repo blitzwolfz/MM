@@ -389,7 +389,12 @@ client.on("message", async (message) => {
         await challonge_1.GroupSearch(message, args);
     }
     else if (command === "exhibition" || command === "duel") {
-        await exhibitions_1.exhibition(message, client, args);
+        if (args[0].toLowerCase() === "help") {
+            await message.channel.send({ embed: help_1.DuelHelp });
+        }
+        else {
+            await exhibitions_1.exhibition(message, client, args);
+        }
     }
     else if (command === "dqw" || command === "declarequalwinner") {
         if (!message.member.roles.cache.has('719936221572235295'))

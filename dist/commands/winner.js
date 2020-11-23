@@ -221,13 +221,26 @@ async function qualend(client, id) {
                     timestamp: new Date()
                 }
             });
-            return channel.send({
+            channel.send({
                 embed: {
                     title: `Votes for ${channel.name} are in!`,
                     description: `${totalvotes} votes for this qualifier`,
                     fields,
                     color: "#d7be26",
                     timestamp: new Date()
+                }
+            }).then(async (message) => {
+                var _a;
+                console.log("This is msg id:", message);
+                let t = (_a = channel.topic) === null || _a === void 0 ? void 0 : _a.split(" ");
+                if (!t) {
+                    await channel.setTopic(message.id);
+                }
+                else if (t.length === 1) {
+                    let emm = await utils_1.qualifierresultadd(channel, client, channel.topic.split(" ")[0], message.id);
+                    await channel.send({ emm });
+                    await (await client.channels.cache.get("722291182461386804"))
+                        .send({ emm });
                 }
             });
         }

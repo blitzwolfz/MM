@@ -4,7 +4,7 @@ import * as discord from "discord.js"
 import { activematch } from "../misc/struct"
 import { deleteActive, deleteQuals, updateProfile, getSingularQuals, getMatch, getQual } from "../misc/db"
 import { winner } from "./card"
-import { dateBuilder } from "../misc/utils"
+import { dateBuilder, qualifierresultadd } from "../misc/utils"
 
 export async function end(client: discord.Client, id: string) {
     let match: activematch = await getMatch(id)
@@ -276,7 +276,7 @@ export async function qualend(client: discord.Client, id: string) {
                 }
             });
 
-            return channel.send({
+            channel.send({
                 embed: {
                     title: `Votes for ${channel.name} are in!`,
                     description: `${totalvotes} votes for this qualifier`,
@@ -284,7 +284,38 @@ export async function qualend(client: discord.Client, id: string) {
                     color: "#d7be26",
                     timestamp: new Date()
                 }
+            }).then(async message => {
+
+                console.log("This is msg id:", message)
+
+                let t = channel.topic?.split(" ")
+
+                if(!t){
+                    await channel.setTopic(message.id)  
+                }
+
+                else if(t.length === 1){
+                    // t.push(message.id)
+
+                    // await channel.setTopic(t.join(" "))
+
+                    let emm = await qualifierresultadd(channel, client, channel.topic!.split(" ")[0], message.id)
+
+                    await channel.send({emm})
+    
+                    await (await (<discord.TextChannel>client.channels.cache.get("722291182461386804")))
+                    .send({emm});
+                }
+
             });
+
+            //return;
+
+            // if(channel.topic?.length === 2){
+
+
+
+            // }
         }
     }
 
