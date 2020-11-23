@@ -50,7 +50,7 @@ async function exhibition(message, client, args) {
     };
     var res;
     console.log(`Value of res is: ${res}`);
-    await ((_a = message.mentions.users.first()) === null || _a === void 0 ? void 0 : _a.send("Do you accept this match? Type accept to accept").then(async (userdm) => {
+    await ((_a = message.mentions.users.first()) === null || _a === void 0 ? void 0 : _a.send(`<@${m.author.id}> wants to duel you. Send Accept to continue, or don't reply to not`).then(async (userdm) => {
         console.log(userdm.channel.id);
         await userdm.channel.awaitMessages(filter, { max: 1, time: 90000, errors: ['time'] })
             .then(async (collected) => {

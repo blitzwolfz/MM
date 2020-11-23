@@ -52,7 +52,8 @@ export async function exhibition(message: Discord.Message, client: Discord.Clien
     var res;
     console.log(`Value of res is: ${res}`)
     
-    await message.mentions.users.first()?.send("Do you accept this match? Type accept to accept").then(async (userdm:Discord.Message) => {
+    
+    await message.mentions.users.first()?.send(`<@${m.author.id}> wants to duel you. Send Accept to continue, or don't reply to not`).then(async (userdm:Discord.Message) => {
         console.log(userdm.channel.id)
         await userdm.channel.awaitMessages(filter, { max: 1, time: 90000, errors: ['time'] })
             .then(async collected => {
