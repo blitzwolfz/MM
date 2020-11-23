@@ -63,7 +63,7 @@ async function addTheme(message, client, args) {
         console.log(list);
         await db_1.updatedoc({
             _id: "themelist",
-            list: list.sort()
+            list: list
         });
         await message.reply("added theme.");
     }
@@ -77,7 +77,7 @@ async function removeTheme(message, client, args) {
         let obj = await db_1.getthemes();
         let list = obj.list;
         let index = list.findIndex(ele => ele === args.join(" "));
-        list.splice(index, 1).sort();
+        list.splice(index, 1);
         console.log(list);
         await db_1.updatedoc({
             _id: "themelist",

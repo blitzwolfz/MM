@@ -237,21 +237,39 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
     let temps = await db_1.getalltempStructs();
     if (temps) {
         for (const temp of temps) {
-            let templatelist = await randomtemp_1.getRandomTemplateList(client);
             if (messageReaction.emoji.name === '🌀' && user.id !== "722303830368190485") {
-                let random = templatelist[Math.floor(Math.random() * (((templatelist.length - 1) - 1) - 1) + 1)];
-                let embed = new Discord.MessageEmbed()
-                    .setDescription("Random template")
-                    .setImage(random)
-                    .setColor("#d7be26")
-                    .setTimestamp();
-                console.log(await messageReaction.message.id);
-                temp.url = random;
-                await (await client.channels.cache.get("722616679280148504")
-                    .messages.fetch(temp.messageid))
-                    .edit({ embed });
-                await db_1.updatetempStruct(temp._id, temp);
-                await messageReaction.users.remove(user.id);
+                if (temp.istheme === false) {
+                    let templatelist = await randomtemp_1.getRandomTemplateList(client);
+                    let random = templatelist[Math.floor(Math.random() * (((templatelist.length - 1) - 1) - 1) + 1)];
+                    let embed = new Discord.MessageEmbed()
+                        .setDescription("Random template")
+                        .setImage(random)
+                        .setColor("#d7be26")
+                        .setTimestamp();
+                    console.log(await messageReaction.message.id);
+                    temp.url = random;
+                    await (await client.channels.cache.get("722616679280148504")
+                        .messages.fetch(temp.messageid))
+                        .edit({ embed });
+                    await db_1.updatetempStruct(temp._id, temp);
+                    await messageReaction.users.remove(user.id);
+                }
+                if (temp.istheme === true) {
+                    let themelist = await randomtemp_1.getRandomThemeList(client);
+                    let random = themelist[Math.floor(Math.random() * (((themelist.length - 1) - 1) - 1) + 1)];
+                    let embed = new Discord.MessageEmbed()
+                        .setTitle("Random Theme")
+                        .setDescription(`Theme is: ${random}`)
+                        .setColor("#d7be26")
+                        .setTimestamp();
+                    console.log(await messageReaction.message.id);
+                    temp.url = random;
+                    await (await client.channels.cache.get("722616679280148504")
+                        .messages.fetch(temp.messageid))
+                        .edit({ embed });
+                    await db_1.updatetempStruct(temp._id, temp);
+                    await messageReaction.users.remove(user.id);
+                }
             }
             if (messageReaction.emoji.name === utils_1.emojis[7] && user.id !== "722303830368190485") {
                 temp.found = true;

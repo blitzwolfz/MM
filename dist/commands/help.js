@@ -79,7 +79,7 @@ exports.UserHelp = {
     fields: [
         {
             name: '`!submit`',
-            value: `Pass a image/gif with the message or it will not be submitted :)\nNote this command works regardless of split or unsplit match`,
+            value: `Pass an image/gif with the message or it will not be submitted :)\nNote this command works regardless of split or unsplit match`,
         },
         {
             name: '`!qualsubmit`',
@@ -111,7 +111,7 @@ exports.UserHelp = {
         },
         {
             name: 'Voting in qualifiers',
-            value: `When voting in qualifiers, and you used up all 3 votes,\nclick on the ${utils_1.emojis[6]} to reset your votes`
+            value: `When voting in qualifiers, and you used up all 2 of your votes,\nclick on the ${utils_1.emojis[6]} to reset your votes`
         },
     ],
     timestamp: new Date()

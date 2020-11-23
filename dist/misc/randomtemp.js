@@ -71,31 +71,57 @@ async function getRandomThemeList(client) {
     return await e.list;
 }
 exports.getRandomThemeList = getRandomThemeList;
-async function RandomTemplateEmbed(random, id) {
-    let embed = new Discord.MessageEmbed()
-        .setTitle("Random template")
-        .setDescription(`<#${id}>`)
-        .setImage(random)
-        .setColor("#d7be26")
-        .setTimestamp();
-    return embed;
+async function RandomTemplateEmbed(random, id, istheme) {
+    if (istheme === true) {
+        let embed = new Discord.MessageEmbed()
+            .setTitle("Random template")
+            .setDescription(`<#${id}>\nTheme is: ${random}`)
+            .setColor("#d7be26")
+            .setTimestamp();
+        return embed;
+    }
+    else {
+        let embed = new Discord.MessageEmbed()
+            .setTitle("Random template")
+            .setDescription(`<#${id}>`)
+            .setImage(random)
+            .setColor("#d7be26")
+            .setTimestamp();
+        return embed;
+    }
 }
-async function RandomTemplateFunc(message, client, _id) {
-    let templatelist = await getRandomTemplateList(client);
-    let random = templatelist[Math.floor(Math.random() * (((templatelist.length - 1) - 1) - 1) + 1)];
+async function RandomTemplateFunc(message, client, _id, theme) {
     let tempstruct = {
         _id: _id,
         found: false,
-        url: random,
+        istheme: false,
+        url: "",
         messageid: "",
         time: Math.floor(Date.now() / 1000)
     };
-    await client.channels.cache.get("722616679280148504").send(`<@${message.author.id}>`, await RandomTemplateEmbed(random, message.channel.id)).then(async (message) => {
-        await message.react(utils_1.emojis[7]);
-        await message.react('❌');
-        await message.react('🌀');
-        tempstruct.messageid = message.id;
-    });
+    if (theme === true) {
+        let themelist = await getRandomThemeList(client);
+        let random = themelist[Math.floor(Math.random() * (((themelist.length - 1) - 1) - 1) + 1)];
+        tempstruct.url = random;
+        tempstruct.istheme = true;
+        await client.channels.cache.get("722616679280148504").send(`<@${message.author.id}>`, await RandomTemplateEmbed(random, message.channel.id, true)).then(async (message) => {
+            await message.react(utils_1.emojis[7]);
+            await message.react('❌');
+            await message.react('🌀');
+            tempstruct.messageid = message.id;
+        });
+    }
+    else {
+        let templatelist = await getRandomTemplateList(client);
+        let random = templatelist[Math.floor(Math.random() * (((templatelist.length - 1) - 1) - 1) + 1)];
+        tempstruct.url = random;
+        await client.channels.cache.get("722616679280148504").send(`<@${message.author.id}>`, await RandomTemplateEmbed(random, message.channel.id, false)).then(async (message) => {
+            await message.react(utils_1.emojis[7]);
+            await message.react('❌');
+            await message.react('🌀');
+            tempstruct.messageid = message.id;
+        });
+    }
     await db_1.inserttempStruct(tempstruct);
 }
 exports.RandomTemplateFunc = RandomTemplateFunc;

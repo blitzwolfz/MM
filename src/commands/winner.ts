@@ -91,7 +91,7 @@ export async function end(client: discord.Client, id: string) {
         let embed = new discord.MessageEmbed()
             .setTitle(`Match between ${user1.username} and ${user2.username}`)
             .setColor("#d7be26")
-            .setDescription(`<@${user1.id}> has won with image A!\n The final votes where ${match.p1.votes} to ${match.p2.votes}`)
+            .setDescription(`<@${user1.id}> has won with image A!\n The final votes were ${match.p1.votes} to ${match.p2.votes}`)
             .setFooter(dateBuilder())
         
         if(!match.exhibition){
@@ -128,7 +128,7 @@ export async function end(client: discord.Client, id: string) {
         let embed = new discord.MessageEmbed()
             .setTitle(`Match between ${user1.username} and ${user2.username}`)
             .setColor("#d7be26")
-            .setDescription(`<@${user2.id}> has won with image B!\n The final votes where ${match.p1.votes} to ${match.p2.votes}`)
+            .setDescription(`<@${user2.id}> has won with image B!\n The final votes were ${match.p1.votes} to ${match.p2.votes}`)
             .setFooter(dateBuilder())
 
         if(!match.exhibition){

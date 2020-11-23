@@ -113,6 +113,7 @@ export interface modprofile {
 export interface randomtempstruct {
     _id: string;
     found: boolean;
+    istheme: boolean;
     messageid: string;
     url: string;
     time: number;
