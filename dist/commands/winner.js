@@ -111,7 +111,7 @@ async function end(client, id) {
             await client.channels.cache.get("780774797273071626").send((new discord.MessageEmbed()
                 .setColor("#d7be26")
                 .setImage(match.p1.memelink)
-                .setDescription(`<@${user1.id}> beat <@${user2.id}>. The final score was ${match.p1.votes} to ${match.p2.votes} votes!`)
+                .setDescription(`<@${user1.id}> beat <@${user2.id}>.\nThe final score was ${match.p1.votes} to ${match.p2.votes} votes!`)
                 .setFooter(utils_1.dateBuilder())));
         }
     }
@@ -140,7 +140,7 @@ async function end(client, id) {
             await client.channels.cache.get("780774797273071626").send((new discord.MessageEmbed()
                 .setColor("#d7be26")
                 .setImage(match.p1.memelink)
-                .setDescription(`<@${user2.id}> beat <@${user1.id}>. The final score was ${match.p2.votes} to ${match.p1.votes} votes!`)
+                .setDescription(`<@${user2.id}> beat <@${user1.id}>.\nThe final score was ${match.p2.votes} to ${match.p1.votes} votes!`)
                 .setFooter(utils_1.dateBuilder())));
         }
         if (!match.exhibition) {
