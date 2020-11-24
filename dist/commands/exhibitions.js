@@ -66,7 +66,7 @@ async function exhibition(message, client, args) {
     console.log(`Value of res is: ${res}`);
     if (res) {
         let guild = client.guilds.cache.get("719406444109103117");
-        let category = await guild.channels.cache.find(c => c.name == "matches" && c.type == "category");
+        let category = await guild.channels.cache.find(c => c.name == "duels" && c.type == "category");
         await (guild === null || guild === void 0 ? void 0 : guild.channels.create(`${message.author.username}-vs-${(_b = message.mentions.users.first()) === null || _b === void 0 ? void 0 : _b.username}`, { type: 'text', topic: `Exhibition Match`, parent: category.id }).then(async (channel) => {
             await channel.lockPermissions();
             let newmatch = {

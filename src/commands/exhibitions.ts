@@ -73,7 +73,7 @@ export async function exhibition(message: Discord.Message, client: Discord.Clien
 
     if(res){
         let guild = client.guilds.cache.get("719406444109103117")
-        let category = await guild!.channels.cache.find(c => c.name == "matches" && c.type == "category")!;
+        let category = await guild!.channels.cache.find(c => c.name == "duels" && c.type == "category")!;
 
 
         await guild?.channels
