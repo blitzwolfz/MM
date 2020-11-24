@@ -100,11 +100,20 @@ async function end(client, id) {
             await user1.send(`Your match is over, here is the final result. You gained 25 points for winning your match, and ${(match.p1.votes * 5)} points from your votes.`, { embed: embed });
             await user2.send(`Your match is over, here is the final result. You gained ${(match.p2.votes * 5)} points from your votes.`, { embed: embed });
         }
-        await client.channels.cache.get("734565012378746950").send((new discord.MessageEmbed()
-            .setColor("#d7be26")
-            .setImage(match.p1.memelink)
-            .setDescription(`${(await (await channelid.guild.members.fetch(user1.id)).nickname) || await (await client.users.fetch(user1.id)).username} won with ${match.p1.votes} votes!`)
-            .setFooter(utils_1.dateBuilder())));
+        if (match.exhibition === false) {
+            await client.channels.cache.get("734565012378746950").send((new discord.MessageEmbed()
+                .setColor("#d7be26")
+                .setImage(match.p1.memelink)
+                .setDescription(`${(await (await channelid.guild.members.fetch(user1.id)).nickname) || await (await client.users.fetch(user1.id)).username} won with ${match.p1.votes} votes!`)
+                .setFooter(utils_1.dateBuilder())));
+        }
+        else if (match.exhibition === true) {
+            await client.channels.cache.get("780774797273071626").send((new discord.MessageEmbed()
+                .setColor("#d7be26")
+                .setImage(match.p1.memelink)
+                .setDescription(`<@${user1.id}> beat <@${user2.id}>. The final score was ${match.p1.votes} to ${match.p2.votes} votes!`)
+                .setFooter(utils_1.dateBuilder())));
+        }
     }
     else if (match.p1.votes < match.p2.votes) {
         let embed = new discord.MessageEmbed()
@@ -120,11 +129,20 @@ async function end(client, id) {
         }
         await channelid.send(embed);
         await channelid.send([await card_1.winner(client, user2.id)]);
-        await client.channels.cache.get("734565012378746950").send((new discord.MessageEmbed()
-            .setColor("#d7be26")
-            .setDescription(`${(await (await channelid.guild.members.fetch(user2.id)).nickname) || await (await client.users.fetch(user2.id)).username} won with ${match.p2.votes} votes!`)
-            .setImage(match.p2.memelink)
-            .setFooter(utils_1.dateBuilder())));
+        if (match.exhibition === false) {
+            await client.channels.cache.get("734565012378746950").send((new discord.MessageEmbed()
+                .setColor("#d7be26")
+                .setImage(match.p1.memelink)
+                .setDescription(`${(await (await channelid.guild.members.fetch(user2.id)).nickname) || await (await client.users.fetch(user2.id)).username} won with ${match.p2.votes} votes!`)
+                .setFooter(utils_1.dateBuilder())));
+        }
+        else if (match.exhibition === true) {
+            await client.channels.cache.get("780774797273071626").send((new discord.MessageEmbed()
+                .setColor("#d7be26")
+                .setImage(match.p1.memelink)
+                .setDescription(`<@${user2.id}> beat <@${user1.id}>. The final score was ${match.p2.votes} to ${match.p1.votes} votes!`)
+                .setFooter(utils_1.dateBuilder())));
+        }
         if (!match.exhibition) {
             await user1.send(`Your match is over, here is the final result. You gained ${(match.p1.votes * 5)} points from your votes.`, { embed: embed });
             await user2.send(`Your match is over, here is the final result. You gained 25 points for winning your match, and gained ${(match.p2.votes * 5)} points from your votes.`, { embed: embed });

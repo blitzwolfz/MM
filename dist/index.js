@@ -368,6 +368,11 @@ client.on("message", async (message) => {
     }
     else if (command === "test") {
         await message.reply("no").then(async (message) => await message.react('🤏'));
+        await message.channel.send(new Discord.MessageEmbed()
+            .setTitle("Template")
+            .setDescription(`<@${message.author.id}><@${message.author.id}>`)
+            .setColor("#07da63")
+            .setTimestamp());
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))
