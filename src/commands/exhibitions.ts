@@ -5,16 +5,27 @@ import { activematch } from "../misc/struct"
 
 export async function exhibition(message: Discord.Message, client: Discord.Client, args: string[]){
 
-    if (message.mentions.users.array().length === 0){
+    console.log(args)
+
+    if (!message.mentions.users.array()){
         return message.reply("Please mention someone")
     }
+
+    else if (message.mentions.users.first()?.id === message.author.id){
+        return message.reply("No boni")
+    }
+
 
     if (args.length < 2){
         return message.reply("Please use flag theme or template")
     }
 
     if (args.length >= 3){
-        return message.reply("No too many args.")
+        return message.reply("No too many arguments. Use either theme or template")
+    }
+
+    else if(!["template", "theme"].includes(args[1].toLowerCase())){
+        return message.reply("Please use flag theme or template")
     }
 
     let ex = await getExhibition()
@@ -25,14 +36,6 @@ export async function exhibition(message: Discord.Message, client: Discord.Clien
 
     let m = message
 
-    ex.cooldowns.push({
-        user:m.author.id,
-        time:Math.floor(Date.now() / 1000)
-    })
-
-    await updateExhibition(ex)
-
-    ex = await getExhibition()
 
     // if (ex.cooldowns.findIndex(x => (x.user === (message.author.id)) || (x.user === (message.mentions.users.first()?.id)))){
     //     return message.reply("it has not been 3 hours yet")
@@ -72,6 +75,16 @@ export async function exhibition(message: Discord.Message, client: Discord.Clien
     
 
     if(res){
+
+        ex.cooldowns.push({
+            user:m.author.id,
+            time:Math.floor(Date.now() / 1000)
+        })
+    
+        await updateExhibition(ex)
+    
+        ex = await getExhibition()
+
         let guild = client.guilds.cache.get("719406444109103117")
         let category = await guild!.channels.cache.find(c => c.name == "duels" && c.type == "category")!;
 

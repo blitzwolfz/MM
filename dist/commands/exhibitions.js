@@ -24,33 +24,34 @@ const Discord = __importStar(require("discord.js"));
 const db_1 = require("../misc/db");
 const randomtemp_1 = require("../misc/randomtemp");
 async function exhibition(message, client, args) {
-    var _a, _b;
-    if (message.mentions.users.array().length === 0) {
+    var _a, _b, _c;
+    console.log(args);
+    if (!message.mentions.users.array()) {
         return message.reply("Please mention someone");
+    }
+    else if (((_a = message.mentions.users.first()) === null || _a === void 0 ? void 0 : _a.id) === message.author.id) {
+        return message.reply("No boni");
     }
     if (args.length < 2) {
         return message.reply("Please use flag theme or template");
     }
     if (args.length >= 3) {
-        return message.reply("No too many args.");
+        return message.reply("No too many arguments. Use either theme or template");
+    }
+    else if (!["template", "theme"].includes(args[1].toLowerCase())) {
+        return message.reply("Please use flag theme or template");
     }
     let ex = await db_1.getExhibition();
     if (ex.cooldowns.some(x => x.user === message.author.id)) {
         return message.reply("It hasn't been 3h yet");
     }
     let m = message;
-    ex.cooldowns.push({
-        user: m.author.id,
-        time: Math.floor(Date.now() / 1000)
-    });
-    await db_1.updateExhibition(ex);
-    ex = await db_1.getExhibition();
     const filter = (response) => {
         return (("accept").toLowerCase() === response.content.toLowerCase());
     };
     var res;
     console.log(`Value of res is: ${res}`);
-    await ((_a = message.mentions.users.first()) === null || _a === void 0 ? void 0 : _a.send(`<@${m.author.id}> wants to duel you. Send Accept to continue, or don't reply to not`).then(async (userdm) => {
+    await ((_b = message.mentions.users.first()) === null || _b === void 0 ? void 0 : _b.send(`<@${m.author.id}> wants to duel you. Send Accept to continue, or don't reply to not`).then(async (userdm) => {
         console.log(userdm.channel.id);
         await userdm.channel.awaitMessages(filter, { max: 1, time: 90000, errors: ['time'] })
             .then(async (collected) => {
@@ -65,9 +66,15 @@ async function exhibition(message, client, args) {
     }));
     console.log(`Value of res is: ${res}`);
     if (res) {
+        ex.cooldowns.push({
+            user: m.author.id,
+            time: Math.floor(Date.now() / 1000)
+        });
+        await db_1.updateExhibition(ex);
+        ex = await db_1.getExhibition();
         let guild = client.guilds.cache.get("719406444109103117");
         let category = await guild.channels.cache.find(c => c.name == "duels" && c.type == "category");
-        await (guild === null || guild === void 0 ? void 0 : guild.channels.create(`${message.author.username}-vs-${(_b = message.mentions.users.first()) === null || _b === void 0 ? void 0 : _b.username}`, { type: 'text', topic: `Exhibition Match`, parent: category.id }).then(async (channel) => {
+        await (guild === null || guild === void 0 ? void 0 : guild.channels.create(`${message.author.username}-vs-${(_c = message.mentions.users.first()) === null || _c === void 0 ? void 0 : _c.username}`, { type: 'text', topic: `Exhibition Match`, parent: category.id }).then(async (channel) => {
             await channel.lockPermissions();
             let newmatch = {
                 _id: channel.id,
