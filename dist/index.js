@@ -121,6 +121,29 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             await user.send("No.");
         }
     }
+    if (['🇦', '🇧', '🇨', '🇩', '🇪', '🇫'].includes(messageReaction.emoji.name) && user.id !== "722303830368190485") {
+        if (messageReaction.partial)
+            await messageReaction.fetch();
+        if (messageReaction.message.partial)
+            await messageReaction.message.fetch();
+        if (user.client.guilds.cache
+            .get(messageReaction.message.guild.id)
+            .members.cache.get(user.id)
+            .roles.cache.has("719936221572235295")
+            === true) {
+            let pos = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫'].indexOf(messageReaction.emoji.name);
+            let id = await (await db_1.getQual(messageReaction.message.channel.id)).playerids[pos];
+            await start_1.splitqual(client, messageReaction.message, id);
+            await db_1.updateModProfile(messageReaction.message.author.id, "modactions", 1);
+            await db_1.updateModProfile(messageReaction.message.author.id, "matchportionsstarted", 1);
+            await messageReaction.users.remove(user.id);
+            await messageReaction.remove();
+        }
+        else {
+            await messageReaction.users.remove(user.id);
+            await user.send("No.");
+        }
+    }
     if (!utils_1.emojis.includes(messageReaction.emoji.name))
         return;
     console.log(`a reaction is added to a message`);
@@ -480,6 +503,7 @@ client.on("message", async (message) => {
         match.template = args.slice(1).join(" ");
         await client.channels.cache.get("738047732312309870")
             .send(`<#${match.channelid}> theme is ${args.slice(1).join(" ")}`);
+        match.istheme = true;
         await db_1.updateQuals(match);
         await message.reply("Theme has been set!");
     }
@@ -597,7 +621,7 @@ client.on("message", async (message) => {
     else if (command === "stats") {
         await user_1.stats(message, client);
     }
-    else if (command === "startsplitqual") {
+    else if (command === "startsplitqual" || command === "ssq") {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
         await start_1.splitqual(client, message);

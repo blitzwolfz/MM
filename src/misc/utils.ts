@@ -352,7 +352,7 @@ export async function qualifierresultadd(channel:Discord.TextChannel, client:Dis
     }
     
     channel.send({embed: {
-      title: `Final Results for Group <#${channel.id}>`,
+      title: `Final Results for ${channel.name}`,
       description: `Top two move on`,
       fields,
       color: "#d7be26",

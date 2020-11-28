@@ -252,6 +252,7 @@ export async function startqual(message: discord.Message, client: discord.Client
         players: users,
         playerids: plyerids,
         template: "",
+        istheme:false,
         votes: votearray,
         octime: Math.floor(Date.now() / 1000),
         playersdone: [],
@@ -330,6 +331,8 @@ export async function startmodqual(message: discord.Message, client: discord.Cli
         }
     }
 
+    console.log(x)
+
     for (const u of users) {
         createAtUsermatch(await client.users.fetch(u.userid))
     }
@@ -343,6 +346,7 @@ export async function startmodqual(message: discord.Message, client: discord.Cli
         octime: 0,
         votes: votearray,
         template: "",
+        istheme:false,
         playersdone: [],
         votingperiod: false,
         votetime: 0
@@ -351,22 +355,33 @@ export async function startmodqual(message: discord.Message, client: discord.Cli
 
     //await vs(message, client, users)
 
-    let embed = new discord.MessageEmbed()
-        .setTitle(`Qualifiying match`)
-        .setColor("#d7be26")
-        .setDescription(`This match has been split. Please contact mods to start your portion`)
-        .setTimestamp()
+    if (args.includes("template")) {
+        await RandomTemplateFunc(message, client, message.channel.id, false)
 
 
-
-    message.channel.send({ embed })
-
-    console.log(args[args.indexOf("theme") + 1])
-
-
-
-    if (["t", "template"].includes(args[x])) {
-        newmatch.template = message.attachments.array()[0].url
+        let rantemp = await gettempStruct(message.channel.id)
+    
+        rantemp.time = rantemp.time - 2.5
+    
+        console.log(rantemp)
+    
+        while(rantemp.found === false){
+    
+            if(Math.floor(Date.now()/1000) - rantemp.time > 120){
+                
+                await deletetempStruct(rantemp._id)
+                await (await (<discord.TextChannel>client.channels.cache.get("722616679280148504")).messages.fetch(rantemp.messageid)).delete()
+                return await message.channel.send(new discord.MessageEmbed()
+                .setTitle(`Random Template Selection failed `)
+                .setColor("red")
+                .setDescription(`Mods please restart this match`)
+                .setTimestamp())
+            }
+            rantemp = await gettempStruct(message.channel.id)
+        }
+    
+        newmatch.template = rantemp.url
+        await deletetempStruct(rantemp._id)
     }
 
 
@@ -378,6 +393,26 @@ export async function startmodqual(message: discord.Message, client: discord.Cli
         //     await user.send(`Your theme is: ${args.splice(5+x)}`)
         // }
     }
+
+    let embed = new discord.MessageEmbed()
+        .setTitle(`Qualifiying match`)
+        .setColor("#d7be26")
+        .setDescription(`This match has been split. Please contact mods to start your portion`)
+        .setTimestamp()
+
+
+
+    await message.channel.send({ embed }).then(async message => {
+        let emmojis = ['🇦', '🇧', '🇨','🇩','🇪','🇫']
+        for(let i = 0; i < users.length; i++){
+            console.log(emmojis[i])
+            await message.react(emmojis[i])
+        }
+        
+    })
+
+    console.log(args[args.indexOf("theme") + 1])
+
 
     //console.log(newmatch)
     // qualmatches.push(newmatch)
@@ -653,8 +688,8 @@ export async function qualrunning(client: discord.Client) {
     //await running(client)
 }
 
-export async function splitqual(client: discord.Client, message: discord.Message) {
-    let user = await (client.users.fetch(message.mentions!.users!.first()!.id));
+export async function splitqual(client: discord.Client, message: discord.Message, ...userid:string[]) {
+    let user = await (await client.users.fetch(userid[0] || message.mentions!.users!.first()!.id));
     let qualmatches: qualmatch[] = await getQuals()
 
     for (let match of qualmatches) {
@@ -674,9 +709,17 @@ export async function splitqual(client: discord.Client, message: discord.Message
                     await user.send(`<@${user.id}> your qualifier match has been split.\nYou have 30 mins to complete your memes\nUse \`!qualsubmit\` to submit`)
 
 
-                    if (match.template.length > 0 || match.template) {
+                    if (match.template.length > 0 && match.istheme || match.template && match.istheme) {
                         await user.send("\n\nHere is your theme: " + match.template)
                         //await user.send({ files: [new discord.MessageAttachment(match.template)] })
+                    }
+
+                    else if(match.istheme === false){
+                        await user.send(new discord.MessageEmbed()
+                        .setTitle("Your template")
+                        .setImage(match.template)
+                        .setColor("#d7be26")
+                        .setTimestamp())
                     }
 
                     await updateQuals(match)

@@ -191,6 +191,36 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
 
   }
 
+  if(['🇦', '🇧', '🇨','🇩','🇪','🇫'].includes(messageReaction.emoji.name) && user.id !== "722303830368190485") {
+    //messageReaction.message.channel.send(user.client.guilds.cache.get(messageReaction.message.guild!.id)!.roles.cache.has("719936221572235295"))
+
+    if (messageReaction.partial) await messageReaction.fetch();
+    if (messageReaction.message.partial) await messageReaction.message.fetch();
+
+    if (user.client.guilds.cache
+      .get(messageReaction.message.guild!.id)!
+      .members.cache.get(user.id)!
+      .roles.cache.has("719936221572235295") 
+      === true){
+
+      
+        let pos = ['🇦', '🇧', '🇨','🇩','🇪','🇫'].indexOf(messageReaction.emoji.name)
+        let id = await (await getQual(messageReaction.message.channel.id)).playerids[pos]
+        await splitqual(client, messageReaction.message, id)
+        await updateModProfile(messageReaction.message.author.id, "modactions", 1)
+        await updateModProfile(messageReaction.message.author.id, "matchportionsstarted", 1)
+        await messageReaction.users.remove(user.id)
+        await messageReaction.remove()
+
+      
+    }
+    
+    else{
+      await messageReaction.users.remove(user.id)
+      await user.send("No.")
+    }
+  }
+
   if (!emojis.includes(messageReaction.emoji.name)) return;
 
   console.log(`a reaction is added to a message`);
@@ -801,6 +831,8 @@ client.on("message", async message => {
     await (<Discord.TextChannel>client.channels.cache.get("738047732312309870"))
     .send(`<#${match.channelid}> theme is ${args.slice(1).join(" ")}`);
 
+    match.istheme = true
+
     await updateQuals(match)
 
     await message.reply("Theme has been set!")
@@ -946,7 +978,7 @@ client.on("message", async message => {
     await stats(message, client)
   }
 
-  else if (command === "startsplitqual") {
+  else if (command === "startsplitqual" || command === "ssq") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await splitqual(client, message)
     await updateModProfile(message.author.id, "modactions", 1)

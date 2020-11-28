@@ -253,7 +253,7 @@ async function qualifierresultadd(channel, client, msg1, msg2) {
         v.value += " Points in total";
     }
     channel.send({ embed: {
-            title: `Final Results for Group <#${channel.id}>`,
+            title: `Final Results for ${channel.name}`,
             description: `Top two move on`,
             fields,
             color: "#d7be26",

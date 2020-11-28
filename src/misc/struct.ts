@@ -42,6 +42,7 @@ export interface qualmatch{
     playerids:Array<string>
     octime: number;
     template:string;
+    istheme:boolean;
     split: boolean;
     votes: Array<Array<string>>;
     playersdone:Array<string>
