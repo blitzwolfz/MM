@@ -169,7 +169,7 @@ async function deleteExhibitionchannels(client) {
         if (!ex.cooldowns[i]) {
             continue;
         }
-        if (Math.floor(Date.now() / 1000) - Math.floor(ex.cooldowns[i].time) >= 10800) {
+        if (Math.floor(Date.now() / 1000) - Math.floor(ex.cooldowns[i].time) >= 3600) {
             await us.send("You can start another exhibition match!");
             ex.cooldowns.splice(i, 1);
             i++;
