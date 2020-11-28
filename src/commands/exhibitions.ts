@@ -211,7 +211,7 @@ export async function deleteExhibitionchannels(client: Discord.Client) {
     for(let ii = 0; ii < ex.activematches.length; ii++){
         
 
-        if(guild?.channels.cache.has(ex.activematches[ii])){
+        if(!guild?.channels.cache.has(ex.activematches[ii])){
             ex.activematches.splice(ii, 1)
             ii++
         }

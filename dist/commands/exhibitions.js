@@ -156,7 +156,7 @@ async function deleteExhibitionchannels(client) {
     var ex = await db_1.getExhibition();
     let guild = await client.guilds.cache.get("719406444109103117");
     for (let ii = 0; ii < ex.activematches.length; ii++) {
-        if (guild === null || guild === void 0 ? void 0 : guild.channels.cache.has(ex.activematches[ii])) {
+        if (!(guild === null || guild === void 0 ? void 0 : guild.channels.cache.has(ex.activematches[ii]))) {
             ex.activematches.splice(ii, 1);
             ii++;
         }
