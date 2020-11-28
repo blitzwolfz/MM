@@ -16,7 +16,7 @@ export async function getRandomTemplateList(client: Discord.Client): Promise<str
   console.time("start")
   
   await (<Discord.TextChannel>client.channels.cache.get("724827952390340648")).messages.fetch({ limit: 100 }).then(async msg => {
-    console.log(msg.map(async m => {
+    msg.map(async m => {
       // console.log(m.url)
       // await message.reply(m.id)
       await (<Discord.TextChannel>client.channels.cache.get("724827952390340648")).messages.fetch(m.id).then(async (m2: Discord.Message) => {
@@ -31,7 +31,7 @@ export async function getRandomTemplateList(client: Discord.Client): Promise<str
           // await message.reply(m2.attachments.array()[0].url)
         }
       })
-    }));
+    });
   })
 
   for(let i = 0; i < 4; i++){
@@ -109,7 +109,8 @@ export async function RandomTemplateFunc(message: Discord.Message, client: Disco
 
   if(theme === true){
     let themelist = await getRandomThemeList(client)
-    let random:string = themelist[Math.floor(Math.random() * (((themelist.length - 1) - 1) - 1) + 1)];
+    //let random:string = themelist[Math.floor(Math.random() * (((themelist.length - 1) - 1) - 1) + 1)];
+    let random:string = themelist[Math.floor(Math.random() * themelist.length)];
 
     tempstruct.url = random
     tempstruct.istheme = true
@@ -124,7 +125,8 @@ export async function RandomTemplateFunc(message: Discord.Message, client: Disco
 
   else{
     let templatelist = await getRandomTemplateList(client)
-    let random:string = templatelist[Math.floor(Math.random() * (((templatelist.length - 1) - 1) - 1) + 1)];
+    //let random:string = templatelist[Math.floor(Math.random() * (((templatelist.length - 1) - 1) - 1) + 1)];
+    let random:string = templatelist[Math.floor(Math.random() * templatelist.length)];
     
     tempstruct.url = random
 

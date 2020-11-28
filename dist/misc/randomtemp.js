@@ -31,7 +31,7 @@ async function getRandomTemplateList(client) {
     let lastmsg = [];
     console.time("start");
     await client.channels.cache.get("724827952390340648").messages.fetch({ limit: 100 }).then(async (msg) => {
-        console.log(msg.map(async (m) => {
+        msg.map(async (m) => {
             await client.channels.cache.get("724827952390340648").messages.fetch(m.id).then(async (m2) => {
                 if (m2.attachments.size >= 1) {
                     for (let x = 0; x < m2.attachments.array().length; x++) {
@@ -42,7 +42,7 @@ async function getRandomTemplateList(client) {
                     lastmsg.push(m2.id);
                 }
             });
-        }));
+        });
     });
     for (let i = 0; i < 4; i++) {
         await client.channels.cache.get("724827952390340648").messages.fetch({ before: lastmsg[0], limit: 100 }).then(async (msg) => {
@@ -101,7 +101,7 @@ async function RandomTemplateFunc(message, client, _id, theme) {
     };
     if (theme === true) {
         let themelist = await getRandomThemeList(client);
-        let random = themelist[Math.floor(Math.random() * (((themelist.length - 1) - 1) - 1) + 1)];
+        let random = themelist[Math.floor(Math.random() * themelist.length)];
         tempstruct.url = random;
         tempstruct.istheme = true;
         await client.channels.cache.get("722616679280148504").send(`<@${message.author.id}>`, await RandomTemplateEmbed(random, message.channel.id, true)).then(async (message) => {
@@ -113,7 +113,7 @@ async function RandomTemplateFunc(message, client, _id, theme) {
     }
     else {
         let templatelist = await getRandomTemplateList(client);
-        let random = templatelist[Math.floor(Math.random() * (((templatelist.length - 1) - 1) - 1) + 1)];
+        let random = templatelist[Math.floor(Math.random() * templatelist.length)];
         tempstruct.url = random;
         await client.channels.cache.get("722616679280148504").send(`<@${message.author.id}>`, await RandomTemplateEmbed(random, message.channel.id, false)).then(async (message) => {
             await message.react(utils_1.emojis[7]);

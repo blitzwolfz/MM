@@ -1,6 +1,26 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.themelistLb = exports.removeTheme = exports.addTheme = exports.approvetemplate = exports.template = void 0;
+const Discord = __importStar(require("discord.js"));
 const db_1 = require("../misc/db");
 const utils_1 = require("../misc/utils");
 async function template(message, client) {
@@ -12,15 +32,13 @@ async function template(message, client) {
         return message.reply("Your image was not submitted properly. Contact a mod");
     }
     else {
-        await channel.send({
-            embed: {
-                description: `${message.author.username} has submitted a new template(s)`,
-                color: "#d7be26",
-                timestamp: new Date()
-            }
-        });
         for (let i = 0; i < message.attachments.array().length; i++) {
-            await channel.send(`Template link is: ${message.attachments.array()[i].url}`);
+            await channel.send(new Discord.MessageEmbed()
+                .setTitle(`${message.author.username} has submitted a new template(s)`)
+                .setImage(message.attachments.array()[i].url)).then(async (message) => {
+                await message.react('🏁');
+                await message.react('🗡️');
+            });
         }
         db_1.updateProfile(message.author.id, "points", (message.attachments.array().length * 2));
         await message.reply(`Thank you for submitting templates. You gained ${message.attachments.array().length * 2} points`);

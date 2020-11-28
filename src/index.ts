@@ -66,7 +66,7 @@ import {
 import { verify } from "./misc/verify";
 import { cockratingLB, winningLB, quallistGroups } from "./misc/lbs";
 import { createmodprofile, viewmodprofile, modLB, clearmodstats } from "./misc/modprofiles";
-import { getRandomTemplateList, getRandomThemeList } from "./misc/randomtemp";
+import { getRandomTemplateList, getRandomThemeList, RandomTemplateFunc } from "./misc/randomtemp";
 
 
 console.log("Hello World, bot has begun life");
@@ -179,6 +179,60 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
         await updateModProfile(messageReaction.message.author.id, "modactions", 1)
         await updateModProfile(messageReaction.message.author.id, "matchportionsstarted", 1)
         await messageReaction.users.remove(user.id)
+        
+      }
+    }
+    
+    else{
+      await messageReaction.users.remove(user.id)
+      await user.send("No.")
+    }
+
+
+  }
+
+  if(messageReaction.emoji.name === '🏁' || messageReaction.emoji.name === '🗡️' && user.id !== "722303830368190485") {
+    //messageReaction.message.channel.send(user.client.guilds.cache.get(messageReaction.message.guild!.id)!.roles.cache.has("719936221572235295"))
+
+    if (messageReaction.partial) await messageReaction.fetch();
+    if (messageReaction.message.partial) await messageReaction.message.fetch();
+
+    if (user.client.guilds.cache
+      .get(messageReaction.message.guild!.id)!
+      .members.cache.get(user.id)!
+      .roles.cache.has("719936221572235295") 
+      === true){
+
+        let tempccc = <Discord.TextChannel>client.channels.cache.get("724827952390340648")
+      if(messageReaction.emoji.name === '🏁'){
+        let voteCollection: Discord.Collection<string, Discord.MessageReaction>;
+
+        await messageReaction.message.channel.messages.fetch(messageReaction.message.id).then(msg => voteCollection = msg.reactions.cache);
+
+        let l = voteCollection!.first()!.count!
+        console.log(l)
+        console.log(messageReaction.message.embeds[0].image)
+
+        if(l === 3){
+          await tempccc.send(await messageReaction.message.embeds[0].image?.url)
+          await messageReaction.message.delete()
+        }        
+
+      }
+      
+      else if(messageReaction.emoji.name === '🗡️'){
+        let voteCollection: Discord.Collection<string, Discord.MessageReaction>;
+
+        await messageReaction.message.channel.messages.fetch(messageReaction.message.id).then(msg => voteCollection = msg.reactions.cache);
+
+        let l = voteCollection!.array()[1]!.count!
+        console.log(l)
+        console.log(messageReaction.message.embeds[0].image)
+
+        if(l === 3){
+          //await tempccc.send(await messageReaction.message.embeds[0].image?.url)
+          await messageReaction.message.delete()
+        }   
         
       }
     }
@@ -605,104 +659,45 @@ client.on("message", async message => {
   else if (command === "test") {
 
     //await insertExhibition()
-    await message.reply("no").then(async message => await message.react('🤏'))
+    //await message.reply("no").then(async message => await message.react('🤏'))
 
-    await message.channel.send(                        
-      new Discord.MessageEmbed()
-        .setTitle("Template")
-        .setDescription(`<@${message.author.id}><@${message.author.id}>`)
-        .setColor("#07da63")
-        .setTimestamp()
-      )
-    
-    // let c = <Discord.TextChannel>await client.channels.fetch( await message.channel.id)
+    await RandomTemplateFunc(message, client, message.channel.id, false)
 
-    // await c.setTopic("777106541991559198\n776337603389554688")
+    // var templatelist:string[] = []
+    // let lastmsg:string[] = []
 
-    // let top = c.topic!
-
-    // let arr:string[] = top.split(" ")
-
-    // await c.send(arr)
-    // console.log(arr)
-
-    // let c = <Discord.TextChannel>await client.channels.fetch("722291182461386804")
-
-    // let m = await c.messages.fetch("777106541991559198")
-
-    // let em = m.embeds[0].fields
-
-    // for(let i = 0; i < em.length; i++){
-    //   // message.channel.send(`\`\`\`${em[i].name}\`\`\``)
-    //   // message.channel.send(`\`\`\`${em[i].value}\`\`\``)
-    //   console.log(em[i])
-    // }
-
-    // em.sort(function(a, b) {
-    //   //ratings.sort((a: modprofile, b: modprofile) => (b.modactions) - (a.modactions));
-    //   return ((b.name.length) - (a.name.length));
-    //   //Sort could be modified to, for example, sort on the age 
-    //   // if the name is the same.
-    // });
-
-    // let c1 = <Discord.TextChannel>await client.channels.fetch("722291182461386804")
-
-    // let m1 = await c1.messages.fetch("776337603389554688")
-
-    // let em1 = m1.embeds[0].fields
-
-    // for(let i = 0; i < em1.length; i++){
-    //   // message.channel.send(`\`\`\`${em[i].name}\`\`\``)
-    //   // message.channel.send(`\`\`\`${em[i].value}\`\`\``)
-    //   console.log(em[i])
-    // }
-
-    // em1.sort(function(a, b) {
-    //   //ratings.sort((a: modprofile, b: modprofile) => (b.modactions) - (a.modactions));
-    //   return ((b.name.length) - (a.name.length));
-    //   //Sort could be modified to, for example, sort on the age 
-    //   // if the name is the same.
-    // });
-
-    // const fields = [];
-
-    
-
-    // for (let i = 0; i < em1.length; i++){
-
-    //   //parseInt(em[i].value[em[i].value.split(" ").findIndex(x => x === "Earned") + 1].substr(0, 2)) + parseInt(em1[i].value[em[i].value.split(" ").findIndex(x => x === "Earned") + 1].substr(0, 2))
-    //   console.log(`${em[i].value.toLowerCase().includes("earned") ? (em[i].value.split(" ")[5].substr(0, 2)+ " ") : "0" }`)
-    //   console.log(`${em1[i].value.toLowerCase().includes("earned") ? (em1[i].value.split(" ")[5].substr(0, 2)+ " ") : "0" }`)
-    //   fields.push({
-    //       name: `${em1[i].name}`,
-    //       //value: `${match.votes[i].length > 0 ? `Came in with ${match.votes[i].length} vote(s)` : `Failed to submit meme`}`
-    //       value: `${parseInt(`${em[i].value.toLowerCase().includes("earned") ? (em[i].value.split(" ")[5].substr(0, 2)+ " ") : "0" }`) + parseInt(`${em1[i].value.toLowerCase().includes("earned") ? (em1[i].value.split(" ")[5].substr(0, 2)+ " ") : "0" }`)} `,
+    // await (<Discord.TextChannel>client.channels.cache.get("722291683030466621")).messages.fetch({ limit: 100 }).then(async msg => {
+    //   msg.map(async m => {
+    //     // console.log(m.url)
+    //     // await message.reply(m.id)
+    //     await (<Discord.TextChannel>client.channels.cache.get("722291683030466621")).messages.fetch(m.id).then(async (m2: Discord.Message) => {
+    //       if (m2.attachments.size >= 1) {
+    //         // console.log(m2.attachments.array()[0].url)
+    //         for(let x = 0; x < m2.attachments.array().length; x++){
+    //           if(!m2.attachments.array()[x].url.includes("gif") || !m2.attachments.array()[0].url.includes("mp4")){
+    //             templatelist.push(m2.attachments.array()[x].url)
+    //           }
+    //         }
+    //         lastmsg.push(m2.id)
+    //         // await message.reply(m2.attachments.array()[0].url)
+    //       }
+    //     })
     //   });
-    // }
-
-    // fields.sort(function(a, b) {
-    //   //ratings.sort((a: modprofile, b: modprofile) => (b.modactions) - (a.modactions));
-    //   return ((parseInt(b.value)) - (parseInt(a.value)));
-    //   //Sort could be modified to, for example, sort on the age 
-    //   // if the name is the same.
-    // });
-
-    // for(let v of fields){
-    //   v.value += " Points in total"
-    // }
-    
-
-    // message.channel.send({
-    //   embed: {
-    //       title: `Final Results`,
-    //       description: `Top two move on`,
-    //       fields,
-    //       color: "#d7be26",
-    //       timestamp: new Date()
-    //   }
     // })
 
+    // for(let i = 0; i < templatelist.length; i++){
+    //   await (<Discord.TextChannel>client.channels.cache.get("722291683030466621")).send(
+    //     new Discord.MessageEmbed()
+    //     .setTitle(`Approve of template`)
+    //     .setImage(templatelist[i])
+    // ).then(async (message:Discord.Message) => {
+    //     await message.react('🏁')
+    //     await message.react('🗡️')
+    //     }
+    // )
+    // }
 
+    
   }
 
   else if (command === "createqualgroup") {

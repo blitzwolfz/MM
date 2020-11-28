@@ -14,16 +14,26 @@ export async function template(message: Discord.Message, client:Discord.Client){
     }
 
     else{
-        await channel.send(
-            {
-                embed: {
-                    description: `${message.author.username} has submitted a new template(s)`,
-                    color: "#d7be26",
-                    timestamp: new Date()
-                }
-            })
+        // await channel.send(
+        //     {
+        //         embed: {
+        //             description: `${message.author.username} has submitted a new template(s)`,
+        //             color: "#d7be26",
+        //             timestamp: new Date()
+        //         }
+        //     })
         for (let i = 0; i < message.attachments.array().length; i++) {
-            await channel.send(`Template link is: ${message.attachments.array()[i].url}`)
+            //await channel.send(`${message.attachments.array()[i].url}`)
+
+            await channel.send(
+                new Discord.MessageEmbed()
+                .setTitle(`${message.author.username} has submitted a new template(s)`)
+                .setImage(message.attachments.array()[i].url)
+            ).then(async message => {
+                await message.react('🏁')
+                await message.react('🗡️')
+                }
+            )
         }
 
         updateProfile(message.author.id, "points", (message.attachments.array().length * 2))

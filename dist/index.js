@@ -89,6 +89,7 @@ client.on("guildMemberAdd", async function (member) {
     console.log(`a user joins a guild: ${(_b = member.user) === null || _b === void 0 ? void 0 : _b.username}`);
 });
 client.on("messageReactionAdd", async function (messageReaction, user) {
+    var _a;
     if (user.bot)
         return;
     if (messageReaction.emoji.name === '🅰️' || messageReaction.emoji.name === '🅱️' && user.id !== "722303830368190485") {
@@ -114,6 +115,44 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
                 await db_1.updateModProfile(messageReaction.message.author.id, "modactions", 1);
                 await db_1.updateModProfile(messageReaction.message.author.id, "matchportionsstarted", 1);
                 await messageReaction.users.remove(user.id);
+            }
+        }
+        else {
+            await messageReaction.users.remove(user.id);
+            await user.send("No.");
+        }
+    }
+    if (messageReaction.emoji.name === '🏁' || messageReaction.emoji.name === '🗡️' && user.id !== "722303830368190485") {
+        if (messageReaction.partial)
+            await messageReaction.fetch();
+        if (messageReaction.message.partial)
+            await messageReaction.message.fetch();
+        if (user.client.guilds.cache
+            .get(messageReaction.message.guild.id)
+            .members.cache.get(user.id)
+            .roles.cache.has("719936221572235295")
+            === true) {
+            let tempccc = client.channels.cache.get("724827952390340648");
+            if (messageReaction.emoji.name === '🏁') {
+                let voteCollection;
+                await messageReaction.message.channel.messages.fetch(messageReaction.message.id).then(msg => voteCollection = msg.reactions.cache);
+                let l = voteCollection.first().count;
+                console.log(l);
+                console.log(messageReaction.message.embeds[0].image);
+                if (l === 3) {
+                    await tempccc.send(await ((_a = messageReaction.message.embeds[0].image) === null || _a === void 0 ? void 0 : _a.url));
+                    await messageReaction.message.delete();
+                }
+            }
+            else if (messageReaction.emoji.name === '🗡️') {
+                let voteCollection;
+                await messageReaction.message.channel.messages.fetch(messageReaction.message.id).then(msg => voteCollection = msg.reactions.cache);
+                let l = voteCollection.array()[1].count;
+                console.log(l);
+                console.log(messageReaction.message.embeds[0].image);
+                if (l === 3) {
+                    await messageReaction.message.delete();
+                }
             }
         }
         else {
@@ -390,12 +429,7 @@ client.on("message", async (message) => {
         await utils_1.deletechannels(message, args);
     }
     else if (command === "test") {
-        await message.reply("no").then(async (message) => await message.react('🤏'));
-        await message.channel.send(new Discord.MessageEmbed()
-            .setTitle("Template")
-            .setDescription(`<@${message.author.id}><@${message.author.id}>`)
-            .setColor("#07da63")
-            .setTimestamp());
+        await randomtemp_1.RandomTemplateFunc(message, client, message.channel.id, false);
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))
