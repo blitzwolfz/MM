@@ -2,6 +2,7 @@ import * as Discord from "discord.js"
 import { getExhibition, insertActive, updateExhibition } from "../misc/db"
 import { getRandomTemplateList, getRandomThemeList } from "../misc/randomtemp"
 import { activematch } from "../misc/struct"
+import { toHHMMSS } from "../misc/utils"
 
 export async function exhibition(message: Discord.Message, client: Discord.Client, args: string[]){
 
@@ -31,7 +32,7 @@ export async function exhibition(message: Discord.Message, client: Discord.Clien
     let ex = await getExhibition()
 
     if(ex.cooldowns.some(x => x.user === message.author.id)){
-        return message.reply("It hasn't been 3h yet")
+        return message.reply("It hasn't been 1h yet")
     }
 
     let m = message
@@ -203,14 +204,19 @@ export async function deleteExhibitionchannels(client: Discord.Client) {
     var ex = await getExhibition()
     //console.log(ex)
 
+    let guild = await client.guilds.cache.get("719406444109103117")
+
     
 
     for(let ii = 0; ii < ex.activematches.length; ii++){
-        let ch = await client.channels.fetch(ex.activematches[ii])
+        
 
-        if(!ch){
-            continue;
+        if(guild?.channels.cache.has(ex.activematches[ii])){
+            ex.activematches.splice(ii, 1)
+            ii++
         }
+
+        let ch = await client.channels.fetch(ex.activematches[ii])
 
         if(Math.floor(Date.now() / 1000) - Math.floor(ch.createdTimestamp/1000 ) > 7200){
             await ch.delete()
@@ -235,4 +241,19 @@ export async function deleteExhibitionchannels(client: Discord.Client) {
         }
     }
     await updateExhibition(ex)
+}
+
+export async function duelcheck(message: Discord.Message){
+    let ex = await getExhibition()
+
+    if(!ex.cooldowns.some(x => x.user === message.author.id)){
+        return message.reply("You can start another duel.")
+    }
+
+    else if(ex.cooldowns.some(x => x.user === message.author.id)){
+        let i = ex.cooldowns.findIndex(x => x.user === message.author.id)
+
+        await message.reply(`Time till you can start another duel: ${await toHHMMSS(ex.cooldowns[i].time, 3600)}`)
+    }
+
 }

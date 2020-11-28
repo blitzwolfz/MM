@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.qualifierresultadd = exports.clearstats = exports.createrole = exports.updatesomething = exports.deletechannels = exports.reminders = exports.dateBuilder = exports.indexOf2d = exports.forwardsFilter = exports.backwardsFilter = exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
+exports.toHHMMSS = exports.qualifierresultadd = exports.clearstats = exports.createrole = exports.updatesomething = exports.deletechannels = exports.reminders = exports.dateBuilder = exports.indexOf2d = exports.forwardsFilter = exports.backwardsFilter = exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
 const db_1 = require("./db");
 const modprofiles_1 = require("./modprofiles");
 async function getUser(mention) {
@@ -269,3 +269,7 @@ async function qualifierresultadd(channel, client, msg1, msg2) {
         } });
 }
 exports.qualifierresultadd = qualifierresultadd;
+async function toHHMMSS(timestamp, howlong) {
+    return new Date((howlong - (Math.floor(Date.now() / 1000) - timestamp)) * 1000).toISOString().substr(11, 8);
+}
+exports.toHHMMSS = toHHMMSS;

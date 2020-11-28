@@ -20,7 +20,7 @@ import {
   matchstats,
   qualstats,
 } from "./commands/start";
-import { exhibition } from "./commands/exhibitions"
+import { duelcheck, exhibition } from "./commands/exhibitions"
 import { qualend, end, cancelmatch } from "./commands/winner";
 import { vs } from "./commands/card";
 import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, createrole, clearstats } from "./misc/utils";
@@ -727,6 +727,10 @@ client.on("message", async message => {
 
     if(args[0].toLowerCase() === "help"){
       await message.channel.send({ embed: DuelHelp })
+    }
+
+    else if(args[0].toLowerCase() === "check"){
+      await duelcheck(message)
     }
 
     else{

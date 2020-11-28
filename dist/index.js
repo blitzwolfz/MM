@@ -454,6 +454,9 @@ client.on("message", async (message) => {
         if (args[0].toLowerCase() === "help") {
             await message.channel.send({ embed: help_1.DuelHelp });
         }
+        else if (args[0].toLowerCase() === "check") {
+            await exhibitions_1.duelcheck(message);
+        }
         else {
             await exhibitions_1.exhibition(message, client, args);
         }

@@ -183,11 +183,16 @@ export const DuelHelp = {
     description:"Duels are a way to play matches with other people in this server."+
     "\nAll you have to do is do the !duel command, and the bot will start a duel for you."+
     "\nTo the person who is being mentioned, the bot will dm you, and just follow it's instructions."+
-    "You have a chance to duel others every 3h, with the bot dming you when you can.",
+    "You have a chance to duel others every 1h, with the bot dming you when you can.",
     fields: [
         {
             name: '`!duel @someone <theme | template>`',
             value: `Pass an theme or template flag, and you will get a random theme or template from our inventory.`,
+        },
+
+        {
+            name: '`!duel check`',
+            value: `Tells you how long till you can start another duel`,
         }
     ],
     timestamp: new Date()

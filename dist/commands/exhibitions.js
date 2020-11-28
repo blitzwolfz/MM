@@ -19,10 +19,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteExhibitionchannels = exports.exhibition = void 0;
+exports.duelcheck = exports.deleteExhibitionchannels = exports.exhibition = void 0;
 const Discord = __importStar(require("discord.js"));
 const db_1 = require("../misc/db");
 const randomtemp_1 = require("../misc/randomtemp");
+const utils_1 = require("../misc/utils");
 async function exhibition(message, client, args) {
     var _a, _b, _c;
     console.log(args);
@@ -43,7 +44,7 @@ async function exhibition(message, client, args) {
     }
     let ex = await db_1.getExhibition();
     if (ex.cooldowns.some(x => x.user === message.author.id)) {
-        return message.reply("It hasn't been 3h yet");
+        return message.reply("It hasn't been 1h yet");
     }
     let m = message;
     const filter = (response) => {
@@ -153,11 +154,13 @@ async function exhibition(message, client, args) {
 exports.exhibition = exhibition;
 async function deleteExhibitionchannels(client) {
     var ex = await db_1.getExhibition();
+    let guild = await client.guilds.cache.get("719406444109103117");
     for (let ii = 0; ii < ex.activematches.length; ii++) {
-        let ch = await client.channels.fetch(ex.activematches[ii]);
-        if (!ch) {
-            continue;
+        if (guild === null || guild === void 0 ? void 0 : guild.channels.cache.has(ex.activematches[ii])) {
+            ex.activematches.splice(ii, 1);
+            ii++;
         }
+        let ch = await client.channels.fetch(ex.activematches[ii]);
         if (Math.floor(Date.now() / 1000) - Math.floor(ch.createdTimestamp / 1000) > 7200) {
             await ch.delete();
             ex.activematches.splice(ii, 1);
@@ -178,3 +181,14 @@ async function deleteExhibitionchannels(client) {
     await db_1.updateExhibition(ex);
 }
 exports.deleteExhibitionchannels = deleteExhibitionchannels;
+async function duelcheck(message) {
+    let ex = await db_1.getExhibition();
+    if (!ex.cooldowns.some(x => x.user === message.author.id)) {
+        return message.reply("You can start another duel.");
+    }
+    else if (ex.cooldowns.some(x => x.user === message.author.id)) {
+        let i = ex.cooldowns.findIndex(x => x.user === message.author.id);
+        await message.reply(`Time till you can start another duel: ${await utils_1.toHHMMSS(ex.cooldowns[i].time, 3600)}`);
+    }
+}
+exports.duelcheck = duelcheck;
