@@ -159,6 +159,7 @@ async function deleteExhibitionchannels(client) {
         if (!(guild === null || guild === void 0 ? void 0 : guild.channels.cache.has(ex.activematches[ii]))) {
             ex.activematches.splice(ii, 1);
             ii++;
+            continue;
         }
         let ch = await client.channels.fetch(ex.activematches[ii]);
         if (Math.floor(Date.now() / 1000) - Math.floor(ch.createdTimestamp / 1000) > 7200) {
