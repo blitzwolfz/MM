@@ -27,43 +27,7 @@ exports.approvefilter = (reaction, user) => reaction.emoji.name === utils_1.emoj
 exports.redofilter = (reaction, user) => reaction.emoji.name === '🌀' && !user.bot;
 exports.disapprovefilter = (reaction, user) => reaction.emoji.name === utils_1.emojis[8] && !user.bot;
 async function getRandomTemplateList(client) {
-    var templatelist = [];
-    let lastmsg = [];
-    console.time("start");
-    await client.channels.cache.get("724827952390340648").messages.fetch({ limit: 100 }).then(async (msg) => {
-        msg.map(async (m) => {
-            await client.channels.cache.get("724827952390340648").messages.fetch(m.id).then(async (m2) => {
-                if (m2.attachments.size >= 1) {
-                    for (let x = 0; x < m2.attachments.array().length; x++) {
-                        if (!m2.attachments.array()[x].url.includes("gif") || !m2.attachments.array()[0].url.includes("mp4")) {
-                            templatelist.push(m2.attachments.array()[x].url);
-                        }
-                    }
-                    lastmsg.push(m2.id);
-                }
-            });
-        });
-    });
-    for (let i = 0; i < 4; i++) {
-        await client.channels.cache.get("724827952390340648").messages.fetch({ before: lastmsg[0], limit: 100 }).then(async (msg) => {
-            msg.map(async (m) => {
-                await client.channels.cache.get("724827952390340648").messages.fetch(m.id).then(async (m2) => {
-                    if (m2.attachments.size >= 1) {
-                        for (let x = 0; x < m2.attachments.array().length; x++) {
-                            if (!m2.attachments.array()[x].url.includes("gif") || !m2.attachments.array()[0].url.includes("mp4")) {
-                                templatelist.push(m2.attachments.array()[x].url);
-                            }
-                        }
-                        lastmsg[0] = (m2.id);
-                    }
-                });
-            });
-        });
-    }
-    let set = await new Set(templatelist);
-    templatelist = [];
-    templatelist = Array.from(set);
-    return templatelist;
+    return await (await db_1.gettemplatedb()).list;
 }
 exports.getRandomTemplateList = getRandomTemplateList;
 async function getRandomThemeList(client) {

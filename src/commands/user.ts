@@ -90,3 +90,19 @@ export async function createAtUsermatch(User: discord.User){
         await addProfile(NewUser)
     }
 }
+
+// export async function clearstats(message: discord.Message){
+
+//     let profiles = await getAllProfiles("memesvoted")
+
+//     for(let i = 0; i < profiles.length; i++){
+//         profiles[i].memesvoted = 0
+
+//         await updateProfile(profiles[i]._id, "memesvoted", -profiles[i].memesvoted)
+
+//         //await resetModProfile(profiles[i]._id, profiles[i])
+//     }
+
+//     await message.reply("Profiles have been cleared")
+
+// }

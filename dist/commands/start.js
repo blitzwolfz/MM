@@ -287,7 +287,7 @@ async function startmodqual(message, client) {
                 await (await client.channels.cache.get("722616679280148504").messages.fetch(rantemp.messageid)).delete();
                 return await message.channel.send(new discord.MessageEmbed()
                     .setTitle(`Random Template Selection failed `)
-                    .setColor("red")
+                    .setColor("RED")
                     .setDescription(`Mods please restart this match`)
                     .setTimestamp());
             }

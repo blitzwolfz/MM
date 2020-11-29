@@ -41,7 +41,12 @@ export declare function updateModProfile(_id: string, field: string, num: number
 export declare function resetModProfile(_id: string, profile: modprofile): Promise<void>;
 export declare function getAllModProfiles(sortby: string): Promise<modprofile[]>;
 export declare function gettempStruct(_id: string): Promise<randomtempstruct>;
-export declare function insertlist(lists: any[]): Promise<void>;
+export declare function inserttemplate(lists: any[]): Promise<void>;
+export declare function gettemplatedb(): Promise<{
+    _id: "templatelist";
+    list: string[];
+}>;
+export declare function updatetemplatedb(lists: string[]): Promise<void>;
 export declare function getthemes(): Promise<{
     _id: "themelist";
     list: string[];

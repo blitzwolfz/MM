@@ -89,9 +89,55 @@ client.on("guildMemberAdd", async function (member) {
     console.log(`a user joins a guild: ${(_b = member.user) === null || _b === void 0 ? void 0 : _b.username}`);
 });
 client.on("messageReactionAdd", async function (messageReaction, user) {
-    var _a;
     if (user.bot)
         return;
+    let temps = await db_1.getalltempStructs();
+    if (temps) {
+        for (const temp of temps) {
+            if (messageReaction.emoji.name === '🌀' && user.id !== "722303830368190485") {
+                if (temp.istheme === false) {
+                    let templatelist = await (await db_1.gettemplatedb()).list;
+                    let random = templatelist[Math.floor(Math.random() * templatelist.length)];
+                    let embed = new Discord.MessageEmbed()
+                        .setDescription("Random template")
+                        .setImage(random)
+                        .setColor("#d7be26")
+                        .setTimestamp();
+                    console.log(await messageReaction.message.id);
+                    temp.url = random;
+                    await (await client.channels.cache.get("722616679280148504")
+                        .messages.fetch(temp.messageid))
+                        .edit({ embed });
+                    await db_1.updatetempStruct(temp._id, temp);
+                    await messageReaction.users.remove(user.id);
+                }
+                if (temp.istheme === true) {
+                    let themelist = await randomtemp_1.getRandomThemeList(client);
+                    let random = themelist[Math.floor(Math.random() * (((themelist.length - 1) - 1) - 1) + 1)];
+                    let embed = new Discord.MessageEmbed()
+                        .setTitle("Random Theme")
+                        .setDescription(`Theme is: ${random}`)
+                        .setColor("#d7be26")
+                        .setTimestamp();
+                    console.log(await messageReaction.message.id);
+                    temp.url = random;
+                    await (await client.channels.cache.get("722616679280148504")
+                        .messages.fetch(temp.messageid))
+                        .edit({ embed });
+                    await db_1.updatetempStruct(temp._id, temp);
+                    await messageReaction.users.remove(user.id);
+                }
+            }
+            if (messageReaction.emoji.name === '✅' && user.id !== "722303830368190485") {
+                temp.found = true;
+                await db_1.updatetempStruct(temp._id, temp);
+            }
+            else if (messageReaction.emoji.name === '❌' && user.id !== "722303830368190485") {
+                temp.time = 121;
+                await db_1.updatetempStruct(temp._id, temp);
+            }
+        }
+    }
     if (messageReaction.emoji.name === '🅰️' || messageReaction.emoji.name === '🅱️' && user.id !== "722303830368190485") {
         if (messageReaction.partial)
             await messageReaction.fetch();
@@ -140,7 +186,9 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
                 console.log(l);
                 console.log(messageReaction.message.embeds[0].image);
                 if (l === 3) {
-                    await tempccc.send(await ((_a = messageReaction.message.embeds[0].image) === null || _a === void 0 ? void 0 : _a.url));
+                    let e = await db_1.gettemplatedb();
+                    e.list.push(await messageReaction.message.embeds[0].image.url);
+                    await db_1.updatetemplatedb(e.list);
                     await messageReaction.message.delete();
                 }
             }
@@ -171,6 +219,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             .roles.cache.has("719936221572235295")
             === true) {
             let pos = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫'].indexOf(messageReaction.emoji.name);
+            messageReaction.message.channel.send(pos);
             let id = await (await db_1.getQual(messageReaction.message.channel.id)).playerids[pos];
             await start_1.splitqual(client, messageReaction.message, id);
             await db_1.updateModProfile(messageReaction.message.author.id, "modactions", 1);
@@ -296,54 +345,6 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             }
         }
     }
-    let temps = await db_1.getalltempStructs();
-    if (temps) {
-        for (const temp of temps) {
-            if (messageReaction.emoji.name === '🌀' && user.id !== "722303830368190485") {
-                if (temp.istheme === false) {
-                    let templatelist = await randomtemp_1.getRandomTemplateList(client);
-                    let random = templatelist[Math.floor(Math.random() * (((templatelist.length - 1) - 1) - 1) + 1)];
-                    let embed = new Discord.MessageEmbed()
-                        .setDescription("Random template")
-                        .setImage(random)
-                        .setColor("#d7be26")
-                        .setTimestamp();
-                    console.log(await messageReaction.message.id);
-                    temp.url = random;
-                    await (await client.channels.cache.get("722616679280148504")
-                        .messages.fetch(temp.messageid))
-                        .edit({ embed });
-                    await db_1.updatetempStruct(temp._id, temp);
-                    await messageReaction.users.remove(user.id);
-                }
-                if (temp.istheme === true) {
-                    let themelist = await randomtemp_1.getRandomThemeList(client);
-                    let random = themelist[Math.floor(Math.random() * (((themelist.length - 1) - 1) - 1) + 1)];
-                    let embed = new Discord.MessageEmbed()
-                        .setTitle("Random Theme")
-                        .setDescription(`Theme is: ${random}`)
-                        .setColor("#d7be26")
-                        .setTimestamp();
-                    console.log(await messageReaction.message.id);
-                    temp.url = random;
-                    await (await client.channels.cache.get("722616679280148504")
-                        .messages.fetch(temp.messageid))
-                        .edit({ embed });
-                    await db_1.updatetempStruct(temp._id, temp);
-                    await messageReaction.users.remove(user.id);
-                }
-            }
-            if (messageReaction.emoji.name === utils_1.emojis[7] && user.id !== "722303830368190485") {
-                temp.found = true;
-                await db_1.updatetempStruct(temp._id, temp);
-                await messageReaction.message.delete();
-            }
-            else if (messageReaction.emoji.name === '❌' && user.id !== "722303830368190485") {
-                temp.time = 121;
-                await db_1.updatetempStruct(temp._id, temp);
-            }
-        }
-    }
 });
 client.on("message", async (message) => {
     var _a, _b, _c, _d, _e, _f, _g;
@@ -429,7 +430,6 @@ client.on("message", async (message) => {
         await utils_1.deletechannels(message, args);
     }
     else if (command === "test") {
-        await randomtemp_1.RandomTemplateFunc(message, client, message.channel.id, false);
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))

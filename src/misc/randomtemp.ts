@@ -1,7 +1,7 @@
 import * as Discord from "discord.js"
 import { emojis } from "./utils";
 import { randomtempstruct } from "./struct";
-import { getthemes, inserttempStruct } from "./db";
+import { gettemplatedb, getthemes, inserttempStruct } from "./db";
 
 
 export const approvefilter = (reaction: { emoji: { name: string; }; }, user: Discord.User) => reaction.emoji.name === emojis[7] && !user.bot;
@@ -11,57 +11,57 @@ export const disapprovefilter = (reaction: { emoji: { name: string; }; }, user: 
 
 export async function getRandomTemplateList(client: Discord.Client): Promise<string[]>{
 
-  var templatelist:string[] = []
-  let lastmsg:string[] = []
-  console.time("start")
+  // var templatelist:string[] = []
+  // let lastmsg:string[] = []
+  // console.time("start")
   
-  await (<Discord.TextChannel>client.channels.cache.get("724827952390340648")).messages.fetch({ limit: 100 }).then(async msg => {
-    msg.map(async m => {
-      // console.log(m.url)
-      // await message.reply(m.id)
-      await (<Discord.TextChannel>client.channels.cache.get("724827952390340648")).messages.fetch(m.id).then(async (m2: Discord.Message) => {
-        if (m2.attachments.size >= 1) {
-          // console.log(m2.attachments.array()[0].url)
-          for(let x = 0; x < m2.attachments.array().length; x++){
-            if(!m2.attachments.array()[x].url.includes("gif") || !m2.attachments.array()[0].url.includes("mp4")){
-              templatelist.push(m2.attachments.array()[x].url)
-            }
-          }
-          lastmsg.push(m2.id)
-          // await message.reply(m2.attachments.array()[0].url)
-        }
-      })
-    });
-  })
+  // await (<Discord.TextChannel>client.channels.cache.get("724827952390340648")).messages.fetch({ limit: 100 }).then(async msg => {
+  //   msg.map(async m => {
+  //     // console.log(m.url)
+  //     // await message.reply(m.id)
+  //     await (<Discord.TextChannel>client.channels.cache.get("724827952390340648")).messages.fetch(m.id).then(async (m2: Discord.Message) => {
+  //       if (m2.attachments.size >= 1) {
+  //         // console.log(m2.attachments.array()[0].url)
+  //         for(let x = 0; x < m2.attachments.array().length; x++){
+  //           if(!m2.attachments.array()[x].url.includes("gif") || !m2.attachments.array()[0].url.includes("mp4")){
+  //             templatelist.push(m2.attachments.array()[x].url)
+  //           }
+  //         }
+  //         lastmsg.push(m2.id)
+  //         // await message.reply(m2.attachments.array()[0].url)
+  //       }
+  //     })
+  //   });
+  // })
 
-  for(let i = 0; i < 4; i++){
-    await (<Discord.TextChannel>client.channels.cache.get("724827952390340648")).messages.fetch({ before:lastmsg[0], limit:100 }).then(async msg => {
-      msg.map(async m => {
-        // console.log(m.url)
-        // await message.reply(m.id)
-        await (<Discord.TextChannel>client.channels.cache.get("724827952390340648")).messages.fetch(m.id).then(async (m2: Discord.Message) => {
-          if (m2.attachments.size >= 1) {
-            // console.log(m2.attachments.array()[0].url)
-            for(let x = 0; x < m2.attachments.array().length; x++){
-              if(!m2.attachments.array()[x].url.includes("gif") || !m2.attachments.array()[0].url.includes("mp4")){
-                templatelist.push(m2.attachments.array()[x].url)
-              }
-            }
-            lastmsg[0] = (m2.id)
-            // await message.reply(m2.attachments.array()[0].url)
-          }
-        })
-      });
-    })
-  }
+  // for(let i = 0; i < 4; i++){
+  //   await (<Discord.TextChannel>client.channels.cache.get("724827952390340648")).messages.fetch({ before:lastmsg[0], limit:100 }).then(async msg => {
+  //     msg.map(async m => {
+  //       // console.log(m.url)
+  //       // await message.reply(m.id)
+  //       await (<Discord.TextChannel>client.channels.cache.get("724827952390340648")).messages.fetch(m.id).then(async (m2: Discord.Message) => {
+  //         if (m2.attachments.size >= 1) {
+  //           // console.log(m2.attachments.array()[0].url)
+  //           for(let x = 0; x < m2.attachments.array().length; x++){
+  //             if(!m2.attachments.array()[x].url.includes("gif") || !m2.attachments.array()[0].url.includes("mp4")){
+  //               templatelist.push(m2.attachments.array()[x].url)
+  //             }
+  //           }
+  //           lastmsg[0] = (m2.id)
+  //           // await message.reply(m2.attachments.array()[0].url)
+  //         }
+  //       })
+  //     });
+  //   })
+  // }
 
-  let set = await new Set(templatelist)
+  // let set = await new Set(templatelist)
 
-  templatelist = []
+  // templatelist = []
 
-  templatelist = Array.from(set)
+  // templatelist = Array.from(set)
 
-  return templatelist
+  return await (await gettemplatedb()).list
   //await message.reply(`\`\`\`${templatelist}\`\`\``)
 }
 

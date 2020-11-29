@@ -231,12 +231,28 @@ export async function gettempStruct(_id: string): Promise<randomtempstruct> {
     return client.db(process.env.DBNAME).collection("tempstruct").findOne({_id:_id})!;
 }
 
-export async function insertlist(lists:any[]) {
+export async function inserttemplate(lists:any[]) {
     let e = {
         _id:"templatelist",
         list:lists
     }
+
+    console.log(e)
     await client.db(process.env.DBNAME).collection("tempstruct").insertOne(e)    
+}
+
+export async function gettemplatedb(): Promise<{_id:"templatelist", list: string[]}> {
+    return client.db(process.env.DBNAME).collection("tempstruct").findOne({_id:"templatelist"})!;   
+}
+
+export async function updatetemplatedb(lists:string[]) {
+    let e = {
+        _id:"templatelist",
+        list:lists
+    }
+
+    console.log(e)
+    await client.db(process.env.DBNAME).collection("tempstruct").updateOne({_id:"templatelist"}, {$set: e})    
 }
 
 export async function getthemes(): Promise<{
