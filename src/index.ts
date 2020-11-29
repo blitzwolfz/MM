@@ -210,14 +210,17 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
 
       if(messageReaction.emoji.name === '✅' && user.id !== "722303830368190485"){
         temp.found = true
-        await updatetempStruct(temp._id, temp)
-        //await messageReaction.message.delete()
+        await updatetempStruct(temp._id, temp).then(async () => {
+          await messageReaction.message.delete()
+        })
       }
 
       else if(messageReaction.emoji.name === '❌' && user.id !== "722303830368190485"){
         temp.time = 121
-        await updatetempStruct(temp._id, temp)
-        //await messageReaction.message.delete()
+        await updatetempStruct(temp._id, temp).then(async () => {
+          await messageReaction.message.delete()
+        })
+        
       }
     }
   }
