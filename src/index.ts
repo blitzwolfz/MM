@@ -278,7 +278,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
       .roles.cache.has("719936221572235295") 
       === true){
 
-        let tempccc = <Discord.TextChannel>client.channels.cache.get("724827952390340648")
+        //let tempccc = <Discord.TextChannel>client.channels.cache.get("724827952390340648")
       if(messageReaction.emoji.name === '🏁'){
         let voteCollection: Discord.Collection<string, Discord.MessageReaction>;
 
@@ -340,7 +340,6 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
 
       
         let pos = ['🇦', '🇧', '🇨','🇩','🇪','🇫'].indexOf(messageReaction.emoji.name)
-        messageReaction.message.channel.send(pos)
         let id = await (await getQual(messageReaction.message.channel.id)).playerids[pos]
         await splitqual(client, messageReaction.message, id)
         await updateModProfile(messageReaction.message.author.id, "modactions", 1)
@@ -495,57 +494,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
       }
     }
   }
-  // let quals: qualmatch[] = await getQuals()
-  
-  // if (quals) {
-  //   for (const match of quals) {
 
-  //     let id = client.channels.cache.get(messageReaction.message.channel.id)?.id
-  //     if (match.channelid === id) {
-
-  //       if (messageReaction.partial) await messageReaction.fetch();
-  //       if (messageReaction.message.partial) await messageReaction.message.fetch();
-
-  //       if (emojis.includes(messageReaction.emoji.name)) {
-  //         let i = emojis.indexOf(messageReaction.emoji.name)
-  //         console.log(messageReaction.emoji.name, emojis[6])
-
-  //         if (match.playerids.includes(user.id)) {
-  //           await messageReaction.users.remove(user.id)
-  //           return user.send("You can't vote in your own qualifers")
-  //         }
-
-  //         if (messageReaction.emoji.name === emojis[6]) {
-  //           match.votes = removethreevotes(match.votes, user.id)
-  //           updateQuals(match)
-  //           messageReaction.users.remove(user.id)
-  //           return user.send("Your votes have been reset")
-  //         }
-
-  //         if (hasthreevotes(match.votes, user.id)) {
-  //           await messageReaction.users.remove(user.id)
-  //           return user.send("You used up all your votes. Please hit the recycle emote to reset your votes")
-  //         }
-
-  //         if (!match.playersdone.includes(match.playerids[i])) {
-  //           await messageReaction.users.remove(user.id)
-  //           return user.send("You can't for a non meme")
-  //         }
-
-  //         else if (match.votes[i].includes(user.id)) {
-  //           await messageReaction.users.remove(user.id)
-  //           return user.send("You can't for a meme twice. Hit the recycle emote to reset your votes")
-  //         }
-  //         else {
-  //           match.votes[i].push(user.id)
-  //           await messageReaction.users.remove(user.id)
-  //           await updateQuals(match)
-  //           return user.send(`Your vote for meme ${i+1} in <#${match.channelid}> been counted.`);
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
 
 });
 

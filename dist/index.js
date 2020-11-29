@@ -223,7 +223,6 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             .roles.cache.has("719936221572235295")
             === true) {
             let pos = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫'].indexOf(messageReaction.emoji.name);
-            messageReaction.message.channel.send(pos);
             let id = await (await db_1.getQual(messageReaction.message.channel.id)).playerids[pos];
             await start_1.splitqual(client, messageReaction.message, id);
             await db_1.updateModProfile(messageReaction.message.author.id, "modactions", 1);
