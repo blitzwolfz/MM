@@ -71,6 +71,10 @@ async function exhibition(message, client, args) {
             user: m.author.id,
             time: Math.floor(Date.now() / 1000)
         });
+        ex.cooldowns.push({
+            user: m.mentions.users.first().id,
+            time: Math.floor(Date.now() / 1000)
+        });
         await db_1.updateExhibition(ex);
         ex = await db_1.getExhibition();
         let guild = client.guilds.cache.get("719406444109103117");

@@ -81,6 +81,11 @@ export async function exhibition(message: Discord.Message, client: Discord.Clien
             user:m.author.id,
             time:Math.floor(Date.now() / 1000)
         })
+
+        ex.cooldowns.push({
+            user:m.mentions.users.first()!.id!,
+            time:Math.floor(Date.now() / 1000)
+        })
     
         await updateExhibition(ex)
     
