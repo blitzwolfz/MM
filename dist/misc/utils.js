@@ -110,9 +110,11 @@ async function reminders(message, client, args) {
                 if (await db_1.getQual(channel.id) && !args[2]) {
                     let match = await db_1.getQual(channel.id);
                     let s = "";
+                    if (match.votingperiod === true)
+                        continue;
                     for (let i = 0; i < match.players.length; i++) {
                         if (!match.playersdone.includes(match.players[i].userid)) {
-                            s += `<@${match.players[i].userid}>`;
+                            s += `<@${match.players[i].userid}> `;
                         }
                     }
                     await client.channels.cache.get(channel.id)
@@ -125,7 +127,7 @@ async function reminders(message, client, args) {
                     let m = all.last();
                     let s = "";
                     for (let e = 0; e < m.mentions.users.array().length; e++) {
-                        s += `<@${m.mentions.users.array()[e].id}>`;
+                        s += `<@${m.mentions.users.array()[e].id}> `;
                     }
                     await m.channel
                         .send(`<@${s}>, you have ${args[0]}h left to complete portion ${args[1]}`);
@@ -261,7 +263,7 @@ async function qualifierresultadd(channel, client, msg1, msg2) {
         } });
     await (await client.channels.cache.get("722291182461386804"))
         .send({ embed: {
-            title: `Final Results for Group <#${channel.id}>`,
+            title: `Final Results for Group ${channel.name}`,
             description: `Top two move on`,
             fields,
             color: "#d7be26",

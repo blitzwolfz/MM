@@ -210,7 +210,7 @@ export async function qualend(client: discord.Client, id: string) {
                 if(match.players[i].memedone){
                     fields.push({
                         name: `<@${match.players[i].userid}>`,
-                        value: `Has automatically won!`
+                        value: `Finished with 50`
                     });
                 }
                 else if(match.players[i].memedone === false){
@@ -314,6 +314,7 @@ export async function qualend(client: discord.Client, id: string) {
 
                 if(!t){
                     await channel.setTopic(message.id)  
+                    
                 }
 
                 else if(t.length === 1){

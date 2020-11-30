@@ -151,9 +151,11 @@ export async function reminders(message: Discord.Message, client:Discord.Client,
 
           let s = ""
 
+          if(match.votingperiod === true) continue;
+
           for (let i = 0; i < match.players.length; i++){
             if(!match.playersdone.includes(match.players[i].userid)){
-              s += `<@${match.players[i].userid}>`
+              s += `<@${match.players[i].userid}> `
             }
           }
 
@@ -174,7 +176,7 @@ export async function reminders(message: Discord.Message, client:Discord.Client,
           let s = ""
 
           for(let e = 0; e < m.mentions.users.array().length; e++){
-            s += `<@${m.mentions.users.array()[e].id}>`
+            s += `<@${m.mentions.users.array()[e].id}> `
           }
   
           await m.channel
@@ -361,7 +363,7 @@ export async function qualifierresultadd(channel:Discord.TextChannel, client:Dis
 
   await (await (<Discord.TextChannel>client.channels.cache.get("722291182461386804")))
   .send({embed: {
-    title: `Final Results for Group <#${channel.id}>`,
+    title: `Final Results for Group ${channel.name}`,
     description: `Top two move on`,
     fields,
     color: "#d7be26",
