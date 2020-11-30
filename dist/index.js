@@ -173,6 +173,8 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
         }
     }
     if (messageReaction.emoji.name === '🏁' || messageReaction.emoji.name === '🗡️' && user.id !== "722303830368190485") {
+        if (messageReaction.message.channel.id !== "722291683030466621")
+            return;
         if (messageReaction.partial)
             await messageReaction.fetch();
         if (messageReaction.message.partial)
@@ -182,7 +184,6 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             .members.cache.get(user.id)
             .roles.cache.has("719936221572235295")
             === true) {
-            let tempccc = client.channels.cache.get("724827952390340648");
             if (messageReaction.emoji.name === '🏁') {
                 let voteCollection;
                 await messageReaction.message.channel.messages.fetch(messageReaction.message.id).then(msg => voteCollection = msg.reactions.cache);

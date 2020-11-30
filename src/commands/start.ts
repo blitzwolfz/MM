@@ -1070,8 +1070,16 @@ export async function reload(message: discord.Message, client: discord.Client) {
         console.log("Check 3")
         if (Math.floor(Date.now() / 1000) - match.octime > 1800 || match.playersdone.length === match.playerids.length) {
 
-            for (let i = 0; i < match.votes.length; i++) {
-                match.votes[i] = []
+            // for (let i = 0; i < match.votes.length; i++) {
+            //     match.votes[i] = []
+            // }
+
+            if(match.istheme === false){
+                await channel.send(new discord.MessageEmbed()
+                .setTitle("Template")
+                .setImage(match.template)
+                .setColor("#07da63")
+                .setTimestamp())
             }
 
             if (match.playersdone.length <= 2) {
@@ -1117,7 +1125,12 @@ export async function reload(message: discord.Message, client: discord.Client) {
             match.votetime = Math.floor(Date.now() / 1000)
             match.votingperiod = true
 
-            if (match.template.length > 0 || match.template) {
+            // if (match.template.length > 0 || match.template) {
+            //     await channel.send("\n\nThe theme is: " + match.template)
+            //     //await user.send({ files: [new discord.MessageAttachment(match.template)] })
+            // }
+
+            if (match.template.length > 0 && match.istheme || match.template && match.istheme) {
                 await channel.send("\n\nThe theme is: " + match.template)
                 //await user.send({ files: [new discord.MessageAttachment(match.template)] })
             }

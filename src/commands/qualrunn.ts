@@ -39,9 +39,9 @@ export async function qualrunn(match: qualmatch, channelid: string, client: disc
                 if(match.istheme === false){
                     await channel.send(new discord.MessageEmbed()
                     .setTitle("Template")
-                .setImage(match.template)
-                .setColor("#07da63")
-                .setTimestamp())
+                    .setImage(match.template)
+                    .setColor("#07da63")
+                    .setTimestamp())
                 }
                 
                 for(let player of match.players){

@@ -268,7 +268,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
 
   if(messageReaction.emoji.name === '🏁' || messageReaction.emoji.name === '🗡️' && user.id !== "722303830368190485") {
     //messageReaction.message.channel.send(user.client.guilds.cache.get(messageReaction.message.guild!.id)!.roles.cache.has("719936221572235295"))
-
+    if(messageReaction.message.channel.id !== "722291683030466621") return;
     if (messageReaction.partial) await messageReaction.fetch();
     if (messageReaction.message.partial) await messageReaction.message.fetch();
 

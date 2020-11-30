@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.themelistLb = exports.removeTheme = exports.addTheme = exports.approvetemplate = exports.template = void 0;
+exports.templatecheck = exports.themelistLb = exports.removeTheme = exports.addTheme = exports.approvetemplate = exports.template = void 0;
 const Discord = __importStar(require("discord.js"));
 const db_1 = require("../misc/db");
 const utils_1 = require("../misc/utils");
@@ -146,3 +146,40 @@ async function themelistEmbed(page = 1, client, ratings, ...rest) {
         timestamp: new Date()
     };
 }
+async function templatecheckembed(page = 1, client, templist) {
+    page = page < 0 ? 0 : page - 1;
+    return {
+        title: `Template number ${page + 1}`,
+        image: {
+            url: `${templist[page]}`,
+        },
+        color: "#d7be26",
+        timestamp: new Date()
+    };
+}
+async function templatecheck(message, client, args) {
+    let page = parseInt(args[0]) || 1;
+    let ratings = await db_1.gettemplatedb();
+    let removelinks = [];
+    const m = (await message.channel.send({ embed: await quallistEmbed(page, client, ratings) }));
+    await m.react("⬅");
+    await m.react("➡");
+    await m.react('🗡️');
+    const backwards = m.createReactionCollector(utils_1.backwardsFilter, { time: 300000 });
+    const forwards = m.createReactionCollector(utils_1.forwardsFilter, { time: 300000 });
+    const remove = m.createReactionCollector(((reaction, user) => reaction.emoji.name === '🗡️' && !user.bot), { time: 300000 });
+    backwards.on('collect', async () => {
+        m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
+        m.edit({ embed: await quallistEmbed(--page, client, ratings) });
+    });
+    forwards.on('collect', async () => {
+        m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
+        m.edit({ embed: await quallistEmbed(++page, client, ratings) });
+    });
+    remove.on('collect', async () => {
+        var _a;
+        m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
+        removelinks.push((_a = m.embeds[0].image) === null || _a === void 0 ? void 0 : _a.url);
+    });
+}
+exports.templatecheck = templatecheck;

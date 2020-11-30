@@ -1,5 +1,5 @@
 import * as Discord from "discord.js"
-import { getthemes, updatedoc, updateProfile } from "../misc/db"
+import { gettemplatedb, getthemes, updatedoc, updateProfile } from "../misc/db"
 import { backwardsFilter, forwardsFilter } from "../misc/utils"
 
 export async function template(message: Discord.Message, client:Discord.Client){
@@ -170,4 +170,52 @@ async function themelistEmbed(page: number = 1, client: Discord.Client, ratings:
         color: "#d7be26",
         timestamp: new Date()
     };
+}
+
+async function templatecheckembed(page: number = 1, client: Discord.Client, templist: string[]){
+
+    //let signup = await getSignups()
+    //let guild = client.guilds.cache.get("719406444109103117")
+
+    page = page < 0 ? 0 : page - 1 ;
+
+    return {
+        title: `Template number ${page+1}`,
+        image: {
+            url: `${templist[page]}`,
+        },
+        color: "#d7be26",
+        timestamp: new Date()
+    };
+}
+
+export async function templatecheck(message: Discord.Message, client: Discord.Client, args: string[]) {
+    let page: number = parseInt(args[0]) || 1
+    let ratings = await gettemplatedb()
+    let removelinks:string[] = []
+    const m = <Discord.Message>(await message.channel.send({ embed: await quallistEmbed(page!, client, ratings) }));
+    await m.react("⬅")
+    await m.react("➡");
+    await m.react('🗡️')
+
+    const backwards = m.createReactionCollector(backwardsFilter, { time: 300000 });
+    const forwards = m.createReactionCollector(forwardsFilter, { time: 300000 });
+    const remove = m.createReactionCollector(((reaction: { emoji: { name: string; }; }, user: Discord.User) => reaction.emoji.name === '🗡️' && !user.bot), { time: 300000 });
+
+    backwards.on('collect', async () => {
+        m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
+        m.edit({ embed: await quallistEmbed(--page, client, ratings)});
+    });
+    forwards.on('collect', async () => {
+        m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
+        m.edit({ embed: await quallistEmbed(++page, client, ratings) });
+    });
+
+    remove.on('collect', async () => {
+        m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id))
+        removelinks.push(m.embeds[0].image?.url!)
+    });
+
+    
+
 }
