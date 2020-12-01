@@ -225,9 +225,9 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             === true) {
             let pos = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫'].indexOf(messageReaction.emoji.name);
             let id = await (await db_1.getQual(messageReaction.message.channel.id)).playerids[pos];
-            await start_1.splitqual(client, messageReaction.message, id);
             await db_1.updateModProfile(messageReaction.message.author.id, "modactions", 1);
             await db_1.updateModProfile(messageReaction.message.author.id, "matchportionsstarted", 1);
+            await start_1.splitqual(client, messageReaction.message, id);
             await messageReaction.users.remove(user.id);
             await messageReaction.remove();
         }

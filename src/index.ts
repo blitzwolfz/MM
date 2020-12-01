@@ -341,9 +341,9 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
       
         let pos = ['🇦', '🇧', '🇨','🇩','🇪','🇫'].indexOf(messageReaction.emoji.name)
         let id = await (await getQual(messageReaction.message.channel.id)).playerids[pos]
-        await splitqual(client, messageReaction.message, id)
         await updateModProfile(messageReaction.message.author.id, "modactions", 1)
         await updateModProfile(messageReaction.message.author.id, "matchportionsstarted", 1)
+        await splitqual(client, messageReaction.message, id)
         await messageReaction.users.remove(user.id)
         await messageReaction.remove()
 
@@ -694,7 +694,6 @@ client.on("message", async message => {
 
   else if (command === "search") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
-
     await GroupSearch(message, args)
   }
 
