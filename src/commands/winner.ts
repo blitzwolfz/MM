@@ -317,6 +317,8 @@ export async function qualend(client: discord.Client, id: string) {
                     
                 }
 
+                else if(t.join("").toLowerCase() === "round1") await channel.setTopic(message.id);
+
                 else if(t.length === 1){
                     // t.push(message.id)
 

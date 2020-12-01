@@ -434,6 +434,16 @@ client.on("message", async (message) => {
         await utils_1.deletechannels(message, args);
     }
     else if (command === "test") {
+        await message.reply("no").then(async (message) => {
+            var _a;
+            await message.react('🤏');
+            let channel = await client.channels.cache.get(message.channel.id);
+            let t = (_a = channel.topic) === null || _a === void 0 ? void 0 : _a.split(" ");
+            if ((t === null || t === void 0 ? void 0 : t.join("").toLowerCase()) === "round1")
+                await channel.setTopic(message.id);
+            else if ((t === null || t === void 0 ? void 0 : t.length) === 1)
+                await channel.setTopic(t[0] + "\n" + message.id);
+        }).then;
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))

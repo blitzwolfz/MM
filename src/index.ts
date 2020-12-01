@@ -622,7 +622,16 @@ client.on("message", async message => {
   else if (command === "test") {
 
     //await insertExhibition()
-    //await message.reply("no").then(async message => await message.react('🤏'))
+    await message.reply("no").then(async message => {await message.react('🤏')
+    let channel = await <Discord.TextChannel>client.channels.cache.get(message.channel.id)
+
+
+    let t = channel.topic?.split(" ")
+    if(t?.join("").toLowerCase() === "round1") await channel.setTopic(message.id);
+
+    else if(t?.length === 1) await channel.setTopic(t[0]+"\n"+message.id);
+
+    }).then
 
     // let templ = await getRandomTemplateList(client)
 
