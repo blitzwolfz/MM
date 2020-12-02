@@ -43,6 +43,13 @@ async function qualrunn(match, channelid, client) {
                     return await winner_1.qualend(client, channel.id);
                 }
                 match = qualplayershuffle(match);
+                if (match.istheme === false) {
+                    await channel.send(new discord.MessageEmbed()
+                        .setTitle("Template")
+                        .setImage(match.template)
+                        .setColor("#07da63")
+                        .setTimestamp());
+                }
                 for (let player of match.players) {
                     if (player.memedone) {
                         let embed = new discord.MessageEmbed()
@@ -72,7 +79,7 @@ async function qualrunn(match, channelid, client) {
                 });
                 match.votetime = Math.floor(Date.now() / 1000);
                 match.votingperiod = true;
-                if (match.template.length > 0 || match.template) {
+                if (match.template.length > 0 && match.istheme || match.template && match.istheme) {
                     await channel.send("\n\nThe theme is: " + match.template);
                 }
                 await channel.send(`<@&719936221572235295>`);

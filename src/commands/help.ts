@@ -80,7 +80,7 @@ export const UserHelp = {
     fields: [
         {
             name: '`!submit`',
-            value: `Pass a image/gif with the message or it will not be submitted :)\nNote this command works regardless of split or unsplit match`,
+            value: `Pass an image/gif with the message or it will not be submitted :)\nNote this command works regardless of split or unsplit match`,
         },
         {
             name: '`!qualsubmit`',
@@ -112,7 +112,7 @@ export const UserHelp = {
         },
         {
             name: 'Voting in qualifiers',
-            value: `When voting in qualifiers, and you used up all 3 votes,\nclick on the ${emojis[6]} to reset your votes`
+            value: `When voting in qualifiers, and you used up all 2 of your votes,\nclick on the ${emojis[6]} to reset your votes`
         },
     ],
     timestamp: new Date()
@@ -173,6 +173,27 @@ export const ModChallongeHelp = {
             name: '`!deletechannels <category>`',
             value: `This command deletes all the channels in a category.`
         },
+    ],
+    timestamp: new Date()
+};
+
+export const DuelHelp = {
+    title: "Duel help menu",
+    color:"PURPLE",
+    description:"Duels are a way to play matches with other people in this server."+
+    "\nAll you have to do is do the !duel command, and the bot will start a duel for you."+
+    "\nTo the person who is being mentioned, the bot will dm you, and just follow it's instructions."+
+    "You have a chance to duel others every 1h, with the bot dming you when you can.",
+    fields: [
+        {
+            name: '`!duel @someone <theme | template>`',
+            value: `Pass an theme or template flag, and you will get a random theme or template from our inventory.`,
+        },
+
+        {
+            name: '`!duel check`',
+            value: `Tells you how long till you can start another duel`,
+        }
     ],
     timestamp: new Date()
 };

@@ -16,5 +16,10 @@ export declare const forwardsFilter: (reaction: {
 export declare function indexOf2d(arr: any[][], item: any, searchpos: number, returnpos: number): any;
 export declare function dateBuilder(): string;
 export declare function reminders(message: Discord.Message, client: Discord.Client, args: string[]): Promise<void>;
+export declare function autoreminders(client: Discord.Client): Promise<void>;
 export declare function deletechannels(message: Discord.Message, args: string[]): Promise<void>;
 export declare function updatesomething(message: Discord.Message): Promise<void>;
+export declare function createrole(message: Discord.Message, args: string[]): Promise<Discord.Message | undefined>;
+export declare function clearstats(message: Discord.Message): Promise<void>;
+export declare function qualifierresultadd(channel: Discord.TextChannel, client: Discord.Client, msg1: string, msg2: string): Promise<void>;
+export declare function toHHMMSS(timestamp: number, howlong: number): Promise<string>;

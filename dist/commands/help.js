@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ModChallongeHelp = exports.ModSignupHelp = exports.UserHelp = exports.ModHelp = void 0;
+exports.DuelHelp = exports.ModChallongeHelp = exports.ModSignupHelp = exports.UserHelp = exports.ModHelp = void 0;
 const utils_1 = require("../misc/utils");
 exports.ModHelp = {
     title: "Mod help menu",
@@ -79,7 +79,7 @@ exports.UserHelp = {
     fields: [
         {
             name: '`!submit`',
-            value: `Pass a image/gif with the message or it will not be submitted :)\nNote this command works regardless of split or unsplit match`,
+            value: `Pass an image/gif with the message or it will not be submitted :)\nNote this command works regardless of split or unsplit match`,
         },
         {
             name: '`!qualsubmit`',
@@ -111,7 +111,7 @@ exports.UserHelp = {
         },
         {
             name: 'Voting in qualifiers',
-            value: `When voting in qualifiers, and you used up all 3 votes,\nclick on the ${utils_1.emojis[6]} to reset your votes`
+            value: `When voting in qualifiers, and you used up all 2 of your votes,\nclick on the ${utils_1.emojis[6]} to reset your votes`
         },
     ],
     timestamp: new Date()
@@ -170,6 +170,25 @@ exports.ModChallongeHelp = {
             name: '`!deletechannels <category>`',
             value: `This command deletes all the channels in a category.`
         },
+    ],
+    timestamp: new Date()
+};
+exports.DuelHelp = {
+    title: "Duel help menu",
+    color: "PURPLE",
+    description: "Duels are a way to play matches with other people in this server." +
+        "\nAll you have to do is do the !duel command, and the bot will start a duel for you." +
+        "\nTo the person who is being mentioned, the bot will dm you, and just follow it's instructions." +
+        "You have a chance to duel others every 1h, with the bot dming you when you can.",
+    fields: [
+        {
+            name: '`!duel @someone <theme | template>`',
+            value: `Pass an theme or template flag, and you will get a random theme or template from our inventory.`,
+        },
+        {
+            name: '`!duel check`',
+            value: `Tells you how long till you can start another duel`,
+        }
     ],
     timestamp: new Date()
 };

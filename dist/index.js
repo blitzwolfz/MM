@@ -23,6 +23,7 @@ const Discord = __importStar(require("discord.js"));
 require("dotenv").config();
 const submit_1 = require("./commands/submit");
 const start_1 = require("./commands/start");
+const exhibitions_1 = require("./commands/exhibitions");
 const winner_1 = require("./commands/winner");
 const card_1 = require("./commands/card");
 const utils_1 = require("./misc/utils");
@@ -90,6 +91,57 @@ client.on("guildMemberAdd", async function (member) {
 client.on("messageReactionAdd", async function (messageReaction, user) {
     if (user.bot)
         return;
+    let temps = await db_1.getalltempStructs();
+    if (temps) {
+        for (const temp of temps) {
+            if (messageReaction.emoji.name === '🌀' && user.id !== "722303830368190485") {
+                if (temp.istheme === false) {
+                    let templatelist = await (await db_1.gettemplatedb()).list;
+                    let random = templatelist[Math.floor(Math.random() * templatelist.length)];
+                    let embed = new Discord.MessageEmbed()
+                        .setDescription("Random template")
+                        .setImage(random)
+                        .setColor("#d7be26")
+                        .setTimestamp();
+                    console.log(await messageReaction.message.id);
+                    temp.url = random;
+                    await (await client.channels.cache.get("722616679280148504")
+                        .messages.fetch(temp.messageid))
+                        .edit({ embed });
+                    await db_1.updatetempStruct(temp._id, temp);
+                    await messageReaction.users.remove(user.id);
+                }
+                if (temp.istheme === true) {
+                    let themelist = await randomtemp_1.getRandomThemeList(client);
+                    let random = themelist[Math.floor(Math.random() * (((themelist.length - 1) - 1) - 1) + 1)];
+                    let embed = new Discord.MessageEmbed()
+                        .setTitle("Random Theme")
+                        .setDescription(`Theme is: ${random}`)
+                        .setColor("#d7be26")
+                        .setTimestamp();
+                    console.log(await messageReaction.message.id);
+                    temp.url = random;
+                    await (await client.channels.cache.get("722616679280148504")
+                        .messages.fetch(temp.messageid))
+                        .edit({ embed });
+                    await db_1.updatetempStruct(temp._id, temp);
+                    await messageReaction.users.remove(user.id);
+                }
+            }
+            if (messageReaction.emoji.name === '✅' && user.id !== "722303830368190485") {
+                temp.found = true;
+                await db_1.updatetempStruct(temp._id, temp).then(async () => {
+                    await messageReaction.message.delete();
+                });
+            }
+            else if (messageReaction.emoji.name === '❌' && user.id !== "722303830368190485") {
+                temp.time = 121;
+                await db_1.updatetempStruct(temp._id, temp).then(async () => {
+                    await messageReaction.message.delete();
+                });
+            }
+        }
+    }
     if (messageReaction.emoji.name === '🅰️' || messageReaction.emoji.name === '🅱️' && user.id !== "722303830368190485") {
         if (messageReaction.partial)
             await messageReaction.fetch();
@@ -120,10 +172,73 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             await user.send("No.");
         }
     }
+    if (messageReaction.emoji.name === '🏁' || messageReaction.emoji.name === '🗡️' && user.id !== "722303830368190485") {
+        if (messageReaction.message.channel.id !== "722291683030466621")
+            return;
+        if (messageReaction.partial)
+            await messageReaction.fetch();
+        if (messageReaction.message.partial)
+            await messageReaction.message.fetch();
+        if (user.client.guilds.cache
+            .get(messageReaction.message.guild.id)
+            .members.cache.get(user.id)
+            .roles.cache.has("719936221572235295")
+            === true) {
+            if (messageReaction.emoji.name === '🏁') {
+                let voteCollection;
+                await messageReaction.message.channel.messages.fetch(messageReaction.message.id).then(msg => voteCollection = msg.reactions.cache);
+                let l = voteCollection.first().count;
+                console.log(l);
+                console.log(messageReaction.message.embeds[0].image);
+                if (l === 3) {
+                    let e = await db_1.gettemplatedb();
+                    e.list.push(await messageReaction.message.embeds[0].image.url);
+                    await db_1.updatetemplatedb(e.list);
+                    await messageReaction.message.delete();
+                }
+            }
+            else if (messageReaction.emoji.name === '🗡️') {
+                let voteCollection;
+                await messageReaction.message.channel.messages.fetch(messageReaction.message.id).then(msg => voteCollection = msg.reactions.cache);
+                let l = voteCollection.array()[1].count;
+                console.log(l);
+                console.log(messageReaction.message.embeds[0].image);
+                if (l === 3) {
+                    await messageReaction.message.delete();
+                }
+            }
+        }
+        else {
+            await messageReaction.users.remove(user.id);
+            await user.send("No.");
+        }
+    }
+    if (['🇦', '🇧', '🇨', '🇩', '🇪', '🇫'].includes(messageReaction.emoji.name) && user.id !== "722303830368190485") {
+        if (messageReaction.partial)
+            await messageReaction.fetch();
+        if (messageReaction.message.partial)
+            await messageReaction.message.fetch();
+        if (user.client.guilds.cache
+            .get(messageReaction.message.guild.id)
+            .members.cache.get(user.id)
+            .roles.cache.has("719936221572235295")
+            === true) {
+            let pos = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫'].indexOf(messageReaction.emoji.name);
+            let id = await (await db_1.getQual(messageReaction.message.channel.id)).playerids[pos];
+            await db_1.updateModProfile(messageReaction.message.author.id, "modactions", 1);
+            await db_1.updateModProfile(messageReaction.message.author.id, "matchportionsstarted", 1);
+            await start_1.splitqual(client, messageReaction.message, id);
+            await messageReaction.users.remove(user.id);
+            await messageReaction.remove();
+        }
+        else {
+            await messageReaction.users.remove(user.id);
+            await user.send("No.");
+        }
+    }
     if (!utils_1.emojis.includes(messageReaction.emoji.name))
         return;
     console.log(`a reaction is added to a message`);
-    let temps = await db_1.getalltempStructs();
     if ((messageReaction.emoji.name === utils_1.emojis[1] || messageReaction.emoji.name === utils_1.emojis[0])
         && await db_1.getMatch(messageReaction.message.channel.id)) {
         let match = await db_1.getMatch(messageReaction.message.channel.id);
@@ -133,8 +248,10 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             await messageReaction.message.fetch();
         if (!match)
             return;
-        if (user.id != match.p1.userid || user.id != match.p2.userid) {
+        if (user.id !== match.p1.userid && user.id !== match.p2.userid) {
+            console.log("checkq1");
             if (messageReaction.emoji.name === utils_1.emojis[0]) {
+                console.log("checkq2");
                 if (match.p1.voters.includes(user.id)) {
                     await user.send("You can't vote on the same meme twice");
                     await messageReaction.users.remove(user.id);
@@ -149,10 +266,17 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
                     }
                     await messageReaction.users.remove(user.id);
                     await messageReaction.message.react(utils_1.emojis[0]);
-                    await user.send(`Vote counted for meme 1 in <#${match.channelid}>. You gained 2 points for voting`);
+                    if (!match.exhibition) {
+                        await user.send(`Vote counted for Player 1's memes in <#${match.channelid}>. You gained 2 points for voting`);
+                    }
+                    else {
+                        await user.send(`Vote counted for Player 1's memes in <#${match.channelid}>.`);
+                    }
+                    console.log("checkq3");
                 }
             }
             else if (messageReaction.emoji.name === utils_1.emojis[1]) {
+                console.log("checkq4");
                 if (match.p2.voters.includes(user.id)) {
                     await user.send("You can't vote on the same meme twice");
                     await messageReaction.users.remove(user.id);
@@ -161,13 +285,19 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
                 else {
                     match.p2.votes += 1;
                     match.p2.voters.push(user.id);
-                    await user.send(`Vote counted for meme 2 in <#${match.channelid}>. You gained 2 points for voting`);
                     if (match.p1.voters.includes(user.id)) {
                         match.p1.votes -= 1;
                         match.p1.voters.splice(match.p1.voters.indexOf(user.id), 1);
                     }
                     await messageReaction.users.remove(user.id);
                     await messageReaction.message.react(utils_1.emojis[1]);
+                    if (!match.exhibition) {
+                        await user.send(`Vote counted for Player 2's memes in <#${match.channelid}>. You gained 2 points for voting`);
+                    }
+                    else {
+                        await user.send(`Vote counted for Player 2's memes in <#${match.channelid}>.`);
+                    }
+                    console.log("checkq5");
                 }
             }
             await db_1.updateActive(match);
@@ -185,6 +315,8 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             await messageReaction.fetch();
         if (messageReaction.message.partial)
             await messageReaction.message.fetch();
+        if (match.votingperiod === false)
+            return;
         if (match.playerids.includes(user.id)) {
             await messageReaction.users.remove(user.id);
             return user.send("You can't vote in your own qualifers");
@@ -217,39 +349,9 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             }
         }
     }
-    if (temps) {
-        for (const temp of temps) {
-            console.log(temp);
-            let templatelist = await randomtemp_1.getRandomTemplateList(client);
-            if (messageReaction.emoji.name === '🌀' && user.id !== "722303830368190485") {
-                let random = templatelist[Math.floor(Math.random() * (((templatelist.length - 1) - 1) - 1) + 1)];
-                let embed = new Discord.MessageEmbed()
-                    .setDescription("Random template")
-                    .setImage(random)
-                    .setColor("#d7be26")
-                    .setTimestamp();
-                console.log(await messageReaction.message.id);
-                temp.url = random;
-                await (await client.channels.cache.get("722616679280148504")
-                    .messages.fetch(temp.messageid))
-                    .edit({ embed });
-                await db_1.updatetempStruct(temp._id, temp);
-                await messageReaction.users.remove(user.id);
-            }
-            if (messageReaction.emoji.name === utils_1.emojis[7] && user.id !== "722303830368190485") {
-                temp.found = true;
-                await db_1.updatetempStruct(temp._id, temp);
-                await messageReaction.message.delete();
-            }
-            else if (messageReaction.emoji.name === '❌' && user.id !== "722303830368190485") {
-                temp.time = 121;
-                await db_1.updatetempStruct(temp._id, temp);
-            }
-        }
-    }
 });
 client.on("message", async (message) => {
-    var _a, _b, _c, _d;
+    var _a, _b, _c, _d, _e, _f, _g;
     if (message.content.indexOf(process.env.PREFIX) !== 0 || message.author.bot) {
         if (message.author.id !== "688558229646475344")
             return;
@@ -264,9 +366,23 @@ client.on("message", async (message) => {
         return;
     }
     ;
-    if (command === "s" || message.content.includes("!s")) {
+    if (command === "s") {
         await start_1.qualrunning(client);
         await start_1.running(client);
+    }
+    if (command === "forcepoll") {
+        let match = await db_1.getMatch(message.channel.id);
+        if (Math.floor(Math.random() * (5 - 1) + 1) % 2 === 1) {
+            let temp = match.p1;
+            match.p1 = match.p2;
+            match.p2 = temp;
+        }
+        match.p1.time = (Math.floor(Date.now() / 1000)) - 3200;
+        match.p2.time = (Math.floor(Date.now() / 1000)) - 3200;
+        match.votingperiod = true;
+        match.votetime = (Math.floor(Date.now() / 1000));
+        await db_1.updateActive(match);
+        await start_1.reload(message, client);
     }
     else if (command === "ping") {
         const m = await message.channel.send("Ping?");
@@ -307,13 +423,27 @@ client.on("message", async (message) => {
     else if (command === "reminder") {
         await utils_1.reminders(message, client, args);
     }
+    else if (command === "createrole") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
+        await utils_1.createrole(message, args);
+    }
     else if (command === "deletechannels") {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
         await utils_1.deletechannels(message, args);
     }
     else if (command === "test") {
-        await message.reply("no").then(async (message) => await message.react('🤏'));
+        await message.reply("no").then(async (message) => {
+            var _a;
+            await message.react('🤏');
+            let channel = await client.channels.cache.get(message.channel.id);
+            let t = (_a = channel.topic) === null || _a === void 0 ? void 0 : _a.split(" ");
+            if ((t === null || t === void 0 ? void 0 : t.join("").toLowerCase()) === "round1")
+                await channel.setTopic(message.id);
+            else if ((t === null || t === void 0 ? void 0 : t.length) === 1)
+                await channel.setTopic(t[0] + "\n" + message.id);
+        }).then;
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))
@@ -334,7 +464,25 @@ client.on("message", async (message) => {
             return message.reply("You don't have those premissions");
         await challonge_1.GroupSearch(message, args);
     }
-    else if (command === "declarequalwinner") {
+    else if (command === "qrd") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
+        await utils_1.qualifierresultadd(await client.channels.cache.get(message.channel.id), client, args[0], args[1]);
+    }
+    else if (command === "exhibition" || command === "duel") {
+        if (args[0].toLowerCase() === "help") {
+            await message.channel.send({ embed: help_1.DuelHelp });
+        }
+        else if (args[0].toLowerCase() === "check") {
+            await exhibitions_1.duelcheck(message);
+        }
+        else {
+            await exhibitions_1.exhibition(message, client, args);
+        }
+    }
+    else if (command === "dqw" || command === "declarequalwinner") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
         await challonge_1.declarequalwinner(message, client);
     }
     else if (command === "removequalwinner") {
@@ -363,17 +511,22 @@ client.on("message", async (message) => {
         await db_1.updateModProfile(message.author.id, "modactions", 1);
         await db_1.updateModProfile(message.author.id, "matchesstarted", 1);
     }
+    else if (command === "forefeit") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
+        await message.reply("Not ready");
+    }
     else if (command === "checkmatch") {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
         if (await db_1.getMatch(message.channel.id)) {
-            message.reply(", there is an active match");
+            message.reply("there is an active match");
         }
         else if (await db_1.getQual(message.channel.id)) {
-            message.reply(", there is an active qualifier match");
+            message.reply("there is an active qualifier match");
         }
         else {
-            message.reply(", there are no matches");
+            message.reply("there are no matches");
         }
     }
     else if (command === "startqual") {
@@ -406,8 +559,24 @@ client.on("message", async (message) => {
         match.template = args.slice(1).join(" ");
         await client.channels.cache.get("738047732312309870")
             .send(`<#${match.channelid}> theme is ${args.slice(1).join(" ")}`);
+        match.istheme = true;
         await db_1.updateQuals(match);
         await message.reply("Theme has been set!");
+    }
+    else if (command === "addtheme") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
+        await template_1.addTheme(message, client, args);
+    }
+    else if (command === "deletetheme") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
+        await template_1.removeTheme(message, client, args);
+    }
+    else if (command === "themelist") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
+        await template_1.themelistLb(message, client, args);
     }
     else if (command === "approve") {
         if (!message.member.roles.cache.has('719936221572235295'))
@@ -469,16 +638,46 @@ client.on("message", async (message) => {
             }
         }
     }
+    else if (command === "mr" || command === "manualrating" || command === "powercock") {
+        if (!message.member.roles.cache.has('719936221572235295')) {
+            return message.reply("You are not cock rating master.");
+        }
+        else {
+            let id = (((_g = (_f = (_e = message.mentions) === null || _e === void 0 ? void 0 : _e.users) === null || _f === void 0 ? void 0 : _f.first()) === null || _g === void 0 ? void 0 : _g.id) || message.author.id);
+            let form = await db_1.getCockrating(id);
+            let max = 100;
+            let min = parseInt(args[1] || args[0]);
+            if (!form) {
+                message.reply(`<@${id}> has ${max === min ? `100% good cock` : `${min}/${max} cock.`}`);
+                let newform = {
+                    _id: id,
+                    num: min,
+                    time: Math.floor(Date.now() / 1000)
+                };
+                await db_1.insertCockrating(newform);
+            }
+            else {
+                message.reply(`<@${id}> has ${max === min ? `100% good cock` : `${min}/${max} cock. The previous rating was ${form.num}/${max} cock`}`);
+                form.num = min;
+                await db_1.updateCockrating(form);
+            }
+        }
+    }
     else if (command === "crlb") {
         await lbs_1.cockratingLB(message, client, args);
     }
     else if (command === "lb") {
         await lbs_1.winningLB(message, client, args);
     }
+    else if (command === "clearstats") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
+        await utils_1.clearstats(message);
+    }
     else if (command === "stats") {
         await user_1.stats(message, client);
     }
-    else if (command === "startsplitqual") {
+    else if (command === "startsplitqual" || command === "ssq") {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
         await start_1.splitqual(client, message);
@@ -489,6 +688,11 @@ client.on("message", async (message) => {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
         await start_1.matchstats(message, client);
+    }
+    else if (command === "qualstats") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
+        await start_1.qualstats(message, client);
     }
     else if (command === "startsplit") {
         if (!message.member.roles.cache.has('719936221572235295'))
@@ -539,8 +743,7 @@ client.on("message", async (message) => {
         await signups_1.removesignup(message);
     }
     else if (command === "viewsignup" || command === "viewlist") {
-        await signups_1.activeOffers(message, client);
-        signups_1.matchlistEmbed;
+        await signups_1.activeOffers(message, client, args);
     }
     else if (command === "viewmatchlist" || command === "matchlist") {
         await signups_1.matchlistEmbed(message, client);

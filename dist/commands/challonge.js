@@ -121,8 +121,13 @@ async function ChannelCreation(message, disclient, args) {
         let match = await db_1.getMatchlist();
         for (let i = 0; i < match.users.length; i++) {
             console.log(match.users[i]);
-            let name = ((await (await guild.members.fetch(match.users[i])).nickname) || await (await disclient.users.fetch(match.users[i])).username);
-            names.push([name, match.users[i]]);
+            try {
+                let name = ((await (await guild.members.fetch(match.users[i])).nickname) || await (await disclient.users.fetch(match.users[i])).username);
+                names.push([name, match.users[i]]);
+            }
+            catch {
+                message.channel.send(`${match.users[i]} is fucked`);
+            }
         }
         const client = challonge.createClient({
             apiKey: process.env.CHALLONGE
@@ -196,17 +201,14 @@ async function QualChannelCreation(message, args) {
     let time = args[1];
     for (let i = 0; i < groups.users.length; i++) {
         if (groups.users[i].length > 0) {
-            await message.guild.channels.create(`Group ${i + 1}`, { type: 'text', topic: `Round ${args[0]}` })
+            let category = await message.guild.channels.cache.find(c => c.name == "qualifiers" && c.type == "category");
+            await message.guild.channels.create(`Group ${i + 1}`, { type: 'text', topic: `Round ${args[0]}`, parent: category.id })
                 .then(async (channel) => {
-                let category = await message.guild.channels.cache.find(c => c.name == "qualifiers" && c.type == "category");
-                if (!category)
-                    throw new Error("Category channel does not exist");
-                await channel.setParent(category.id);
                 let string = "";
                 for (let u of groups.users[i]) {
                     string += `<@${u}> `;
                 }
-                await channel.send(`${string}, Round ${args[0]} has begun, and you have ${time}h. Contact a mod to being your portion!`);
+                await channel.send(`${string}, Portion ${args[0]} has begun, and you have ${time}h to complete it. Contact a ref to begin your portion!`);
             });
         }
     }
@@ -283,13 +285,14 @@ async function GroupSearch(message, args) {
         return message.reply("invaild input. Please use User ID or a User mention");
     for (let i = 0; i < signup.users.length; i++) {
         if (signup.users[i].includes(id)) {
-            return await message.reply(`${await (await message.guild.members.cache.get(id)).nickname} is in <#${message.guild.channels.cache.find(channel => channel.name === `group-${i + 1}`).id}>`);
+            return await message.reply(`This person is in <#${message.guild.channels.cache.find(channel => channel.name === `group-${i + 1}`).id}>`);
         }
     }
     return message.reply("they are not in a group");
 }
 exports.GroupSearch = GroupSearch;
 async function declarequalwinner(message, client) {
+    var _a, _b;
     if (message.member.roles.cache.has('724818272922501190')
         || message.member.roles.cache.has('724818272922501190')
         || message.member.roles.cache.has('724832462286356590') || !message.member.roles.cache.has('719936221572235295')) {
@@ -305,7 +308,8 @@ async function declarequalwinner(message, client) {
                     await db_1.updateMatchlist(match);
                     db_1.updateProfile(id, "wins", 1);
                     db_1.updateProfile(id, "points", 25);
-                    return message.reply(" added user.");
+                    await ((_a = message.mentions.users.first()) === null || _a === void 0 ? void 0 : _a.send("Congrats on winning your qualifer. Now get ready for the bracket portion"));
+                    return message.reply("added user.");
                 }
             }
             else {
@@ -317,7 +321,8 @@ async function declarequalwinner(message, client) {
                 };
                 newmatch.users.push(id);
                 await db_1.insertMatchlist(newmatch);
-                return message.reply(", added user.");
+                await ((_b = message.mentions.users.first()) === null || _b === void 0 ? void 0 : _b.send("Congrats on winning your qualifer. Now get ready for the bracket portion"));
+                return message.reply("added user.");
             }
         }
         catch (err) {

@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getalltempStructs = exports.deletetempStruct = exports.updatetempStruct = exports.inserttempStruct = exports.gettempStruct = exports.getAllModProfiles = exports.resetModProfile = exports.updateModProfile = exports.addModProfile = exports.getModProfile = exports.getAllCockratings = exports.updateCockrating = exports.getCockrating = exports.insertCockrating = exports.updateVerify = exports.getVerify = exports.insertVerify = exports.updateMatchlist = exports.getMatchlist = exports.insertMatchlist = exports.deleteQuallist = exports.updateQuallist = exports.getQuallist = exports.insertQuallist = exports.deleteSignup = exports.updateSignup = exports.getSignups = exports.insertSignups = exports.deleteQuals = exports.deleteActive = exports.addUser = exports.updateProfile = exports.getProfile = exports.getAllProfiles = exports.addProfile = exports.getSingularQuals = exports.getQuals = exports.getQual = exports.getMatch = exports.getActive = exports.updateQuals = exports.insertQuals = exports.updateActive = exports.insertActive = exports.connectToDB = void 0;
+exports.insertExhibition = exports.updateExhibition = exports.getExhibition = exports.deleteGroupmatch = exports.getGroupmatch = exports.getGroupmatches = exports.updateGroupmatch = exports.insertGroupmatch = exports.getalltempStructs = exports.deletetempStruct = exports.updatetempStruct = exports.inserttempStruct = exports.updatedoc = exports.getthemes = exports.updatetemplatedb = exports.gettemplatedb = exports.inserttemplate = exports.gettempStruct = exports.getAllModProfiles = exports.resetModProfile = exports.updateModProfile = exports.addModProfile = exports.getModProfile = exports.getAllCockratings = exports.updateCockrating = exports.getCockrating = exports.insertCockrating = exports.updateVerify = exports.getVerify = exports.insertVerify = exports.updateMatchlist = exports.getMatchlist = exports.insertMatchlist = exports.deleteQuallist = exports.updateQuallist = exports.getQuallist = exports.insertQuallist = exports.deleteSignup = exports.updateSignup = exports.getSignups = exports.insertSignups = exports.deleteQuals = exports.deleteActive = exports.addUser = exports.changefield = exports.updateProfile = exports.getProfile = exports.getAllProfiles = exports.addProfile = exports.getSingularQuals = exports.getQuals = exports.getQual = exports.getMatch = exports.getActive = exports.updateQuals = exports.insertQuals = exports.updateActive = exports.insertActive = exports.connectToDB = void 0;
 const mongo = __importStar(require("mongodb"));
 require("dotenv").config();
 const MongoClient = mongo.MongoClient;
@@ -109,6 +109,10 @@ async function updateProfile(_id, field, num) {
     }
 }
 exports.updateProfile = updateProfile;
+async function changefield() {
+    await client.db(process.env.DBNAME).collection("users").updateMany({}, { $rename: { "votes": "memesvoted" } });
+}
+exports.changefield = changefield;
 async function addUser(user) {
     await client.db(process.env.DBNAME).collection("users").insertOne(user);
 }
@@ -223,6 +227,36 @@ async function gettempStruct(_id) {
     return client.db(process.env.DBNAME).collection("tempstruct").findOne({ _id: _id });
 }
 exports.gettempStruct = gettempStruct;
+async function inserttemplate(lists) {
+    let e = {
+        _id: "templatelist",
+        list: lists
+    };
+    console.log(e);
+    await client.db(process.env.DBNAME).collection("tempstruct").insertOne(e);
+}
+exports.inserttemplate = inserttemplate;
+async function gettemplatedb() {
+    return client.db(process.env.DBNAME).collection("tempstruct").findOne({ _id: "templatelist" });
+}
+exports.gettemplatedb = gettemplatedb;
+async function updatetemplatedb(lists) {
+    let e = {
+        _id: "templatelist",
+        list: lists
+    };
+    console.log(e);
+    await client.db(process.env.DBNAME).collection("tempstruct").updateOne({ _id: "templatelist" }, { $set: e });
+}
+exports.updatetemplatedb = updatetemplatedb;
+async function getthemes() {
+    return client.db(process.env.DBNAME).collection("tempstruct").findOne({ _id: "themelist" });
+}
+exports.getthemes = getthemes;
+async function updatedoc(st) {
+    await client.db(process.env.DBNAME).collection("tempstruct").updateOne({ _id: "themelist" }, { $set: st });
+}
+exports.updatedoc = updatedoc;
 async function inserttempStruct(struct) {
     await client.db(process.env.DBNAME).collection("tempstruct").insertOne(struct);
 }
@@ -236,6 +270,52 @@ async function deletetempStruct(_id) {
 }
 exports.deletetempStruct = deletetempStruct;
 async function getalltempStructs() {
-    return client.db(process.env.DBNAME).collection("tempstruct").find({}).toArray();
+    let e = await client.db(process.env.DBNAME).collection("tempstruct").find({}).toArray();
+    e.splice(0, 1);
+    return e;
 }
 exports.getalltempStructs = getalltempStructs;
+async function insertGroupmatch(match) {
+    await client.db(process.env.DBNAME).collection("groupmatch").insertOne(match);
+    console.log("Inserted ActiveMatches!");
+}
+exports.insertGroupmatch = insertGroupmatch;
+async function updateGroupmatch(activematch) {
+    let _id = activematch._id;
+    await client.db(process.env.DBNAME).collection("groupmatch").updateOne({ _id }, { $set: activematch });
+    console.log("Updated Group Match!");
+}
+exports.updateGroupmatch = updateGroupmatch;
+async function getGroupmatches() {
+    console.log("Getting groupmatches");
+    return await client.db(process.env.DBNAME).collection("groupmatch").find({}, { projection: { _id: 0 } }).toArray();
+}
+exports.getGroupmatches = getGroupmatches;
+async function getGroupmatch(_id) {
+    return await client.db(process.env.DBNAME).collection("groupmatch").findOne({ _id });
+}
+exports.getGroupmatch = getGroupmatch;
+async function deleteGroupmatch(match) {
+    let _id = match._id;
+    await client.db(process.env.DBNAME).collection("groupmatch").deleteOne({ _id });
+    console.log("deleted group match");
+}
+exports.deleteGroupmatch = deleteGroupmatch;
+async function getExhibition() {
+    return await client.db(process.env.DBNAME).collection("signup").findOne({ _id: 5 });
+}
+exports.getExhibition = getExhibition;
+async function updateExhibition(ex) {
+    await client.db(process.env.DBNAME).collection("signup").updateOne({ _id: 5 }, { $set: ex });
+}
+exports.updateExhibition = updateExhibition;
+async function insertExhibition() {
+    let e = {
+        _id: 5,
+        cooldowns: [],
+        activematches: [],
+        activeoffers: []
+    };
+    await client.db(process.env.DBNAME).collection("signup").insertOne(e);
+}
+exports.insertExhibition = insertExhibition;

@@ -34,3 +34,13 @@ export declare const ModChallongeHelp: {
     }[];
     timestamp: Date;
 };
+export declare const DuelHelp: {
+    title: string;
+    color: string;
+    description: string;
+    fields: {
+        name: string;
+        value: string;
+    }[];
+    timestamp: Date;
+};

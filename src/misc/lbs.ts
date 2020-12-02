@@ -62,7 +62,7 @@ async function ratingslistEmbed(page: number = 1, client: Discord.Client, rating
 
 export async function winningLB(message: Discord.Message, client: Discord.Client, args: string[]) {
     
-    let symbol: "wins" | "points" | "loss"  = "wins"
+    let symbol: "wins" | "points" | "loss" | "memesvoted"  = "wins"
 
     //@ts-ignore
     let page:number = typeof args[1] == "undefined" ? isNaN(parseInt(args[0])) ? 1 : parseInt(args[0]) : args[1];;
@@ -71,6 +71,7 @@ export async function winningLB(message: Discord.Message, client: Discord.Client
     switch (args[0]?.[0]) {
         case "p": symbol = "points"; break;
         case "l": symbol = "loss"; break;
+        case "v": symbol = "memesvoted"; break;
         default: symbol = "wins";
     }
     let ratings = await getAllProfiles(symbol)
@@ -92,7 +93,7 @@ export async function winningLB(message: Discord.Message, client: Discord.Client
     });
 }
 
-async function winlistEmbed(page: number = 1, client: Discord.Client, ratings: user[], ...rest:any){
+async function winlistEmbed(page: number = 1, client: Discord.Client, ratings: user[],...rest:any){
 
     //let signup = await getSignups()
     //let guild = client.guilds.cache.get("719406444109103117")
@@ -102,10 +103,13 @@ async function winlistEmbed(page: number = 1, client: Discord.Client, ratings: u
     let index = (0 + page - 1) * 10
     for (let i = index; i < index + 10; i++){
 
+        let obj = ratings[i]
         try{
             fields.push({
                 name: `${i+1}) ${await (await client.users.fetch(ratings[i]._id)).username}`,
-                value: `Points: ${ratings[i].points}\nWins: ${ratings[i].wins}\nLoss: ${ratings[i].loss}\n`
+                //`${rest[1] === "memesvoted" ? "memesvoted" : rest[1]}`
+                //@ts-ignore
+                value: `${rest[1] === "memesvoted" ? "Memes voted on" : `${rest[1][0].toUpperCase()}${rest[1].substring(1)}`}: ${obj[rest[1]]}`
             });
         }
         catch{
@@ -116,7 +120,7 @@ async function winlistEmbed(page: number = 1, client: Discord.Client, ratings: u
 
 
     return {
-        title: `Leaderboard sorted by ${rest[1]}. You are on page ${page! || 1} of ${Math.floor(ratings.length / 10) + 1}`,
+        title: `Leaderboard sorted by ${rest[1] === "votes" ? "Memes voted for" : rest[1]}. You are on page ${page! || 1} of ${Math.floor(ratings.length / 10) + 1}`,
         description: `Your rank is: ${ratings.findIndex(item => item._id == rest[0]) + 1}`,
         fields,
         color: "#d7be26",

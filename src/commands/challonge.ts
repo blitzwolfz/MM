@@ -3,6 +3,7 @@ import * as Discord from "discord.js";
 import { getSignups, getMatchlist, updateMatchlist, insertMatchlist, insertQuallist, getQuallist, updateQuallist, updateProfile } from "../misc/db";
 import { matchlist, quallist } from "../misc/struct";
 import { indexOf2d } from "../misc/utils";
+//import { indexOf2d } from "../misc/utils";
 
 
 const challonge = require("challonge-js")
@@ -108,6 +109,7 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
         for (let i = 0; i < matchlist.users.length; i++) {
             console.log("ok")
             let name = (await (await guild!.members.fetch(matchlist.users[i])).nickname) || await (await disclient.users.fetch(matchlist.users[i])).username
+            //let name = matchlist.users[i]
 
 
 
@@ -162,8 +164,10 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
 
         for(let i = 0; i < match.users.length; i++){
             console.log(match.users[i])
-            let name = ((await (await guild!.members.fetch(match.users[i])).nickname) || await (await disclient.users.fetch(match.users[i])).username)
-            names.push([name, match.users[i]])
+            try{
+                let name = ((await (await guild!.members.fetch(match.users[i])).nickname) || await (await disclient.users.fetch(match.users[i])).username)
+                names.push([name, match.users[i]])
+            } catch { message.channel.send(`${match.users[i]} is fucked`)}
             //names.concat([((await (await message.guild!.members.fetch(i)).nickname) || await (await disclient.users.fetch(i)).username), i])
         }
 
@@ -272,7 +276,6 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
     }
     return message.reply("Made all channels")
 }
-
 export async function QualChannelCreation(message: Discord.Message, args: string[]) {
 
     let groups = await getQuallist()
@@ -283,20 +286,21 @@ export async function QualChannelCreation(message: Discord.Message, args: string
     for(let i = 0; i < groups.users.length; i++){
 
         if(groups.users[i].length > 0){
-                    
-            await message.guild!.channels.create(`Group ${i+1}`, { type: 'text', topic: `Round ${args[0]}` })
-            .then(async channel => {
-                let category = await message.guild!.channels.cache.find(c => c.name == "qualifiers" && c.type == "category");
 
-                if (!category) throw new Error("Category channel does not exist");
-                await channel.setParent(category.id);
-                
+            let category = await message.guild!.channels.cache.find(c => c.name == "qualifiers" && c.type == "category");
+                    
+            await message.guild!.channels.create(`Group ${i+1}`, { type: 'text', topic: `Round ${args[0]}` , parent: category!.id })
+            .then(async channel => {
+
+                // if (!category) throw new Error("Category channel does not exist");
+                // await channel.setParent("745171069601579029");
+                // // await channel.lockPermissions()
                 let string = ""
 
                 for (let u of groups.users[i]){
                     string += `<@${u}> `
                 }
-                await channel.send(`${string}, Round ${args[0]} has begun, and you have ${time}h. Contact a mod to being your portion!`)
+                await channel.send(`${string}, Portion ${args[0]} has begun, and you have ${time}h to complete it. Contact a ref to begin your portion!`)
             });
         }
 
@@ -431,12 +435,14 @@ export async function GroupSearch(message: Discord.Message, args: string[]) {
     let signup = await getQuallist()
     let id = (message.mentions?.users?.first()?.id || args[0])
     if (!id) return message.reply("invaild input. Please use User ID or a User mention")
+
+    //let name = await (await message.guild!.members.cache.get(id))!.nickname || await (await client.users.fetch(id)).username
     
 
     for (let i = 0; i < signup.users.length; i++) {
 
         if (signup.users[i].includes(id)) {
-            return await message.reply(`${await (await message.guild!.members.cache.get(id))!.nickname} is in <#${message.guild!.channels.cache.find(channel => channel.name === `group-${i + 1}`)!.id}>`)
+            return await message.reply(`This person is in <#${message.guild!.channels.cache.find(channel => channel.name === `group-${i + 1}`)!.id}>`)
         }
     }
 
@@ -489,7 +495,8 @@ export async function declarequalwinner(message: Discord.Message, client: Discor
                     await updateMatchlist(match)
                     updateProfile(id, "wins", 1)
                     updateProfile(id, "points", 25)
-                    return message.reply(" added user.")
+                    await message.mentions!.users!.first()?.send("Congrats on winning your qualifer. Now get ready for the bracket portion")
+                    return message.reply("added user.")
                 }
             }
 
@@ -506,7 +513,8 @@ export async function declarequalwinner(message: Discord.Message, client: Discor
                 newmatch.users.push(id)
 
                 await insertMatchlist(newmatch)
-                return message.reply(", added user.")
+                await message.mentions!.users!.first()?.send("Congrats on winning your qualifer. Now get ready for the bracket portion")
+                return message.reply("added user.")
 
             }
 

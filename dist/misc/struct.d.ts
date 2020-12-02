@@ -3,7 +3,9 @@ export interface activematch {
     channelid: string;
     messageID: string;
     split: boolean;
+    exhibition: boolean;
     template: string;
+    theme: string;
     tempfound: boolean;
     p1: {
         userid: string;
@@ -37,11 +39,28 @@ export interface qualmatch {
     playerids: Array<string>;
     octime: number;
     template: string;
+    istheme: boolean;
     split: boolean;
     votes: Array<Array<string>>;
     playersdone: Array<string>;
     votingperiod: boolean;
     votetime: number;
+}
+export interface groupmatch {
+    _id: string;
+    split: boolean;
+    template: Array<string>;
+    groups: Array<groupstruct>;
+    votingperiod: boolean;
+    votetime: number;
+}
+export interface groupstruct {
+    groupsplit: boolean;
+    groupplayers: Array<string>;
+    captain: string;
+    memes: Array<string>;
+    halfreminder: boolean;
+    fivereminder: boolean;
 }
 export interface players {
     userid: string;
@@ -54,6 +73,7 @@ export interface players {
 export interface user {
     _id: string;
     name: string;
+    memesvoted: number;
     points: number;
     wins: number;
     loss: number;
@@ -94,7 +114,18 @@ export interface modprofile {
 export interface randomtempstruct {
     _id: string;
     found: boolean;
+    istheme: boolean;
     messageid: string;
     url: string;
+    time: number;
+}
+export interface exhibition {
+    _id: 5;
+    cooldowns: Array<cooldown>;
+    activematches: Array<string>;
+    activeoffers: Array<cooldown>;
+}
+export interface cooldown {
+    user: string;
     time: number;
 }

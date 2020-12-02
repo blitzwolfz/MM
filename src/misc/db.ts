@@ -2,7 +2,9 @@ import * as mongo from "mongodb"
 
 require("dotenv").config();
 
-import { activematch, qualmatch, user, signups, matchlist, verificationform, quallist, cockratingInterface, modprofile, randomtempstruct } from "./struct";
+import { activematch, qualmatch, user, signups, matchlist, 
+    verificationform, quallist, cockratingInterface, 
+    modprofile, randomtempstruct, groupmatch, exhibition } from "./struct";
 
 const MongoClient = mongo.MongoClient
 //const assert = require("assert")
@@ -90,10 +92,14 @@ export async function updateProfile(_id:string, field:string, num: any): Promise
     if(field === "name"){
         await client.db(process.env.DBNAME).collection("users").updateOne({_id:_id}, {$set:{[field]:num}})!;
     }
-    
     else{
         await client.db(process.env.DBNAME).collection("users").updateOne({_id:_id}, {$inc:{[field]:num}})!;
     }
+}
+
+export async function changefield(): Promise<void> {
+    await client.db(process.env.DBNAME).collection("users").updateMany( {}, { $rename: { "votes": "memesvoted" } } )  
+    
 }
 
 export async function addUser(user:user): Promise<void> {
@@ -225,6 +231,41 @@ export async function gettempStruct(_id: string): Promise<randomtempstruct> {
     return client.db(process.env.DBNAME).collection("tempstruct").findOne({_id:_id})!;
 }
 
+export async function inserttemplate(lists:any[]) {
+    let e = {
+        _id:"templatelist",
+        list:lists
+    }
+
+    console.log(e)
+    await client.db(process.env.DBNAME).collection("tempstruct").insertOne(e)    
+}
+
+export async function gettemplatedb(): Promise<{_id:"templatelist", list: string[]}> {
+    return client.db(process.env.DBNAME).collection("tempstruct").findOne({_id:"templatelist"})!;   
+}
+
+export async function updatetemplatedb(lists:string[]) {
+    let e = {
+        _id:"templatelist",
+        list:lists
+    }
+
+    console.log(e)
+    await client.db(process.env.DBNAME).collection("tempstruct").updateOne({_id:"templatelist"}, {$set: e})    
+}
+
+export async function getthemes(): Promise<{
+    _id:"themelist",
+    list:string[]
+}>{
+    return client.db(process.env.DBNAME).collection("tempstruct").findOne({_id:"themelist"})!;   
+}
+
+export async function updatedoc(st:{_id:"themelist",list:string[]}) {
+    await client.db(process.env.DBNAME).collection("tempstruct").updateOne({_id:"themelist"}, {$set: st})!;
+}
+
 export async function inserttempStruct(struct:randomtempstruct): Promise<void> {
     await client.db(process.env.DBNAME).collection("tempstruct").insertOne(struct)!;
 }
@@ -238,5 +279,60 @@ export async function deletetempStruct(_id:string): Promise<void>{
 }
 
 export async function getalltempStructs(): Promise<randomtempstruct[]> {
-    return client.db(process.env.DBNAME).collection("tempstruct").find({}).toArray()!;
+    let e = await client.db(process.env.DBNAME).collection("tempstruct").find({}).toArray()!;
+
+    e.splice(0, 1)
+
+    return e
+}
+
+/*Group struct*/
+
+export async function insertGroupmatch(match: groupmatch): Promise<void> {
+    await client.db(process.env.DBNAME).collection("groupmatch").insertOne(match);
+    console.log("Inserted ActiveMatches!")
+}
+
+export async function updateGroupmatch(activematch: groupmatch): Promise<void> {
+    let _id = activematch._id
+    await client.db(process.env.DBNAME).collection("groupmatch").updateOne({_id}, {$set: activematch});
+    console.log("Updated Group Match!")
+}
+
+export async function getGroupmatches(): Promise<groupmatch[]>{
+    console.log("Getting groupmatches")
+    // return await client.db(process.env.DBNAME).collection("activematch").find({}, {projection:{ _id: 0 }}).select(['activematch']).toArray();
+    return await client.db(process.env.DBNAME).collection("groupmatch").find({}, {projection:{_id:0}}).toArray();
+}
+
+export async function getGroupmatch(_id:string): Promise<groupmatch>{
+    return await client.db(process.env.DBNAME).collection("groupmatch").findOne({_id})!;
+}
+
+export async function deleteGroupmatch(match: groupmatch): Promise<void>{
+    let _id = match._id
+    await client.db(process.env.DBNAME).collection("groupmatch").deleteOne({_id})
+    console.log("deleted group match")
+}
+
+
+//exhibition matches
+
+export async function getExhibition(): Promise<exhibition>{
+    return await client.db(process.env.DBNAME).collection("signup").findOne({ _id: 5 })!;
+}
+
+export async function updateExhibition(ex: exhibition){
+    await client.db(process.env.DBNAME).collection("signup").updateOne({_id: 5}, {$set: ex});        
+}
+
+export async function insertExhibition(){
+
+    let e:exhibition ={
+        _id: 5,
+        cooldowns: [],
+        activematches: [],
+        activeoffers: []
+    }
+    await client.db(process.env.DBNAME).collection("signup").insertOne(e);        
 }

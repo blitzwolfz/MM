@@ -28,9 +28,10 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
         let matches: activematch[] = await getActive()
 
         for (const match of matches){
-            if(match.p1.userid === message.author.id && !match.p1.memedone){
+            if((match.p1.userid === message.author.id) && !match.p1.memedone && !match.p1.memelink.length){
+                match.p1.memelink = (message.attachments.array()[0].url)
                 match.p1.memedone = true
-                match.p1.memelink = message.attachments.array()[0].url
+
                 if(match.split){
                     match.p1.donesplit = true
                 }
@@ -46,8 +47,8 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
                 if(match.p1.donesplit && match.p2.donesplit && match.split){
                     console.log("not a split match")
                     match.split = false
-                    match.p1.time = Math.floor(Date.now() / 1000) - 1800
-                    match.p2.time = Math.floor(Date.now() / 1000) - 1800
+                    match.p1.time = Math.floor(Date.now() / 1000) - 3200
+                    match.p2.time = Math.floor(Date.now() / 1000) - 3200
                     // match.votingperiod = true
                     // match.votetime = Math.floor(Date.now() / 1000)
                 }
@@ -55,9 +56,10 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
                 return;
             }
 
-            if(match.p2.userid === message.author.id && !match.p2.memedone){
+            if((match.p2.userid === message.author.id) && !match.p2.memedone && !match.p2.memelink.length){
+
+                match.p2.memelink = (message.attachments.array()[0].url)
                 match.p2.memedone = true
-                match.p2.memelink = message.attachments.array()[0].url
 
                 if(match.split){
                     match.p2.donesplit = true
@@ -75,11 +77,12 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
                 if(match.p1.donesplit && match.p2.donesplit && match.split){
                     console.log("not a split match")
                     match.split = false
-                    match.p1.time = Math.floor(Date.now() / 1000) - 1800
-                    match.p2.time = Math.floor(Date.now() / 1000) - 1800
+                    match.p1.time = Math.floor(Date.now() / 1000) - 3200
+                    match.p2.time = Math.floor(Date.now() / 1000) - 3200
                     // match.votingperiod = true
                     // match.votetime = Math.floor(Date.now() / 1000)
                 }
+                
                 await updateActive(match)
                 return;
             }

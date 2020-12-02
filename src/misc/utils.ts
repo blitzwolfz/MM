@@ -1,5 +1,6 @@
 import * as Discord from "discord.js"
-import { getMatch, getAllProfiles, updateProfile } from "./db";
+import { getMatch, getAllProfiles, updateProfile, getQual } from "./db";
+import { clearmodstats } from "./modprofiles";
 
 export async function getUser(mention: string) {
   // The id is the first and only match found by the RegEx.
@@ -72,8 +73,11 @@ export function indexOf2d (arr:any[][], item:any, searchpos: number, returnpos: 
   for (let i = 0; i < arr.length; i++){
     console.log(arr[i][searchpos])
     console.log(arr[i][returnpos])
+    
     if(arr[i][searchpos] == item){
+      
       console.log(arr[i][returnpos])
+      
       return arr[i][returnpos]
     }
   }
@@ -98,6 +102,8 @@ export function dateBuilder () {
 export async function reminders(message: Discord.Message, client:Discord.Client, args:string[]) {
   let catchannels = message!.guild!.channels.cache.array()!
 
+  let pp = 0
+
   for(let channel of catchannels){
 
     try{
@@ -108,33 +114,73 @@ export async function reminders(message: Discord.Message, client:Discord.Client,
           if(match.split){
             if(!match.p1.memedone && !match.p2.memedone){
               await (<Discord.TextChannel>client.channels.cache.get(channel.id))
-              .send(`<@${match.p1.userid}> and <@${match.p2.userid}> you have ${args[0]}h left to complete your match`)
+              .send(`<@${match.p1.userid}>and <@${match.p2.userid}> you have ${args[0]}h left to complete your match`)
             }
             
             else if(match.p1.memedone){
               await (<Discord.TextChannel>client.channels.cache.get(channel.id))
-              .send(`<@${match.p2.userid}> you have ${args[0]}h left to complete your match`)
+              .send(`<@${match.p2.userid}>you have ${args[0]}h left to complete your match`)
             }
     
             else if(match.p2.memedone){
               await (<Discord.TextChannel>client.channels.cache.get(channel.id))
-              .send(`<@${match.p1.userid}> you have ${args[0]}h left to complete your match`)
+              .send(`<@${match.p1.userid}>you have ${args[0]}h left to complete your match`)
             }
           }
         }
   
         else{
+          let all = (await (<Discord.TextChannel>await client.channels.fetch(channel.id))!
+          .messages.fetch({limit:100}))
+      
+          console.log(`The length is: ${all.array().length}`)
+      
+          if(all.array().length === 1){
+            let m = all.first()!
+      
+            await m.channel
+            .send(`<@${m.mentions.users.first()!.id}> and <@${m.mentions.users.array()[1]!.id}>, you have ${args[0]}h left to complete your match`)
+          }
+
+        }
+      }
+
+      else if(channel.parent && channel.parent!.name === "qualifiers"){
+        if (await getQual(channel.id) && !args[2]) {
+          let match = await getQual(channel.id)
+
+          let s = ""
+
+          if(match.votingperiod === true) continue;
+
+          for (let i = 0; i < match.players.length; i++){
+            if(!match.playersdone.includes(match.players[i].userid)){
+              s += `<@${match.players[i].userid}> `
+            }
+          }
+
+          
+          await (<Discord.TextChannel>client.channels.cache.get(channel.id))
+          .send(`${s} you have ${args[0]}h left to complete portion ${args[1]}`)
+
+        }
+  
+        if(args[2] === "start"){
           let all = (await (<Discord.TextChannel>await client.channels.fetch(channel.id)!)
           .messages.fetch({limit:100}))
 
           console.log(`The length is: ${all.array().length}`)
 
-          if(all.array().length === 1){
-            let m = all.last()!
-  
-            await m.channel
-            .send(`<@${m.mentions.users.first()!.id}> and <@${m.mentions.users.array()[1]!.id}>, you have ${args[0]}h left to complete your match`)
+          let m = all.last()!
+
+          let s = ""
+
+          for(let e = 0; e < m.mentions.users.array().length; e++){
+            s += `<@${m.mentions.users.array()[e].id}> `
           }
+  
+          await m.channel
+          .send(`<@${s}>, you have ${args[0]}h left to complete portion ${args[1]}`)
 
         }
       }
@@ -142,8 +188,79 @@ export async function reminders(message: Discord.Message, client:Discord.Client,
       continue
     }
 
-  }
+    pp += 1;
 
+  }
+  await message.channel.send(`<@${message.author.id}> gets ${pp} good boy points`)
+}
+
+export async function autoreminders(client:Discord.Client) {
+  let catchannels = client.guilds.cache.get("719406444109103117")!.channels.cache.array()!
+
+  
+  for(let channel of catchannels){
+
+    let all = (await (<Discord.TextChannel>await client.channels.fetch(channel.id))!
+    .messages.fetch({limit:100}))
+
+    let now = Math.round((Math.floor(Date.now()/1000) - all.first()!.createdTimestamp)/100)*100
+
+    try{
+      if(channel.parent && channel.parent!.name === "matches"){
+
+        if (await getMatch(channel.id)) {
+          let match = await getMatch(channel.id)
+
+          let stmsg:string = ""
+
+          if(!match.p1.memedone) stmsg += `<@${match.p1.userid}>`
+          if(!match.p2.memedone) stmsg += `<@${match.p2.userid}>`
+  
+          if(match.split){
+           
+            if(stmsg){
+
+              if(now === 43200 ){
+                await (<Discord.TextChannel>client.channels.cache.get(channel.id))
+                .send(`${stmsg} you have 12h left to complete your match`)
+              }
+
+              else if(now === 86400 ){
+                await (<Discord.TextChannel>client.channels.cache.get(channel.id))
+                .send(`${stmsg} you have 24h left to complete your match`)
+              }
+
+              else if(now === 7200 ){
+                await (<Discord.TextChannel>client.channels.cache.get(channel.id))
+                .send(`${stmsg} you have 2h left to complete your match`)
+              }
+
+            }
+          }
+        }
+  
+        else{
+          if(now === 43200 ){
+            await (<Discord.TextChannel>client.channels.cache.get(channel.id))
+            .send(`<@${all.first()?.mentions.users.array()[0].id}><@${all.first()?.mentions.users.array()[1].id}> you have 12h left to complete your match`)
+          }
+
+          else if(now === 86400 ){
+            await (<Discord.TextChannel>client.channels.cache.get(channel.id))
+            .send(`<@${all.first()?.mentions.users.array()[0].id}><@${all.first()?.mentions.users.array()[1].id}> you have 24h left to complete your match`)
+          }
+
+          else if(now === 7200 ){
+            await (<Discord.TextChannel>client.channels.cache.get(channel.id))
+            .send(`<@${all.first()?.mentions.users.array()[0].id}><@${all.first()?.mentions.users.array()[1].id}> you have 2h left to complete your match`)
+          }
+
+        }
+      }
+    } catch {
+      continue
+    }
+  }
 }
 
 export async function deletechannels(message: Discord.Message, args:string[]) {
@@ -172,7 +289,7 @@ export async function updatesomething(message:Discord.Message){
   try{
     for(let u of allusers){
       try{
-        await updateProfile(u._id, "points", 0)
+        await updateProfile(u._id, "memesvoted", 0)
       }
 
       catch (err) {
@@ -185,4 +302,147 @@ export async function updatesomething(message:Discord.Message){
   }
 
   await message.channel.send("Done")
+}
+
+export async function createrole(message: Discord.Message, args: string[]){
+
+  if(!args) return message.reply("you forgot to add command flags. `!createrole <name> <multiple | deafult is 1>`")
+
+  let name = args[0]
+
+  if(!args[0]) return message.reply("Please give a name!!!!")
+
+  //let colour : "GREY" 
+
+  let amount: number = typeof args[1] == "undefined" ? 1 : parseInt(args[1])
+
+  if(amount === 1){
+    try{
+      message.guild!.roles.create({
+        data: {
+          name: name,
+          color: 'GREY',
+        },
+        reason: 'idfk',
+      })
+        .then(console.log)
+        .catch(console.error);
+    } catch (err) {
+      message.channel.send("```" + err + "```")
+      return message.reply(", there is an error! Ping blitz and show him the error.")
+    }
+  }
+
+  else if (amount > 1 && amount <= 20){
+    for(let x = 0; x < amount; x++){
+      try{
+        message.guild!.roles.create({
+          data: {
+            name: `${name}${x+1}`,
+            color: 'GREY',
+          },
+          reason: 'idfk',
+        }).then(async r =>{
+          message.channel.send(`Role ${name}${x}: <@&${r.id}>`)
+        })
+      } catch (err) {
+        message.channel.send("```" + err + "```")
+        return message.reply(", there is an error! Ping blitz and show him the error.")
+      }
+    }
+  }
+}
+
+
+export async function clearstats(message: Discord.Message){
+
+  let profiles = await getAllProfiles("memesvoted")
+
+  for(let i = 0; i < profiles.length; i++){
+    await updateProfile(profiles[i]._id, "memesvoted", -(profiles[i].memesvoted))
+  }
+
+  await message.reply("Voting stats been cleared have been cleared")
+
+  await clearmodstats(message)
+
+}
+
+export async function qualifierresultadd(channel:Discord.TextChannel, client:Discord.Client, msg1:string, msg2:string){
+    //let c = <Discord.TextChannel>await client.channels.fetch("722291182461386804")
+
+    let m = await channel.messages.fetch(msg1)
+
+    let em = m.embeds[0].fields
+
+    em.sort(function(a, b) {
+      //ratings.sort((a: modprofile, b: modprofile) => (b.modactions) - (a.modactions));
+      return ((b.name.length) - (a.name.length));
+      //Sort could be modified to, for example, sort on the age 
+      // if the name is the same.
+    });
+
+    //let c1 = <Discord.TextChannel>await client.channels.fetch("722291182461386804")
+
+    let m1 = await channel.messages.fetch(msg2)
+
+    let em1 = m1.embeds[0].fields
+
+    em1.sort(function(a, b) {
+      //ratings.sort((a: modprofile, b: modprofile) => (b.modactions) - (a.modactions));
+      return ((b.name.length) - (a.name.length));
+      //Sort could be modified to, for example, sort on the age 
+      // if the name is the same.
+    });
+
+    const fields = [];
+
+    
+
+    for (let i = 0; i < em1.length; i++){
+
+      //parseInt(em[i].value[em[i].value.split(" ").findIndex(x => x === "Earned") + 1].substr(0, 2)) + parseInt(em1[i].value[em[i].value.split(" ").findIndex(x => x === "Earned") + 1].substr(0, 2))
+      console.log(`${em[i].value.toLowerCase().includes("earned") ? (em[i].value.split(" ")[5].substr(0, 2)+ " ") : "0" }`)
+      console.log(`${em1[i].value.toLowerCase().includes("earned") ? (em1[i].value.split(" ")[5].substr(0, 2)+ " ") : "0" }`)
+      fields.push({
+          name: `${em1[i].name}`,
+          //value: `${match.votes[i].length > 0 ? `Came in with ${match.votes[i].length} vote(s)` : `Failed to submit meme`}`
+          value: `${parseInt(`${em[i].value.toLowerCase().includes("earned") ? (em[i].value.split(" ")[5].substr(0, 2)+ " ") : "0" }`) + parseInt(`${em1[i].value.toLowerCase().includes("earned") ? (em1[i].value.split(" ")[5].substr(0, 2)+ " ") : "0" }`)} `,
+      });
+    }
+
+    fields.sort(function(a, b) {
+      //ratings.sort((a: modprofile, b: modprofile) => (b.modactions) - (a.modactions));
+      return ((parseInt(b.value)) - (parseInt(a.value)));
+      //Sort could be modified to, for example, sort on the age 
+      // if the name is the same.
+    });
+
+    for(let v of fields){
+      v.value += " Points in total"
+    }
+    
+    channel.send({embed: {
+      title: `Final Results for ${channel.name}`,
+      description: `Top two move on`,
+      fields,
+      color: "#d7be26",
+      timestamp: new Date()
+  }})
+
+  await (await (<Discord.TextChannel>client.channels.cache.get("722291182461386804")))
+  .send({embed: {
+    title: `Final Results for Group ${channel.name}`,
+    description: `Top two move on`,
+    fields,
+    color: "#d7be26",
+    timestamp: new Date()
+  }})
+
+}
+
+
+export async function toHHMMSS(timestamp: number, howlong: number) {
+  
+  return new Date((howlong - (Math.floor(Date.now() / 1000) - timestamp)) * 1000).toISOString().substr(11, 8)
 }
