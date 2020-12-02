@@ -23,7 +23,7 @@ import {
 import { duelcheck, exhibition } from "./commands/exhibitions"
 import { qualend, end, cancelmatch } from "./commands/winner";
 import { vs } from "./commands/card";
-import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, createrole, clearstats } from "./misc/utils";
+import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, createrole, clearstats, qualifierresultadd } from "./misc/utils";
 import { ModHelp, UserHelp, ModSignupHelp, ModChallongeHelp, DuelHelp } from "./commands/help";
 
 import {
@@ -695,6 +695,11 @@ client.on("message", async message => {
   else if (command === "search") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await GroupSearch(message, args)
+  }
+
+  else if(command === "qrd"){
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
+    await qualifierresultadd(await (<Discord.TextChannel>client.channels.cache.get(message.channel.id)), client, args[0], args[1])
   }
 
   else if (command === "exhibition" || command === "duel") {

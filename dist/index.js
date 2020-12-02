@@ -464,6 +464,11 @@ client.on("message", async (message) => {
             return message.reply("You don't have those premissions");
         await challonge_1.GroupSearch(message, args);
     }
+    else if (command === "qrd") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
+        await utils_1.qualifierresultadd(await client.channels.cache.get(message.channel.id), client, args[0], args[1]);
+    }
     else if (command === "exhibition" || command === "duel") {
         if (args[0].toLowerCase() === "help") {
             await message.channel.send({ embed: help_1.DuelHelp });
