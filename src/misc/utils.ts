@@ -200,12 +200,13 @@ export async function autoreminders(client:Discord.Client) {
   
   for(let channel of catchannels){
 
-    let all = (await (<Discord.TextChannel>await client.channels.fetch(channel.id))!
-    .messages.fetch({limit:100}))
-
-    let now = Math.round((Math.floor(Date.now()/1000) - all.first()!.createdTimestamp)/100)*100
-
     try{
+
+      let all = (await (<Discord.TextChannel>await client.channels.fetch(channel.id))!
+      .messages.fetch({limit:100}))
+  
+      let now = Math.round((Math.floor(Date.now()/1000) - all.first()!.createdTimestamp)/100)*100
+
       if(channel.parent && channel.parent!.name === "matches"){
 
         if (await getMatch(channel.id)) {

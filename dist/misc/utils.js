@@ -146,10 +146,10 @@ async function autoreminders(client) {
     var _a, _b, _c, _d, _e, _f;
     let catchannels = client.guilds.cache.get("719406444109103117").channels.cache.array();
     for (let channel of catchannels) {
-        let all = (await (await client.channels.fetch(channel.id))
-            .messages.fetch({ limit: 100 }));
-        let now = Math.round((Math.floor(Date.now() / 1000) - all.first().createdTimestamp) / 100) * 100;
         try {
+            let all = (await (await client.channels.fetch(channel.id))
+                .messages.fetch({ limit: 100 }));
+            let now = Math.round((Math.floor(Date.now() / 1000) - all.first().createdTimestamp) / 100) * 100;
             if (channel.parent && channel.parent.name === "matches") {
                 if (await db_1.getMatch(channel.id)) {
                     let match = await db_1.getMatch(channel.id);
