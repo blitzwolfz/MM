@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.toHHMMSS = exports.qualifierresultadd = exports.clearstats = exports.createrole = exports.updatesomething = exports.deletechannels = exports.reminders = exports.dateBuilder = exports.indexOf2d = exports.forwardsFilter = exports.backwardsFilter = exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
+exports.toHHMMSS = exports.qualifierresultadd = exports.clearstats = exports.createrole = exports.updatesomething = exports.deletechannels = exports.autoreminders = exports.reminders = exports.dateBuilder = exports.indexOf2d = exports.forwardsFilter = exports.backwardsFilter = exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
 const db_1 = require("./db");
 const modprofiles_1 = require("./modprofiles");
 async function getUser(mention) {
@@ -142,6 +142,61 @@ async function reminders(message, client, args) {
     await message.channel.send(`<@${message.author.id}> gets ${pp} good boy points`);
 }
 exports.reminders = reminders;
+async function autoreminders(client) {
+    var _a, _b, _c, _d, _e, _f;
+    let catchannels = client.guilds.cache.get("719406444109103117").channels.cache.array();
+    for (let channel of catchannels) {
+        let all = (await (await client.channels.fetch(channel.id))
+            .messages.fetch({ limit: 100 }));
+        let now = Math.round((Math.floor(Date.now() / 1000) - all.first().createdTimestamp) / 100) * 100;
+        try {
+            if (channel.parent && channel.parent.name === "matches") {
+                if (await db_1.getMatch(channel.id)) {
+                    let match = await db_1.getMatch(channel.id);
+                    let stmsg = "";
+                    if (!match.p1.memedone)
+                        stmsg += `<@${match.p1.userid}>`;
+                    if (!match.p2.memedone)
+                        stmsg += `<@${match.p2.userid}>`;
+                    if (match.split) {
+                        if (stmsg) {
+                            if (now === 43200) {
+                                await client.channels.cache.get(channel.id)
+                                    .send(`${stmsg} you have 12h left to complete your match`);
+                            }
+                            else if (now === 86400) {
+                                await client.channels.cache.get(channel.id)
+                                    .send(`${stmsg} you have 24h left to complete your match`);
+                            }
+                            else if (now === 7200) {
+                                await client.channels.cache.get(channel.id)
+                                    .send(`${stmsg} you have 2h left to complete your match`);
+                            }
+                        }
+                    }
+                }
+                else {
+                    if (now === 43200) {
+                        await client.channels.cache.get(channel.id)
+                            .send(`<@${(_a = all.first()) === null || _a === void 0 ? void 0 : _a.mentions.users.array()[0].id}><@${(_b = all.first()) === null || _b === void 0 ? void 0 : _b.mentions.users.array()[1].id}> you have 12h left to complete your match`);
+                    }
+                    else if (now === 86400) {
+                        await client.channels.cache.get(channel.id)
+                            .send(`<@${(_c = all.first()) === null || _c === void 0 ? void 0 : _c.mentions.users.array()[0].id}><@${(_d = all.first()) === null || _d === void 0 ? void 0 : _d.mentions.users.array()[1].id}> you have 24h left to complete your match`);
+                    }
+                    else if (now === 7200) {
+                        await client.channels.cache.get(channel.id)
+                            .send(`<@${(_e = all.first()) === null || _e === void 0 ? void 0 : _e.mentions.users.array()[0].id}><@${(_f = all.first()) === null || _f === void 0 ? void 0 : _f.mentions.users.array()[1].id}> you have 2h left to complete your match`);
+                    }
+                }
+            }
+        }
+        catch {
+            continue;
+        }
+    }
+}
+exports.autoreminders = autoreminders;
 async function deletechannels(message, args) {
     let catchannels = message.guild.channels.cache.array();
     for (let channel of catchannels) {

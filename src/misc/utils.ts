@@ -194,6 +194,75 @@ export async function reminders(message: Discord.Message, client:Discord.Client,
   await message.channel.send(`<@${message.author.id}> gets ${pp} good boy points`)
 }
 
+export async function autoreminders(client:Discord.Client) {
+  let catchannels = client.guilds.cache.get("719406444109103117")!.channels.cache.array()!
+
+  
+  for(let channel of catchannels){
+
+    let all = (await (<Discord.TextChannel>await client.channels.fetch(channel.id))!
+    .messages.fetch({limit:100}))
+
+    let now = Math.round((Math.floor(Date.now()/1000) - all.first()!.createdTimestamp)/100)*100
+
+    try{
+      if(channel.parent && channel.parent!.name === "matches"){
+
+        if (await getMatch(channel.id)) {
+          let match = await getMatch(channel.id)
+
+          let stmsg:string = ""
+
+          if(!match.p1.memedone) stmsg += `<@${match.p1.userid}>`
+          if(!match.p2.memedone) stmsg += `<@${match.p2.userid}>`
+  
+          if(match.split){
+           
+            if(stmsg){
+
+              if(now === 43200 ){
+                await (<Discord.TextChannel>client.channels.cache.get(channel.id))
+                .send(`${stmsg} you have 12h left to complete your match`)
+              }
+
+              else if(now === 86400 ){
+                await (<Discord.TextChannel>client.channels.cache.get(channel.id))
+                .send(`${stmsg} you have 24h left to complete your match`)
+              }
+
+              else if(now === 7200 ){
+                await (<Discord.TextChannel>client.channels.cache.get(channel.id))
+                .send(`${stmsg} you have 2h left to complete your match`)
+              }
+
+            }
+          }
+        }
+  
+        else{
+          if(now === 43200 ){
+            await (<Discord.TextChannel>client.channels.cache.get(channel.id))
+            .send(`<@${all.first()?.mentions.users.array()[0].id}><@${all.first()?.mentions.users.array()[1].id}> you have 12h left to complete your match`)
+          }
+
+          else if(now === 86400 ){
+            await (<Discord.TextChannel>client.channels.cache.get(channel.id))
+            .send(`<@${all.first()?.mentions.users.array()[0].id}><@${all.first()?.mentions.users.array()[1].id}> you have 24h left to complete your match`)
+          }
+
+          else if(now === 7200 ){
+            await (<Discord.TextChannel>client.channels.cache.get(channel.id))
+            .send(`<@${all.first()?.mentions.users.array()[0].id}><@${all.first()?.mentions.users.array()[1].id}> you have 2h left to complete your match`)
+          }
+
+        }
+      }
+    } catch {
+      continue
+    }
+  }
+}
+
 export async function deletechannels(message: Discord.Message, args:string[]) {
   let catchannels = message!.guild!.channels.cache.array()!
 

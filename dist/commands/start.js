@@ -463,6 +463,7 @@ async function running(client) {
         }
     }
     await exhibitions_1.deleteExhibitionchannels(client);
+    await utils_1.autoreminders(client);
 }
 exports.running = running;
 async function qualrunning(client) {
