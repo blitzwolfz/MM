@@ -1205,57 +1205,90 @@ export async function reload(message: discord.Message, client: discord.Client) {
                 && ((Math.floor(Date.now() / 1000) - match.p1.time <= 3600) && match.p1.memedone === true))) {
 
 
-                if (Math.floor(Math.random() * (5 - 1) + 1) % 2 === 1) {
-                    let temp = match.p1
-
-                    match.p1 = match.p2
-
-                    match.p2 = temp
-
-                    //await updateActive(match)
-                }
-
-
-                channelid.send(
-                new discord.MessageEmbed()
-                    .setTitle("Template")
-                .setImage(match.template)
-                .setColor("#07da63")
-                .setTimestamp()
-                )
-
-
-                let embed1 = new discord.MessageEmbed()
-                    .setDescription("Player 1")
-                    .setImage(match.p1.memelink)
-                    .setColor("#d7be26")
-                    .setTimestamp()
-                
-                console.log("Player 1 embed done")
-                
-
-                let embed2 = new discord.MessageEmbed()
-                    .setDescription("Player 2")
-                    .setImage(match.p2.memelink)
-                    .setColor("#d7be26")
-                    .setTimestamp()
-                               
-                
-                let embed3 = new discord.MessageEmbed()
-                    .setTitle("Vote for the best meme!")
-                    .setColor("#d7be26")
-                    .setDescription(`Vote for Group 1 reacting with ${emojis[0]}\nVote for Group 2 by reacting with ${emojis[1]}`)
-                
-               
-
-                await channelid.send(embed1)
-                await channelid.send(embed2)
-                
-                await channelid.send(embed3).then(async msg => {
-                    match.messageID = msg.id
-                    await (msg as discord.Message).react(emojis[0])
-                    await (msg as discord.Message).react(emojis[1])
-                })
+                    if (Math.floor(Math.random() * (5 - 1) + 1) % 2 === 1) {
+                        let temp = match.p1
+    
+                        match.p1 = match.p2
+    
+                        match.p2 = temp
+    
+                        //await updateActive(match)
+                    }
+    
+                    if(match.template){
+                        channelid.send(
+                            new discord.MessageEmbed()
+                                .setTitle("Template")
+                            .setImage(match.template)
+                            .setColor("#07da63")
+                            .setTimestamp()
+                            )
+                    }
+    
+                    if(match.theme){
+                        channelid.send(
+                            new discord.MessageEmbed()
+                                .setTitle("Theme")
+                            .setDescription(`Theme is: ${match.theme}`)
+                            .setColor("#07da63")
+                            .setTimestamp()
+                            )
+                    }
+    
+    
+    
+                    let embed1 = new discord.MessageEmbed()
+                        .setDescription("Player 1")
+                        .setImage(match.p1.memelink)
+                        .setColor("#d7be26")
+                        .setTimestamp()
+                    
+                    console.log("Player 1 embed done")
+                    
+    
+                    let embed2 = new discord.MessageEmbed()
+                        .setDescription("Player 2")
+                        .setImage(match.p2.memelink)
+                        .setColor("#d7be26")
+                        .setTimestamp()
+                                   
+                    
+                    let embed3 = new discord.MessageEmbed()
+                        .setTitle("Vote for the best meme!")
+                        .setColor("#d7be26")
+                        .setDescription(`Vote for User 1 reacting with ${emojis[0]}\nVote for User 2 by reacting with ${emojis[1]}`)
+                    
+                   
+    
+                    await channelid.send(embed1)
+                    await channelid.send(embed2)
+                    
+                    await channelid.send(embed3).then(async msg => {
+                        match.messageID = msg.id
+                        await (msg as discord.Message).react(emojis[0])
+                        await (msg as discord.Message).react(emojis[1])
+                    })
+    
+                    //await channelid.send("@eveyone")
+    
+                    match.votingperiod = true
+                    match.votetime = (Math.floor(Date.now() / 1000))
+                    
+                    if(!match.exhibition){
+                        await channelid.send(`<@&719936221572235295>`)
+                        await channelid.send("You have 2 hours to vote!")
+                    }
+    
+    
+                    
+    
+                    if(match.exhibition){
+                        match.votetime = ((Math.floor(Date.now() / 1000)) - 5400)
+                        await channelid.send("You have 30 mins to vote!")
+                        await channelid.send(`<@&783003389390487582>`)
+                    }
+    
+                    await updateActive(match)
 
                 //await channelid.send("@eveyone")
 

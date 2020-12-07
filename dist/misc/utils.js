@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.toHHMMSS = exports.qualifierresultadd = exports.clearstats = exports.createrole = exports.updatesomething = exports.deletechannels = exports.autoreminders = exports.reminders = exports.dateBuilder = exports.indexOf2d = exports.forwardsFilter = exports.backwardsFilter = exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
+exports.toS = exports.toHHMMSS = exports.qualifierresultadd = exports.clearstats = exports.createrole = exports.updatesomething = exports.deletechannels = exports.autoreminders = exports.reminders = exports.dateBuilder = exports.indexOf2d = exports.forwardsFilter = exports.backwardsFilter = exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
 const db_1 = require("./db");
 const modprofiles_1 = require("./modprofiles");
 async function getUser(mention) {
@@ -143,52 +143,14 @@ async function reminders(message, client, args) {
 }
 exports.reminders = reminders;
 async function autoreminders(client) {
-    var _a, _b, _c, _d, _e, _f;
     let catchannels = client.guilds.cache.get("719406444109103117").channels.cache.array();
     for (let channel of catchannels) {
         try {
             let all = (await (await client.channels.fetch(channel.id))
                 .messages.fetch({ limit: 100 }));
-            let now = Math.round((Math.floor(Date.now() / 1000) - all.first().createdTimestamp) / 100) * 100;
             if (channel.parent && channel.parent.name === "matches") {
-                if (await db_1.getMatch(channel.id)) {
-                    let match = await db_1.getMatch(channel.id);
-                    let stmsg = "";
-                    if (!match.p1.memedone)
-                        stmsg += `<@${match.p1.userid}>`;
-                    if (!match.p2.memedone)
-                        stmsg += `<@${match.p2.userid}>`;
-                    if (match.split) {
-                        if (stmsg) {
-                            if (now === 43200) {
-                                await client.channels.cache.get(channel.id)
-                                    .send(`${stmsg} you have 12h left to complete your match`);
-                            }
-                            else if (now === 86400) {
-                                await client.channels.cache.get(channel.id)
-                                    .send(`${stmsg} you have 24h left to complete your match`);
-                            }
-                            else if (now === 7200) {
-                                await client.channels.cache.get(channel.id)
-                                    .send(`${stmsg} you have 2h left to complete your match`);
-                            }
-                        }
-                    }
-                }
-                else {
-                    if (now === 43200) {
-                        await client.channels.cache.get(channel.id)
-                            .send(`<@${(_a = all.first()) === null || _a === void 0 ? void 0 : _a.mentions.users.array()[0].id}><@${(_b = all.first()) === null || _b === void 0 ? void 0 : _b.mentions.users.array()[1].id}> you have 12h left to complete your match`);
-                    }
-                    else if (now === 86400) {
-                        await client.channels.cache.get(channel.id)
-                            .send(`<@${(_c = all.first()) === null || _c === void 0 ? void 0 : _c.mentions.users.array()[0].id}><@${(_d = all.first()) === null || _d === void 0 ? void 0 : _d.mentions.users.array()[1].id}> you have 24h left to complete your match`);
-                    }
-                    else if (now === 7200) {
-                        await client.channels.cache.get(channel.id)
-                            .send(`<@${(_e = all.first()) === null || _e === void 0 ? void 0 : _e.mentions.users.array()[0].id}><@${(_f = all.first()) === null || _f === void 0 ? void 0 : _f.mentions.users.array()[1].id}> you have 2h left to complete your match`);
-                    }
-                }
+                let now = Math.round(((Math.floor(Date.now() / 1000) - Math.floor(all.first().createdTimestamp / 1000))));
+                console.log(now);
             }
         }
         catch {
@@ -299,7 +261,7 @@ async function qualifierresultadd(channel, client, msg1, msg2) {
         console.log(`${em[i].value.toLowerCase().includes("earned") ? (em[i].value.split(" ")[5].substr(0, 2) + " ") : "0"}`);
         console.log(`${em1[i].value.toLowerCase().includes("earned") ? (em1[i].value.split(" ")[5].substr(0, 2) + " ") : "0"}`);
         fields.push({
-            name: `${em1[i].name}`,
+            name: `${em1[i].name.substr(0, em1[1].name.indexOf("|") - 1)}`,
             value: `${parseInt(`${em[i].value.toLowerCase().includes("earned") ? (em[i].value.split(" ")[5].substr(0, 2) + " ") : "0"}`) + parseInt(`${em1[i].value.toLowerCase().includes("earned") ? (em1[i].value.split(" ")[5].substr(0, 2) + " ") : "0"}`)} `,
         });
     }
@@ -330,3 +292,10 @@ async function toHHMMSS(timestamp, howlong) {
     return new Date((howlong - (Math.floor(Date.now() / 1000) - timestamp)) * 1000).toISOString().substr(11, 8);
 }
 exports.toHHMMSS = toHHMMSS;
+async function toS(timestamp) {
+    if (!timestamp)
+        return null;
+    var hms = timestamp.split(':');
+    return (+hms[0]) * 60 * 60 + (+hms[1]) * 60 + (+hms[2] || 0);
+}
+exports.toS = toS;

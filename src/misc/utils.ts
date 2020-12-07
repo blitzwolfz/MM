@@ -204,61 +204,67 @@ export async function autoreminders(client:Discord.Client) {
 
       let all = (await (<Discord.TextChannel>await client.channels.fetch(channel.id))!
       .messages.fetch({limit:100}))
-  
-      let now = Math.round((Math.floor(Date.now()/1000) - all.first()!.createdTimestamp)/100)*100
 
+      //console.log("CHN:", channel.createdTimestamp)
+  
+      
       if(channel.parent && channel.parent!.name === "matches"){
 
-        if (await getMatch(channel.id)) {
-          let match = await getMatch(channel.id)
+        let now = Math.round(((Math.floor(Date.now()/1000) - Math.floor(all.first()!.createdTimestamp/1000))))
+        
+        console.log(now)
 
-          let stmsg:string = ""
+      //   if (await getMatch(channel.id)) {
+      //     let match = await getMatch(channel.id)
 
-          if(!match.p1.memedone) stmsg += `<@${match.p1.userid}>`
-          if(!match.p2.memedone) stmsg += `<@${match.p2.userid}>`
+      //     let stmsg:string = ""
+
+      //     if(!match.p1.memedone) stmsg += `<@${match.p1.userid}>`
+      //     if(!match.p2.memedone) stmsg += `<@${match.p2.userid}>`
   
-          if(match.split){
+      //     if(match.split){
            
-            if(stmsg){
+      //       if(stmsg){
 
-              if(now === 43200 ){
-                await (<Discord.TextChannel>client.channels.cache.get(channel.id))
-                .send(`${stmsg} you have 12h left to complete your match`)
-              }
+      //         if(now === 43200 ){
+      //           await (<Discord.TextChannel>client.channels.cache.get(channel.id))
+      //           .send(`${stmsg} you have 12h left to complete your match`)
+      //         }
 
-              else if(now === 86400 ){
-                await (<Discord.TextChannel>client.channels.cache.get(channel.id))
-                .send(`${stmsg} you have 24h left to complete your match`)
-              }
+      //         else if(now === 86400 ){
+      //           await (<Discord.TextChannel>client.channels.cache.get(channel.id))
+      //           .send(`${stmsg} you have 24h left to complete your match`)
+      //         }
 
-              else if(now === 7200 ){
-                await (<Discord.TextChannel>client.channels.cache.get(channel.id))
-                .send(`${stmsg} you have 2h left to complete your match`)
-              }
+      //         else if(now === 7200 ){
+      //           await (<Discord.TextChannel>client.channels.cache.get(channel.id))
+      //           .send(`${stmsg} you have 2h left to complete your match`)
+      //         }
 
-            }
-          }
-        }
+      //       }
+      //     }
+      //   }
   
-        else{
-          if(now === 43200 ){
-            await (<Discord.TextChannel>client.channels.cache.get(channel.id))
-            .send(`<@${all.first()?.mentions.users.array()[0].id}><@${all.first()?.mentions.users.array()[1].id}> you have 12h left to complete your match`)
-          }
+      //   else{
+      //     if(now === 43200 ){
+      //       await (<Discord.TextChannel>client.channels.cache.get(channel.id))
+      //       .send(`<@${all.first()?.mentions.users.array()[0].id}><@${all.first()?.mentions.users.array()[1].id}> you have 12h left to complete your match`)
+      //     }
 
-          else if(now === 86400 ){
-            await (<Discord.TextChannel>client.channels.cache.get(channel.id))
-            .send(`<@${all.first()?.mentions.users.array()[0].id}><@${all.first()?.mentions.users.array()[1].id}> you have 24h left to complete your match`)
-          }
+      //     else if(now === 86400 ){
+      //       await (<Discord.TextChannel>client.channels.cache.get(channel.id))
+      //       .send(`<@${all.first()?.mentions.users.array()[0].id}><@${all.first()?.mentions.users.array()[1].id}> you have 24h left to complete your match`)
+      //     }
 
-          else if(now === 7200 ){
-            await (<Discord.TextChannel>client.channels.cache.get(channel.id))
-            .send(`<@${all.first()?.mentions.users.array()[0].id}><@${all.first()?.mentions.users.array()[1].id}> you have 2h left to complete your match`)
-          }
+      //     else if(now === 7200 ){
+      //       await (<Discord.TextChannel>client.channels.cache.get(channel.id))
+      //       .send(`<@${all.first()?.mentions.users.array()[0].id}><@${all.first()?.mentions.users.array()[1].id}> you have 2h left to complete your match`)
+      //     }
 
-        }
+      //   }
       }
-    } catch {
+    } 
+    catch {
       continue
     }
   }
@@ -398,7 +404,6 @@ export async function qualifierresultadd(channel:Discord.TextChannel, client:Dis
 
     const fields = [];
 
-    
 
     for (let i = 0; i < em1.length; i++){
 
@@ -406,7 +411,7 @@ export async function qualifierresultadd(channel:Discord.TextChannel, client:Dis
       console.log(`${em[i].value.toLowerCase().includes("earned") ? (em[i].value.split(" ")[5].substr(0, 2)+ " ") : "0" }`)
       console.log(`${em1[i].value.toLowerCase().includes("earned") ? (em1[i].value.split(" ")[5].substr(0, 2)+ " ") : "0" }`)
       fields.push({
-          name: `${em1[i].name}`,
+          name: `${em1[i].name.substr(0, em1[1].name.indexOf("|")-1)}`,
           //value: `${match.votes[i].length > 0 ? `Came in with ${match.votes[i].length} vote(s)` : `Failed to submit meme`}`
           value: `${parseInt(`${em[i].value.toLowerCase().includes("earned") ? (em[i].value.split(" ")[5].substr(0, 2)+ " ") : "0" }`) + parseInt(`${em1[i].value.toLowerCase().includes("earned") ? (em1[i].value.split(" ")[5].substr(0, 2)+ " ") : "0" }`)} `,
       });
@@ -446,4 +451,12 @@ export async function qualifierresultadd(channel:Discord.TextChannel, client:Dis
 export async function toHHMMSS(timestamp: number, howlong: number) {
   
   return new Date((howlong - (Math.floor(Date.now() / 1000) - timestamp)) * 1000).toISOString().substr(11, 8)
+}
+
+export async function toS(timestamp:string) { 	
+  if (!timestamp) return null; 	
+  
+  var hms = timestamp.split(':'); 	
+  
+  return (+hms[0]) * 60 * 60 + (+hms[1]) * 60 + (+hms[2] || 0);  
 }

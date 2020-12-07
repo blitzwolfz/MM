@@ -526,6 +526,8 @@ client.on("message", async message => {
     return
   };
 
+  //await message.channel.startTyping(100)
+
   if(command === "s"){
     await qualrunning(client);
     await running(client);
@@ -542,8 +544,8 @@ client.on("message", async message => {
 
       match.p2 = temp
   }
-    match.p1.time = (Math.floor(Date.now() / 1000)) - 3200
-    match.p2.time = (Math.floor(Date.now() / 1000)) - 3200
+    match.p1.time = (Math.floor(Date.now() / 1000)) - 2800
+    match.p2.time = (Math.floor(Date.now() / 1000)) - 2800
     match.votingperiod = true
     match.votetime = (Math.floor(Date.now() / 1000))
 
