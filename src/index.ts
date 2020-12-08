@@ -23,7 +23,7 @@ import {
 import { duelcheck, exhibition } from "./commands/exhibitions"
 import { qualend, end, cancelmatch } from "./commands/winner";
 import { vs } from "./commands/card";
-import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, createrole, clearstats, qualifierresultadd } from "./misc/utils";
+import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, createrole, clearstats, qualifierresultadd, autoreminders } from "./misc/utils";
 import { ModHelp, UserHelp, ModSignupHelp, ModChallongeHelp, DuelHelp } from "./commands/help";
 
 import {
@@ -120,8 +120,18 @@ client.on('ready', async () => {
     }
   }
 
-  await running(client)
-  await qualrunning(client)
+  setInterval(async function(){ 
+    console.log("A Kiss every 5 seconds");
+    await running(client)
+  }, 10000);
+
+  setInterval(async function(){ 
+    console.log("A Second Kiss every 5 seconds");
+    await qualrunning(client)
+  }, 10000);
+
+  //await running(client)
+  //await qualrunning(client)
   await (<Discord.TextChannel>client.channels.cache.get("722616679280148504")).send("<@239516219445608449>",{
     embed:{
         description: `Updates/Restart has worked`,
@@ -502,7 +512,7 @@ client.on("message", async message => {
   //const gamemaster = message.guild.roles.get("719936221572235295");
 
   
-  // if(message.content.includes("!s")){
+  // if(message.content.includes("!speedrun")){
   //   await qualrunning(client);
   //   await running(client);
   //   console.log("Ran!")
@@ -528,9 +538,15 @@ client.on("message", async message => {
 
   //await message.channel.startTyping(100)
 
-  if(command === "s"){
+  // if(command === "s"){
+  //   await qualrunning(client);
+  //   await running(client);
+  // }
+
+  if(command === "!speedrun"){
     await qualrunning(client);
     await running(client);
+    console.log("Ran!")
   }
 
   if(command === "forcepoll"){
@@ -622,60 +638,9 @@ client.on("message", async message => {
   }
 
   else if (command === "test") {
+    await message.reply("no").then(async message => {await message.react('🤏')})
 
-    //await insertExhibition()
-    await message.reply("no").then(async message => {await message.react('🤏')
-    let channel = await <Discord.TextChannel>client.channels.cache.get(message.channel.id)
-
-
-    let t = channel.topic?.split(" ")
-    if(t?.join("").toLowerCase() === "round1") await channel.setTopic(message.id);
-
-    else if(t?.length === 1) await channel.setTopic(t[0]+"\n"+message.id);
-
-    }).then
-
-    // let templ = await getRandomTemplateList(client)
-
-    // await insertlist(templ)
-
-    // message.reply("Done.")
-
-    // var templatelist:string[] = []
-    // let lastmsg:string[] = []
-
-    // await (<Discord.TextChannel>client.channels.cache.get("722291683030466621")).messages.fetch({ limit: 100 }).then(async msg => {
-    //   msg.map(async m => {
-    //     // console.log(m.url)
-    //     // await message.reply(m.id)
-    //     await (<Discord.TextChannel>client.channels.cache.get("722291683030466621")).messages.fetch(m.id).then(async (m2: Discord.Message) => {
-    //       if (m2.attachments.size >= 1) {
-    //         // console.log(m2.attachments.array()[0].url)
-    //         for(let x = 0; x < m2.attachments.array().length; x++){
-    //           if(!m2.attachments.array()[x].url.includes("gif") || !m2.attachments.array()[0].url.includes("mp4")){
-    //             templatelist.push(m2.attachments.array()[x].url)
-    //           }
-    //         }
-    //         lastmsg.push(m2.id)
-    //         // await message.reply(m2.attachments.array()[0].url)
-    //       }
-    //     })
-    //   });
-    // })
-
-    // for(let i = 0; i < templatelist.length; i++){
-    //   await (<Discord.TextChannel>client.channels.cache.get("722291683030466621")).send(
-    //     new Discord.MessageEmbed()
-    //     .setTitle(`Approve of template`)
-    //     .setImage(templatelist[i])
-    // ).then(async (message:Discord.Message) => {
-    //     await message.react('🏁')
-    //     await message.react('🗡️')
-    //     }
-    // )
-    // }
-
-    
+    await autoreminders(client, message.channel.id)
   }
 
   else if (command === "createqualgroup") {

@@ -71,8 +71,14 @@ client.on('ready', async () => {
             }
         }
     }
-    await start_1.running(client);
-    await start_1.qualrunning(client);
+    setInterval(async function () {
+        console.log("A Kiss every 5 seconds");
+        await start_1.running(client);
+    }, 10000);
+    setInterval(async function () {
+        console.log("A Second Kiss every 5 seconds");
+        await start_1.qualrunning(client);
+    }, 10000);
     await client.channels.cache.get("722616679280148504").send("<@239516219445608449>", {
         embed: {
             description: `Updates/Restart has worked`,
@@ -366,9 +372,10 @@ client.on("message", async (message) => {
         return;
     }
     ;
-    if (command === "s") {
+    if (command === "!speedrun") {
         await start_1.qualrunning(client);
         await start_1.running(client);
+        console.log("Ran!");
     }
     if (command === "forcepoll") {
         let match = await db_1.getMatch(message.channel.id);
@@ -434,16 +441,8 @@ client.on("message", async (message) => {
         await utils_1.deletechannels(message, args);
     }
     else if (command === "test") {
-        await message.reply("no").then(async (message) => {
-            var _a;
-            await message.react('🤏');
-            let channel = await client.channels.cache.get(message.channel.id);
-            let t = (_a = channel.topic) === null || _a === void 0 ? void 0 : _a.split(" ");
-            if ((t === null || t === void 0 ? void 0 : t.join("").toLowerCase()) === "round1")
-                await channel.setTopic(message.id);
-            else if ((t === null || t === void 0 ? void 0 : t.length) === 1)
-                await channel.setTopic(t[0] + "\n" + message.id);
-        }).then;
+        await message.reply("no").then(async (message) => { await message.react('🤏'); });
+        await utils_1.autoreminders(client, message.channel.id);
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))

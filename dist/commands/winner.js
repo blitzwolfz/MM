@@ -24,18 +24,9 @@ const discord = __importStar(require("discord.js"));
 const db_1 = require("../misc/db");
 const card_1 = require("./card");
 const utils_1 = require("../misc/utils");
+const challonge_1 = require("./challonge");
 async function end(client, id) {
     let match = await db_1.getMatch(id);
-    if (!match.exhibition) {
-        for (let s = 0; s < match.p1.voters.length; s++) {
-            await await db_1.updateProfile(match.p1.voters[s], "points", 2);
-            await await db_1.updateProfile(match.p1.voters[s], "memesvoted", 1);
-        }
-        for (let t = 0; t < match.p2.voters.length; t++) {
-            await await db_1.updateProfile(match.p2.voters[t], "points", 2);
-            await await db_1.updateProfile(match.p2.voters[t], "memesvoted", 1);
-        }
-    }
     await db_1.deleteActive(match);
     console.log(match);
     let channelid = client.channels.cache.get(match.channelid);
@@ -157,6 +148,27 @@ async function end(client, id) {
         await channelid.send(embed);
         await user1.send(`Your match is over,both of you ended in a tie of ${match.p1.votes}`);
         await user2.send(`Your match is over, both of you ended in a tie of ${match.p1.votes}`);
+    }
+    let t = channelid.topic.toString().split(",");
+    if (!match.exhibition) {
+        for (let s = 0; s < match.p1.voters.length; s++) {
+            await await db_1.updateProfile(match.p1.voters[s], "points", 2);
+            await await db_1.updateProfile(match.p1.voters[s], "memesvoted", 1);
+        }
+        for (let t = 0; t < match.p2.voters.length; t++) {
+            await await db_1.updateProfile(match.p2.voters[t], "points", 2);
+            await await db_1.updateProfile(match.p2.voters[t], "memesvoted", 1);
+        }
+        let m = await channelid.messages.cache.first().mentions.users.first().id;
+        let winnerid = (m === match.p1.userid ? `${t[1]}` : `${t[2]}`);
+        if (channelid.topic) {
+            if (match.p1.votes > match.p2.votes) {
+                await challonge_1.matchwinner([`${t[0]}`, `${match.p1.votes}`, `${match.p2.votes}`, `${winnerid}`]);
+            }
+            if (match.p2.votes > match.p1.votes) {
+                await challonge_1.matchwinner([`${t[0]}`, `${match.p2.votes}`, `${match.p1.votes}`, `${winnerid}`]);
+            }
+        }
     }
     return;
 }

@@ -194,7 +194,7 @@ export async function reminders(message: Discord.Message, client:Discord.Client,
   await message.channel.send(`<@${message.author.id}> gets ${pp} good boy points`)
 }
 
-export async function autoreminders(client:Discord.Client) {
+export async function autoreminders(client:Discord.Client, ...st:string[]) {
   let catchannels = client.guilds.cache.get("719406444109103117")!.channels.cache.array()!
 
   
@@ -210,11 +210,56 @@ export async function autoreminders(client:Discord.Client) {
       
       if(channel.parent && channel.parent!.name === "matches"){
 
-        let now = Math.round(((Math.floor(Date.now()/1000) - Math.floor(all.first()!.createdTimestamp/1000))))
+        let now = Math.ceil(Math.round(Math.floor(Date.now()/1000) - Math.floor(all.last()!.createdTimestamp/1000))/100)*100
         
         console.log(now)
 
-      //   if (await getMatch(channel.id)) {
+      if (await getMatch(channel.id)) {
+
+        let match = await getMatch(channel.id)
+
+        let stmsg:string = ""
+
+        if(!match.p1.memedone) stmsg += `<@${match.p1.userid}>`
+        if(!match.p2.memedone) stmsg += ` <@${match.p2.userid}>`
+        
+        if (match.split) {
+          if (stmsg) {
+            if (now === 43200) {
+              await (<Discord.TextChannel>client.channels.cache.get(channel.id))
+                .send(`${stmsg} you have 12h left to complete your match`)
+            }
+
+            else if (now === 86400) {
+              await (<Discord.TextChannel>client.channels.cache.get(channel.id))
+                .send(`${stmsg} you have 24h left to complete your match`)
+            }
+
+            else if (now === 7200) {
+              await (<Discord.TextChannel>client.channels.cache.get(channel.id))
+                .send(`${stmsg} you have 2h left to complete your match`)
+            }
+          }
+        }
+
+        else {
+          if (now === 43200) {
+            await (<Discord.TextChannel>client.channels.cache.get(channel.id))
+              .send(`<@${all.first()?.mentions.users.array()[0].id}><@${all.first()?.mentions.users.array()[1].id}> you have 12h left to complete your match`)
+          }
+
+          else if (now === 86400) {
+            await (<Discord.TextChannel>client.channels.cache.get(channel.id))
+              .send(`<@${all.first()?.mentions.users.array()[0].id}><@${all.first()?.mentions.users.array()[1].id}> you have 24h left to complete your match`)
+          }
+
+          else if (now === 7200) {
+            await (<Discord.TextChannel>client.channels.cache.get(channel.id))
+              .send(`<@${all.first()?.mentions.users.array()[0].id}><@${all.first()?.mentions.users.array()[1].id}> you have 2h left to complete your match`)
+          }
+
+        }
+
       //     let match = await getMatch(channel.id)
 
       //     let stmsg:string = ""
@@ -243,7 +288,7 @@ export async function autoreminders(client:Discord.Client) {
 
       //       }
       //     }
-      //   }
+      }
   
       //   else{
       //     if(now === 43200 ){

@@ -1,4 +1,3 @@
-
 export interface activematch{
     _id: string;
     channelid:string;
@@ -147,4 +146,44 @@ export interface exhibition{
 export interface cooldown{
     user:string,
     time:number,
+}
+
+
+export interface challongematchstruct{
+    match: {
+        id: number,
+        state: "pending" | "open" | "complete" ,
+        identifier: string,
+        round: number,
+        location: null,
+        optional: false,
+        forfeited: null,
+        tournamentId: number,
+        player1Id: number | null,
+        player2Id: number | null,
+        player1PrereqMatchId: number | null,
+        player2PrereqMatchId: number | null,
+        player1IsPrereqMatchLoser: boolean,
+        player2IsPrereqMatchLoser: boolean,
+        winnerId: number | null,
+        loserId: number | null,
+        startedAt: "string" | null,
+        createdAt: string | null,
+        updatedAt: string | null,
+        hasAttachment: false,
+        player1Votes: number | null,
+        player2Votes: number | null,
+        groupId: null,
+        attachmentCount: null,
+        scheduledTime: null,
+        underwayAt: null,
+        rushbId: null,
+        completedAt: string | null,
+        suggestedPlayOrder: number,
+        openGraphImageFileName: null,
+        openGraphImageContentType: null,
+        openGraphImageFileSize: null,
+        prerequisiteMatchIdsCsv: string | null,
+        scoresCsv: string | null
+    }
 }

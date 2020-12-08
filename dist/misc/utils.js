@@ -142,15 +142,54 @@ async function reminders(message, client, args) {
     await message.channel.send(`<@${message.author.id}> gets ${pp} good boy points`);
 }
 exports.reminders = reminders;
-async function autoreminders(client) {
+async function autoreminders(client, ...st) {
+    var _a, _b, _c, _d, _e, _f;
     let catchannels = client.guilds.cache.get("719406444109103117").channels.cache.array();
     for (let channel of catchannels) {
         try {
             let all = (await (await client.channels.fetch(channel.id))
                 .messages.fetch({ limit: 100 }));
             if (channel.parent && channel.parent.name === "matches") {
-                let now = Math.round(((Math.floor(Date.now() / 1000) - Math.floor(all.first().createdTimestamp / 1000))));
+                let now = Math.ceil(Math.round(Math.floor(Date.now() / 1000) - Math.floor(all.last().createdTimestamp / 1000)) / 100) * 100;
                 console.log(now);
+                if (await db_1.getMatch(channel.id)) {
+                    let match = await db_1.getMatch(channel.id);
+                    let stmsg = "";
+                    if (!match.p1.memedone)
+                        stmsg += `<@${match.p1.userid}>`;
+                    if (!match.p2.memedone)
+                        stmsg += ` <@${match.p2.userid}>`;
+                    if (match.split) {
+                        if (stmsg) {
+                            if (now === 43200) {
+                                await client.channels.cache.get(channel.id)
+                                    .send(`${stmsg} you have 12h left to complete your match`);
+                            }
+                            else if (now === 86400) {
+                                await client.channels.cache.get(channel.id)
+                                    .send(`${stmsg} you have 24h left to complete your match`);
+                            }
+                            else if (now === 7200) {
+                                await client.channels.cache.get(channel.id)
+                                    .send(`${stmsg} you have 2h left to complete your match`);
+                            }
+                        }
+                    }
+                    else {
+                        if (now === 43200) {
+                            await client.channels.cache.get(channel.id)
+                                .send(`<@${(_a = all.first()) === null || _a === void 0 ? void 0 : _a.mentions.users.array()[0].id}><@${(_b = all.first()) === null || _b === void 0 ? void 0 : _b.mentions.users.array()[1].id}> you have 12h left to complete your match`);
+                        }
+                        else if (now === 86400) {
+                            await client.channels.cache.get(channel.id)
+                                .send(`<@${(_c = all.first()) === null || _c === void 0 ? void 0 : _c.mentions.users.array()[0].id}><@${(_d = all.first()) === null || _d === void 0 ? void 0 : _d.mentions.users.array()[1].id}> you have 24h left to complete your match`);
+                        }
+                        else if (now === 7200) {
+                            await client.channels.cache.get(channel.id)
+                                .send(`<@${(_e = all.first()) === null || _e === void 0 ? void 0 : _e.mentions.users.array()[0].id}><@${(_f = all.first()) === null || _f === void 0 ? void 0 : _f.mentions.users.array()[1].id}> you have 2h left to complete your match`);
+                        }
+                    }
+                }
             }
         }
         catch {

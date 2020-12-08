@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.matchlistmaker = exports.removequalwinner = exports.declarequalwinner = exports.GroupSearch = exports.CreateQualGroups = exports.QualChannelCreation = exports.ChannelCreation = exports.CreateChallongeMatchBracket = exports.CreateChallongeQualBracket = void 0;
+exports.matchlistmaker = exports.removequalwinner = exports.declarequalwinner = exports.GroupSearch = exports.matchwinner = exports.CreateQualGroups = exports.QualChannelCreation = exports.ChannelCreation = exports.CreateChallongeMatchBracket = exports.CreateChallongeQualBracket = void 0;
 const Discord = __importStar(require("discord.js"));
 const db_1 = require("../misc/db");
 const utils_1 = require("../misc/utils");
@@ -150,6 +150,7 @@ async function ChannelCreation(message, disclient, args) {
                             let channelstringname = "";
                             let name1 = "";
                             let name2 = "";
+                            let matchid = data[i].match.id;
                             client.participants.index({
                                 id: matchlist.url,
                                 callback: async (err, data) => {
@@ -170,7 +171,7 @@ async function ChannelCreation(message, disclient, args) {
                                         }
                                     }
                                     if (channelstringname.includes("-vs-")) {
-                                        await message.guild.channels.create(channelstringname, { type: 'text', topic: `Round ${args[0]}` })
+                                        await message.guild.channels.create(channelstringname, { type: 'text', topic: `${matchid},${oneid},${twoid}` })
                                             .then(async (channel) => {
                                             let category = await message.guild.channels.cache.find(c => c.name == "matches" && c.type == "category");
                                             console.log(name1);
@@ -277,6 +278,24 @@ async function shuffle(a) {
     }
     return a;
 }
+async function matchwinner(args) {
+    const client = challonge.createClient({
+        apiKey: process.env.CHALLONGE
+    });
+    let score = `${args[1]}-${args[2]}`;
+    client.matches.update({
+        id: await (await db_1.getMatchlist()).url,
+        matchId: args[0],
+        match: {
+            scoresCsv: score,
+            winnerId: args[3]
+        },
+        callback: (err, data) => {
+            console.log(err, data);
+        }
+    });
+}
+exports.matchwinner = matchwinner;
 async function GroupSearch(message, args) {
     var _a, _b, _c;
     let signup = await db_1.getQuallist();

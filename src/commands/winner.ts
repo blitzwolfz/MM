@@ -5,22 +5,23 @@ import { activematch } from "../misc/struct"
 import { deleteActive, deleteQuals, updateProfile, getSingularQuals, getMatch, getQual } from "../misc/db"
 import { winner } from "./card"
 import { dateBuilder, qualifierresultadd } from "../misc/utils"
+import { matchwinner } from "./challonge"
 
 export async function end(client: discord.Client, id: string) {
     let match: activematch = await getMatch(id)
 
-    if(!match.exhibition){
+    // if(!match.exhibition){
 
-        for(let s = 0; s <  match.p1.voters.length; s++){
-            await await updateProfile(match.p1.voters[s], "points", 2)
-            await await updateProfile(match.p1.voters[s], "memesvoted", 1)
-        }
+    //     for(let s = 0; s <  match.p1.voters.length; s++){
+    //         await await updateProfile(match.p1.voters[s], "points", 2)
+    //         await await updateProfile(match.p1.voters[s], "memesvoted", 1)
+    //     }
 
-        for(let t = 0; t <  match.p2.voters.length; t++){
-            await await updateProfile(match.p2.voters[t], "points", 2)
-            await await updateProfile(match.p2.voters[t], "memesvoted", 1)
-        }
-    }
+    //     for(let t = 0; t <  match.p2.voters.length; t++){
+    //         await await updateProfile(match.p2.voters[t], "points", 2)
+    //         await await updateProfile(match.p2.voters[t], "memesvoted", 1)
+    //     }
+    // }
     
     await deleteActive(match)
 
@@ -191,6 +192,35 @@ export async function end(client: discord.Client, id: string) {
         await user2.send(`Your match is over, both of you ended in a tie of ${match.p1.votes}`)
     }
 
+    let t = channelid.topic!.toString().split(",")
+
+
+    if(!match.exhibition){
+
+        for(let s = 0; s <  match.p1.voters.length; s++){
+            await await updateProfile(match.p1.voters[s], "points", 2)
+            await await updateProfile(match.p1.voters[s], "memesvoted", 1)
+        }
+
+        for(let t = 0; t <  match.p2.voters.length; t++){
+            await await updateProfile(match.p2.voters[t], "points", 2)
+            await await updateProfile(match.p2.voters[t], "memesvoted", 1)
+        }
+
+        let m = await channelid.messages.cache.first()!.mentions.users.first()!.id
+
+        let winnerid = (m === match.p1.userid ? `${t[1]}` : `${t[2]}`);
+
+        if(channelid.topic){
+            if(match.p1.votes > match.p2.votes){
+                await matchwinner([`${t[0]}`,`${match.p1.votes}`,`${match.p2.votes}`,`${winnerid}`])
+            }
+    
+            if(match.p2.votes > match.p1.votes){
+                await matchwinner([`${t[0]}`,`${match.p2.votes}`,`${match.p1.votes}`,`${winnerid}`])
+            }
+        }
+    }
     // matches.splice(matches.indexOf(match), 1)
     return;
 }

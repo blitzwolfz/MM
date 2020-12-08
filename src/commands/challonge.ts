@@ -77,7 +77,6 @@ export async function CreateChallongeQualBracket(message: Discord.Message, discl
 
 }
 
-
 export async function CreateChallongeMatchBracket(message: Discord.Message, disclient: Discord.Client, args: string[], guild: Discord.Guild) {
     if (message.member!.roles.cache.has('724818272922501190')
         || message.member!.roles.cache.has('724818272922501190')
@@ -150,7 +149,6 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
 
 }
 
-
 export async function ChannelCreation(message: Discord.Message, disclient: Discord.Client, args: string[]) {
     console.log("OK")
     if (!args) return message.reply("Please input round number!")
@@ -212,6 +210,7 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
                             let channelstringname: string = ""
                             let name1:string = ""
                             let name2:string = ""
+                            let matchid = data[i].match.id
 
                             client.participants.index({
                                 id: matchlist.url,
@@ -221,6 +220,7 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
 
                                     for (let x = 0; x < data.length; x++) {
                                         if (data[x].participant.id === oneid) {
+
                                             channelstringname += data[x].participant.name.substring(0, 10)
                                             name1 = data[x].participant.name
                                             break;
@@ -247,7 +247,7 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
                                             
                                                 // console.log(names)
                                             
-                                                await message.guild!.channels.create(channelstringname, { type: 'text', topic: `Round ${args[0]}` })
+                                                await message.guild!.channels.create(channelstringname, { type: 'text', topic: `${matchid},${oneid},${twoid}` })
                                                 .then(async channel => {
                                                     let category = await message.guild!.channels.cache.find(c => c.name == "matches" && c.type == "category");
 
@@ -308,7 +308,6 @@ export async function QualChannelCreation(message: Discord.Message, args: string
     
     return message.reply("Made all channels")
 }
-
 
 export async function CreateQualGroups(message: Discord.Message, args: string[]) {
     if (message.member!.roles.cache.has('724818272922501190')
@@ -398,38 +397,29 @@ async function shuffle(a: any[]) {
     return a;
 }
 
-// export async function quallistEmbed(message: Discord.Message, client: Discord.Client, args: string[]) {
+export async function matchwinner(args: string[]) {
+
+    const client = challonge.createClient({
+        apiKey: process.env.CHALLONGE
+    });
 
 
-//     console.log(args)
-//     let signup = await getQuallist()
+    let score = `${args[1]}-${args[2]}`
 
-//     if (!args.length) {
-//         return message.reply(`, there are ${signup.users.length} groups`)
-//     }
+    
 
-//     else {
-//         let page = parseInt(args[0])
-
-//         page -= 1
-
-//         const fields = [];
-
-//         for (let i = 0; i < signup.users[page].length; i++)
-//             fields.push({
-//                 name: `${i + 1}) ${await (await client.users.fetch(signup.users[page][i])).username}`,
-//                 value: `Userid is: ${signup.users[page][i]}`
-//         });
-
-//         return {
-//             title: `Group ${page += 1}`,
-//             description: "Groups for quals",
-//             fields,
-//             color: "#d7be26",
-//             timestamp: new Date()
-//         };
-//     }
-// }
+    client.matches.update({
+        id: await (await getMatchlist()).url,
+        matchId: args[0],
+        match: {
+          scoresCsv: score,
+          winnerId: args[3]
+        },
+        callback: (err:any, data:any) => {
+          console.log(err, data);
+        }
+      });
+}
 
 export async function GroupSearch(message: Discord.Message, args: string[]) {
     let signup = await getQuallist()
@@ -449,28 +439,6 @@ export async function GroupSearch(message: Discord.Message, args: string[]) {
     return message.reply("they are not in a group")
 
 }
-
-
-
-
-// export async function CreateChallongeMatchBracket(message: Discord.Message, disclient: Discord.Client, args: string[]) {
-//     if (message.member!.roles.cache.has('724818272922501190')
-//         || message.member!.roles.cache.has('724818272922501190')
-//         || message.member!.roles.cache.has('724832462286356590')) {
-
-
-//         return message.reply(new Discord.MessageEmbed()
-//             .setColor("#d7be26")
-//             .setTitle(`MemeManiaMatchTest${num}`)
-//             .setDescription(`Here's the link to the brackers\nhttps://www.challonge.com\\`)
-//             .setTimestamp())
-//     }
-
-//     else {
-//         await (await disclient.users.fetch(message.author.id)).send("You aren't allowed to use that command!")
-//     }
-
-// }
 
 export async function declarequalwinner(message: Discord.Message, client: Discord.Client) {
 
@@ -591,29 +559,3 @@ export async function matchlistmaker() {
         await updateMatchlist(match)
     }
 }
-
-
-
-// client.participants.show({
-//     id: 'MemeManiaChannelTest',
-//     participantId: data[i].match.player1Id,
-//     callback: async (err:any, data:any) => {
-//     if(err) console.log(err)
-//     // console.log(data.participant.name)
-//     console.log(channelstringname + data.participant.name.substring(0, 5))
-//     channelstringname += data.participant.name.substring(0, 5)
-//     }
-//   });
-
-// //console.log(channelstringname)
-
-// client.participants.show({
-//     id: 'MemeManiaChannelTest',
-//     participantId: data[i].match.player2Id,
-//     callback: async (err:any, data:any) => {
-//         if(err) console.log(err)
-//        //console.log(data.participant.name)
-//         console.log(channelstringname + "vs" + data.participant.name.substring(0, 5))
-//         channelstringname += "vs" + data.participant.name.substring(0, 5)
-//     }
-// });
