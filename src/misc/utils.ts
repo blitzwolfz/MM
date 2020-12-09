@@ -324,37 +324,41 @@ export async function aautoreminders(client: Discord.Client, ...st: string[]) {
 }
 
 export async function autoreminders(client: Discord.Client) {
+
+  return; 
   let time:string;
   let t = 0;
 
-  if(Math.floor((Date.now())/1000 - parseInt(await (await getMatchlist()).qualurl)) > 129600){
+  if(Math.floor((Date.now())/1000 - parseInt(await (await getMatchlist()).qualurl)) > 129600*1000){
     time = "2"
     
-    t = 2 * 3600
-    console.log("t diff", t*1000)
+    t = 2 * 3600 * 1000
+    console.log("t diff", t)
     
   }
 
-  else if(Math.floor((Date.now())/1000 - parseInt(await (await getMatchlist()).qualurl)) > 86400){
+  else if(Math.floor((Date.now())/1000 - parseInt(await (await getMatchlist()).qualurl)) > 86400*1000){
     time = "12"
     
-    t = 12 * 3600
-    console.log("t diff", t*1000)
+    t = 12 * 3600 * 1000
+    console.log("t diff", t)
     
   }
 
   else {
     time = "24"
     
-    t = 24 * 3600
-    console.log("t diff", t*1000)
+    t = 24 * 3600 * 1000
+    console.log("t diff", t)
     
   }
 
-  console.log(t - (Math.floor(Date.now()/1000) - Math.floor(parseInt((await getMatchlist()).qualurl))))
-  console.log((await getMatchlist()).qualurl)
+  
+  console.log(time)
+  console.log(await toHHMMSS(t, Math.floor(t - Date.now() - (parseInt((await getMatchlist()).qualurl)))/1000))
+  console.log(t - Date.now() - (parseInt((await getMatchlist()).qualurl)))
 
-  setTimeout(() => reminders(client, [time]), ((t-(Math.floor((Date.now())/1000 - parseInt(await (await getMatchlist()).qualurl))))*1000));
+  //setTimeout(() => reminders(client, [time]), ((t-(Math.floor((Date.now())/1000 - parseInt(await (await getMatchlist()).qualurl))))*1000));
 }
 
 export async function deletechannels(message: Discord.Message, args: string[]) {

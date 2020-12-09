@@ -42,12 +42,13 @@ import {
   updatetempStruct,
   gettemplatedb,
   updatetemplatedb,
-  
+
 } from "./misc/db";
 
 import { template, approvetemplate, addTheme, removeTheme, themelistLb } from "./commands/template";
 import { createrUser, stats } from "./commands/user";
-import { signup,
+import {
+  signup,
   startsignup,
   closesignup,
   removesignup,
@@ -121,12 +122,12 @@ client.on('ready', async () => {
     }
   }
 
-  setInterval(async function(){ 
+  setInterval(async function () {
     console.log("A Kiss every 5 seconds");
     await running(client)
   }, 10000);
 
-  setInterval(async function(){ 
+  setInterval(async function () {
     console.log("A Second Kiss every 5 seconds");
     await qualrunning(client)
   }, 10000);
@@ -135,11 +136,11 @@ client.on('ready', async () => {
 
   //await running(client)
   //await qualrunning(client)
-  await (<Discord.TextChannel>client.channels.cache.get("722616679280148504")).send("<@239516219445608449>",{
-    embed:{
-        description: `Updates/Restart has worked`,
-        color:"#d7be26",
-        timestamp: new Date()
+  await (<Discord.TextChannel>client.channels.cache.get("722616679280148504")).send("<@239516219445608449>", {
+    embed: {
+      description: `Updates/Restart has worked`,
+      color: "#d7be26",
+      timestamp: new Date()
     }
   });
   client.user!.setActivity(`${process.env.STATUS}`);
@@ -167,53 +168,53 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
 
   let temps: randomtempstruct[] = await getalltempStructs()
 
-  if (temps){
+  if (temps) {
 
-    for(const temp of temps){
+    for (const temp of temps) {
       //console.log(temp)
 
-      if (messageReaction.emoji.name === '🌀' && user.id !== "722303830368190485") {  
-        
-        if(temp.istheme === false){
+      if (messageReaction.emoji.name === '🌀' && user.id !== "722303830368190485") {
+
+        if (temp.istheme === false) {
           let templatelist = await (await gettemplatedb()).list
-          let random:string = templatelist[Math.floor(Math.random() * templatelist.length)];
-  
+          let random: string = templatelist[Math.floor(Math.random() * templatelist.length)];
+
           let embed = new Discord.MessageEmbed()
-          .setDescription("Random template")
-          .setImage(random)
-          .setColor("#d7be26")
-          .setTimestamp()
+            .setDescription("Random template")
+            .setImage(random)
+            .setColor("#d7be26")
+            .setTimestamp()
           console.log(await messageReaction.message.id)
-  
+
           temp.url = random
           //temp.time = temp.time - (110 * 1000) 
-  
+
           //await messageReaction.message.edit({embed})
           await (await (<Discord.TextChannel>client.channels.cache.get("722616679280148504"))
-          .messages.fetch(temp.messageid))
-          .edit({embed})
+            .messages.fetch(temp.messageid))
+            .edit({ embed })
           await updatetempStruct(temp._id, temp)
           await messageReaction.users.remove(user.id)
         }
 
-        if(temp.istheme === true){
-          
+        if (temp.istheme === true) {
+
           let themelist = await getRandomThemeList(client)
-          let random:string = themelist[Math.floor(Math.random() * (((themelist.length - 1) - 1) - 1) + 1)];
-  
+          let random: string = themelist[Math.floor(Math.random() * (((themelist.length - 1) - 1) - 1) + 1)];
+
           let embed = new Discord.MessageEmbed()
-          .setTitle("Random Theme")
-          .setDescription(`Theme is: ${random}`)
-          .setColor("#d7be26")
-          .setTimestamp()
+            .setTitle("Random Theme")
+            .setDescription(`Theme is: ${random}`)
+            .setColor("#d7be26")
+            .setTimestamp()
           console.log(await messageReaction.message.id)
-  
+
           temp.url = random
           //temp.time = temp.time - (110 * 1000) 
 
           await (await (<Discord.TextChannel>client.channels.cache.get("722616679280148504"))
-          .messages.fetch(temp.messageid))
-          .edit({embed})
+            .messages.fetch(temp.messageid))
+            .edit({ embed })
           await updatetempStruct(temp._id, temp)
           await messageReaction.users.remove(user.id)
         }
@@ -221,24 +222,24 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
 
       }
 
-      if(messageReaction.emoji.name === '✅' && user.id !== "722303830368190485"){
+      if (messageReaction.emoji.name === '✅' && user.id !== "722303830368190485") {
         temp.found = true
         await updatetempStruct(temp._id, temp).then(async () => {
           await messageReaction.message.delete()
         })
       }
 
-      else if(messageReaction.emoji.name === '❌' && user.id !== "722303830368190485"){
+      else if (messageReaction.emoji.name === '❌' && user.id !== "722303830368190485") {
         temp.time = 121
         await updatetempStruct(temp._id, temp).then(async () => {
           await messageReaction.message.delete()
         })
-        
+
       }
     }
   }
 
-  if(messageReaction.emoji.name === '🅰️' || messageReaction.emoji.name === '🅱️' && user.id !== "722303830368190485") {
+  if (messageReaction.emoji.name === '🅰️' || messageReaction.emoji.name === '🅱️' && user.id !== "722303830368190485") {
     //messageReaction.message.channel.send(user.client.guilds.cache.get(messageReaction.message.guild!.id)!.roles.cache.has("719936221572235295"))
 
     if (messageReaction.partial) await messageReaction.fetch();
@@ -247,10 +248,10 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
     if (user.client.guilds.cache
       .get(messageReaction.message.guild!.id)!
       .members.cache.get(user.id)!
-      .roles.cache.has("719936221572235295") 
-      === true){
+      .roles.cache.has("719936221572235295")
+      === true) {
 
-      if(messageReaction.emoji.name === '🅰️'){
+      if (messageReaction.emoji.name === '🅰️') {
 
         let id = await (await getMatch(messageReaction.message.channel.id)).p1.userid
         await splitregular(messageReaction.message, client, id)
@@ -259,19 +260,19 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
         await messageReaction.users.remove(user.id)
 
       }
-      
-      else if(messageReaction.emoji.name === '🅱️'){
+
+      else if (messageReaction.emoji.name === '🅱️') {
 
         let id = await (await getMatch(messageReaction.message.channel.id)).p2.userid
         await splitregular(messageReaction.message, client, id)
         await updateModProfile(messageReaction.message.author.id, "modactions", 1)
         await updateModProfile(messageReaction.message.author.id, "matchportionsstarted", 1)
         await messageReaction.users.remove(user.id)
-        
+
       }
     }
-    
-    else{
+
+    else {
       await messageReaction.users.remove(user.id)
       await user.send("No.")
     }
@@ -279,20 +280,20 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
 
   }
 
-  if(messageReaction.emoji.name === '🏁' || messageReaction.emoji.name === '🗡️' && user.id !== "722303830368190485") {
+  if (messageReaction.emoji.name === '🏁' || messageReaction.emoji.name === '🗡️' && user.id !== "722303830368190485") {
     //messageReaction.message.channel.send(user.client.guilds.cache.get(messageReaction.message.guild!.id)!.roles.cache.has("719936221572235295"))
-    if(messageReaction.message.channel.id !== "722291683030466621") return;
+    if (messageReaction.message.channel.id !== "722291683030466621") return;
     if (messageReaction.partial) await messageReaction.fetch();
     if (messageReaction.message.partial) await messageReaction.message.fetch();
 
     if (user.client.guilds.cache
       .get(messageReaction.message.guild!.id)!
       .members.cache.get(user.id)!
-      .roles.cache.has("719936221572235295") 
-      === true){
+      .roles.cache.has("719936221572235295")
+      === true) {
 
-        //let tempccc = <Discord.TextChannel>client.channels.cache.get("724827952390340648")
-      if(messageReaction.emoji.name === '🏁'){
+      //let tempccc = <Discord.TextChannel>client.channels.cache.get("724827952390340648")
+      if (messageReaction.emoji.name === '🏁') {
         let voteCollection: Discord.Collection<string, Discord.MessageReaction>;
 
         await messageReaction.message.channel.messages.fetch(messageReaction.message.id).then(msg => voteCollection = msg.reactions.cache);
@@ -301,7 +302,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
         console.log(l)
         console.log(messageReaction.message.embeds[0].image)
 
-        if(l === 3){
+        if (l === 3) {
           //await tempccc.send(await messageReaction.message.embeds[0].image?.url)
 
           let e = await gettemplatedb()
@@ -310,11 +311,11 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
 
           await updatetemplatedb(e.list)
           await messageReaction.message.delete()
-        }        
+        }
 
       }
-      
-      else if(messageReaction.emoji.name === '🗡️'){
+
+      else if (messageReaction.emoji.name === '🗡️') {
         let voteCollection: Discord.Collection<string, Discord.MessageReaction>;
 
         await messageReaction.message.channel.messages.fetch(messageReaction.message.id).then(msg => voteCollection = msg.reactions.cache);
@@ -323,15 +324,15 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
         console.log(l)
         console.log(messageReaction.message.embeds[0].image)
 
-        if(l === 3){
+        if (l === 3) {
           //await tempccc.send(await messageReaction.message.embeds[0].image?.url)
           await messageReaction.message.delete()
-        }   
-        
+        }
+
       }
     }
-    
-    else{
+
+    else {
       await messageReaction.users.remove(user.id)
       await user.send("No.")
     }
@@ -339,7 +340,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
 
   }
 
-  if(['🇦', '🇧', '🇨','🇩','🇪','🇫'].includes(messageReaction.emoji.name) && user.id !== "722303830368190485") {
+  if (['🇦', '🇧', '🇨', '🇩', '🇪', '🇫'].includes(messageReaction.emoji.name) && user.id !== "722303830368190485") {
     //messageReaction.message.channel.send(user.client.guilds.cache.get(messageReaction.message.guild!.id)!.roles.cache.has("719936221572235295"))
 
     if (messageReaction.partial) await messageReaction.fetch();
@@ -348,22 +349,22 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
     if (user.client.guilds.cache
       .get(messageReaction.message.guild!.id)!
       .members.cache.get(user.id)!
-      .roles.cache.has("719936221572235295") 
-      === true){
+      .roles.cache.has("719936221572235295")
+      === true) {
 
-      
-        let pos = ['🇦', '🇧', '🇨','🇩','🇪','🇫'].indexOf(messageReaction.emoji.name)
-        let id = await (await getQual(messageReaction.message.channel.id)).playerids[pos]
-        await updateModProfile(messageReaction.message.author.id, "modactions", 1)
-        await updateModProfile(messageReaction.message.author.id, "matchportionsstarted", 1)
-        await splitqual(client, messageReaction.message, id)
-        await messageReaction.users.remove(user.id)
-        await messageReaction.remove()
 
-      
+      let pos = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫'].indexOf(messageReaction.emoji.name)
+      let id = await (await getQual(messageReaction.message.channel.id)).playerids[pos]
+      await updateModProfile(messageReaction.message.author.id, "modactions", 1)
+      await updateModProfile(messageReaction.message.author.id, "matchportionsstarted", 1)
+      await splitqual(client, messageReaction.message, id)
+      await messageReaction.users.remove(user.id)
+      await messageReaction.remove()
+
+
     }
-    
-    else{
+
+    else {
       await messageReaction.users.remove(user.id)
       await user.send("No.")
     }
@@ -375,10 +376,10 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
   //console.log(messageReaction, user)
   // let quals: qualmatch[] = await getQuals()
 
-  
 
 
-  if((messageReaction.emoji.name === emojis[1] || messageReaction.emoji.name === emojis[0]) 
+
+  if ((messageReaction.emoji.name === emojis[1] || messageReaction.emoji.name === emojis[0])
     && await getMatch(messageReaction.message.channel.id)) {
     let match = await getMatch(messageReaction.message.channel.id)
 
@@ -386,31 +387,31 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
     if (messageReaction.message.partial) await messageReaction.message.fetch();
     if (!match) return;
 
-    if (user.id !== match.p1.userid && user.id !== match.p2.userid){ // != match.p1.userid || user.id != match.p2.userid
+    if (user.id !== match.p1.userid && user.id !== match.p2.userid) { // != match.p1.userid || user.id != match.p2.userid
       console.log("checkq1")
-      if(messageReaction.emoji.name === emojis[0]){
-      console.log("checkq2")
-        if(match.p1.voters.includes(user.id)){
+      if (messageReaction.emoji.name === emojis[0]) {
+        console.log("checkq2")
+        if (match.p1.voters.includes(user.id)) {
           await user.send("You can't vote on the same meme twice")
           await messageReaction.users.remove(user.id)
           await messageReaction.message.react(emojis[0])
         }
 
-        else{
+        else {
           match.p1.votes += 1
           match.p1.voters.push(user.id)
-         
-          if(match.p2.voters.includes(user.id)){
+
+          if (match.p2.voters.includes(user.id)) {
             match.p2.votes -= 1
             match.p2.voters.splice(match.p2.voters.indexOf(user.id), 1)
           }
           await messageReaction.users.remove(user.id)
           await messageReaction.message.react(emojis[0])
-          if(!match.exhibition){
+          if (!match.exhibition) {
             await user.send(`Vote counted for Player 1's memes in <#${match.channelid}>. You gained 2 points for voting`)
           }
 
-          else{
+          else {
             await user.send(`Vote counted for Player 1's memes in <#${match.channelid}>.`)
           }
           console.log("checkq3")
@@ -418,31 +419,31 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
         }
       }
 
-      else if(messageReaction.emoji.name === emojis[1]){
-      console.log("checkq4")
+      else if (messageReaction.emoji.name === emojis[1]) {
+        console.log("checkq4")
 
-        if(match.p2.voters.includes(user.id)){
+        if (match.p2.voters.includes(user.id)) {
           await user.send("You can't vote on the same meme twice")
           await messageReaction.users.remove(user.id)
           await messageReaction.message.react(emojis[1])
         }
 
-        else{
+        else {
           match.p2.votes += 1
           match.p2.voters.push(user.id)
 
 
-          if(match.p1.voters.includes(user.id)){
+          if (match.p1.voters.includes(user.id)) {
             match.p1.votes -= 1
             match.p1.voters.splice(match.p1.voters.indexOf(user.id), 1)
           }
           await messageReaction.users.remove(user.id)
           await messageReaction.message.react(emojis[1])
-          if(!match.exhibition){
+          if (!match.exhibition) {
             await user.send(`Vote counted for Player 2's memes in <#${match.channelid}>. You gained 2 points for voting`)
           }
 
-          else{
+          else {
             await user.send(`Vote counted for Player 2's memes in <#${match.channelid}>.`)
           }
           console.log("checkq5")
@@ -459,15 +460,15 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
   }
 
   //removethreevotes() now only checks if it's 2 votes or less
-  if(emojis.includes(messageReaction.emoji.name) && await getQual(messageReaction.message.channel.id)) {
+  if (emojis.includes(messageReaction.emoji.name) && await getQual(messageReaction.message.channel.id)) {
     let match = await getQual(messageReaction.message.channel.id)
 
-    if(!match) return;
+    if (!match) return;
 
     if (messageReaction.partial) await messageReaction.fetch();
     if (messageReaction.message.partial) await messageReaction.message.fetch();
 
-    if(match.votingperiod === false) return;
+    if (match.votingperiod === false) return;
 
     if (match.playerids.includes(user.id)) {
       await messageReaction.users.remove(user.id)
@@ -481,7 +482,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
       return user.send("Your votes have been reset")
     }
 
-    else{
+    else {
       let i = emojis.indexOf(messageReaction.emoji.name)
 
       if (hasthreevotes(match.votes, user.id)) {
@@ -498,12 +499,12 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
         await messageReaction.users.remove(user.id)
         return user.send("You can't for a meme twice. Hit the recycle emote to reset your votes")
       }
-      
+
       else {
         match.votes[i].push(user.id)
         await messageReaction.users.remove(user.id)
         await updateQuals(match)
-        return user.send(`Your vote for meme ${i+1} in <#${match.channelid}> been counted. You gained 2 points for voting`);
+        return user.send(`Your vote for meme ${i + 1} in <#${match.channelid}> been counted. You gained 2 points for voting`);
       }
     }
   }
@@ -514,7 +515,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
 client.on("message", async message => {
   //const gamemaster = message.guild.roles.get("719936221572235295");
 
-  
+
   // if(message.content.includes("!speedrun")){
   //   await qualrunning(client);
   //   await running(client);
@@ -546,13 +547,13 @@ client.on("message", async message => {
   //   await running(client);
   // }
 
-  if(command === "!speedrun"){
+  if (command === "!speedrun") {
     await qualrunning(client);
     await running(client);
     console.log("Ran!")
   }
 
-  if(command === "forcepoll"){
+  if (command === "forcepoll") {
 
     let match = await getMatch(message.channel.id)
 
@@ -562,7 +563,7 @@ client.on("message", async message => {
       match.p1 = match.p2
 
       match.p2 = temp
-  }
+    }
     match.p1.time = (Math.floor(Date.now() / 1000)) - 2800
     match.p2.time = (Math.floor(Date.now() / 1000)) - 2800
     match.votingperiod = true
@@ -571,7 +572,7 @@ client.on("message", async message => {
     await updateActive(match)
 
     await reload(message, client)
-    
+
   }
 
   else if (command === "ping") {
@@ -587,9 +588,9 @@ client.on("message", async message => {
     }
     message.delete().catch(console.log);
     message.channel.send(sayMessage);
-}
+  }
 
-  else if (command === "purge" || command === "clear"){
+  else if (command === "purge" || command === "clear") {
 
 
     if (!message!.member!.permissions.has(['MANAGE_MESSAGES'], true)) {
@@ -604,48 +605,48 @@ client.on("message", async message => {
 
     if (!amount || amount < 1 || amount > 100) return message.reply("Please give a number between 1 to 100");
 
-    
-    await message.channel.messages.fetch({
-      limit: amount })
-      .then(async (messages) => {
-      if (user) {
-        const filterBy = user;
-        let deletemessages = messages.filter(m => m.author.id === filterBy.id).array().slice(0, amount);
-        //console.log(deletemessages)
-        await message.channel.bulkDelete(deletemessages).catch(error => console.log(error.stack));
-      }
 
-      else{
-        await message.channel.bulkDelete(messages).catch(error => console.log(error.stack));
-      }
-      
+    await message.channel.messages.fetch({
+      limit: amount
     })
+      .then(async (messages) => {
+        if (user) {
+          const filterBy = user;
+          let deletemessages = messages.filter(m => m.author.id === filterBy.id).array().slice(0, amount);
+          //console.log(deletemessages)
+          await message.channel.bulkDelete(deletemessages).catch(error => console.log(error.stack));
+        }
+
+        else {
+          await message.channel.bulkDelete(messages).catch(error => console.log(error.stack));
+        }
+
+      })
 
     // message.channel.bulkDelete(fetched)
     //   .catch(error => message.reply(`Couldn't delete messages because of: ${error}`));
 
   }
 
-  else if(command === "reminder" ){
+  else if (command === "reminder") {
     await reminders(client, args)
   }
 
-  else if (command === "createrole"){
+  else if (command === "createrole") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await createrole(message, args)
   }
 
-  else if(command === "deletechannels"){
+  else if (command === "deletechannels") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await deletechannels(message, args)
   }
 
   else if (command === "test") {
-    await message.reply("no").then(async message => {await message.react('🤏')})
-
-    let guild = client.guilds.cache.get("719406444109103117")!
-    let catchannels = guild.channels.cache.array()!
-    console.log(catchannels.length)
+    await message.reply("no").then(async message => { await message.react('🤏') })
+    let channelid = <Discord.TextChannel>client.channels.cache.get("785633848968871936")
+    console.log((await channelid.messages.fetch()).last()?.createdTimestamp)
+    await message.channel.send(await channelid.messages.cache.last()?.createdTimestamp)
   }
 
   else if (command === "createqualgroup") {
@@ -669,7 +670,7 @@ client.on("message", async message => {
     await GroupSearch(message, args)
   }
 
-  else if(command === "qrd"){
+  else if (command === "qrd") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await qualifierresultadd(await (<Discord.TextChannel>client.channels.cache.get(message.channel.id)), client, args[0], args[1])
   }
@@ -677,15 +678,15 @@ client.on("message", async message => {
   else if (command === "exhibition" || command === "duel") {
     //if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
 
-    if(args[0].toLowerCase() === "help"){
+    if (args[0].toLowerCase() === "help") {
       await message.channel.send({ embed: DuelHelp })
     }
 
-    else if(args[0].toLowerCase() === "check"){
+    else if (args[0].toLowerCase() === "check") {
       await duelcheck(message)
     }
 
-    else{
+    else {
       await exhibition(message, client, args)
     }
 
@@ -693,7 +694,7 @@ client.on("message", async message => {
 
   else if (command === "dqw" || command === "declarequalwinner") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
-    
+
     await declarequalwinner(message, client)
   }
 
@@ -726,7 +727,7 @@ client.on("message", async message => {
     await updateModProfile(message.author.id, "matchesstarted", 1)
   }
 
-  else if (command === "forefeit"){
+  else if (command === "forefeit") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await message.reply("Not ready")
     //await forfeit(message, client)
@@ -769,18 +770,18 @@ client.on("message", async message => {
     await updateModProfile(message.author.id, "matchesstarted", 1)
   }
 
-  else if (command === "settheme" || command === "themeset"){
+  else if (command === "settheme" || command === "themeset") {
     //let id = message.mentions.channels.first()!.id
-    if(!message.mentions.channels.first()) return message.reply("please, state the channel for the qualifier")
+    if (!message.mentions.channels.first()) return message.reply("please, state the channel for the qualifier")
 
-    if(!args[1]) return message.reply("please enter a theme")
+    if (!args[1]) return message.reply("please enter a theme")
 
     let match = await getQual(message.mentions.channels.first()!.id)
 
     match.template = args.slice(1).join(" ")
 
     await (<Discord.TextChannel>client.channels.cache.get("738047732312309870"))
-    .send(`<#${match.channelid}> theme is ${args.slice(1).join(" ")}`);
+      .send(`<#${match.channelid}> theme is ${args.slice(1).join(" ")}`);
 
     match.istheme = true
 
@@ -790,17 +791,17 @@ client.on("message", async message => {
 
   }
 
-  else if(command === "addtheme"){
+  else if (command === "addtheme") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await addTheme(message, client, args)
   }
 
-  else if(command === "deletetheme"){
+  else if (command === "deletetheme") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await removeTheme(message, client, args)
   }
 
-  else if(command === "themelist"){
+  else if (command === "themelist") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await themelistLb(message, client, args)
   }
@@ -817,22 +818,22 @@ client.on("message", async message => {
     await createrUser(message)
   }
 
-  else if (command === "modcreate"){
+  else if (command === "modcreate") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await createmodprofile(message)
   }
 
-  else if(command === "modstats"){
+  else if (command === "modstats") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await viewmodprofile(message, client, args)
   }
 
-  else if(command === "modlb"){
+  else if (command === "modlb") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await modLB(message, client, args)
   }
 
-  else if (command === "resetmodprofiles"){
+  else if (command === "resetmodprofiles") {
     if (message.author.id !== "239516219445608449") return message.reply("You don't have those premissions")
     await clearmodstats(message)
   }
@@ -852,7 +853,7 @@ client.on("message", async message => {
       if (!form) {
         message.reply(`<@${id}> has ${max === min ? `100% good cock` : `${min}/${max} cock.`}`)
 
-        
+
 
         let newform: cockratingInterface = {
           _id: id,
@@ -892,7 +893,7 @@ client.on("message", async message => {
       if (!form) {
         message.reply(`<@${id}> has ${max === min ? `100% good cock` : `${min}/${max} cock.`}`)
 
-        
+
 
         let newform: cockratingInterface = {
           _id: id,
@@ -916,11 +917,11 @@ client.on("message", async message => {
     await cockratingLB(message, client, args)
   }
 
-  else if(command === "lb"){
+  else if (command === "lb") {
     await winningLB(message, client, args)
   }
 
-  else if (command === "clearstats"){
+  else if (command === "clearstats") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await clearstats(message)
   }
@@ -936,14 +937,14 @@ client.on("message", async message => {
     await updateModProfile(message.author.id, "matchportionsstarted", 1)
   }
 
-  else if(command === "matchstats"){
+  else if (command === "matchstats") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await matchstats(message, client)
   }
 
-  else if(command === "qualstats"){
+  else if (command === "qualstats") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
-    await qualstats(message,client)
+    await qualstats(message, client)
   }
 
   else if (command === "startsplit") {
@@ -968,7 +969,7 @@ client.on("message", async message => {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await end(client, message.channel.id)
   }
-  
+
   else if (command === "cancel") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await cancelmatch(message)
@@ -1178,7 +1179,7 @@ client.login(process.env.TOKEN);
 //       await messageReaction.users.remove(user.id)
 //       return user.send("You can't for a meme twice. Hit the recycle emote to reset your votes")
 //     }
-    
+
 //     else {
 //       match.votes[i].push(user.id)
 //       await messageReaction.users.remove(user.id)
