@@ -137,8 +137,17 @@ export async function reminders(client: Discord.Client, args: string[]) {
             .messages.fetch({ limit: 100 }))
 
           console.log(`The length is: ${all.array().length}`)
+          let ting = 1
+          
+          if(args[0] === "12"){
+            ting += 1
+          }
 
-          if (all.array().length === 1) {
+          if(args[0] === "2"){
+            ting += 2
+          }
+          
+          if (all.array().length === ting) {
             let m = all.first()!
 
             await m.channel

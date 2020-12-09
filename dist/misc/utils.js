@@ -101,7 +101,14 @@ async function reminders(client, args) {
                     let all = (await (await client.channels.fetch(channel.id))
                         .messages.fetch({ limit: 100 }));
                     console.log(`The length is: ${all.array().length}`);
-                    if (all.array().length === 1) {
+                    let ting = 1;
+                    if (args[0] === "12") {
+                        ting += 1;
+                    }
+                    if (args[0] === "2") {
+                        ting += 2;
+                    }
+                    if (all.array().length === ting) {
                         let m = all.first();
                         await m.channel
                             .send(`<@${m.mentions.users.first().id}> and <@${m.mentions.users.array()[1].id}>, you have ${args[0]}h left to complete your match`);
