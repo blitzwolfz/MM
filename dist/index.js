@@ -79,6 +79,7 @@ client.on('ready', async () => {
         console.log("A Second Kiss every 5 seconds");
         await start_1.qualrunning(client);
     }, 10000);
+    await utils_1.autoreminders(client);
     await client.channels.cache.get("722616679280148504").send("<@239516219445608449>", {
         embed: {
             description: `Updates/Restart has worked`,
@@ -428,7 +429,7 @@ client.on("message", async (message) => {
         });
     }
     else if (command === "reminder") {
-        await utils_1.reminders(message, client, args);
+        await utils_1.reminders(client, args);
     }
     else if (command === "createrole") {
         if (!message.member.roles.cache.has('719936221572235295'))
@@ -442,7 +443,9 @@ client.on("message", async (message) => {
     }
     else if (command === "test") {
         await message.reply("no").then(async (message) => { await message.react('🤏'); });
-        await utils_1.autoreminders(client, message.channel.id);
+        let guild = client.guilds.cache.get("719406444109103117");
+        let catchannels = guild.channels.cache.array();
+        console.log(catchannels.length);
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))

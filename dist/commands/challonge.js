@@ -183,6 +183,11 @@ async function ChannelCreation(message, disclient, args) {
                                                 throw new Error("Category channel does not exist");
                                             await channel.setParent(category.id);
                                             await channel.lockPermissions();
+                                            if (i === 0) {
+                                                let t = await db_1.getMatchlist();
+                                                t.qualurl = Math.round(message.createdTimestamp / 1000).toString();
+                                                await db_1.updateMatchlist(t);
+                                            }
                                         });
                                     }
                                 }

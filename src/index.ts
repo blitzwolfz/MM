@@ -42,6 +42,7 @@ import {
   updatetempStruct,
   gettemplatedb,
   updatetemplatedb,
+  
 } from "./misc/db";
 
 import { template, approvetemplate, addTheme, removeTheme, themelistLb } from "./commands/template";
@@ -129,6 +130,8 @@ client.on('ready', async () => {
     console.log("A Second Kiss every 5 seconds");
     await qualrunning(client)
   }, 10000);
+
+  await autoreminders(client)
 
   //await running(client)
   //await qualrunning(client)
@@ -624,7 +627,7 @@ client.on("message", async message => {
   }
 
   else if(command === "reminder" ){
-    await reminders(message, client, args)
+    await reminders(client, args)
   }
 
   else if (command === "createrole"){
@@ -640,7 +643,9 @@ client.on("message", async message => {
   else if (command === "test") {
     await message.reply("no").then(async message => {await message.react('🤏')})
 
-    await autoreminders(client, message.channel.id)
+    let guild = client.guilds.cache.get("719406444109103117")!
+    let catchannels = guild.channels.cache.array()!
+    console.log(catchannels.length)
   }
 
   else if (command === "createqualgroup") {

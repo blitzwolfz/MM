@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.toS = exports.toHHMMSS = exports.qualifierresultadd = exports.clearstats = exports.createrole = exports.updatesomething = exports.deletechannels = exports.autoreminders = exports.reminders = exports.dateBuilder = exports.indexOf2d = exports.forwardsFilter = exports.backwardsFilter = exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
+exports.toS = exports.toHHMMSS = exports.qualifierresultadd = exports.clearstats = exports.createrole = exports.updatesomething = exports.deletechannels = exports.autoreminders = exports.aautoreminders = exports.reminders = exports.dateBuilder = exports.indexOf2d = exports.forwardsFilter = exports.backwardsFilter = exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
 const db_1 = require("./db");
 const modprofiles_1 = require("./modprofiles");
 async function getUser(mention) {
@@ -72,10 +72,12 @@ function dateBuilder() {
     return `${day}, ${month} ${date} ${year}`;
 }
 exports.dateBuilder = dateBuilder;
-async function reminders(message, client, args) {
-    let catchannels = message.guild.channels.cache.array();
+async function reminders(client, args) {
+    let guild = client.guilds.cache.get("719406444109103117");
+    let catchannels = guild.channels.cache.array();
     let pp = 0;
     for (let channel of catchannels) {
+        console.log(catchannels.length);
         try {
             if (channel.parent && channel.parent.name === "matches") {
                 if (await db_1.getMatch(channel.id)) {
@@ -139,10 +141,15 @@ async function reminders(message, client, args) {
         }
         pp += 1;
     }
-    await message.channel.send(`<@${message.author.id}> gets ${pp} good boy points`);
+    try {
+        await console.log(`Me gets ${pp} good boy points`);
+    }
+    catch (error) {
+    }
+    await autoreminders(client);
 }
 exports.reminders = reminders;
-async function autoreminders(client, ...st) {
+async function aautoreminders(client, ...st) {
     var _a, _b, _c, _d, _e, _f;
     let catchannels = client.guilds.cache.get("719406444109103117").channels.cache.array();
     for (let channel of catchannels) {
@@ -150,8 +157,7 @@ async function autoreminders(client, ...st) {
             let all = (await (await client.channels.fetch(channel.id))
                 .messages.fetch({ limit: 100 }));
             if (channel.parent && channel.parent.name === "matches") {
-                let now = Math.ceil(Math.round(Math.floor(Date.now() / 1000) - Math.floor(all.last().createdTimestamp / 1000)) / 100) * 100;
-                console.log(now);
+                let now = Math.ceil(Math.round(Math.floor(Date.now() / 1000) - Math.floor(1607365500000 / 1000)) / 100) * 100;
                 if (await db_1.getMatch(channel.id)) {
                     let match = await db_1.getMatch(channel.id);
                     let stmsg = "";
@@ -196,6 +202,29 @@ async function autoreminders(client, ...st) {
             continue;
         }
     }
+}
+exports.aautoreminders = aautoreminders;
+async function autoreminders(client) {
+    let time;
+    let t = 0;
+    if (Math.floor((Date.now()) / 1000 - parseInt(await (await db_1.getMatchlist()).qualurl)) > 129600) {
+        time = "2";
+        t = 2 * 3600;
+        console.log("t diff", t * 1000);
+    }
+    else if (Math.floor((Date.now()) / 1000 - parseInt(await (await db_1.getMatchlist()).qualurl)) > 86400) {
+        time = "12";
+        t = 12 * 3600;
+        console.log("t diff", t * 1000);
+    }
+    else {
+        time = "24";
+        t = 24 * 3600;
+        console.log("t diff", t * 1000);
+    }
+    console.log(t - (Math.floor(Date.now() / 1000) - Math.floor(parseInt((await db_1.getMatchlist()).qualurl))));
+    console.log((await db_1.getMatchlist()).qualurl);
+    setTimeout(() => reminders(client, [time]), ((t - (Math.floor((Date.now()) / 1000 - parseInt(await (await db_1.getMatchlist()).qualurl)))) * 1000));
 }
 exports.autoreminders = autoreminders;
 async function deletechannels(message, args) {
@@ -310,21 +339,25 @@ async function qualifierresultadd(channel, client, msg1, msg2) {
     for (let v of fields) {
         v.value += " Points in total";
     }
-    channel.send({ embed: {
+    channel.send({
+        embed: {
             title: `Final Results for ${channel.name}`,
             description: `Top two move on`,
             fields,
             color: "#d7be26",
             timestamp: new Date()
-        } });
+        }
+    });
     await (await client.channels.cache.get("722291182461386804"))
-        .send({ embed: {
+        .send({
+        embed: {
             title: `Final Results for Group ${channel.name}`,
             description: `Top two move on`,
             fields,
             color: "#d7be26",
             timestamp: new Date()
-        } });
+        }
+    });
 }
 exports.qualifierresultadd = qualifierresultadd;
 async function toHHMMSS(timestamp, howlong) {

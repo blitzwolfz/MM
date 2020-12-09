@@ -261,6 +261,16 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
                                                     if (!category) throw new Error("Category channel does not exist");
                                                     await channel.setParent(category.id);
                                                     await channel.lockPermissions()
+
+                                                    if(i === 0){
+                                                        let t = await getMatchlist()
+
+                                                        
+
+                                                        t.qualurl = Math.round(message.createdTimestamp/1000).toString()
+
+                                                        await updateMatchlist(t)
+                                                    }
                                                 });
                                     }
 
