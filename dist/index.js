@@ -79,6 +79,10 @@ client.on('ready', async () => {
         console.log("A Second Kiss every 5 seconds");
         await start_1.qualrunning(client);
     }, 10000);
+    setInterval(async function () {
+        console.log("A Third Kiss every 5 seconds");
+        await utils_1.autoreminders(client);
+    }, 1000);
     await utils_1.autoreminders(client);
     await client.channels.cache.get("722616679280148504").send("<@239516219445608449>", {
         embed: {

@@ -132,6 +132,11 @@ client.on('ready', async () => {
     await qualrunning(client)
   }, 10000);
 
+  setInterval(async function () {
+    console.log("A Third Kiss every 5 seconds");
+    await autoreminders(client)
+  }, 1000);
+
   await autoreminders(client)
 
   //await running(client)

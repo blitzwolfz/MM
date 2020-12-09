@@ -136,7 +136,7 @@ export async function reminders(client: Discord.Client, args: string[]) {
           let all = (await (<Discord.TextChannel>await client.channels.fetch(channel.id))!
             .messages.fetch({ limit: 100 }))
 
-            console.log(`The length is: ${all.array().length}`)
+          console.log(`The length is: ${all.array().length}`)
 
           if (all.array().length === 1) {
             let m = all.first()!
@@ -325,38 +325,37 @@ export async function aautoreminders(client: Discord.Client, ...st: string[]) {
 
 export async function autoreminders(client: Discord.Client) {
 
-  return; 
-  let time:string;
-  let t = 0;
+  //return; 
+  //let time:string;
+  //let t = 0;
 
-  if(Math.floor((Date.now())/1000 - parseInt(await (await getMatchlist()).qualurl)) > 129600*1000){
-    time = "2"
-    
-    t = 2 * 3600 * 1000
-    console.log("t diff", t)
-    
+  if (Math.floor((Date.now()) - parseInt(await (await getMatchlist()).qualurl)) < 165601 * 1000 && Math.floor((Date.now()) - parseInt(await (await getMatchlist()).qualurl)) > 165600 * 1000) {
+    //time = "2"
+    setTimeout(() => { console.log("World!"); }, 2000);
+    await reminders(client, ["2"])
   }
 
-  else if(Math.floor((Date.now())/1000 - parseInt(await (await getMatchlist()).qualurl)) > 86400*1000){
-    time = "12"
-    
-    t = 12 * 3600 * 1000
-    console.log("t diff", t)
-    
+  else if (Math.floor((Date.now()) - parseInt(await (await getMatchlist()).qualurl)) < 129601 * 1000 && Math.floor((Date.now()) - parseInt(await (await getMatchlist()).qualurl)) > 129600 * 1000) {
+    //time = "12"
+    //console.log("t diff", t)
+    await reminders(client, ["12"])
+
   }
 
-  else {
-    time = "24"
-    
-    t = 24 * 3600 * 1000
-    console.log("t diff", t)
-    
-  }
+  else if (Math.floor((Date.now()) - parseInt(await (await getMatchlist()).qualurl)) < 86401 * 1000 && Math.floor((Date.now()) - parseInt(await (await getMatchlist()).qualurl)) > 86400 * 1000) {
+    //time = "24"
+    //console.log("t diff", t)
+    await reminders(client, ["24"])
 
-  
-  console.log(time)
-  console.log(await toHHMMSS(t, Math.floor(t - Date.now() - (parseInt((await getMatchlist()).qualurl)))/1000))
-  console.log(t - Date.now() - (parseInt((await getMatchlist()).qualurl)))
+  }
+  // console.log(165600*1000)
+  // console.log(Math.floor((Date.now()) - parseInt(await (await getMatchlist()).qualurl)))
+  // console.log(Math.floor((Date.now()) - parseInt(await (await getMatchlist()).qualurl)) < 165601*1000 && Math.floor((Date.now()) - parseInt(await (await getMatchlist()).qualurl)) > 165600*1000)
+
+  // console.log(Math.floor((Date.now()) - parseInt(await (await getMatchlist()).qualurl)) < 129601*1000 && Math.floor((Date.now()) - parseInt(await (await getMatchlist()).qualurl)) > 129600*1000)
+
+  // console.log( Math.floor((Date.now()) - parseInt(await (await getMatchlist()).qualurl)) < 86401*1000 && Math.floor((Date.now()) - parseInt(await (await getMatchlist()).qualurl)) > 86400*1000)
+
 
   //setTimeout(() => reminders(client, [time]), ((t-(Math.floor((Date.now())/1000 - parseInt(await (await getMatchlist()).qualurl))))*1000));
 }

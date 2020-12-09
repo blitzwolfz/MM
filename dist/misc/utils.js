@@ -205,27 +205,16 @@ async function aautoreminders(client, ...st) {
 }
 exports.aautoreminders = aautoreminders;
 async function autoreminders(client) {
-    return;
-    let time;
-    let t = 0;
-    if (Math.floor((Date.now()) / 1000 - parseInt(await (await db_1.getMatchlist()).qualurl)) > 129600 * 1000) {
-        time = "2";
-        t = 2 * 3600 * 1000;
-        console.log("t diff", t);
+    if (Math.floor((Date.now()) - parseInt(await (await db_1.getMatchlist()).qualurl)) < 165601 * 1000 && Math.floor((Date.now()) - parseInt(await (await db_1.getMatchlist()).qualurl)) > 165600 * 1000) {
+        setTimeout(() => { console.log("World!"); }, 2000);
+        await reminders(client, ["2"]);
     }
-    else if (Math.floor((Date.now()) / 1000 - parseInt(await (await db_1.getMatchlist()).qualurl)) > 86400 * 1000) {
-        time = "12";
-        t = 12 * 3600 * 1000;
-        console.log("t diff", t);
+    else if (Math.floor((Date.now()) - parseInt(await (await db_1.getMatchlist()).qualurl)) < 129601 * 1000 && Math.floor((Date.now()) - parseInt(await (await db_1.getMatchlist()).qualurl)) > 129600 * 1000) {
+        await reminders(client, ["12"]);
     }
-    else {
-        time = "24";
-        t = 24 * 3600 * 1000;
-        console.log("t diff", t);
+    else if (Math.floor((Date.now()) - parseInt(await (await db_1.getMatchlist()).qualurl)) < 86401 * 1000 && Math.floor((Date.now()) - parseInt(await (await db_1.getMatchlist()).qualurl)) > 86400 * 1000) {
+        await reminders(client, ["24"]);
     }
-    console.log(time);
-    console.log(await toHHMMSS(t, Math.floor(t - Date.now() - (parseInt((await db_1.getMatchlist()).qualurl))) / 1000));
-    console.log(t - Date.now() - (parseInt((await db_1.getMatchlist()).qualurl)));
 }
 exports.autoreminders = autoreminders;
 async function deletechannels(message, args) {

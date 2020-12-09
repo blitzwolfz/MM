@@ -1,5 +1,5 @@
 import * as discord from "discord.js"
-import { getUser, emojis, autoreminders } from "../misc/utils"
+import { getUser, emojis } from "../misc/utils"
 const prefix = process.env.PREFIX!
 import { activematch, qualmatch, players } from "../misc/struct"
 import { end, qualend } from "./winner"
@@ -675,7 +675,7 @@ export async function running(client: discord.Client): Promise<void> {
 
     }
     await deleteExhibitionchannels(client)
-    await autoreminders(client)
+    //await autoreminders(client)
     //await qualrunning(client)
 }
 
