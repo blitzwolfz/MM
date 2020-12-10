@@ -42,6 +42,7 @@ import {
   updatetempStruct,
   gettemplatedb,
   updatetemplatedb,
+  getQuals,
 
 } from "./misc/db";
 
@@ -125,12 +126,12 @@ client.on('ready', async () => {
   setInterval(async function () {
     console.log("A Kiss every 5 seconds");
     await running(client)
-  }, 10000);
+  }, 15000);
 
   setInterval(async function () {
     console.log("A Second Kiss every 5 seconds");
     await qualrunning(client)
-  }, 10000);
+  }, 15000);
 
   setInterval(async function () {
     console.log("A Third Kiss every 5 seconds");
@@ -649,7 +650,7 @@ client.on("message", async message => {
 
   else if (command === "test") {
     await message.reply("no").then(async message => { await message.react('🤏') })
-    let channelid = <Discord.TextChannel>client.channels.cache.get("785633848968871936")
+    let channelid = <Discord.TextChannel>client.channels.cache.get(args[0])
     console.log((await channelid.messages.fetch()).last()?.createdTimestamp)
     await message.channel.send(await channelid.messages.cache.last()?.createdTimestamp)
   }
@@ -1007,6 +1008,28 @@ client.on("message", async message => {
     //await viewsignup(message, client)
     await activeOffers(message, client, args)
     //matchlistEmbed
+  }
+
+  else if (command === "allmatches") {
+    if (!message.member!.roles.cache.has('724818272922501190')) return message.reply("You don't have those premissions")
+    let a = await getActive()
+
+    if (a) {
+      for (let i = 0; i < a.length; i++) {
+        await message.channel.send(`${a[i].channelid}`)
+      }
+
+    }
+
+    let aa = await getQuals()
+
+    if (aa) {
+      for (let i = 0; i < aa.length; i++) {
+        await message.channel.send(`${a[i].channelid}`)
+      }
+    }
+
+
   }
 
   else if (command === "viewmatchlist" || command === "matchlist") {

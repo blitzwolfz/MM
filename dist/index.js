@@ -74,11 +74,11 @@ client.on('ready', async () => {
     setInterval(async function () {
         console.log("A Kiss every 5 seconds");
         await start_1.running(client);
-    }, 10000);
+    }, 15000);
     setInterval(async function () {
         console.log("A Second Kiss every 5 seconds");
         await start_1.qualrunning(client);
-    }, 10000);
+    }, 15000);
     setInterval(async function () {
         console.log("A Third Kiss every 5 seconds");
         await utils_1.autoreminders(client);
@@ -447,7 +447,7 @@ client.on("message", async (message) => {
     }
     else if (command === "test") {
         await message.reply("no").then(async (message) => { await message.react('🤏'); });
-        let channelid = client.channels.cache.get("785633848968871936");
+        let channelid = client.channels.cache.get(args[0]);
         console.log((_b = (await channelid.messages.fetch()).last()) === null || _b === void 0 ? void 0 : _b.createdTimestamp);
         await message.channel.send(await ((_c = channelid.messages.cache.last()) === null || _c === void 0 ? void 0 : _c.createdTimestamp));
     }
@@ -750,6 +750,22 @@ client.on("message", async (message) => {
     }
     else if (command === "viewsignup" || command === "viewlist") {
         await signups_1.activeOffers(message, client, args);
+    }
+    else if (command === "allmatches") {
+        if (!message.member.roles.cache.has('724818272922501190'))
+            return message.reply("You don't have those premissions");
+        let a = await db_1.getActive();
+        if (a) {
+            for (let i = 0; i < a.length; i++) {
+                await message.channel.send(`${a[i].channelid}`);
+            }
+        }
+        let aa = await db_1.getQuals();
+        if (aa) {
+            for (let i = 0; i < aa.length; i++) {
+                await message.channel.send(`${a[i].channelid}`);
+            }
+        }
     }
     else if (command === "viewmatchlist" || command === "matchlist") {
         await signups_1.matchlistEmbed(message, client);
