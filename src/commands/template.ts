@@ -2,18 +2,18 @@ import * as Discord from "discord.js"
 import { gettemplatedb, getthemes, updatedoc, updateProfile } from "../misc/db"
 import { backwardsFilter, forwardsFilter } from "../misc/utils"
 
-export async function template(message: Discord.Message, client:Discord.Client){
+export async function template(message: Discord.Message, client: Discord.Client) {
     let channel = <Discord.TextChannel>client.channels.cache.get("722291683030466621")
 
-    if (message.attachments.size > 10){
+    if (message.attachments.size > 10) {
         return message.reply("You can't submit more than ten images")
     }
-    
-    else if(message.attachments.size <= 0){
+
+    else if (message.attachments.size <= 0) {
         return message.reply("Your image was not submitted properly. Contact a mod")
     }
 
-    else{
+    else {
         // await channel.send(
         //     {
         //         embed: {
@@ -27,34 +27,34 @@ export async function template(message: Discord.Message, client:Discord.Client){
 
             await channel.send(
                 new Discord.MessageEmbed()
-                .setTitle(`${message.author.username} has submitted a new template(s)`)
-                .setImage(message.attachments.array()[i].url)
+                    .setTitle(`${message.author.username} has submitted a new template(s)`)
+                    .setImage(message.attachments.array()[i].url)
             ).then(async message => {
                 await message.react('🏁')
                 await message.react('🗡️')
-                }
+            }
             )
         }
 
         updateProfile(message.author.id, "points", (message.attachments.array().length * 2))
         await message.reply(`Thank you for submitting templates. You gained ${message.attachments.array().length * 2} points`)
-        
+
     }
 
 }
 
-export async function approvetemplate(message:Discord.Message, client:Discord.Client){
+export async function approvetemplate(message: Discord.Message, client: Discord.Client) {
     let channel = <Discord.TextChannel>client.channels.cache.get("724827952390340648")
-    
-    if (message.attachments.size > 10){
+
+    if (message.attachments.size > 10) {
         return message.reply("You can't submit more than ten images")
     }
-    
-    else if(message.attachments.size <= 0){
+
+    else if (message.attachments.size <= 0) {
         return message.reply("Your image was not submitted properly. Contact blitz")
     }
 
-    else{
+    else {
         await channel.send(
             {
                 embed: {
@@ -70,18 +70,18 @@ export async function approvetemplate(message:Discord.Message, client:Discord.Cl
 
 }
 
-export async function addTheme(message:Discord.Message, client:Discord.Client, args:string[]) {
-    
-    if(!args){
+export async function addTheme(message: Discord.Message, client: Discord.Client, args: string[]) {
+
+    if (!args) {
         return message.reply("Please give a theme.")
     }
 
-    else{
+    else {
         let obj = await getthemes()
         console.log(obj)
         await message.channel.send(args.join(" "))
 
-        let list:string[] = obj.list
+        let list: string[] = obj.list
         console.log(list)
         //await message.channel.send(list)
 
@@ -89,31 +89,31 @@ export async function addTheme(message:Discord.Message, client:Discord.Client, a
         console.log(list)
 
         await updatedoc({
-            _id:"themelist",
-            list:list
+            _id: "themelist",
+            list: list
         })
 
         await message.reply("added theme.")
     }
 }
 
-export async function removeTheme(message:Discord.Message, client:Discord.Client, args:string[]) {
-    if(!args){
+export async function removeTheme(message: Discord.Message, client: Discord.Client, args: string[]) {
+    if (!args) {
         return message.reply("Please give a theme.")
     }
 
-    else{
+    else {
         let obj = await getthemes()
 
-        let list:string[] = obj.list
+        let list: string[] = obj.list
         //let word = 
         let index = list.findIndex(ele => ele === args.join(" "))
         list.splice(index, 1)
         console.log(list)
 
         await updatedoc({
-            _id:"themelist",
-            list:list
+            _id: "themelist",
+            list: list
         })
 
         await message.reply("removed theme.")
@@ -132,7 +132,7 @@ export async function themelistLb(message: Discord.Message, client: Discord.Clie
 
     backwards.on('collect', async () => {
         m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
-        m.edit({ embed: await themelistEmbed(--page, client, obj)});
+        m.edit({ embed: await themelistEmbed(--page, client, obj) });
     });
     forwards.on('collect', async () => {
         m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
@@ -140,7 +140,7 @@ export async function themelistLb(message: Discord.Message, client: Discord.Clie
     });
 }
 
-async function themelistEmbed(page: number = 1, client: Discord.Client, ratings: string[], ...rest:any[]){
+async function themelistEmbed(page: number = 1, client: Discord.Client, ratings: string[], ...rest: any[]) {
 
     //let signup = await getSignups()
     //let guild = client.guilds.cache.get("719406444109103117")
@@ -148,15 +148,15 @@ async function themelistEmbed(page: number = 1, client: Discord.Client, ratings:
     page = page < 1 ? 1 : page;
     const fields = [];
     let index = (0 + page - 1) * 10
-    for (let i = index; i < index + 10; i++){
+    for (let i = index; i < index + 10; i++) {
 
-        try{
+        try {
             fields.push({
-                name: `Theme #${i+1}`,
+                name: `Theme #${i + 1}`,
                 value: `${ratings[i]}`
             });
         }
-        catch{
+        catch {
             continue;
         }
 
@@ -165,22 +165,27 @@ async function themelistEmbed(page: number = 1, client: Discord.Client, ratings:
 
     return {
         title: `Theme List`,
-        description:`Total amount of themes: ${ratings.length+1}. You are on page ${page! || 1} of ${Math.floor(ratings.length / 10) + 1}`,
+        description: `Total amount of themes: ${ratings.length + 1}. You are on page ${page! || 1} of ${Math.floor(ratings.length / 10) + 1}`,
         fields,
         color: "#d7be26",
         timestamp: new Date()
     };
 }
 
-async function templatecheckembed(page: number = 1, client: Discord.Client, templist: string[]){
+async function templatecheckembed(page: number = 1, client: Discord.Client, templist: string[]) {
 
     //let signup = await getSignups()
     //let guild = client.guilds.cache.get("719406444109103117")
 
-    page = page < 0 ? 0 : page - 1 ;
+    page = page < 0 ? 0 : page - 1;
+    
+
+    if(page > templist.length){
+        page = 0
+    }
 
     return {
-        title: `Template number ${page+1}`,
+        title: `Template number ${page + 1}`,
         image: {
             url: `${templist[page]}`,
         },
@@ -190,32 +195,34 @@ async function templatecheckembed(page: number = 1, client: Discord.Client, temp
 }
 
 export async function templatecheck(message: Discord.Message, client: Discord.Client, args: string[]) {
-    let page: number = parseInt(args[0]) || 1
+    //@ts-ignore
+    let page:number = typeof args[1] == "undefined" ? isNaN(parseInt(args[0])) ? 1 : parseInt(args[0]) : args[1];;
     let ratings = await gettemplatedb()
-    let removelinks:string[] = []
-    const m = <Discord.Message>(await message.channel.send({ embed: await quallistEmbed(page!, client, ratings) }));
+    let removelinks: string[] = []
+    const m = <Discord.Message>(await message.channel.send({ embed: await templatecheckembed(page!, client, ratings.list) }));
     await m.react("⬅")
     await m.react("➡");
     await m.react('🗡️')
 
-    const backwards = m.createReactionCollector(backwardsFilter, { time: 300000 });
-    const forwards = m.createReactionCollector(forwardsFilter, { time: 300000 });
-    const remove = m.createReactionCollector(((reaction: { emoji: { name: string; }; }, user: Discord.User) => reaction.emoji.name === '🗡️' && !user.bot), { time: 300000 });
+    const backwards = m.createReactionCollector(backwardsFilter, { time: 500000 });
+    const forwards = m.createReactionCollector(forwardsFilter, { time: 500000 });
+    const remove = m.createReactionCollector(((reaction: { emoji: { name: string; }; }, user: Discord.User) => reaction.emoji.name === '🗡️' && !user.bot), { time: 500000 });
 
     backwards.on('collect', async () => {
         m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
-        m.edit({ embed: await quallistEmbed(--page, client, ratings)});
+        m.edit({ embed: await templatecheckembed(--page, client, ratings.list) });
     });
     forwards.on('collect', async () => {
         m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
-        m.edit({ embed: await quallistEmbed(++page, client, ratings) });
+        m.edit({ embed: await templatecheckembed(++page, client, ratings.list) });
     });
 
     remove.on('collect', async () => {
         m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id))
         removelinks.push(m.embeds[0].image?.url!)
+        m.reactions.message.channel.send(removelinks)
     });
 
-    
+
 
 }

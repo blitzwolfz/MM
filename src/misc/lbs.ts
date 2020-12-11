@@ -99,6 +99,10 @@ async function winlistEmbed(page: number = 1, client: Discord.Client, ratings: u
     //let guild = client.guilds.cache.get("719406444109103117")
 
     page = page < 1 ? 1 : page;
+
+    if(page > ratings.length){
+        page = 0
+    }
     const fields = [];
     let index = (0 + page - 1) * 10
     for (let i = index; i < index + 10; i++){
