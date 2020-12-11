@@ -148,6 +148,9 @@ async function themelistEmbed(page = 1, client, ratings, ...rest) {
 }
 async function templatecheckembed(page = 1, client, templist) {
     page = page < 0 ? 0 : page - 1;
+    if (page > templist.length) {
+        page = 0;
+    }
     return {
         title: `Template number ${page + 1}`,
         image: {
@@ -158,28 +161,30 @@ async function templatecheckembed(page = 1, client, templist) {
     };
 }
 async function templatecheck(message, client, args) {
-    let page = parseInt(args[0]) || 1;
+    let page = typeof args[1] == "undefined" ? isNaN(parseInt(args[0])) ? 1 : parseInt(args[0]) : args[1];
+    ;
     let ratings = await db_1.gettemplatedb();
     let removelinks = [];
-    const m = (await message.channel.send({ embed: await quallistEmbed(page, client, ratings) }));
+    const m = (await message.channel.send({ embed: await templatecheckembed(page, client, ratings.list) }));
     await m.react("⬅");
     await m.react("➡");
     await m.react('🗡️');
-    const backwards = m.createReactionCollector(utils_1.backwardsFilter, { time: 300000 });
-    const forwards = m.createReactionCollector(utils_1.forwardsFilter, { time: 300000 });
-    const remove = m.createReactionCollector(((reaction, user) => reaction.emoji.name === '🗡️' && !user.bot), { time: 300000 });
+    const backwards = m.createReactionCollector(utils_1.backwardsFilter, { time: 500000 });
+    const forwards = m.createReactionCollector(utils_1.forwardsFilter, { time: 500000 });
+    const remove = m.createReactionCollector(((reaction, user) => reaction.emoji.name === '🗡️' && !user.bot), { time: 500000 });
     backwards.on('collect', async () => {
         m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
-        m.edit({ embed: await quallistEmbed(--page, client, ratings) });
+        m.edit({ embed: await templatecheckembed(--page, client, ratings.list) });
     });
     forwards.on('collect', async () => {
         m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
-        m.edit({ embed: await quallistEmbed(++page, client, ratings) });
+        m.edit({ embed: await templatecheckembed(++page, client, ratings.list) });
     });
     remove.on('collect', async () => {
         var _a;
         m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
         removelinks.push((_a = m.embeds[0].image) === null || _a === void 0 ? void 0 : _a.url);
+        m.reactions.message.channel.send(removelinks);
     });
 }
 exports.templatecheck = templatecheck;

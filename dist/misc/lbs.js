@@ -81,6 +81,9 @@ async function winningLB(message, client, args) {
 exports.winningLB = winningLB;
 async function winlistEmbed(page = 1, client, ratings, ...rest) {
     page = page < 1 ? 1 : page;
+    if (page > ratings.length) {
+        page = 0;
+    }
     const fields = [];
     let index = (0 + page - 1) * 10;
     for (let i = index; i < index + 10; i++) {
