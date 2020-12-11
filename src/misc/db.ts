@@ -4,7 +4,7 @@ require("dotenv").config();
 
 import { activematch, qualmatch, user, signups, matchlist, 
     verificationform, quallist, cockratingInterface, 
-    modprofile, randomtempstruct, groupmatch, exhibition } from "./struct";
+    modprofile, randomtempstruct, groupmatch, exhibition, configDB } from "./struct";
 
 const MongoClient = mongo.MongoClient
 //const assert = require("assert")
@@ -166,6 +166,24 @@ export async function getMatchlist(): Promise<matchlist>{
 export async function updateMatchlist(matchlists: matchlist): Promise<void> {
     await client.db(process.env.DBNAME).collection("signup").updateOne({_id:3}, {$set: matchlists});
 }
+
+export async function getConfig(): Promise<configDB> {
+    return client.db(process.env.DBNAME)?.collection("signup")?.findOne({ _id: "config" })!;
+}
+
+export async function updateConfig(c:configDB): Promise<void> {
+    client.db(process.env.DBNAME)?.collection("signup")?.updateOne({ _id: "config"}, {$set: c} )!;
+}
+
+export async function insertConfig() {
+    let c:configDB = {
+        _id:"config",
+        upmsg: ""
+    }
+
+    client.db(process.env.DBNAME)?.collection("signup")?.insertOne(c)!;
+}
+
 
 // export async function deleteMatchlist(): Promise<string>{
 //     await client.db(process.env.DBNAME).collection("signup").deleteOne({_id: 3})

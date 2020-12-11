@@ -167,3 +167,7 @@ export interface challongematchstruct {
         scoresCsv: string | null;
     };
 }
+export interface configDB {
+    _id: "config";
+    upmsg: string;
+}

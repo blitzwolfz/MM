@@ -322,13 +322,19 @@ async function qualifierresultadd(channel, client, msg1, msg2) {
         return ((b.name.length) - (a.name.length));
     });
     const fields = [];
-    for (let i = 0; i < em1.length; i++) {
+    let i = 0;
+    while (i < em.length) {
         console.log(`${em[i].value.toLowerCase().includes("earned") ? (em[i].value.split(" ")[5].substr(0, 2) + " ") : "0"}`);
         console.log(`${em1[i].value.toLowerCase().includes("earned") ? (em1[i].value.split(" ")[5].substr(0, 2) + " ") : "0"}`);
-        fields.push({
-            name: `${em1[i].name.substr(0, em1[1].name.indexOf("|") - 1)}`,
-            value: `${parseInt(`${em[i].value.toLowerCase().includes("earned") ? (em[i].value.split(" ")[5].substr(0, 2) + " ") : "0"}`) + parseInt(`${em1[i].value.toLowerCase().includes("earned") ? (em1[i].value.split(" ")[5].substr(0, 2) + " ") : "0"}`)} `,
-        });
+        for (let p = 0; p < em1.length; p++) {
+            if (em[i].value.split(" ")[10] === em1[p].value.split(" ")[10]) {
+                fields.push({
+                    name: `${em1[p].name.substr(0, em1[1].name.indexOf("|") - 1)}`,
+                    value: `${parseInt(`${em[i].value.toLowerCase().includes("earned") ? (em[i].value.split(" ")[5].substr(0, 2) + " ") : "0"}`) + parseInt(`${em1[p].value.toLowerCase().includes("earned") ? (em1[p].value.split(" ")[5].substr(0, 2) + " ") : "0"}`)} `,
+                });
+                i += 1;
+            }
+        }
     }
     fields.sort(function (a, b) {
         return ((parseInt(b.value)) - (parseInt(a.value)));

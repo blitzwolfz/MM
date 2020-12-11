@@ -358,7 +358,7 @@ export async function autoreminders(client: Discord.Client) {
 
   }
   // console.log(165600*1000)
-  // console.log(Math.floor((Date.now()) - parseInt(await (await getMatchlist()).qualurl)))
+  //console.log(Math.floor((Date.now()) - parseInt(await (await getMatchlist()).qualurl)))
   // console.log(Math.floor((Date.now()) - parseInt(await (await getMatchlist()).qualurl)) < 165601*1000 && Math.floor((Date.now()) - parseInt(await (await getMatchlist()).qualurl)) > 165600*1000)
 
   // console.log(Math.floor((Date.now()) - parseInt(await (await getMatchlist()).qualurl)) < 129601*1000 && Math.floor((Date.now()) - parseInt(await (await getMatchlist()).qualurl)) > 129600*1000)
@@ -504,16 +504,35 @@ export async function qualifierresultadd(channel: Discord.TextChannel, client: D
   const fields = [];
 
 
-  for (let i = 0; i < em1.length; i++) {
+  // for (let i = 0; i < em1.length; i++) {
 
-    //parseInt(em[i].value[em[i].value.split(" ").findIndex(x => x === "Earned") + 1].substr(0, 2)) + parseInt(em1[i].value[em[i].value.split(" ").findIndex(x => x === "Earned") + 1].substr(0, 2))
+  //   //parseInt(em[i].value[em[i].value.split(" ").findIndex(x => x === "Earned") + 1].substr(0, 2)) + parseInt(em1[i].value[em[i].value.split(" ").findIndex(x => x === "Earned") + 1].substr(0, 2))
+  //   console.log(`${em[i].value.toLowerCase().includes("earned") ? (em[i].value.split(" ")[5].substr(0, 2) + " ") : "0"}`)
+  //   console.log(`${em1[i].value.toLowerCase().includes("earned") ? (em1[i].value.split(" ")[5].substr(0, 2) + " ") : "0"}`)
+  //   fields.push({
+  //     name: `${em1[i].name.substr(0, em1[1].name.indexOf("|") - 1)}`,
+  //     //value: `${match.votes[i].length > 0 ? `Came in with ${match.votes[i].length} vote(s)` : `Failed to submit meme`}`
+  //     value: `${parseInt(`${em[i].value.toLowerCase().includes("earned") ? (em[i].value.split(" ")[5].substr(0, 2) + " ") : "0"}`) + parseInt(`${em1[i].value.toLowerCase().includes("earned") ? (em1[i].value.split(" ")[5].substr(0, 2) + " ") : "0"}`)} `,
+  //   });
+  // }
+
+  let i = 0
+  while(i < em.length){
     console.log(`${em[i].value.toLowerCase().includes("earned") ? (em[i].value.split(" ")[5].substr(0, 2) + " ") : "0"}`)
     console.log(`${em1[i].value.toLowerCase().includes("earned") ? (em1[i].value.split(" ")[5].substr(0, 2) + " ") : "0"}`)
-    fields.push({
-      name: `${em1[i].name.substr(0, em1[1].name.indexOf("|") - 1)}`,
-      //value: `${match.votes[i].length > 0 ? `Came in with ${match.votes[i].length} vote(s)` : `Failed to submit meme`}`
-      value: `${parseInt(`${em[i].value.toLowerCase().includes("earned") ? (em[i].value.split(" ")[5].substr(0, 2) + " ") : "0"}`) + parseInt(`${em1[i].value.toLowerCase().includes("earned") ? (em1[i].value.split(" ")[5].substr(0, 2) + " ") : "0"}`)} `,
-    });
+
+    for(let p = 0; p < em1.length; p++){
+      if(em[i].value.split(" ")[10] === em1[p].value.split(" ")[10]){
+        fields.push({
+          name: `${em1[p].name.substr(0, em1[1].name.indexOf("|") - 1)}`,
+          //value: `${match.votes[i].length > 0 ? `Came in with ${match.votes[i].length} vote(s)` : `Failed to submit meme`}`
+          value: `${parseInt(`${em[i].value.toLowerCase().includes("earned") ? (em[i].value.split(" ")[5].substr(0, 2) + " ") : "0"}`) + parseInt(`${em1[p].value.toLowerCase().includes("earned") ? (em1[p].value.split(" ")[5].substr(0, 2) + " ") : "0"}`)} `,
+        });
+
+        i+= 1
+
+      }
+    }
   }
 
   fields.sort(function (a, b) {

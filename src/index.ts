@@ -4,6 +4,7 @@ require("dotenv").config();
 import {
   activematch,
   cockratingInterface,
+  configDB,
   randomtempstruct
 } from "./misc/struct";
 import { submit, qualsubmit } from "./commands/submit";
@@ -43,10 +44,11 @@ import {
   gettemplatedb,
   updatetemplatedb,
   getQuals,
-
+  getConfig,
+  updateConfig,
 } from "./misc/db";
 
-import { template, approvetemplate, addTheme, removeTheme, themelistLb } from "./commands/template";
+import { template, approvetemplate, addTheme, removeTheme, themelistLb, templatecheck } from "./commands/template";
 import { createrUser, stats } from "./commands/user";
 import {
   signup,
@@ -586,6 +588,34 @@ client.on("message", async message => {
     await m.edit(`Latency is ${m.createdTimestamp - message.createdTimestamp}ms. Discord API Latency is ${Math.round(client.ws.ping)}ms`);
   }
 
+  else if(command === "templatecheck"){
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("only selected users can use this command. If any problem occured, DM <@239516219445608449>.");
+    await templatecheck(message, client, args)
+  }
+
+  else if (command === "updatemessage" || command === "upmsg") {
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("only selected users can use this command. If any problem occured, DM <@239516219445608449>.");
+
+    let c = await getConfig()
+
+    c.upmsg = args.join(" ")
+    await updateConfig(c)
+
+    message.reply(`Added update message of ${args.join(" ")}`);
+  }
+
+  else if (command === "announce") {
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("only selected users can use this command. If any problem occured, DM <@393137628083388430>.");
+    let c: configDB = await getConfig(), output = c.upmsg
+    let channel = <Discord.TextChannel>client.channels.cache.get("722284266108747880"); //Change this to the announcement channel id
+
+    if (["everyone", "e", "Everyone", "E"].includes(args[0])) channel.send(`@everyone ${output}`);
+
+    else if (["help", "h", "Help", "H"].includes(args[0])) message.reply("Please either `.announce everyone` to ping everyone or `.announce` to not ping everyone");
+
+    else channel.send(output);
+  }
+
   else if (command === "say") {
     const sayMessage = args.join(" ");
     if (sayMessage.match(/@everyone/) && !message!.member!.permissions.has(['MANAGE_MESSAGES'])) {
@@ -598,36 +628,38 @@ client.on("message", async message => {
 
   else if (command === "purge" || command === "clear") {
 
-
-    if (!message!.member!.permissions.has(['MANAGE_MESSAGES'], true)) {
-      return message.reply("you don't have those premissions")
-    }
-
-    console.log(args)
-
-    const amount = parseInt(args[0])
-
-    const user = message.mentions.users.first();
-
-    if (!amount || amount < 1 || amount > 100) return message.reply("Please give a number between 1 to 100");
+    return message.reply("Feature no longer in use")
 
 
-    await message.channel.messages.fetch({
-      limit: amount
-    })
-      .then(async (messages) => {
-        if (user) {
-          const filterBy = user;
-          let deletemessages = messages.filter(m => m.author.id === filterBy.id).array().slice(0, amount);
-          //console.log(deletemessages)
-          await message.channel.bulkDelete(deletemessages).catch(error => console.log(error.stack));
-        }
+    // if (!message!.member!.permissions.has(['MANAGE_MESSAGES'], true)) {
+    //   return message.reply("you don't have those premissions")
+    // }
 
-        else {
-          await message.channel.bulkDelete(messages).catch(error => console.log(error.stack));
-        }
+    // console.log(args)
 
-      })
+    // const amount = parseInt(args[0])
+
+    // const user = message.mentions.users.first();
+
+    // if (!amount || amount < 1 || amount > 100) return message.reply("Please give a number between 1 to 100");
+
+
+    // await message.channel.messages.fetch({
+    //   limit: amount
+    // })
+    //   .then(async (messages) => {
+    //     if (user) {
+    //       const filterBy = user;
+    //       let deletemessages = messages.filter(m => m.author.id === filterBy.id).array().slice(0, amount);
+    //       //console.log(deletemessages)
+    //       await message.channel.bulkDelete(deletemessages).catch(error => console.log(error.stack));
+    //     }
+
+    //     else {
+    //       await message.channel.bulkDelete(messages).catch(error => console.log(error.stack));
+    //     }
+
+    //   })
 
     // message.channel.bulkDelete(fetched)
     //   .catch(error => message.reply(`Couldn't delete messages because of: ${error}`));
@@ -650,9 +682,9 @@ client.on("message", async message => {
 
   else if (command === "test") {
     await message.reply("no").then(async message => { await message.react('🤏') })
-    let channelid = <Discord.TextChannel>client.channels.cache.get(args[0])
-    console.log((await channelid.messages.fetch()).last()?.createdTimestamp)
-    await message.channel.send(await channelid.messages.cache.last()?.createdTimestamp)
+    // let channelid = <Discord.TextChannel>client.channels.cache.get(args[0])
+    // console.log((await channelid.messages.fetch()).last()?.createdTimestamp)
+    // await message.channel.send(await channelid.messages.cache.last()?.createdTimestamp)
   }
 
   else if (command === "createqualgroup") {
@@ -1119,100 +1151,3 @@ client.on("message", async message => {
 });
 
 client.login(process.env.TOKEN);
-
-
-  // if (quals) {
-  //   for (const match of quals) {
-
-  //     let id = messageReaction.message.channel.id
-  //     if (match.channelid === id) {
-
-  //       if (messageReaction.partial) await messageReaction.fetch();
-  //       if (messageReaction.message.partial) await messageReaction.message.fetch();
-
-  //       if (emojis.includes(messageReaction.emoji.name)) {
-  //         let i = emojis.indexOf(messageReaction.emoji.name)
-  //         console.log(messageReaction.emoji.name, emojis[6])
-
-  //         if (match.playerids.includes(user.id) || user.id === "239516219445608449") {
-  //           await messageReaction.users.remove(user.id)
-  //           return user.send("You can't vote in your own qualifers")
-  //         }
-
-  //         if (messageReaction.emoji.name === emojis[6]) {
-  //           match.votes = removethreevotes(match.votes, user.id)
-  //           updateQuals(match)
-  //           messageReaction.users.remove(user.id)
-  //           return user.send("Your votes have been reset")
-  //         }
-
-  //         if (hasthreevotes(match.votes, user.id)) {
-  //           await messageReaction.users.remove(user.id)
-  //           return user.send("You used up all your votes. Please hit the recycle emote to reset your votes")
-  //         }
-
-  //         if (!match.playersdone.includes(match.playerids[i])) {
-  //           await messageReaction.users.remove(user.id)
-  //           return user.send("You can't for a non meme")
-  //         }
-
-  //         else if (match.votes[i].includes(user.id)) {
-  //           await messageReaction.users.remove(user.id)
-  //           return user.send("You can't for a meme twice. Hit the recycle emote to reset your votes")
-  //         }
-  //         else {
-  //           match.votes[i].push(user.id)
-  //           await messageReaction.users.remove(user.id)
-  //           await updateQuals(match)
-  //           return user.send(`Your vote for meme ${i+1} in <#${match.channelid}> been counted.`);
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-
-
-// if(emojis.includes(messageReaction.emoji.name)) {
-//   let match = await getQual(messageReaction.message.channel.id)
-
-//   if (messageReaction.partial) await messageReaction.fetch();
-//   if (messageReaction.message.partial) await messageReaction.message.fetch();
-
-//   if (match.playerids.includes(user.id) || user.id === "239516219445608449") {
-//     await messageReaction.users.remove(user.id)
-//     return user.send("You can't vote in your own qualifers")
-//   }
-
-//   if (messageReaction.emoji.name === emojis[6]) {
-//     match.votes = removethreevotes(match.votes, user.id)
-//     updateQuals(match)
-//     messageReaction.users.remove(user.id)
-//     return user.send("Your votes have been reset")
-//   }
-
-//   else{
-//     let i = emojis.indexOf(messageReaction.emoji.name)
-
-//     if (hasthreevotes(match.votes, user.id)) {
-//       await messageReaction.users.remove(user.id)
-//       return user.send("You used up all your votes. Please hit the recycle emote to reset your votes")
-//     }
-
-//     if (!match.playersdone.includes(match.playerids[i])) {
-//       await messageReaction.users.remove(user.id)
-//       return user.send("You can't for a non meme")
-//     }
-
-//     else if (match.votes[i].includes(user.id)) {
-//       await messageReaction.users.remove(user.id)
-//       return user.send("You can't for a meme twice. Hit the recycle emote to reset your votes")
-//     }
-
-//     else {
-//       match.votes[i].push(user.id)
-//       await messageReaction.users.remove(user.id)
-//       await updateQuals(match)
-//       return user.send(`Your vote for meme ${i+1} in <#${match.channelid}> been counted.`);
-//     }
-//   }
-// }

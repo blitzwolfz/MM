@@ -362,7 +362,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
     }
 });
 client.on("message", async (message) => {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j;
+    var _a, _b, _c, _d, _e, _f, _g;
     if (message.content.indexOf(process.env.PREFIX) !== 0 || message.author.bot) {
         if (message.author.id !== "688558229646475344")
             return;
@@ -400,6 +400,31 @@ client.on("message", async (message) => {
         const m = await message.channel.send("Ping?");
         await m.edit(`Latency is ${m.createdTimestamp - message.createdTimestamp}ms. Discord API Latency is ${Math.round(client.ws.ping)}ms`);
     }
+    else if (command === "templatecheck") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("only selected users can use this command. If any problem occured, DM <@239516219445608449>.");
+        await template_1.templatecheck(message, client, args);
+    }
+    else if (command === "updatemessage" || command === "upmsg") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("only selected users can use this command. If any problem occured, DM <@239516219445608449>.");
+        let c = await db_1.getConfig();
+        c.upmsg = args.join(" ");
+        await db_1.updateConfig(c);
+        message.reply(`Added update message of ${args.join(" ")}`);
+    }
+    else if (command === "announce") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("only selected users can use this command. If any problem occured, DM <@393137628083388430>.");
+        let c = await db_1.getConfig(), output = c.upmsg;
+        let channel = client.channels.cache.get("722284266108747880");
+        if (["everyone", "e", "Everyone", "E"].includes(args[0]))
+            channel.send(`@everyone ${output}`);
+        else if (["help", "h", "Help", "H"].includes(args[0]))
+            message.reply("Please either `.announce everyone` to ping everyone or `.announce` to not ping everyone");
+        else
+            channel.send(output);
+    }
     else if (command === "say") {
         const sayMessage = args.join(" ");
         if (sayMessage.match(/@everyone/) && !message.member.permissions.has(['MANAGE_MESSAGES'])) {
@@ -410,27 +435,7 @@ client.on("message", async (message) => {
         message.channel.send(sayMessage);
     }
     else if (command === "purge" || command === "clear") {
-        if (!message.member.permissions.has(['MANAGE_MESSAGES'], true)) {
-            return message.reply("you don't have those premissions");
-        }
-        console.log(args);
-        const amount = parseInt(args[0]);
-        const user = message.mentions.users.first();
-        if (!amount || amount < 1 || amount > 100)
-            return message.reply("Please give a number between 1 to 100");
-        await message.channel.messages.fetch({
-            limit: amount
-        })
-            .then(async (messages) => {
-            if (user) {
-                const filterBy = user;
-                let deletemessages = messages.filter(m => m.author.id === filterBy.id).array().slice(0, amount);
-                await message.channel.bulkDelete(deletemessages).catch(error => console.log(error.stack));
-            }
-            else {
-                await message.channel.bulkDelete(messages).catch(error => console.log(error.stack));
-            }
-        });
+        return message.reply("Feature no longer in use");
     }
     else if (command === "reminder") {
         await utils_1.reminders(client, args);
@@ -447,9 +452,6 @@ client.on("message", async (message) => {
     }
     else if (command === "test") {
         await message.reply("no").then(async (message) => { await message.react('🤏'); });
-        let channelid = client.channels.cache.get(args[0]);
-        console.log((_b = (await channelid.messages.fetch()).last()) === null || _b === void 0 ? void 0 : _b.createdTimestamp);
-        await message.channel.send(await ((_c = channelid.messages.cache.last()) === null || _c === void 0 ? void 0 : _c.createdTimestamp));
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))
@@ -620,7 +622,7 @@ client.on("message", async (message) => {
             return message.reply("You are not cock rating master.");
         }
         else {
-            let id = (((_f = (_e = (_d = message.mentions) === null || _d === void 0 ? void 0 : _d.users) === null || _e === void 0 ? void 0 : _e.first()) === null || _f === void 0 ? void 0 : _f.id) || message.author.id);
+            let id = (((_d = (_c = (_b = message.mentions) === null || _b === void 0 ? void 0 : _b.users) === null || _c === void 0 ? void 0 : _c.first()) === null || _d === void 0 ? void 0 : _d.id) || message.author.id);
             let form = await db_1.getCockrating(id);
             let max = 100;
             let min = (id === "239516219445608449" ? Math.floor(Math.random() * ((max - 35) - 35) + 1) : Math.floor(Math.random() * ((max - 1) - 1) + 1));
@@ -649,7 +651,7 @@ client.on("message", async (message) => {
             return message.reply("You are not cock rating master.");
         }
         else {
-            let id = (((_j = (_h = (_g = message.mentions) === null || _g === void 0 ? void 0 : _g.users) === null || _h === void 0 ? void 0 : _h.first()) === null || _j === void 0 ? void 0 : _j.id) || message.author.id);
+            let id = (((_g = (_f = (_e = message.mentions) === null || _e === void 0 ? void 0 : _e.users) === null || _f === void 0 ? void 0 : _f.first()) === null || _g === void 0 ? void 0 : _g.id) || message.author.id);
             let form = await db_1.getCockrating(id);
             let max = 100;
             let min = parseInt(args[1] || args[0]);
