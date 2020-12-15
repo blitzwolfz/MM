@@ -157,7 +157,7 @@ export async function end(client: discord.Client, id: string) {
         if (match.exhibition === false) {
             await (<discord.TextChannel>client.channels.cache.get("734565012378746950")).send((new discord.MessageEmbed()
                 .setColor("#d7be26")
-                .setImage(match.p1.memelink)
+                .setImage(match.p2.memelink)
                 .setDescription(`${(await (await channelid.guild!.members.fetch(user2.id)).nickname) || await (await client.users.fetch(user2.id)).username} won with ${match.p2.votes} votes!`)
                 .setFooter(dateBuilder())
             ))
