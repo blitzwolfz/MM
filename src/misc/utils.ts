@@ -1,5 +1,5 @@
 import * as Discord from "discord.js"
-import { getMatch, getAllProfiles, updateProfile, getQual, getMatchlist } from "./db";
+import { getMatch, getAllProfiles, updateProfile, getQual, getMatchlist, getQuallist } from "./db";
 import { clearmodstats } from "./modprofiles";
 
 export async function getUser(mention: string) {
@@ -113,7 +113,7 @@ export async function reminders(client: Discord.Client, args: string[]) {
       if (channel.parent && channel.parent!.name === "matches") {
         if (await getMatch(channel.id)) {
           let match = await getMatch(channel.id)
-
+          if(match.votingperiod) continue;
           if (match.split) {
             if (!match.p1.memedone && !match.p2.memedone) {
               await (<Discord.TextChannel>client.channels.cache.get(channel.id))
@@ -137,28 +137,16 @@ export async function reminders(client: Discord.Client, args: string[]) {
             .messages.fetch({ limit: 100 }))
 
           console.log(`The length is: ${all.array().length}`)
-          let ting = 1
-          
-          if(args[0] === "12"){
-            ting += 1
-          }
+          let m = all.first()!
 
-          if(args[0] === "2"){
-            ting += 2
-          }
-          
-          if (all.array().length === ting) {
-            let m = all.first()!
-
-            await m.channel
-              .send(`<@${m.mentions.users.first()!.id}> and <@${m.mentions.users.array()[1]!.id}>, you have ${args[0]}h left to complete your match`)
-          }
+          await m.channel
+            .send(`<@${m.mentions.users.first()!.id}> and <@${m.mentions.users.array()[1]!.id}>, you have ${args[0]}h left to complete your match`)
 
         }
       }
 
       else if (channel.parent && channel.parent!.name === "qualifiers") {
-        if (await getQual(channel.id) && !args[2]) {
+        if (await getQual(channel.id)) {
           let match = await getQual(channel.id)
 
           let s = ""
@@ -177,22 +165,27 @@ export async function reminders(client: Discord.Client, args: string[]) {
 
         }
 
-        if (args[2] === "start") {
-          let all = (await (<Discord.TextChannel>await client.channels.fetch(channel.id)!)
-            .messages.fetch({ limit: 100 }))
+        else {
+          //Group ${i + 1}
+          let n = parseInt(channel.name.toLowerCase().split(" ").join("").replace("group", "")) - 1
 
-          console.log(`The length is: ${all.array().length}`)
+          let x = await (await getQuallist()).users[n]
 
-          let m = all.last()!
+          // let all = (await (<Discord.TextChannel>await client.channels.fetch(channel.id)!)
+          //   .messages.fetch({ limit: 100 }))
+
+          // console.log(`The length is: ${all.array().length}`)
+
+          // let m = all.last()!
 
           let s = ""
 
-          for (let e = 0; e < m.mentions.users.array().length; e++) {
-            s += `<@${m.mentions.users.array()[e].id}> `
+          for (let e = 0; e <x.length; e++) {
+            s += `<@${x[e]}> `
           }
-
-          await m.channel
-            .send(`<@${s}>, you have ${args[0]}h left to complete portion ${args[1]}`)
+          await (<Discord.TextChannel>client.channels.cache.get(channel.id))
+          .send(`<@${s}>, you have ${args[0]}h left to complete portion`);
+            
 
         }
       }
@@ -517,19 +510,19 @@ export async function qualifierresultadd(channel: Discord.TextChannel, client: D
   // }
 
   let i = 0
-  while(i < em.length){
+  while (i < em.length) {
     console.log(`${em[i].value.toLowerCase().includes("earned") ? (em[i].value.split(" ")[5].substr(0, 2) + " ") : "0"}`)
     console.log(`${em1[i].value.toLowerCase().includes("earned") ? (em1[i].value.split(" ")[5].substr(0, 2) + " ") : "0"}`)
 
-    for(let p = 0; p < em1.length; p++){
-      if(em[i].value.split(" ")[10] === em1[p].value.split(" ")[10]){
+    for (let p = 0; p < em1.length; p++) {
+      if (em[i].value.split(" ")[10] === em1[p].value.split(" ")[10]) {
         fields.push({
           name: `${em1[p].name.substr(0, em1[1].name.indexOf("|") - 1)}`,
           //value: `${match.votes[i].length > 0 ? `Came in with ${match.votes[i].length} vote(s)` : `Failed to submit meme`}`
           value: `${parseInt(`${em[i].value.toLowerCase().includes("earned") ? (em[i].value.split(" ")[5].substr(0, 2) + " ") : "0"}`) + parseInt(`${em1[p].value.toLowerCase().includes("earned") ? (em1[p].value.split(" ")[5].substr(0, 2) + " ") : "0"}`)} `,
         });
 
-        i+= 1
+        i += 1
 
       }
     }

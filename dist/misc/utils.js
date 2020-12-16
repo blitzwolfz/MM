@@ -82,6 +82,8 @@ async function reminders(client, args) {
             if (channel.parent && channel.parent.name === "matches") {
                 if (await db_1.getMatch(channel.id)) {
                     let match = await db_1.getMatch(channel.id);
+                    if (match.votingperiod)
+                        continue;
                     if (match.split) {
                         if (!match.p1.memedone && !match.p2.memedone) {
                             await client.channels.cache.get(channel.id)
@@ -101,22 +103,13 @@ async function reminders(client, args) {
                     let all = (await (await client.channels.fetch(channel.id))
                         .messages.fetch({ limit: 100 }));
                     console.log(`The length is: ${all.array().length}`);
-                    let ting = 1;
-                    if (args[0] === "12") {
-                        ting += 1;
-                    }
-                    if (args[0] === "2") {
-                        ting += 2;
-                    }
-                    if (all.array().length === ting) {
-                        let m = all.first();
-                        await m.channel
-                            .send(`<@${m.mentions.users.first().id}> and <@${m.mentions.users.array()[1].id}>, you have ${args[0]}h left to complete your match`);
-                    }
+                    let m = all.first();
+                    await m.channel
+                        .send(`<@${m.mentions.users.first().id}> and <@${m.mentions.users.array()[1].id}>, you have ${args[0]}h left to complete your match`);
                 }
             }
             else if (channel.parent && channel.parent.name === "qualifiers") {
-                if (await db_1.getQual(channel.id) && !args[2]) {
+                if (await db_1.getQual(channel.id)) {
                     let match = await db_1.getQual(channel.id);
                     let s = "";
                     if (match.votingperiod === true)
@@ -129,17 +122,15 @@ async function reminders(client, args) {
                     await client.channels.cache.get(channel.id)
                         .send(`${s} you have ${args[0]}h left to complete portion ${args[1]}`);
                 }
-                if (args[2] === "start") {
-                    let all = (await (await client.channels.fetch(channel.id))
-                        .messages.fetch({ limit: 100 }));
-                    console.log(`The length is: ${all.array().length}`);
-                    let m = all.last();
+                else {
+                    let n = parseInt(channel.name.toLowerCase().split(" ").join("").replace("group", "")) - 1;
+                    let x = await (await db_1.getQuallist()).users[n];
                     let s = "";
-                    for (let e = 0; e < m.mentions.users.array().length; e++) {
-                        s += `<@${m.mentions.users.array()[e].id}> `;
+                    for (let e = 0; e < x.length; e++) {
+                        s += `<@${x[e]}> `;
                     }
-                    await m.channel
-                        .send(`<@${s}>, you have ${args[0]}h left to complete portion ${args[1]}`);
+                    await client.channels.cache.get(channel.id)
+                        .send(`<@${s}>, you have ${args[0]}h left to complete portion`);
                 }
             }
         }
