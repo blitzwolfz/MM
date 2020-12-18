@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.test = exports.verify = void 0;
+exports.manuallyverify = exports.test = exports.verify = void 0;
 const db_1 = require("./db");
 async function verify(message, client) {
     var args = message.content.slice((process.env.PREFIX).length).trim().split(/ +/g);
@@ -61,7 +61,7 @@ async function verify(message, client) {
                         console.log(userdm.channel.id);
                         await userdm.channel.awaitMessages(filter, { max: 1, time: 90000, errors: ['time'] })
                             .then(async (collected) => {
-                            var _a, _b;
+                            var _a, _b, _c;
                             await ((_a = message.member) === null || _a === void 0 ? void 0 : _a.roles.remove("730650583413030953"));
                             await ((_b = message.member) === null || _b === void 0 ? void 0 : _b.roles.add("719941380503371897"));
                             await message.author.send("Remember to check #info, #annoucements, #rules, and to signup for both vote pings and signup pings in #roles! Enjoy your stay.");
@@ -69,6 +69,7 @@ async function verify(message, client) {
                             await db_1.updateVerify(form);
                             let ch = client.channels.cache.get(("722285800225505879"));
                             ch.send(`A new contender entered the arena of Meme Royale. Welcome <@${message.author.id}>`);
+                            await ((_c = message.member) === null || _c === void 0 ? void 0 : _c.setNickname(args[1]));
                             await message.delete();
                         })
                             .catch(async (collected) => {
@@ -102,3 +103,14 @@ function makeid(length) {
     }
     return result;
 }
+async function manuallyverify(message, client, args) {
+    let guild = message.guild;
+    let gm = await guild.members.fetch(message.mentions.users.first().id);
+    await gm.setNickname(args[0]);
+    await (gm === null || gm === void 0 ? void 0 : gm.roles.remove("730650583413030953"));
+    await (gm === null || gm === void 0 ? void 0 : gm.roles.add("719941380503371897"));
+    await message.mentions.users.first().send("Remember to check #info, #annoucements, #rules, and to signup for both vote pings and signup pings in #roles! Enjoy your stay.");
+    let ch = client.channels.cache.get(("722285800225505879"));
+    ch.send(`A new contender entered the arena of Meme Royale. Welcome <@${message.author.id}>`);
+}
+exports.manuallyverify = manuallyverify;
