@@ -70,7 +70,7 @@ import {
   removequalwinner,
   QualChannelCreation,
 } from "./commands/challonge";
-import { verify } from "./misc/verify";
+import { manuallyverify, verify } from "./misc/verify";
 import { cockratingLB, winningLB, quallistGroups } from "./misc/lbs";
 import { createmodprofile, viewmodprofile, modLB, clearmodstats } from "./misc/modprofiles";
 import { getRandomThemeList } from "./misc/randomtemp";
@@ -140,7 +140,7 @@ client.on('ready', async () => {
     await autoreminders(client)
   }, 1000);
 
-  await autoreminders(client)
+  //await autoreminders(client)
 
   //await running(client)
   //await qualrunning(client)
@@ -682,9 +682,9 @@ client.on("message", async message => {
 
   else if (command === "test") {
     await message.reply("no").then(async message => { await message.react('🤏') })
-    // let channelid = <Discord.TextChannel>client.channels.cache.get(args[0])
-    // console.log((await channelid.messages.fetch()).last()?.createdTimestamp)
-    // await message.channel.send(await channelid.messages.cache.last()?.createdTimestamp)
+
+    console.log(args)
+    await message.member?.setNickname(args[0])
   }
 
   else if (command === "createqualgroup") {
@@ -742,6 +742,11 @@ client.on("message", async message => {
 
   if (command === "verify" || command === "code") {
     await verify(message, client)
+  }
+
+  if (command === "manualverify"){
+    if (!message.member!.roles.cache.has('724818272922501190')) return message.reply("You don't have those premissions")
+    await manuallyverify(message, client, args)
   }
 
   else if (command === "submit") {
@@ -1048,7 +1053,7 @@ client.on("message", async message => {
 
     if (a) {
       for (let i = 0; i < a.length; i++) {
-        await message.channel.send(`${a[i].channelid}`)
+        await message.channel.send(`${a[i].channelid} ---> <#${a[i].channelid}>`)
       }
 
     }
@@ -1057,7 +1062,7 @@ client.on("message", async message => {
 
     if (aa) {
       for (let i = 0; i < aa.length; i++) {
-        await message.channel.send(`${a[i].channelid}`)
+        await message.channel.send(`${aa[i].channelid}`)
       }
     }
 
