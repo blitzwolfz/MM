@@ -80,10 +80,10 @@ async function reminders(client, args) {
         console.log(catchannels.length);
         try {
             if (channel.parent && channel.parent.name === "matches") {
+                console.log("We are in");
                 if (await db_1.getMatch(channel.id)) {
                     let match = await db_1.getMatch(channel.id);
-                    if (match.votingperiod)
-                        continue;
+                    console.log("We are in #2");
                     if (match.split) {
                         if (!match.p1.memedone && !match.p2.memedone) {
                             await client.channels.cache.get(channel.id)

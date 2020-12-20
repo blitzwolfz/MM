@@ -111,9 +111,10 @@ export async function reminders(client: Discord.Client, args: string[]) {
     console.log(catchannels.length)
     try {
       if (channel.parent && channel.parent!.name === "matches") {
+        console.log("We are in")
         if (await getMatch(channel.id)) {
           let match = await getMatch(channel.id)
-          if(match.votingperiod) continue;
+          console.log("We are in #2")
           if (match.split) {
             if (!match.p1.memedone && !match.p2.memedone) {
               await (<Discord.TextChannel>client.channels.cache.get(channel.id))
