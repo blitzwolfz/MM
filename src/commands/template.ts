@@ -199,6 +199,7 @@ export async function templatecheck(message: Discord.Message, client: Discord.Cl
     let page:number = typeof args[1] == "undefined" ? isNaN(parseInt(args[0])) ? 1 : parseInt(args[0]) : args[1];;
     let ratings = await gettemplatedb()
     let removelinks: string[] = []
+    let c = <Discord.TextChannel>message.channel
     const m = <Discord.Message>(await message.channel.send({ embed: await templatecheckembed(page!, client, ratings.list) }));
     await m.react("⬅")
     await m.react("➡");
@@ -206,7 +207,7 @@ export async function templatecheck(message: Discord.Message, client: Discord.Cl
 
     const backwards = m.createReactionCollector(backwardsFilter, { time: 500000 });
     const forwards = m.createReactionCollector(forwardsFilter, { time: 500000 });
-    const remove = m.createReactionCollector(((reaction: { emoji: { name: string; }; }, user: Discord.User) => reaction.emoji.name === '🗡️' && !user.bot), { time: 500000 });
+    const remove = m.createReactionCollector(((reaction: { emoji: { name: string; }; }, user: Discord.User) => reaction.emoji.name === '🗡️' && !user.bot), { time: 15000 });
 
     backwards.on('collect', async () => {
         m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
@@ -220,9 +221,27 @@ export async function templatecheck(message: Discord.Message, client: Discord.Cl
     remove.on('collect', async () => {
         m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id))
         removelinks.push(m.embeds[0].image?.url!)
-        m.reactions.message.channel.send(removelinks)
+        //m.reactions.message.channel.send(removelinks)
     });
 
+    remove.on("end", async () => {
+        var fs = require('fs');
+
+        var file = fs.createWriteStream('array.txt');
+        file.on('error', function(err:any) { console.log(err)});
+
+        removelinks.forEach(function(v:any) { file.write(v + '\n'); });
 
 
+        file.end();
+
+        
+        const attachment = new Discord.MessageAttachment(file);
+
+        await c.send(attachment)
+        forwards.on("end", async () => {})
+        backwards.on("end", async () => {})
+        await m.reactions.message.delete()
+
+    })
 }

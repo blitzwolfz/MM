@@ -351,7 +351,7 @@ export async function autoreminders(client: Discord.Client) {
     await reminders(client, ["24"])
 
   }
-  // console.log(165600*1000)
+  
   //console.log(Math.floor((Date.now()) - parseInt(await (await getMatchlist()).qualurl)))
   // console.log(Math.floor((Date.now()) - parseInt(await (await getMatchlist()).qualurl)) < 165601*1000 && Math.floor((Date.now()) - parseInt(await (await getMatchlist()).qualurl)) > 165600*1000)
 

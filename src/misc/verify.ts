@@ -204,6 +204,7 @@ function makeid(length: number) {
 
 export async function manuallyverify(message: Discord.Message, client: Discord.Client, args:string[]){
     let guild = message.guild!
+    
 
     let gm = await guild.members.fetch(message.mentions.users.first()!.id)
 
