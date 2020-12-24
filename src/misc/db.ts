@@ -32,6 +32,12 @@ export async function insertActive(activematch: activematch): Promise<void> {
     console.log("Inserted ActiveMatches!")
 }
 
+export async function dbSoftReset(): Promise<void> {
+    await client.db(process.env.DBNAME).collection("users").deleteMany({})
+    await client.db(process.env.DBNAME).collection("cockrating").deleteMany({})
+    await client.db(process.env.DBNAME).collection("modprofiles").deleteMany({})
+}
+
 export async function updateActive(activematch: activematch): Promise<void> {
     let _id = activematch.channelid
     await client.db(process.env.DBNAME).collection("activematch").updateOne({_id}, {$set: activematch});

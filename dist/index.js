@@ -745,6 +745,11 @@ client.on("message", async (message) => {
             return message.reply("You don't have those premissions");
         await message.channel.send({ embed: help_1.ModSignupHelp });
     }
+    else if (command === "seasonrestart") {
+        if (message.author.id !== "239516219445608449")
+            return message.reply("You don't have those premissions");
+        await utils_1.SeasonRestart(message);
+    }
     else if (command === "challongehelp") {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");

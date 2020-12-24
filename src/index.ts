@@ -24,7 +24,7 @@ import {
 import { duelcheck, exhibition } from "./commands/exhibitions"
 import { qualend, end, cancelmatch } from "./commands/winner";
 import { vs } from "./commands/card";
-import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, createrole, clearstats, qualifierresultadd, autoreminders } from "./misc/utils";
+import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, createrole, clearstats, qualifierresultadd, autoreminders, SeasonRestart } from "./misc/utils";
 import { ModHelp, UserHelp, ModSignupHelp, ModChallongeHelp, DuelHelp } from "./commands/help";
 
 import {
@@ -1030,6 +1030,11 @@ client.on("message", async message => {
   else if (command === "signuphelp") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await message.channel.send({ embed: ModSignupHelp })
+  }
+
+  else if(command === "seasonrestart"){
+    if (message.author.id !== "239516219445608449") return message.reply("You don't have those premissions")
+    await SeasonRestart(message)
   }
 
   else if (command === "challongehelp") {

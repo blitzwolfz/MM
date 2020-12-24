@@ -560,6 +560,7 @@ export async function matchlistmaker() {
     }
 
     else {
+        match.qualurl = ""
         match.users = []
         match.url = ""
 

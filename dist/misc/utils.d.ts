@@ -25,3 +25,4 @@ export declare function clearstats(message: Discord.Message): Promise<void>;
 export declare function qualifierresultadd(channel: Discord.TextChannel, client: Discord.Client, msg1: string, msg2: string): Promise<void>;
 export declare function toHHMMSS(timestamp: number, howlong: number): Promise<string>;
 export declare function toS(timestamp: string): Promise<number | null>;
+export declare function SeasonRestart(message: Discord.Message): Promise<void>;

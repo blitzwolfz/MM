@@ -1,5 +1,6 @@
 import * as Discord from "discord.js"
-import { getMatch, getAllProfiles, updateProfile, getQual, getMatchlist, getQuallist } from "./db";
+import { matchlistmaker } from "../commands/challonge";
+import { getMatch, getAllProfiles, updateProfile, getQual, getMatchlist, getQuallist, dbSoftReset, deleteSignup, deleteQuallist } from "./db";
 import { clearmodstats } from "./modprofiles";
 
 export async function getUser(mention: string) {
@@ -575,4 +576,14 @@ export async function toS(timestamp: string) {
   var hms = timestamp.split(':');
 
   return (+hms[0]) * 60 * 60 + (+hms[1]) * 60 + (+hms[2] || 0);
+}
+
+export async function SeasonRestart(message: Discord.Message){
+  await dbSoftReset()
+  await deleteSignup()
+  await deleteQuallist()
+  await matchlistmaker()
+  await deleteQuallist()
+
+  message.reply("Season has been reset")
 }

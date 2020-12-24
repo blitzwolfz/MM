@@ -1,6 +1,7 @@
 import { activematch, qualmatch, user, signups, matchlist, verificationform, quallist, cockratingInterface, modprofile, randomtempstruct, groupmatch, exhibition, configDB } from "./struct";
 export declare function connectToDB(): Promise<void>;
 export declare function insertActive(activematch: activematch): Promise<void>;
+export declare function dbSoftReset(): Promise<void>;
 export declare function updateActive(activematch: activematch): Promise<void>;
 export declare function insertQuals(Qual: qualmatch): Promise<void>;
 export declare function updateQuals(Qual: qualmatch): Promise<void>;

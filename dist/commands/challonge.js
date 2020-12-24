@@ -397,6 +397,7 @@ async function matchlistmaker() {
         db_1.insertMatchlist(newmatch);
     }
     else {
+        match.qualurl = "";
         match.users = [];
         match.url = "";
         await db_1.updateMatchlist(match);

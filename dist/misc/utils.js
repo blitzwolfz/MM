@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.toS = exports.toHHMMSS = exports.qualifierresultadd = exports.clearstats = exports.createrole = exports.updatesomething = exports.deletechannels = exports.autoreminders = exports.aautoreminders = exports.reminders = exports.dateBuilder = exports.indexOf2d = exports.forwardsFilter = exports.backwardsFilter = exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
+exports.SeasonRestart = exports.toS = exports.toHHMMSS = exports.qualifierresultadd = exports.clearstats = exports.createrole = exports.updatesomething = exports.deletechannels = exports.autoreminders = exports.aautoreminders = exports.reminders = exports.dateBuilder = exports.indexOf2d = exports.forwardsFilter = exports.backwardsFilter = exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
+const challonge_1 = require("../commands/challonge");
 const db_1 = require("./db");
 const modprofiles_1 = require("./modprofiles");
 async function getUser(mention) {
@@ -365,3 +366,12 @@ async function toS(timestamp) {
     return (+hms[0]) * 60 * 60 + (+hms[1]) * 60 + (+hms[2] || 0);
 }
 exports.toS = toS;
+async function SeasonRestart(message) {
+    await db_1.dbSoftReset();
+    await db_1.deleteSignup();
+    await db_1.deleteQuallist();
+    await challonge_1.matchlistmaker();
+    await db_1.deleteQuallist();
+    message.reply("Season has been reset");
+}
+exports.SeasonRestart = SeasonRestart;
