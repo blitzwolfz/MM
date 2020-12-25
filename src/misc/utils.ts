@@ -1,6 +1,6 @@
 import * as Discord from "discord.js"
 import { matchlistmaker } from "../commands/challonge";
-import { getMatch, getAllProfiles, updateProfile, getQual, getMatchlist, getQuallist, dbSoftReset, deleteSignup, deleteQuallist } from "./db";
+import { getMatch, getAllProfiles, updateProfile, getQual, getMatchlist, getQuallist, dbSoftReset, deleteSignup, deleteQuallist, getAllModProfiles, getAllCockratings } from "./db";
 import { clearmodstats } from "./modprofiles";
 
 export async function getUser(mention: string) {
@@ -586,4 +586,43 @@ export async function SeasonRestart(message: Discord.Message){
   await deleteQuallist()
 
   message.reply("Season has been reset")
+}
+
+export async function saveDatatofile(message: Discord.Message){
+  let u = await getAllProfiles("wins")
+
+  let m = await getAllModProfiles("matchportionsstarted")
+
+  let c = await getAllCockratings()
+
+  var json = JSON.stringify(u);
+  var json2 = JSON.stringify(m);
+  var json3 = JSON.stringify(c);
+
+  var fs = require('fs');
+  let e = await fs.writeFile('user.json', json, 'utf8', function (err:Error) {
+    if (err) return console.log(err);
+    console.log('Hello World > helloworld.txt');
+  })
+  let e2 = await fs.writeFile('mods.json', json2, 'utf8', function (err:Error) {
+    if (err) return console.log(err);
+    console.log('Hello World > helloworld.txt');
+  })
+  let e3 = await fs.writeFile('cr.json', json3, 'utf8', function (err:Error) {
+    if (err) return console.log(err);
+    console.log('Hello World > helloworld.txt');
+  })
+
+  const buffer = fs.readFileSync("./user.json");
+  const attachment = new Discord.MessageAttachment(buffer, 'u.json');  
+  
+  const buffer2 = fs.readFileSync("./mods.json");
+  const attachment2 = new Discord.MessageAttachment(buffer2, 'm.json');  
+  
+  const buffer3 = fs.readFileSync("./cr.json");
+  const attachment3 = new Discord.MessageAttachment(buffer3, 'c.json');
+
+  await message.channel.send(attachment)
+  await message.channel.send(attachment2)
+  await message.channel.send(attachment3)
 }

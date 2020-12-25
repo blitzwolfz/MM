@@ -24,7 +24,7 @@ import {
 import { duelcheck, exhibition } from "./commands/exhibitions"
 import { qualend, end, cancelmatch } from "./commands/winner";
 import { vs } from "./commands/card";
-import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, createrole, clearstats, qualifierresultadd, autoreminders, SeasonRestart } from "./misc/utils";
+import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, createrole, clearstats, qualifierresultadd, autoreminders, SeasonRestart, saveDatatofile } from "./misc/utils";
 import { ModHelp, UserHelp, ModSignupHelp, ModChallongeHelp, DuelHelp } from "./commands/help";
 
 import {
@@ -683,8 +683,8 @@ client.on("message", async message => {
   else if (command === "test") {
     await message.reply("no").then(async message => { await message.react('🤏') })
 
-    console.log(args)
-    await message.member?.setNickname(args[0])
+    if(message.author.id !== "239516219445608449") return message.reply("nah b")
+    await saveDatatofile(message)
   }
 
   else if (command === "createqualgroup") {

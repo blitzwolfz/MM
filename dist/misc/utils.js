@@ -1,6 +1,26 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SeasonRestart = exports.toS = exports.toHHMMSS = exports.qualifierresultadd = exports.clearstats = exports.createrole = exports.updatesomething = exports.deletechannels = exports.autoreminders = exports.aautoreminders = exports.reminders = exports.dateBuilder = exports.indexOf2d = exports.forwardsFilter = exports.backwardsFilter = exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
+exports.saveDatatofile = exports.SeasonRestart = exports.toS = exports.toHHMMSS = exports.qualifierresultadd = exports.clearstats = exports.createrole = exports.updatesomething = exports.deletechannels = exports.autoreminders = exports.aautoreminders = exports.reminders = exports.dateBuilder = exports.indexOf2d = exports.forwardsFilter = exports.backwardsFilter = exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
+const Discord = __importStar(require("discord.js"));
 const challonge_1 = require("../commands/challonge");
 const db_1 = require("./db");
 const modprofiles_1 = require("./modprofiles");
@@ -375,3 +395,37 @@ async function SeasonRestart(message) {
     message.reply("Season has been reset");
 }
 exports.SeasonRestart = SeasonRestart;
+async function saveDatatofile(message) {
+    let u = await db_1.getAllProfiles("wins");
+    let m = await db_1.getAllModProfiles("matchportionsstarted");
+    let c = await db_1.getAllCockratings();
+    var json = JSON.stringify(u);
+    var json2 = JSON.stringify(m);
+    var json3 = JSON.stringify(c);
+    var fs = require('fs');
+    let e = await fs.writeFile('user.json', json, 'utf8', function (err) {
+        if (err)
+            return console.log(err);
+        console.log('Hello World > helloworld.txt');
+    });
+    let e2 = await fs.writeFile('mods.json', json2, 'utf8', function (err) {
+        if (err)
+            return console.log(err);
+        console.log('Hello World > helloworld.txt');
+    });
+    let e3 = await fs.writeFile('cr.json', json3, 'utf8', function (err) {
+        if (err)
+            return console.log(err);
+        console.log('Hello World > helloworld.txt');
+    });
+    const buffer = fs.readFileSync("./user.json");
+    const attachment = new Discord.MessageAttachment(buffer, 'u.json');
+    const buffer2 = fs.readFileSync("./mods.json");
+    const attachment2 = new Discord.MessageAttachment(buffer2, 'm.json');
+    const buffer3 = fs.readFileSync("./cr.json");
+    const attachment3 = new Discord.MessageAttachment(buffer3, 'c.json');
+    await message.channel.send(attachment);
+    await message.channel.send(attachment2);
+    await message.channel.send(attachment3);
+}
+exports.saveDatatofile = saveDatatofile;

@@ -358,7 +358,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
     }
 });
 client.on("message", async (message) => {
-    var _a, _b, _c, _d, _e, _f, _g, _h;
+    var _a, _b, _c, _d, _e, _f, _g;
     if (message.content.indexOf(process.env.PREFIX) !== 0 || message.author.bot) {
         if (message.author.id !== "688558229646475344")
             return;
@@ -448,8 +448,9 @@ client.on("message", async (message) => {
     }
     else if (command === "test") {
         await message.reply("no").then(async (message) => { await message.react('🤏'); });
-        console.log(args);
-        await ((_b = message.member) === null || _b === void 0 ? void 0 : _b.setNickname(args[0]));
+        if (message.author.id !== "239516219445608449")
+            return message.reply("nah b");
+        await utils_1.saveDatatofile(message);
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))
@@ -625,7 +626,7 @@ client.on("message", async (message) => {
             return message.reply("You are not cock rating master.");
         }
         else {
-            let id = (((_e = (_d = (_c = message.mentions) === null || _c === void 0 ? void 0 : _c.users) === null || _d === void 0 ? void 0 : _d.first()) === null || _e === void 0 ? void 0 : _e.id) || message.author.id);
+            let id = (((_d = (_c = (_b = message.mentions) === null || _b === void 0 ? void 0 : _b.users) === null || _c === void 0 ? void 0 : _c.first()) === null || _d === void 0 ? void 0 : _d.id) || message.author.id);
             let form = await db_1.getCockrating(id);
             let max = 100;
             let min = (id === "239516219445608449" ? Math.floor(Math.random() * ((max - 35) - 35) + 1) : Math.floor(Math.random() * ((max - 1) - 1) + 1));
@@ -654,7 +655,7 @@ client.on("message", async (message) => {
             return message.reply("You are not cock rating master.");
         }
         else {
-            let id = (((_h = (_g = (_f = message.mentions) === null || _f === void 0 ? void 0 : _f.users) === null || _g === void 0 ? void 0 : _g.first()) === null || _h === void 0 ? void 0 : _h.id) || message.author.id);
+            let id = (((_g = (_f = (_e = message.mentions) === null || _e === void 0 ? void 0 : _e.users) === null || _f === void 0 ? void 0 : _f.first()) === null || _g === void 0 ? void 0 : _g.id) || message.author.id);
             let form = await db_1.getCockrating(id);
             let max = 100;
             let min = parseInt(args[1] || args[0]);

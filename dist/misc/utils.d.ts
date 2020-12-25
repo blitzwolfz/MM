@@ -26,3 +26,4 @@ export declare function qualifierresultadd(channel: Discord.TextChannel, client:
 export declare function toHHMMSS(timestamp: number, howlong: number): Promise<string>;
 export declare function toS(timestamp: string): Promise<number | null>;
 export declare function SeasonRestart(message: Discord.Message): Promise<void>;
+export declare function saveDatatofile(message: Discord.Message): Promise<void>;
