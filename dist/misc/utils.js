@@ -399,9 +399,18 @@ async function saveDatatofile(message) {
     let u = await db_1.getAllProfiles("wins");
     let m = await db_1.getAllModProfiles("matchportionsstarted");
     let c = await db_1.getAllCockratings();
-    var json = JSON.stringify(u);
-    var json2 = JSON.stringify(m);
-    var json3 = JSON.stringify(c);
+    let u2 = {
+        "e": u
+    };
+    let m2 = {
+        "e": m
+    };
+    let c2 = {
+        "e": c
+    };
+    var json = JSON.stringify(u2);
+    var json2 = JSON.stringify(m2);
+    var json3 = JSON.stringify(c2);
     var fs = require('fs');
     let e = await fs.writeFile('user.json', json, 'utf8', function (err) {
         if (err)
