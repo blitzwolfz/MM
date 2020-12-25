@@ -21,8 +21,11 @@ export async function stats(message: discord.Message, client: discord.Client){
         }
 
         let wr = 0;
-
-        if(user.loss === 0) wr = 100;
+        
+        if(user.loss === 0 && user.wins === 0) wr = 0;
+        
+        else if(user.loss === 0) wr = 100;
+        
         else if(user.wins === 0) wr = 0;
         else{
             wr = Math.floor(user.wins/(user.wins+user.loss)) * 100
@@ -36,7 +39,7 @@ export async function stats(message: discord.Message, client: discord.Client){
                 { name: 'Total points', value: `${user.points}` },
                 { name: 'Total wins', value: `${user.wins}` },
                 { name: 'Total loss', value: `${user.loss}`  },
-                { name: 'Total matches', value: `${user.wins+user.loss} W/L` },
+                { name: 'Total matches', value: `${user.wins+user.loss}` },
                 { name: 'Win Rate', value: `${wr}%` },
             )
         

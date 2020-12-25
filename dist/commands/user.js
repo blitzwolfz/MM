@@ -37,7 +37,9 @@ async function stats(message, client) {
             await db_1.updateProfile(user._id, "name", name);
         }
         let wr = 0;
-        if (user.loss === 0)
+        if (user.loss === 0 && user.wins === 0)
+            wr = 0;
+        else if (user.loss === 0)
             wr = 100;
         else if (user.wins === 0)
             wr = 0;
