@@ -243,6 +243,11 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             await user.send("No.");
         }
     }
+    if (messageReaction.emoji.name === '🗳️') {
+        await signups_1.signup(messageReaction.message, client, user.id, false);
+        await messageReaction.users.remove(user.id);
+        await messageReaction.message.react('🗳️');
+    }
     if (!utils_1.emojis.includes(messageReaction.emoji.name))
         return;
     console.log(`a reaction is added to a message`);
@@ -447,10 +452,7 @@ client.on("message", async (message) => {
         await utils_1.deletechannels(message, args);
     }
     else if (command === "test") {
-        await message.reply("no").then(async (message) => { await message.react('🤏'); });
-        if (message.author.id !== "239516219445608449")
-            return message.reply("nah b");
-        await utils_1.saveDatatofile(message);
+        (await (await client.channels.fetch(args[0])).messages.fetch(args[1])).react('🗳️');
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))
@@ -819,7 +821,7 @@ client.on("message", async (message) => {
             await signups_1.closesignup(message, client);
     }
     else if (command === "signup") {
-        await signups_1.signup(message, client);
+        await signups_1.signup(message, client, message.author.id);
     }
     else if (command === "removesignup") {
         await signups_1.removesignup(message);

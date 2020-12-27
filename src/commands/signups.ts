@@ -47,14 +47,14 @@ export async function startsignup(message: Discord.Message, client: Discord.Clie
     }
 }
 
-export async function signup(message: Discord.Message, client: Discord.Client){
+export async function signup(message: Discord.Message, client: Discord.Client, id:string, dm:boolean = true){
     let signup = await getSignups()
 
-    if(message.channel.type !== "dm"){
-        return message.reply(",you have to signup in bot DM.");
+    if(message.channel.type !== "dm" && dm === true){
+        return message.reply("You have to signup in bot DM.");
     }
 
-    else if(signup.users.includes(message.author.id)){
+    else if(signup.users.includes(id)){
         return message.reply("You already signed up!")
     }
 
@@ -63,15 +63,21 @@ export async function signup(message: Discord.Message, client: Discord.Client){
     }
 
     else{
-        signup.users.push(message.author.id)
+        signup.users.push(id)
 
         await updateSignup(signup)
 
-        await (await (await client.guilds!.cache.get("719406444109103117")!).members.fetch(message.author.id)).roles.add("731568704499875932")!
+        await (await (await client.guilds!.cache.get("719406444109103117")!).members.fetch(id)).roles.add("731568704499875932")!
 
     }
 
-    return message.reply("You have been signed up!")
+    if(dm === true){
+        return message.reply("You have been signed up!")
+    }
+
+    else{
+        return;
+    }
 
 }
 

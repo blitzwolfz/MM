@@ -59,23 +59,28 @@ async function startsignup(message, client) {
     }
 }
 exports.startsignup = startsignup;
-async function signup(message, client) {
+async function signup(message, client, id, dm = true) {
     let signup = await db_1.getSignups();
-    if (message.channel.type !== "dm") {
-        return message.reply(",you have to signup in bot DM.");
+    if (message.channel.type !== "dm" && dm === true) {
+        return message.reply("You have to signup in bot DM.");
     }
-    else if (signup.users.includes(message.author.id)) {
+    else if (signup.users.includes(id)) {
         return message.reply("You already signed up!");
     }
     else if (signup.open === false) {
         return message.reply(", signups are now closed! Contact mod if there is an issue.");
     }
     else {
-        signup.users.push(message.author.id);
+        signup.users.push(id);
         await db_1.updateSignup(signup);
-        await (await (await client.guilds.cache.get("719406444109103117")).members.fetch(message.author.id)).roles.add("731568704499875932");
+        await (await (await client.guilds.cache.get("719406444109103117")).members.fetch(id)).roles.add("731568704499875932");
     }
-    return message.reply("You have been signed up!");
+    if (dm === true) {
+        return message.reply("You have been signed up!");
+    }
+    else {
+        return;
+    }
 }
 exports.signup = signup;
 async function removesignup(message) {

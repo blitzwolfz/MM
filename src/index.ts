@@ -24,7 +24,7 @@ import {
 import { duelcheck, exhibition } from "./commands/exhibitions"
 import { qualend, end, cancelmatch } from "./commands/winner";
 import { vs } from "./commands/card";
-import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, createrole, clearstats, qualifierresultadd, autoreminders, SeasonRestart, saveDatatofile } from "./misc/utils";
+import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, createrole, clearstats, qualifierresultadd, autoreminders, SeasonRestart } from "./misc/utils";
 import { ModHelp, UserHelp, ModSignupHelp, ModChallongeHelp, DuelHelp } from "./commands/help";
 
 import {
@@ -378,6 +378,13 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
     }
   }
 
+  if(messageReaction.emoji.name === '🗳️'){
+    await signup(messageReaction.message, client, user.id, false)
+
+    await messageReaction.users.remove(user.id)
+    await messageReaction.message.react('🗳️')
+  }
+
   if (!emojis.includes(messageReaction.emoji.name)) return;
 
   console.log(`a reaction is added to a message`);
@@ -548,6 +555,8 @@ client.on("message", async message => {
     return
   };
 
+  //client.commands = new Discord.Collection();
+
   //await message.channel.startTyping(100)
 
   // if(command === "s"){
@@ -681,10 +690,8 @@ client.on("message", async message => {
   }
 
   else if (command === "test") {
-    await message.reply("no").then(async message => { await message.react('🤏') })
-
-    if(message.author.id !== "239516219445608449") return message.reply("nah b")
-    await saveDatatofile(message)
+    //await message.reply("no").then(async message => { await message.react('🤏') })
+    (await (<Discord.TextChannel>await client.channels.fetch(args[0])).messages.fetch(args[1])).react('🗳️')
   }
 
   else if (command === "createqualgroup") {
@@ -1127,7 +1134,7 @@ client.on("message", async message => {
   }
 
   else if (command === "signup") {
-    await signup(message, client)
+    await signup(message, client, message.author.id)
   }
 
   else if (command === "removesignup") {
