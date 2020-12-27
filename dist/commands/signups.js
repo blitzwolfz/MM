@@ -64,10 +64,13 @@ async function signup(message, client, id, dm = true) {
     if (message.channel.type !== "dm" && dm === true) {
         return message.reply("You have to signup in bot DM.");
     }
-    else if (signup.users.includes(id)) {
+    else if (signup.users.includes(id) && dm === true) {
         return message.reply("You already signed up!");
     }
-    else if (signup.open === false) {
+    else if (signup.users.includes(id) && dm === false) {
+        (await client.users.fetch(id)).send("You already signed up!");
+    }
+    else if (signup.open === false && dm === true) {
         return message.reply(", signups are now closed! Contact mod if there is an issue.");
     }
     else {
