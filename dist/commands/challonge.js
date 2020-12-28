@@ -255,24 +255,12 @@ async function CreateQualGroups(message, args) {
     }
 }
 exports.CreateQualGroups = CreateQualGroups;
-async function makeGroup(n, list) {
-    let evenGroupds = Math.floor(list.length / n);
-    let groups = [];
-    list = await shuffle(list);
-    let s = 0, end = n;
-    for (let i = 0; i < evenGroupds; i++) {
-        let temp = list.slice(s, end);
-        s += n;
-        end += n;
-        groups.push(temp);
+async function makeGroup(amount, list) {
+    let chunks = [], i = 0, n = list.length;
+    while (i < n) {
+        chunks.push(list.slice(i, i += amount));
     }
-    if (n % 2 == 0) {
-        groups.push(list.slice(evenGroupds * n - 1));
-    }
-    else {
-        groups.push(list.slice(evenGroupds * n - 1).slice(1));
-    }
-    return groups;
+    return chunks;
 }
 async function shuffle(a) {
     for (let i = a.length - 1; i > 0; i--) {

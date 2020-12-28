@@ -71,7 +71,7 @@ async function signup(message, client, id, dm = true) {
         (await client.users.fetch(id)).send("You already signed up!");
     }
     else if (signup.open === false && dm === true) {
-        return message.reply(", signups are now closed! Contact mod if there is an issue.");
+        return message.reply("signups are now closed! Contact mod if there is an issue.");
     }
     else {
         signup.users.push(id);

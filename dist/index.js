@@ -165,6 +165,13 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
                 await db_1.updateModProfile(messageReaction.message.author.id, "modactions", 1);
                 await db_1.updateModProfile(messageReaction.message.author.id, "matchportionsstarted", 1);
                 await messageReaction.users.remove(user.id);
+                await client.channels.cache.get("748760056333336627").send({
+                    embed: {
+                        description: `<@${user.id}>  ${user.tag} has started <@${id}> in <#${messageReaction.message.channel}>`,
+                        color: "#d7be26",
+                        timestamp: new Date()
+                    }
+                });
             }
             else if (messageReaction.emoji.name === '🅱️') {
                 let id = await (await db_1.getMatch(messageReaction.message.channel.id)).p2.userid;
@@ -172,6 +179,13 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
                 await db_1.updateModProfile(messageReaction.message.author.id, "modactions", 1);
                 await db_1.updateModProfile(messageReaction.message.author.id, "matchportionsstarted", 1);
                 await messageReaction.users.remove(user.id);
+                await client.channels.cache.get("748760056333336627").send({
+                    embed: {
+                        description: `<@${user.id}>  ${user.tag} has started <@${id}> in <#${messageReaction.message.channel}>`,
+                        color: "#d7be26",
+                        timestamp: new Date()
+                    }
+                });
             }
         }
         else {
@@ -237,6 +251,13 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             await start_1.splitqual(client, messageReaction.message, id);
             await messageReaction.users.remove(user.id);
             await messageReaction.remove();
+            await client.channels.cache.get("748760056333336627").send({
+                embed: {
+                    description: `<@${user.id}>  ${user.tag} has started <@${id}> in <#${messageReaction.message.channel}>`,
+                    color: "#d7be26",
+                    timestamp: new Date()
+                }
+            });
         }
         else {
             await messageReaction.users.remove(user.id);

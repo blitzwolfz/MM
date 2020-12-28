@@ -267,6 +267,15 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
         await updateModProfile(messageReaction.message.author.id, "matchportionsstarted", 1)
         await messageReaction.users.remove(user.id)
 
+        await (<Discord.TextChannel>client.channels.cache.get("748760056333336627")).send({
+                                
+          embed:{
+              description: `<@${user.id}>  ${user.tag} has started <@${id}> in <#${messageReaction.message.channel}>`,
+              color:"#d7be26",
+              timestamp: new Date()
+          }
+        });
+
       }
 
       else if (messageReaction.emoji.name === '🅱️') {
@@ -276,6 +285,15 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
         await updateModProfile(messageReaction.message.author.id, "modactions", 1)
         await updateModProfile(messageReaction.message.author.id, "matchportionsstarted", 1)
         await messageReaction.users.remove(user.id)
+
+        await (<Discord.TextChannel>client.channels.cache.get("748760056333336627")).send({
+                                
+          embed:{
+              description: `<@${user.id}>  ${user.tag} has started <@${id}> in <#${messageReaction.message.channel}>`,
+              color:"#d7be26",
+              timestamp: new Date()
+          }
+        });
 
       }
     }
@@ -368,6 +386,15 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
       await splitqual(client, messageReaction.message, id)
       await messageReaction.users.remove(user.id)
       await messageReaction.remove()
+
+      await (<Discord.TextChannel>client.channels.cache.get("748760056333336627")).send({
+                                
+        embed:{
+            description: `<@${user.id}>  ${user.tag} has started <@${id}> in <#${messageReaction.message.channel}>`,
+            color:"#d7be26",
+            timestamp: new Date()
+        }
+      });
 
 
     }

@@ -33,6 +33,16 @@ async function submit(message, client) {
                         timestamp: new Date()
                     }
                 });
+                await client.channels.cache.get("793242781892083742").send({
+                    embed: {
+                        description: `<@${message.author.id}>  ${message.author.tag} has submitted their meme\nChannel: <#${match.channelid}>`,
+                        color: "#d7be26",
+                        image: {
+                            url: message.attachments.array()[0].url,
+                        },
+                        timestamp: new Date()
+                    }
+                });
                 message.reply("Your meme has been attached!");
                 if (match.p1.donesplit && match.p2.donesplit && match.split) {
                     console.log("not a split match");

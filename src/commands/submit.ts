@@ -42,6 +42,19 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
                         timestamp: new Date()
                     }
                 });
+
+                await (<Discord.TextChannel>client.channels.cache.get("793242781892083742")).send({
+                                
+                    embed:{
+                        description: `<@${message.author.id}>  ${message.author.tag} has submitted their meme\nChannel: <#${match.channelid}>`,
+                        color:"#d7be26",
+                        image: {
+                            url: message.attachments.array()[0].url,
+                        },
+                        timestamp: new Date()
+                    }
+                });
+                
                 message.reply("Your meme has been attached!")
 
                 if(match.p1.donesplit && match.p2.donesplit && match.split){
