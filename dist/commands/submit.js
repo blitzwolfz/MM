@@ -106,6 +106,16 @@ async function qualsubmit(message, client) {
                                     timestamp: new Date()
                                 }
                             });
+                            await client.channels.cache.get("793242781892083742").send({
+                                embed: {
+                                    description: `<@${message.author.id}>  ${message.author.tag} has submitted their meme\nChannel: <#${match.channelid}>`,
+                                    color: "#d7be26",
+                                    image: {
+                                        url: message.attachments.array()[0].url,
+                                    },
+                                    timestamp: new Date()
+                                }
+                            });
                             player.memedone = true;
                             await db_1.updateQuals(match);
                             return;
