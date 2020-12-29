@@ -35,25 +35,29 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
                 if(match.split){
                     match.p1.donesplit = true
                 }
-                await (<Discord.TextChannel>client.channels.cache.get("722616679280148504")).send({
-                    embed:{
-                        description: `<@${message.author.id}> has submitted their meme\nChannel: <#${match.channelid}>`,
-                        color: "#d7be26",
-                        timestamp: new Date()
-                    }
-                });
 
-                await (<Discord.TextChannel>client.channels.cache.get("793242781892083742")).send({
-                                
-                    embed:{
-                        description: `<@${message.author.id}>  ${message.author.tag} has submitted their meme\nChannel: <#${match.channelid}>`,
-                        color:"#d7be26",
-                        image: {
-                            url: message.attachments.array()[0].url,
-                        },
-                        timestamp: new Date()
-                    }
-                });
+                if(match.exhibition === false){
+                    await (<Discord.TextChannel>client.channels.cache.get("722616679280148504")).send({
+                        embed:{
+                            description: `<@${message.author.id}> has submitted their meme\nChannel: <#${match.channelid}>`,
+                            color: "#d7be26",
+                            timestamp: new Date()
+                        }
+                    });
+    
+                    await (<Discord.TextChannel>client.channels.cache.get("793242781892083742")).send({
+                                    
+                        embed:{
+                            description: `<@${message.author.id}>  ${message.author.tag} has submitted their meme\nChannel: <#${match.channelid}>`,
+                            color:"#d7be26",
+                            image: {
+                                url: message.attachments.array()[0].url,
+                            },
+                            timestamp: new Date()
+                        }
+                    });
+                }
+
                 
                 message.reply("Your meme has been attached!")
 
@@ -78,13 +82,27 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
                     match.p2.donesplit = true
                 }
                 
-                await (<Discord.TextChannel>client.channels.cache.get("722616679280148504")).send({
-                    embed:{
-                        description: `<@${message.author.id}> has submitted their meme\nChannel: <#${match.channelid}>`,
-                        color: "#d7be26",
-                        timestamp: new Date()
-                    }
-                });
+                if(match.exhibition === false){
+                    await (<Discord.TextChannel>client.channels.cache.get("722616679280148504")).send({
+                        embed:{
+                            description: `<@${message.author.id}> has submitted their meme\nChannel: <#${match.channelid}>`,
+                            color: "#d7be26",
+                            timestamp: new Date()
+                        }
+                    });
+    
+                    await (<Discord.TextChannel>client.channels.cache.get("793242781892083742")).send({
+                                    
+                        embed:{
+                            description: `<@${message.author.id}>/${message.author.tag}\nhas submitted their meme\nChannel: <#${match.channelid}>`,
+                            color:"#d7be26",
+                            image: {
+                                url: message.attachments.array()[0].url,
+                            },
+                            timestamp: new Date()
+                        }
+                    });
+                }
                 message.reply("Your meme has been attached!")
 
                 if(match.p1.donesplit && match.p2.donesplit && match.split){

@@ -366,35 +366,55 @@ export async function CreateQualGroups(message: Discord.Message, args: string[])
     }
 }
 
-async function makeGroup(n: number, list: string[]) {
-    let evenGroupds = Math.floor(list.length / n)
-    let groups = []
-    list = await shuffle(list)
+async function makeGroup(amount: number, list: string[]) {
+    
+    // function splitArrayIntoChunksOfLen(arr, len) {
+    //     var chunks = [], i = 0, n = arr.length;
+    //     while (i < n) {
+    //       chunks.push(arr.slice(i, i += len));
+    //     }
+    //     return chunks;
+    //   }
 
-    let s = 0, end = n
+    let chunks:any[] = [], i = 0, n = list.length;
 
-    for (let i = 0; i < evenGroupds; i++) {
-
-
-        let temp = list.slice(s, end)
-
-        s += n
-        end += n
-
-        groups.push(temp)
+    while(i < n){
+        chunks.push(list.slice(i, i += amount));
     }
 
-    if (n % 2 == 0) {
-        groups.push(list.slice(evenGroupds * n - 1))
-    }
+    return chunks;
 
-    else {
-        groups.push(list.slice(evenGroupds * n - 1).slice(1))
-    }
-
-
-    return groups
 }
+
+// async function makeGroup(n: number, list: string[]) {
+//     let evenGroupds = Math.floor(list.length / n)
+//     let groups = []
+//     list = await shuffle(list)
+
+//     let s = 0, end = n
+
+//     for (let i = 0; i < evenGroupds; i++) {
+
+
+//         let temp = list.slice(s, end)
+
+//         s += n
+//         end += n
+
+//         groups.push(temp)
+//     }
+
+//     if (n % 2 == 0) {
+//         groups.push(list.slice(evenGroupds * n - 1))
+//     }
+
+//     else {
+//         groups.push(list.slice(evenGroupds * n - 1).slice(1))
+//     }
+
+
+//     return groups
+// }
 
 async function shuffle(a: any[]) {
     for (let i = a.length - 1; i > 0; i--) {
