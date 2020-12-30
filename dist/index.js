@@ -795,7 +795,7 @@ client.on("message", async (message) => {
         let aa = await db_1.getQuals();
         if (aa) {
             for (let i = 0; i < aa.length; i++) {
-                await message.channel.send(`${a[i].channelid} ---> <#${a[i].channelid}>\nTime to finish: ${await utils_1.toHHMMSS(7200, aa[i].votetime)}`);
+                await message.channel.send(`${aa[i].channelid} ---> <#${aa[i].channelid}>\nTime to finish: ${await utils_1.toHHMMSS(7200, aa[i].votetime)}`);
             }
         }
     }

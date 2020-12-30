@@ -1103,7 +1103,7 @@ client.on("message", async message => {
 
     if (aa) {
       for (let i = 0; i < aa.length; i++) {
-        await message.channel.send(`${a[i].channelid} ---> <#${a[i].channelid}>\nTime to finish: ${await toHHMMSS(7200, aa[i].votetime)}`)
+        await message.channel.send(`${aa[i].channelid} ---> <#${aa[i].channelid}>\nTime to finish: ${await toHHMMSS(7200, aa[i].votetime)}`)
       }
     }
 
