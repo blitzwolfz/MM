@@ -24,7 +24,7 @@ import {
 import { duelcheck, exhibition } from "./commands/exhibitions"
 import { qualend, end, cancelmatch } from "./commands/winner";
 import { vs } from "./commands/card";
-import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, createrole, clearstats, qualifierresultadd, autoreminders, SeasonRestart } from "./misc/utils";
+import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, createrole, clearstats, qualifierresultadd, autoreminders, SeasonRestart, toHHMMSS } from "./misc/utils";
 import { ModHelp, UserHelp, ModSignupHelp, ModChallongeHelp, DuelHelp } from "./commands/help";
 
 import {
@@ -1093,6 +1093,7 @@ client.on("message", async message => {
 
     if (a) {
       for (let i = 0; i < a.length; i++) {
+        if(a[i].exhibition === false)
         await message.channel.send(`${a[i].channelid} ---> <#${a[i].channelid}>`)
       }
 
@@ -1102,7 +1103,7 @@ client.on("message", async message => {
 
     if (aa) {
       for (let i = 0; i < aa.length; i++) {
-        await message.channel.send(`${aa[i].channelid}`)
+        await message.channel.send(`${a[i].channelid} ---> <#${a[i].channelid}>\nTime to finish: ${await toHHMMSS(7200, aa[i].votetime)}`)
       }
     }
 

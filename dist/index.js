@@ -788,13 +788,14 @@ client.on("message", async (message) => {
         let a = await db_1.getActive();
         if (a) {
             for (let i = 0; i < a.length; i++) {
-                await message.channel.send(`${a[i].channelid} ---> <#${a[i].channelid}>`);
+                if (a[i].exhibition === false)
+                    await message.channel.send(`${a[i].channelid} ---> <#${a[i].channelid}>`);
             }
         }
         let aa = await db_1.getQuals();
         if (aa) {
             for (let i = 0; i < aa.length; i++) {
-                await message.channel.send(`${aa[i].channelid}`);
+                await message.channel.send(`${a[i].channelid} ---> <#${a[i].channelid}>\nTime to finish: ${await utils_1.toHHMMSS(7200, aa[i].votetime)}`);
             }
         }
     }
