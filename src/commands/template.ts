@@ -1,5 +1,5 @@
 import * as Discord from "discord.js"
-import { gettemplatedb, getthemes, updatedoc, updateProfile } from "../misc/db"
+import { gettemplatedb, getthemes, updatedoc, updatetemplatedb } from "../misc/db"
 import { backwardsFilter, forwardsFilter } from "../misc/utils"
 
 export async function template(message: Discord.Message, client: Discord.Client) {
@@ -28,6 +28,7 @@ export async function template(message: Discord.Message, client: Discord.Client)
             await channel.send(
                 new Discord.MessageEmbed()
                     .setTitle(`${message.author.username} has submitted a new template(s)`)
+                    .setDescription(`<@${message.author.id}>`)
                     .setImage(message.attachments.array()[i].url)
             ).then(async message => {
                 await message.react('🏁')
@@ -36,8 +37,8 @@ export async function template(message: Discord.Message, client: Discord.Client)
             )
         }
 
-        updateProfile(message.author.id, "points", (message.attachments.array().length * 2))
-        await message.reply(`Thank you for submitting templates. You gained ${message.attachments.array().length * 2} points`)
+        // updateProfile(message.author.id, "points", (message.attachments.array().length * 2))
+        await message.reply(`Thank you for submitting templates. You will gain a maximum of ${message.attachments.array().length * 2} points if they are approved`)
 
     }
 
@@ -199,15 +200,15 @@ export async function templatecheck(message: Discord.Message, client: Discord.Cl
     let page:number = typeof args[1] == "undefined" ? isNaN(parseInt(args[0])) ? 1 : parseInt(args[0]) : args[1];;
     let ratings = await gettemplatedb()
     let removelinks: string[] = []
-    let c = <Discord.TextChannel>message.channel
+    //let c = <Discord.TextChannel>message.channel
     const m = <Discord.Message>(await message.channel.send({ embed: await templatecheckembed(page!, client, ratings.list) }));
     await m.react("⬅")
     await m.react("➡");
     await m.react('🗡️')
 
-    const backwards = m.createReactionCollector(backwardsFilter, { time: 500000 });
-    const forwards = m.createReactionCollector(forwardsFilter, { time: 500000 });
-    const remove = m.createReactionCollector(((reaction: { emoji: { name: string; }; }, user: Discord.User) => reaction.emoji.name === '🗡️' && !user.bot), { time: 15000 });
+    const backwards = m.createReactionCollector(backwardsFilter, { time: 300000 });
+    const forwards = m.createReactionCollector(forwardsFilter, { time: 300000 });
+    const remove = m.createReactionCollector(((reaction: { emoji: { name: string; }; }, user: Discord.User) => reaction.emoji.name === '🗡️' && !user.bot), { time: 300000 });
 
     backwards.on('collect', async () => {
         m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
@@ -225,23 +226,19 @@ export async function templatecheck(message: Discord.Message, client: Discord.Cl
     });
 
     remove.on("end", async () => {
-        var fs = require('fs');
-
-        var file = fs.createWriteStream('array.txt');
-        file.on('error', function(err:any) { console.log(err)});
-
-        removelinks.forEach(function(v:any) { file.write(v + '\n'); });
-
-
-        file.end();
-
-        
-        const attachment = new Discord.MessageAttachment(file);
-
-        await c.send(attachment)
-        forwards.on("end", async () => {})
-        backwards.on("end", async () => {})
-        await m.reactions.message.delete()
-
+        await templatelinksremoved(removelinks)
+        await message.reply("Finished")
     })
+}
+
+async function templatelinksremoved(list:string[]) {
+    let tempdb = await gettemplatedb()
+
+    for(let x = 0; x < list.length; x++){
+        let e = tempdb.list.findIndex(i => i === list[x])
+        tempdb.list.splice(e, 1)
+    }
+
+    await updatetemplatedb(tempdb.list)
+    
 }
