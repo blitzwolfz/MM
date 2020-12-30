@@ -46,6 +46,7 @@ import {
   getQuals,
   getConfig,
   updateConfig,
+  getQuallist,
 } from "./misc/db";
 
 import { template, approvetemplate, addTheme, removeTheme, themelistLb, templatecheck } from "./commands/template";
@@ -793,9 +794,9 @@ client.on("message", async message => {
     await qualsubmit(message, client)
   }
 
-  else if (command === "submittemplate" || command === "template") {
-    await template(message, client)
-  }
+  // else if (command === "submittemplate" || command === "template") {
+  //   await template(message, client)
+  // }
 
   else if (command === "start") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
@@ -1143,7 +1144,36 @@ client.on("message", async message => {
   }
 
   else if (command === "qualchannelcreate") {
+    if (message.member!.roles.cache.has('724818272922501190')
+    || message.member!.roles.cache.has('724832462286356590'))
     await QualChannelCreation(message, args)
+  }
+
+  else if (command === "seconqual") {
+    if (message.member!.roles.cache.has('724818272922501190')
+    || message.member!.roles.cache.has('724832462286356590')){
+      let channels = await message.guild!.channels.cache.array()
+      let groups = await getQuallist()
+
+      
+      for(let c of channels){
+        
+        if(c.parent && c.parent!.name === "qualifiers"){
+
+          let n = parseInt(c.name.toLowerCase().replace("group-", "")) - 1
+
+          let string = ""
+
+          for (let u of groups.users[n]) {
+              string += `<@${u}> `
+          }
+
+          await (<Discord.TextChannel>client.channels.cache.get(c.id))
+          .send(`${string}, Portion ${args[0]} has begun, and you have ${args[1]}h to complete it. Contact a ref to begin your portion!`)
+        }
+      }
+    }
+    
   }
 
   //CqtzrpLVF0GOnJXcFwLwyLbYoAwSQ1jH5QkGnpUJ
