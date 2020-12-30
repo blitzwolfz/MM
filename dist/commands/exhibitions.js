@@ -52,6 +52,17 @@ async function exhibition(message, client, args) {
     };
     var res;
     console.log(`Value of res is: ${res}`);
+    let id2 = message.mentions.users.first();
+    ex.cooldowns.push({
+        user: id2.id,
+        time: Math.floor(Date.now() / 1000)
+    });
+    ex.cooldowns.push({
+        user: m.author.id,
+        time: Math.floor(Date.now() / 1000)
+    });
+    await db_1.updateExhibition(ex);
+    ex = await db_1.getExhibition();
     await ((_b = message.mentions.users.first()) === null || _b === void 0 ? void 0 : _b.send(`<@${m.author.id}> wants to duel you. Send Accept to continue, or don't reply to not`).then(async (userdm) => {
         console.log(userdm.channel.id);
         await userdm.channel.awaitMessages(filter, { max: 1, time: 90000, errors: ['time'] })
@@ -62,15 +73,14 @@ async function exhibition(message, client, args) {
             .catch(async (collected) => {
             await m.author.send(`<@${m.author.id}> match has been declined`);
             res = false;
+            ex.cooldowns.splice(ex.cooldowns.findIndex(x => x.user === id2.id), 1);
+            ex.cooldowns.splice(ex.cooldowns.findIndex(x => x.user === m.author.id), 1);
+            await db_1.updateExhibition(ex);
             return;
         });
     }));
     console.log(`Value of res is: ${res}`);
     if (res) {
-        ex.cooldowns.push({
-            user: m.author.id,
-            time: Math.floor(Date.now() / 1000)
-        });
         await db_1.updateExhibition(ex);
         ex = await db_1.getExhibition();
         let guild = client.guilds.cache.get("719406444109103117");

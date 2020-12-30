@@ -38,6 +38,8 @@ export async function exhibition(message: Discord.Message, client: Discord.Clien
     let m = message
 
 
+
+
     // if (ex.cooldowns.findIndex(x => (x.user === (message.author.id)) || (x.user === (message.mentions.users.first()?.id)))){
     //     return message.reply("it has not been 3 hours yet")
     // }
@@ -55,6 +57,22 @@ export async function exhibition(message: Discord.Message, client: Discord.Clien
 
     var res;
     console.log(`Value of res is: ${res}`)
+
+    let id2 =  message.mentions.users.first()!
+
+    ex.cooldowns.push({
+        user:id2.id,
+        time:Math.floor(Date.now() / 1000)
+    })
+
+    ex.cooldowns.push({
+        user:m.author.id,
+        time:Math.floor(Date.now() / 1000)
+    })
+
+    await updateExhibition(ex)
+    
+    ex = await getExhibition()
     
     
     await message.mentions.users.first()?.send(`<@${m.author.id}> wants to duel you. Send Accept to continue, or don't reply to not`).then(async (userdm:Discord.Message) => {
@@ -68,6 +86,11 @@ export async function exhibition(message: Discord.Message, client: Discord.Clien
             .catch(async collected => {
                 await m.author.send(`<@${m.author.id}> match has been declined`);
                 res = false;
+
+                
+                ex.cooldowns.splice(ex.cooldowns.findIndex(x => x.user === id2.id), 1)
+                ex.cooldowns.splice(ex.cooldowns.findIndex(x => x.user === m.author.id), 1)
+                await updateExhibition(ex)
                 return;
             });
     });
@@ -77,10 +100,6 @@ export async function exhibition(message: Discord.Message, client: Discord.Clien
 
     if(res){
 
-        ex.cooldowns.push({
-            user:m.author.id,
-            time:Math.floor(Date.now() / 1000)
-        })
 
         // ex.cooldowns.push({
         //     user:m.mentions.users.first()!.id!,

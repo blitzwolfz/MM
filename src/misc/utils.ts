@@ -612,14 +612,20 @@ export async function saveDatatofile(message: Discord.Message){
   var json3 = JSON.stringify(c2);
 
   var fs = require('fs');
+
+  //@ts-ignore
   let e = await fs.writeFile('user.json', json, 'utf8', function (err:Error) {
     if (err) return console.log(err);
     console.log('Hello World > helloworld.txt');
   })
+
+  //@ts-ignore
   let e2 = await fs.writeFile('mods.json', json2, 'utf8', function (err:Error) {
     if (err) return console.log(err);
     console.log('Hello World > helloworld.txt');
   })
+
+  //@ts-ignore
   let e3 = await fs.writeFile('cr.json', json3, 'utf8', function (err:Error) {
     if (err) return console.log(err);
     console.log('Hello World > helloworld.txt');
