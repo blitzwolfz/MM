@@ -14,7 +14,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -219,9 +219,10 @@ async function qualend(client, id) {
                 totalvotes += votes.length;
             }
             for (let i = 0; i < match.votes.length; i++) {
+                let name = `${await (await client.users.fetch(match.players[i].userid)).username} | Meme #${match.players.indexOf(match.players[i]) + 1}${match.players[i].memedone ? `` : `-Failed`}`;
                 fields.push({
-                    name: `${await (await client.users.fetch(match.players[i].userid)).username} | Meme #${match.players.indexOf(match.players[i]) + 1}`,
-                    value: `${match.players[i].memedone ? `Finished with ${match.votes[i].length} | Earned: ${Math.floor(match.votes[i].length / totalvotes * 100)}% of the votes\nUserID: ${match.players[i].userid}` : `Failed to submit meme`}`,
+                    name: name,
+                    value: `${match.players[i].memedone ? `Finished with ${match.votes[i].length} | Earned: ${Math.floor(match.votes[i].length / totalvotes * 100)}% of the votes\nUserID: ${match.players[i].userid}` : `Finished with ${0} | Earned: ${0}% of the votes\nUserID: ${match.players[i].userid}`}`,
                 });
             }
             var list = [];

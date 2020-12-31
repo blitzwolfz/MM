@@ -286,7 +286,7 @@ export async function getthemes(): Promise<{
     return client.db(process.env.DBNAME).collection("tempstruct").findOne({_id:"themelist"})!;   
 }
 
-export async function updatedoc(st:{_id:"themelist",list:string[]}) {
+export async function updateThemedb(st:{_id:"themelist",list:string[]}) {
     await client.db(process.env.DBNAME).collection("tempstruct").updateOne({_id:"themelist"}, {$set: st})!;
 }
 

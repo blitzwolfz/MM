@@ -47,6 +47,9 @@ import {
   getConfig,
   updateConfig,
   getQuallist,
+  updateProfile,
+  updateThemedb,
+  getthemes,
 } from "./misc/db";
 
 import { template, approvetemplate, addTheme, removeTheme, themelistLb, templatecheck } from "./commands/template";
@@ -269,11 +272,11 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
         await messageReaction.users.remove(user.id)
 
         await (<Discord.TextChannel>client.channels.cache.get("748760056333336627")).send({
-                                
-          embed:{
-              description: `<@${user.id}>  ${user.tag} has started <@${id}> in <#${messageReaction.message.channel}>`,
-              color:"#d7be26",
-              timestamp: new Date()
+
+          embed: {
+            description: `<@${user.id}>  ${user.tag} has started <@${id}> in <#${messageReaction.message.channel}>`,
+            color: "#d7be26",
+            timestamp: new Date()
           }
         });
 
@@ -288,11 +291,11 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
         await messageReaction.users.remove(user.id)
 
         await (<Discord.TextChannel>client.channels.cache.get("748760056333336627")).send({
-                                
-          embed:{
-              description: `<@${user.id}>  ${user.tag} has started <@${id}> in <#${messageReaction.message.channel}>`,
-              color:"#d7be26",
-              timestamp: new Date()
+
+          embed: {
+            description: `<@${user.id}>  ${user.tag} has started <@${id}> in <#${messageReaction.message.channel}>`,
+            color: "#d7be26",
+            timestamp: new Date()
           }
         });
 
@@ -330,13 +333,33 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
         console.log(messageReaction.message.embeds[0].image)
 
         if (l === 3) {
+          let id = await getUser(await messageReaction.message.embeds[0].description!)
           //await tempccc.send(await messageReaction.message.embeds[0].image?.url)
+          if (await messageReaction.message.embeds[0].image?.url) {
+            let e = await gettemplatedb()
+            e.list.push(await messageReaction.message.embeds[0].image!.url)
+            await updateProfile(id!, "points", 2)
+            await updatetemplatedb(e.list)
+          }
 
-          let e = await gettemplatedb()
+          else if (await messageReaction.message.embeds[0].fields) {
+            "pepe"
+            let obj = await getthemes()
 
-          e.list.push(await messageReaction.message.embeds[0].image!.url)
 
-          await updatetemplatedb(e.list)
+            for (let i = 0; i < messageReaction.message.embeds[0].fields.length; i++) {
+              obj.list.push(messageReaction.message.embeds[0].fields[i].value)
+            }
+
+            await updateThemedb({
+              _id: "themelist",
+              list: obj.list
+            })
+
+            await updateProfile(id!, "points", 2)
+
+          }
+
           await messageReaction.message.delete()
         }
 
@@ -389,11 +412,11 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
       await messageReaction.remove()
 
       await (<Discord.TextChannel>client.channels.cache.get("748760056333336627")).send({
-                                
-        embed:{
-            description: `<@${user.id}>  ${user.tag} has started <@${id}> in <#${messageReaction.message.channel}>`,
-            color:"#d7be26",
-            timestamp: new Date()
+
+        embed: {
+          description: `<@${user.id}>  ${user.tag} has started <@${id}> in <#${messageReaction.message.channel}>`,
+          color: "#d7be26",
+          timestamp: new Date()
         }
       });
 
@@ -406,7 +429,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
     }
   }
 
-  if(messageReaction.emoji.name === '🗳️'){
+  if (messageReaction.emoji.name === '🗳️') {
     await signup(messageReaction.message, client, user.id, false)
 
     await messageReaction.users.remove(user.id)
@@ -625,7 +648,7 @@ client.on("message", async message => {
     await m.edit(`Latency is ${m.createdTimestamp - message.createdTimestamp}ms. Discord API Latency is ${Math.round(client.ws.ping)}ms`);
   }
 
-  else if(command === "templatecheck"){
+  else if (command === "templatecheck") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("only selected users can use this command. If any problem occured, DM <@239516219445608449>.");
     await templatecheck(message, client, args)
   }
@@ -663,46 +686,6 @@ client.on("message", async message => {
     message.channel.send(sayMessage);
   }
 
-  else if (command === "purge" || command === "clear") {
-
-    return message.reply("Feature no longer in use")
-
-
-    // if (!message!.member!.permissions.has(['MANAGE_MESSAGES'], true)) {
-    //   return message.reply("you don't have those premissions")
-    // }
-
-    // console.log(args)
-
-    // const amount = parseInt(args[0])
-
-    // const user = message.mentions.users.first();
-
-    // if (!amount || amount < 1 || amount > 100) return message.reply("Please give a number between 1 to 100");
-
-
-    // await message.channel.messages.fetch({
-    //   limit: amount
-    // })
-    //   .then(async (messages) => {
-    //     if (user) {
-    //       const filterBy = user;
-    //       let deletemessages = messages.filter(m => m.author.id === filterBy.id).array().slice(0, amount);
-    //       //console.log(deletemessages)
-    //       await message.channel.bulkDelete(deletemessages).catch(error => console.log(error.stack));
-    //     }
-
-    //     else {
-    //       await message.channel.bulkDelete(messages).catch(error => console.log(error.stack));
-    //     }
-
-    //   })
-
-    // message.channel.bulkDelete(fetched)
-    //   .catch(error => message.reply(`Couldn't delete messages because of: ${error}`));
-
-  }
-
   else if (command === "reminder") {
     await reminders(client, args)
   }
@@ -718,9 +701,112 @@ client.on("message", async message => {
   }
 
   else if (command === "test") {
-    //await message.reply("no").then(async message => { await message.react('🤏') })
-    (await (<Discord.TextChannel>await client.channels.fetch(args[0])).messages.fetch(args[1])).react('🗳️')
+    await message.reply("no").then(async message => { await message.react('🤏') })
+
+    let c = (await (<Discord.TextChannel>client.channels.cache.get(args[0])))
+
+
+    console.time("original")
+    await qualifierresultadd(c, client, args[1], args[2])
+    console.timeEnd("original")
+
+    console.time("rewrite")
+    let m = await c.messages.fetch(args[1])
+
+    let m2 = await c.messages.fetch(args[2])
+    
+    let em = m.embeds[0].fields
+    
+    let em2 = m2.embeds[0].fields
+
+    for(let i = 0; i < em.length; i++){
+
+      em[i].name = (em[i].value.split(/[^0-9.]+/g))[3]
+
+      em[i].value = (em[i].value.split(/[^0-9.]+/g))[2]
+    }
+
+    for(let ii = 0; ii < em.length; ii++){
+
+      //console.log(em2[ii].value.split(/[^0-9.]+/g))
+      em2[ii].name = (em2[ii].value.split(/[^0-9.]+/g))[3]
+      em2[ii].value = (em2[ii].value.split(/[^0-9.]+/g))[2]
+    }
+
+    //console.log(em)
+    //console.log(em2)
+    
+    
+
+    em.sort(function (a, b) {
+      //ratings.sort((a: modprofile, b: modprofile) => (b.modactions) - (a.modactions));
+      return (parseInt(b.name) - parseInt(a.name));
+      //Sort could be modified to, for example, sort on the age 
+      // if the name is the same.
+    });
+
+    em2.sort(function (a, b) {
+      //ratings.sort((a: modprofile, b: modprofile) => (b.modactions) - (a.modactions));
+      return (parseInt(b.name) - parseInt(a.name));
+      //Sort could be modified to, for example, sort on the age 
+      // if the name is the same.
+    });
+
+    let fields = em
+
+    const em3 = [];
+
+    for(let y = 0; y < em.length; y++){
+
+      em3.push(
+        {
+          name:(await client.users.cache.get(em[y].name)!).username,
+          value: `${parseInt(em[y].value) + parseInt(em2[y].value)}`,
+          inline:false
+        }
+      )
+    }
+
+    message.channel
+      .send({
+        embed: {
+          title: `Final Results for Group ${message.channel.id}`,
+          description: `Top two move on`,
+          fields,
+          color: "#d7be26",
+          timestamp: new Date()
+        }
+    })
+
+    fields = em2
+    message.channel
+    .send({
+      embed: {
+        title: `Final Results for Group ${message.channel.id}`,
+        description: `Top two move on`,
+        fields,
+        color: "#d7be26",
+        timestamp: new Date()
+      }
+    })
+    //console.log(em3)
+
+    fields = em3
+    message.channel
+    .send({
+      embed: {
+        title: `Final Results for Group ${message.channel.id}`,
+        description: `Top two move on`,
+        fields,
+        color: "#d7be26",
+        timestamp: new Date()
+      }
+    })
+    console.timeEnd("rewrite")
+  
   }
+
+
 
   else if (command === "createqualgroup") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
@@ -779,7 +865,7 @@ client.on("message", async message => {
     await verify(message, client)
   }
 
-  if (command === "manualverify"){
+  if (command === "manualverify") {
     if (!message.member!.roles.cache.has('724818272922501190')) return message.reply("You don't have those premissions")
     await manuallyverify(message, client, args)
   }
@@ -797,6 +883,35 @@ client.on("message", async message => {
   // else if (command === "submittemplate" || command === "template") {
   //   await template(message, client)
   // }
+
+  else if (command === "themesubmit") {
+    //if(message.channel.type !== "dm") return message.reply("Must be in bot dm")
+    let channel = <Discord.TextChannel>client.channels.cache.get("722291683030466621")
+    //var args: Array<string> = message.content.slice(process.env.PREFIX!.length).trim().split(/ +/g);
+    let targs: Array<string> = message.content
+      .slice(process.env.PREFIX!.length)
+      .trim()
+      .substr(message.content.slice(process.env.PREFIX!.length)
+        .trim()
+        .indexOf(" ") + 1)
+      .split(/,+/g);
+
+    let em = new Discord.MessageEmbed()
+      .setTitle(`${message.author.username} has submitted a new Theme(s)`)
+      .setDescription(`<@${message.author.id}>`)
+
+    for (let i = 0; i < targs.length; i++) {
+      em.addField(`Theme: ${i + 1}`, targs[i])
+    }
+
+    await channel.send(em).then(async message => {
+      await message.react('🏁')
+      await message.react('🗡️')
+    })
+
+    // updateProfile(message.author.id, "points", (message.attachments.array().length * 2))
+    await message.reply(`Thank you for submitting themes. You will gain a maximum of ${targs.length} points if they are approved`)
+  }
 
   else if (command === "start") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
@@ -874,7 +989,7 @@ client.on("message", async message => {
     await addTheme(message, client, args)
   }
 
-  else if (command === "deletetheme") {
+  else if (command === "deletetheme" || command === "removetheme") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await removeTheme(message, client, args)
   }
@@ -1067,7 +1182,7 @@ client.on("message", async message => {
     await message.channel.send({ embed: ModSignupHelp })
   }
 
-  else if(command === "seasonrestart"){
+  else if (command === "seasonrestart") {
     if (message.author.id !== "239516219445608449") return message.reply("You don't have those premissions")
     await SeasonRestart(message)
   }
@@ -1093,8 +1208,7 @@ client.on("message", async message => {
 
     if (a) {
       for (let i = 0; i < a.length; i++) {
-        if(a[i].exhibition === false)
-        await message.channel.send(`${a[i].channelid} ---> <#${a[i].channelid}>`)
+        if (a[i].exhibition === false) await message.channel.send(`${a[i].channelid} ---> <#${a[i].channelid}>`)
       }
 
     }
@@ -1146,35 +1260,35 @@ client.on("message", async message => {
 
   else if (command === "qualchannelcreate") {
     if (message.member!.roles.cache.has('724818272922501190')
-    || message.member!.roles.cache.has('724832462286356590'))
-    await QualChannelCreation(message, args)
+      || message.member!.roles.cache.has('724832462286356590'))
+      await QualChannelCreation(message, args)
   }
 
   else if (command === "seconqual") {
     if (message.member!.roles.cache.has('724818272922501190')
-    || message.member!.roles.cache.has('724832462286356590')){
+      || message.member!.roles.cache.has('724832462286356590')) {
       let channels = await message.guild!.channels.cache.array()
       let groups = await getQuallist()
 
-      
-      for(let c of channels){
-        
-        if(c.parent && c.parent!.name === "qualifiers"){
+
+      for (let c of channels) {
+
+        if (c.parent && c.parent!.name === "qualifiers") {
 
           let n = parseInt(c.name.toLowerCase().replace("group-", "")) - 1
 
           let string = ""
 
           for (let u of groups.users[n]) {
-              string += `<@${u}> `
+            string += `<@${u}> `
           }
 
           await (<Discord.TextChannel>client.channels.cache.get(c.id))
-          .send(`${string}, Portion ${args[0]} has begun, and you have ${args[1]}h to complete it. Contact a ref to begin your portion!`)
+            .send(`${string}, Portion ${args[0]} has begun, and you have ${args[1]}h to complete it. Contact a ref to begin your portion!`)
         }
       }
     }
-    
+
   }
 
   //CqtzrpLVF0GOnJXcFwLwyLbYoAwSQ1jH5QkGnpUJ

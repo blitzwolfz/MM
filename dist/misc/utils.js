@@ -14,12 +14,12 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.saveDatatofile = exports.SeasonRestart = exports.toS = exports.toHHMMSS = exports.qualifierresultadd = exports.clearstats = exports.createrole = exports.updatesomething = exports.deletechannels = exports.autoreminders = exports.aautoreminders = exports.reminders = exports.dateBuilder = exports.indexOf2d = exports.forwardsFilter = exports.backwardsFilter = exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
+exports.saveDatatofile = exports.SeasonRestart = exports.toS = exports.toHHMMSS = exports.qualifierresultadd = exports.oldqualifierresultadd = exports.clearstats = exports.createrole = exports.updatesomething = exports.deletechannels = exports.autoreminders = exports.aautoreminders = exports.reminders = exports.dateBuilder = exports.indexOf2d = exports.forwardsFilter = exports.backwardsFilter = exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
 const Discord = __importStar(require("discord.js"));
 const challonge_1 = require("../commands/challonge");
 const db_1 = require("./db");
@@ -67,8 +67,10 @@ function removethreevotes(arr, search) {
     return arr;
 }
 exports.removethreevotes = removethreevotes;
-exports.backwardsFilter = (reaction, user) => reaction.emoji.name === '⬅' && !user.bot;
-exports.forwardsFilter = (reaction, user) => reaction.emoji.name === '➡' && !user.bot;
+const backwardsFilter = (reaction, user) => reaction.emoji.name === '⬅' && !user.bot;
+exports.backwardsFilter = backwardsFilter;
+const forwardsFilter = (reaction, user) => reaction.emoji.name === '➡' && !user.bot;
+exports.forwardsFilter = forwardsFilter;
 function indexOf2d(arr, item, searchpos, returnpos) {
     for (let i = 0; i < arr.length; i++) {
         console.log(arr[i][searchpos]);
@@ -322,7 +324,7 @@ async function clearstats(message) {
     await modprofiles_1.clearmodstats(message);
 }
 exports.clearstats = clearstats;
-async function qualifierresultadd(channel, client, msg1, msg2) {
+async function oldqualifierresultadd(channel, client, msg1, msg2) {
     let m = await channel.messages.fetch(msg1);
     let em = m.embeds[0].fields;
     em.sort(function (a, b) {
@@ -373,6 +375,58 @@ async function qualifierresultadd(channel, client, msg1, msg2) {
             timestamp: new Date()
         }
     });
+}
+exports.oldqualifierresultadd = oldqualifierresultadd;
+async function qualifierresultadd(c, client, msg1, msg2) {
+    console.time("total time");
+    let m = await c.messages.fetch(msg1);
+    let m2 = await c.messages.fetch(msg2);
+    let em = m.embeds[0].fields;
+    let em2 = m2.embeds[0].fields;
+    for (let i = 0; i < em.length; i++) {
+        em[i].name = (em[i].value.split(/[^0-9.]+/g))[3];
+        em[i].value = (em[i].value.split(/[^0-9.]+/g))[2];
+    }
+    for (let ii = 0; ii < em.length; ii++) {
+        em2[ii].name = (em2[ii].value.split(/[^0-9.]+/g))[3];
+        em2[ii].value = (em2[ii].value.split(/[^0-9.]+/g))[2];
+    }
+    em.sort(function (a, b) {
+        return (parseInt(b.name) - parseInt(a.name));
+    });
+    em2.sort(function (a, b) {
+        return (parseInt(b.name) - parseInt(a.name));
+    });
+    let fields = em;
+    const em3 = [];
+    for (let y = 0; y < em.length; y++) {
+        em3.push({
+            name: (await client.users.cache.get(em[y].name)).username,
+            value: `${parseInt(em[y].value) + parseInt(em2[y].value)} Points in Total`,
+            inline: false
+        });
+    }
+    em3.sort((a, b) => b.value.length - a.value.length);
+    fields = em3;
+    c.send({
+        embed: {
+            title: `Final Results for Group ${c.name}`,
+            description: `Top two move on`,
+            fields,
+            color: "#d7be26",
+            timestamp: new Date()
+        }
+    });
+    await (await client.channels.cache.get("722291182461386804")).send({
+        embed: {
+            title: `Final Results for Group ${c.name}`,
+            description: `Players with highest move on`,
+            fields,
+            color: "#d7be26",
+            timestamp: new Date()
+        }
+    });
+    console.timeEnd("total time");
 }
 exports.qualifierresultadd = qualifierresultadd;
 async function toHHMMSS(timestamp, howlong) {

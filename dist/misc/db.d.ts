@@ -55,7 +55,7 @@ export declare function getthemes(): Promise<{
     _id: "themelist";
     list: string[];
 }>;
-export declare function updatedoc(st: {
+export declare function updateThemedb(st: {
     _id: "themelist";
     list: string[];
 }): Promise<void>;

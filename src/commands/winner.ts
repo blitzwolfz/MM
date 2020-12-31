@@ -281,10 +281,13 @@ export async function qualend(client: discord.Client, id: string) {
             }
 
             for (let i = 0; i < match.votes.length; i++) {
+
+                let name = `${await (await client.users.fetch(match.players[i].userid)).username} | Meme #${match.players.indexOf(match.players[i]) + 1}${match.players[i].memedone ? ``: `-Failed`}`
+
                 fields.push({
-                    name: `${await (await client.users.fetch(match.players[i].userid)).username} | Meme #${match.players.indexOf(match.players[i]) + 1}`, //\nUserid: ${match.players[i].userid
+                    name: name,
                     //value: `${match.votes[i].length > 0 ? `Came in with ${match.votes[i].length} vote(s)` : `Failed to submit meme`}`
-                    value: `${match.players[i].memedone ? `Finished with ${match.votes[i].length} | Earned: ${Math.floor(match.votes[i].length / totalvotes * 100)}% of the votes\nUserID: ${match.players[i].userid}` : `Failed to submit meme`}`, //`Came in with ${match.votes[i].length}`,
+                    value: `${match.players[i].memedone ? `Finished with ${match.votes[i].length} | Earned: ${Math.floor(match.votes[i].length / totalvotes * 100)}% of the votes\nUserID: ${match.players[i].userid}` : `Finished with ${0} | Earned: ${0}% of the votes\nUserID: ${match.players[i].userid}`}`, //`Came in with ${match.votes[i].length}`,
                 });
             }
 

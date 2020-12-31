@@ -14,12 +14,13 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.insertExhibition = exports.updateExhibition = exports.getExhibition = exports.deleteGroupmatch = exports.getGroupmatch = exports.getGroupmatches = exports.updateGroupmatch = exports.insertGroupmatch = exports.getalltempStructs = exports.deletetempStruct = exports.updatetempStruct = exports.inserttempStruct = exports.updatedoc = exports.getthemes = exports.updatetemplatedb = exports.gettemplatedb = exports.inserttemplate = exports.gettempStruct = exports.getAllModProfiles = exports.resetModProfile = exports.updateModProfile = exports.addModProfile = exports.getModProfile = exports.getAllCockratings = exports.updateCockrating = exports.getCockrating = exports.insertCockrating = exports.updateVerify = exports.getVerify = exports.insertVerify = exports.insertConfig = exports.updateConfig = exports.getConfig = exports.updateMatchlist = exports.getMatchlist = exports.insertMatchlist = exports.deleteQuallist = exports.updateQuallist = exports.getQuallist = exports.insertQuallist = exports.deleteSignup = exports.updateSignup = exports.getSignups = exports.insertSignups = exports.deleteQuals = exports.deleteActive = exports.addUser = exports.changefield = exports.updateProfile = exports.getProfile = exports.getAllProfiles = exports.addProfile = exports.getSingularQuals = exports.getQuals = exports.getQual = exports.getMatch = exports.getActive = exports.updateQuals = exports.insertQuals = exports.updateActive = exports.dbSoftReset = exports.insertActive = exports.connectToDB = void 0;
+exports.getthemes = exports.updatetemplatedb = exports.gettemplatedb = exports.inserttemplate = exports.gettempStruct = exports.getAllModProfiles = exports.resetModProfile = exports.updateModProfile = exports.addModProfile = exports.getModProfile = exports.getAllCockratings = exports.updateCockrating = exports.getCockrating = exports.insertCockrating = exports.updateVerify = exports.getVerify = exports.insertVerify = exports.insertConfig = exports.updateConfig = exports.getConfig = exports.updateMatchlist = exports.getMatchlist = exports.insertMatchlist = exports.deleteQuallist = exports.updateQuallist = exports.getQuallist = exports.insertQuallist = exports.deleteSignup = exports.updateSignup = exports.getSignups = exports.insertSignups = exports.deleteQuals = exports.deleteActive = exports.addUser = exports.changefield = exports.updateProfile = exports.getProfile = exports.getAllProfiles = exports.addProfile = exports.getSingularQuals = exports.getQuals = exports.getQual = exports.getMatch = exports.getActive = exports.updateQuals = exports.insertQuals = exports.updateActive = exports.dbSoftReset = exports.insertActive = exports.connectToDB = void 0;
+exports.insertExhibition = exports.updateExhibition = exports.getExhibition = exports.deleteGroupmatch = exports.getGroupmatch = exports.getGroupmatches = exports.updateGroupmatch = exports.insertGroupmatch = exports.getalltempStructs = exports.deletetempStruct = exports.updatetempStruct = exports.inserttempStruct = exports.updateThemedb = void 0;
 const mongo = __importStar(require("mongodb"));
 require("dotenv").config();
 const MongoClient = mongo.MongoClient;
@@ -278,10 +279,10 @@ async function getthemes() {
     return client.db(process.env.DBNAME).collection("tempstruct").findOne({ _id: "themelist" });
 }
 exports.getthemes = getthemes;
-async function updatedoc(st) {
+async function updateThemedb(st) {
     await client.db(process.env.DBNAME).collection("tempstruct").updateOne({ _id: "themelist" }, { $set: st });
 }
-exports.updatedoc = updatedoc;
+exports.updateThemedb = updateThemedb;
 async function inserttempStruct(struct) {
     await client.db(process.env.DBNAME).collection("tempstruct").insertOne(struct);
 }
