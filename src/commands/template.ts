@@ -1,5 +1,5 @@
 import * as Discord from "discord.js"
-import { gettemplatedb, getthemes, updatedoc, updatetemplatedb } from "../misc/db"
+import { gettemplatedb, getthemes, updatetemplatedb, updateThemedb } from "../misc/db"
 import { backwardsFilter, forwardsFilter } from "../misc/utils"
 
 export async function template(message: Discord.Message, client: Discord.Client) {
@@ -14,14 +14,6 @@ export async function template(message: Discord.Message, client: Discord.Client)
     }
 
     else {
-        // await channel.send(
-        //     {
-        //         embed: {
-        //             description: `${message.author.username} has submitted a new template(s)`,
-        //             color: "#d7be26",
-        //             timestamp: new Date()
-        //         }
-        //     })
         for (let i = 0; i < message.attachments.array().length; i++) {
             //await channel.send(`${message.attachments.array()[i].url}`)
 
@@ -89,7 +81,7 @@ export async function addTheme(message: Discord.Message, client: Discord.Client,
         list.push(args.join(" "))
         console.log(list)
 
-        await updatedoc({
+        await updateThemedb({
             _id: "themelist",
             list: list
         })
@@ -100,24 +92,23 @@ export async function addTheme(message: Discord.Message, client: Discord.Client,
 
 export async function removeTheme(message: Discord.Message, client: Discord.Client, args: string[]) {
     if (!args) {
-        return message.reply("Please give a theme.")
+        return message.reply("Please give a number.")
     }
 
     else {
         let obj = await getthemes()
 
         let list: string[] = obj.list
-        //let word = 
-        let index = list.findIndex(ele => ele === args.join(" "))
-        list.splice(index, 1)
+        let word = list[parseInt(args[0])-1]
+        list.splice(parseInt(args[0])-1, 1)
         console.log(list)
 
-        await updatedoc({
+        await updateThemedb({
             _id: "themelist",
             list: list
         })
 
-        await message.reply("removed theme.")
+        await message.reply(`removed theme of ${word}.`)
     }
 }
 
@@ -152,6 +143,7 @@ async function themelistEmbed(page: number = 1, client: Discord.Client, ratings:
     for (let i = index; i < index + 10; i++) {
 
         try {
+            if(ratings[i])
             fields.push({
                 name: `Theme #${i + 1}`,
                 value: `${ratings[i]}`
@@ -173,7 +165,7 @@ async function themelistEmbed(page: number = 1, client: Discord.Client, ratings:
     };
 }
 
-async function templatecheckembed(page: number = 1, client: Discord.Client, templist: string[]) {
+async function templatecheckembed(page: number = 1, client: Discord.Client, templist: string[], themes:boolean = false) {
 
     //let signup = await getSignups()
     //let guild = client.guilds.cache.get("719406444109103117")
@@ -185,14 +177,26 @@ async function templatecheckembed(page: number = 1, client: Discord.Client, temp
         page = 0
     }
 
-    return {
-        title: `Template number ${page + 1}`,
-        image: {
-            url: `${templist[page]}`,
-        },
-        color: "#d7be26",
-        timestamp: new Date()
-    };
+    if(themes === false){
+        return {
+            title: `Template number ${page + 1}`,
+            image: {
+                url: `${templist[page]}`,
+            },
+            color: "#d7be26",
+            timestamp: new Date()
+        };
+    }
+
+    if(themes === true){
+        return {
+            title: `Theme number ${page + 1}`,
+            description:`${templist[page]}`,
+            color: "#d7be26",
+            timestamp: new Date()
+        };
+    }
+
 }
 
 export async function templatecheck(message: Discord.Message, client: Discord.Client, args: string[]) {
@@ -231,14 +235,17 @@ export async function templatecheck(message: Discord.Message, client: Discord.Cl
     })
 }
 
-async function templatelinksremoved(list:string[]) {
-    let tempdb = await gettemplatedb()
+async function templatelinksremoved(list:string[], themes:boolean = false) {
+    let tempdb:Array<string> = []
+
+    tempdb = await (await gettemplatedb()).list
+    
 
     for(let x = 0; x < list.length; x++){
-        let e = tempdb.list.findIndex(i => i === list[x])
-        tempdb.list.splice(e, 1)
+        let e = tempdb.findIndex(i => i === list[x])
+        tempdb.splice(e, 1)
     }
 
-    await updatetemplatedb(tempdb.list)
-    
+
+    await updatetemplatedb(tempdb)
 }
