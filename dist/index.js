@@ -212,13 +212,13 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
                 let l = voteCollection.first().count;
                 console.log(l);
                 console.log(messageReaction.message.embeds[0].image);
-                if (l === 3) {
+                if (l >= 3) {
                     let id = await utils_1.getUser(await messageReaction.message.embeds[0].description);
                     if (await ((_a = messageReaction.message.embeds[0].image) === null || _a === void 0 ? void 0 : _a.url)) {
                         let e = await db_1.gettemplatedb();
                         e.list.push(await messageReaction.message.embeds[0].image.url);
-                        await db_1.updateProfile(id, "points", 2);
                         await db_1.updatetemplatedb(e.list);
+                        await db_1.updateProfile(id, "points", 2);
                     }
                     else if (await messageReaction.message.embeds[0].fields) {
                         "pepe";
@@ -615,15 +615,21 @@ client.on("message", async (message) => {
             return;
         await submit_1.qualsubmit(message, client);
     }
+    else if (command === "submittemplate" || command === "template") {
+        await template_1.template(message, client);
+    }
     else if (command === "themesubmit") {
         let channel = client.channels.cache.get("722291683030466621");
-        let targs = message.content
-            .slice(process.env.PREFIX.length)
-            .trim()
-            .substr(message.content.slice(process.env.PREFIX.length)
-            .trim()
-            .indexOf(" ") + 1)
-            .split(/,+/g);
+        if (message.channel.type !== "dm") {
+            message.reply("Please dm bot theme");
+            return message.delete();
+        }
+        let targs = args.join(" ").split(",");
+        console.log(targs);
+        if (args.length === 0)
+            return message.reply("Please enter a theme");
+        if (targs.length > 1)
+            return message.reply("Can only enter one theme at a time");
         let em = new Discord.MessageEmbed()
             .setTitle(`${message.author.username} has submitted a new Theme(s)`)
             .setDescription(`<@${message.author.id}>`);

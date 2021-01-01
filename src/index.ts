@@ -332,14 +332,14 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
         console.log(l)
         console.log(messageReaction.message.embeds[0].image)
 
-        if (l === 3) {
+        if (l >= 3) {
           let id = await getUser(await messageReaction.message.embeds[0].description!)
           //await tempccc.send(await messageReaction.message.embeds[0].image?.url)
           if (await messageReaction.message.embeds[0].image?.url) {
             let e = await gettemplatedb()
             e.list.push(await messageReaction.message.embeds[0].image!.url)
-            await updateProfile(id!, "points", 2)
             await updatetemplatedb(e.list)
+            await updateProfile(id!, "points", 2)
           }
 
           else if (await messageReaction.message.embeds[0].fields) {
@@ -880,21 +880,26 @@ client.on("message", async message => {
     await qualsubmit(message, client)
   }
 
-  // else if (command === "submittemplate" || command === "template") {
-  //   await template(message, client)
-  // }
+  else if (command === "submittemplate" || command === "template") {
+    await template(message, client)
+  }
 
   else if (command === "themesubmit") {
     //if(message.channel.type !== "dm") return message.reply("Must be in bot dm")
     let channel = <Discord.TextChannel>client.channels.cache.get("722291683030466621")
+    
+    if(message.channel.type !== "dm"){
+      message.reply("Please dm bot theme")
+      return message.delete()
+    }
+    
     //var args: Array<string> = message.content.slice(process.env.PREFIX!.length).trim().split(/ +/g);
-    let targs: Array<string> = message.content
-      .slice(process.env.PREFIX!.length)
-      .trim()
-      .substr(message.content.slice(process.env.PREFIX!.length)
-        .trim()
-        .indexOf(" ") + 1)
-      .split(/,+/g);
+    let targs = args.join(" ").split(",")
+    console.log(targs)
+
+    if(args.length === 0) return message.reply("Please enter a theme")
+
+    if(targs.length > 1) return message.reply("Can only enter one theme at a time")
 
     let em = new Discord.MessageEmbed()
       .setTitle(`${message.author.username} has submitted a new Theme(s)`)
