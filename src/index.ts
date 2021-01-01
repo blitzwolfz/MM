@@ -333,13 +333,19 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
         console.log(messageReaction.message.embeds[0].image)
 
         if (l >= 3) {
-          let id = await getUser(await messageReaction.message.embeds[0].description!)
+          let id:string | undefined;          
+          try{
+            id = await getUser(await messageReaction.message.embeds[0].description!).catch()
+          }catch {
+
+          }
           //await tempccc.send(await messageReaction.message.embeds[0].image?.url)
           if (await messageReaction.message.embeds[0].image?.url) {
             let e = await gettemplatedb()
             e.list.push(await messageReaction.message.embeds[0].image!.url)
             await updatetemplatedb(e.list)
-            await updateProfile(id!, "points", 2)
+            if(id)
+            await updateProfile(id, "points", 2)
           }
 
           else if (await messageReaction.message.embeds[0].fields) {
@@ -356,7 +362,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
               list: obj.list
             })
 
-            await updateProfile(id!, "points", 2)
+            if(id) await updateProfile(id, "points", 2)
 
           }
 

@@ -213,12 +213,18 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
                 console.log(l);
                 console.log(messageReaction.message.embeds[0].image);
                 if (l >= 3) {
-                    let id = await utils_1.getUser(await messageReaction.message.embeds[0].description);
+                    let id;
+                    try {
+                        id = await utils_1.getUser(await messageReaction.message.embeds[0].description).catch();
+                    }
+                    catch {
+                    }
                     if (await ((_a = messageReaction.message.embeds[0].image) === null || _a === void 0 ? void 0 : _a.url)) {
                         let e = await db_1.gettemplatedb();
                         e.list.push(await messageReaction.message.embeds[0].image.url);
                         await db_1.updatetemplatedb(e.list);
-                        await db_1.updateProfile(id, "points", 2);
+                        if (id)
+                            await db_1.updateProfile(id, "points", 2);
                     }
                     else if (await messageReaction.message.embeds[0].fields) {
                         "pepe";
@@ -230,7 +236,8 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
                             _id: "themelist",
                             list: obj.list
                         });
-                        await db_1.updateProfile(id, "points", 2);
+                        if (id)
+                            await db_1.updateProfile(id, "points", 2);
                     }
                     await messageReaction.message.delete();
                 }
