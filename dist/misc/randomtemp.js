@@ -14,7 +14,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -23,9 +23,12 @@ exports.RandomTemplateFunc = exports.getRandomThemeList = exports.getRandomTempl
 const Discord = __importStar(require("discord.js"));
 const utils_1 = require("./utils");
 const db_1 = require("./db");
-exports.approvefilter = (reaction, user) => reaction.emoji.name === utils_1.emojis[7] && !user.bot;
-exports.redofilter = (reaction, user) => reaction.emoji.name === '🌀' && !user.bot;
-exports.disapprovefilter = (reaction, user) => reaction.emoji.name === utils_1.emojis[8] && !user.bot;
+const approvefilter = (reaction, user) => reaction.emoji.name === utils_1.emojis[7] && !user.bot;
+exports.approvefilter = approvefilter;
+const redofilter = (reaction, user) => reaction.emoji.name === '🌀' && !user.bot;
+exports.redofilter = redofilter;
+const disapprovefilter = (reaction, user) => reaction.emoji.name === utils_1.emojis[8] && !user.bot;
+exports.disapprovefilter = disapprovefilter;
 async function getRandomTemplateList(client) {
     return await (await db_1.gettemplatedb()).list;
 }

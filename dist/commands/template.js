@@ -14,7 +14,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -35,13 +35,13 @@ async function template(message, client) {
         for (let i = 0; i < message.attachments.array().length; i++) {
             await channel.send(new Discord.MessageEmbed()
                 .setTitle(`${message.author.username} has submitted a new template(s)`)
+                .setDescription(`<@${message.author.id}>`)
                 .setImage(message.attachments.array()[i].url)).then(async (message) => {
                 await message.react('🏁');
                 await message.react('🗡️');
             });
         }
-        db_1.updateProfile(message.author.id, "points", (message.attachments.array().length * 2));
-        await message.reply(`Thank you for submitting templates. You gained ${message.attachments.array().length * 2} points`);
+        await message.reply(`Thank you for submitting templates. You will gain a maximum of ${message.attachments.array().length * 2} points if they are approved`);
     }
 }
 exports.template = template;
@@ -79,7 +79,7 @@ async function addTheme(message, client, args) {
         console.log(list);
         list.push(args.join(" "));
         console.log(list);
-        await db_1.updatedoc({
+        await db_1.updateThemedb({
             _id: "themelist",
             list: list
         });
@@ -89,19 +89,19 @@ async function addTheme(message, client, args) {
 exports.addTheme = addTheme;
 async function removeTheme(message, client, args) {
     if (!args) {
-        return message.reply("Please give a theme.");
+        return message.reply("Please give a number.");
     }
     else {
         let obj = await db_1.getthemes();
         let list = obj.list;
-        let index = list.findIndex(ele => ele === args.join(" "));
-        list.splice(index, 1);
+        let word = list[parseInt(args[0]) - 1];
+        list.splice(parseInt(args[0]) - 1, 1);
         console.log(list);
-        await db_1.updatedoc({
+        await db_1.updateThemedb({
             _id: "themelist",
             list: list
         });
-        await message.reply("removed theme.");
+        await message.reply(`removed theme of ${word}.`);
     }
 }
 exports.removeTheme = removeTheme;
@@ -129,10 +129,11 @@ async function themelistEmbed(page = 1, client, ratings, ...rest) {
     let index = (0 + page - 1) * 10;
     for (let i = index; i < index + 10; i++) {
         try {
-            fields.push({
-                name: `Theme #${i + 1}`,
-                value: `${ratings[i]}`
-            });
+            if (ratings[i])
+                fields.push({
+                    name: `Theme #${i + 1}`,
+                    value: `${ratings[i]}`
+                });
         }
         catch {
             continue;
@@ -146,19 +147,29 @@ async function themelistEmbed(page = 1, client, ratings, ...rest) {
         timestamp: new Date()
     };
 }
-async function templatecheckembed(page = 1, client, templist) {
+async function templatecheckembed(page = 1, client, templist, themes = false) {
     page = page < 0 ? 0 : page - 1;
     if (page > templist.length) {
         page = 0;
     }
-    return {
-        title: `Template number ${page + 1}`,
-        image: {
-            url: `${templist[page]}`,
-        },
-        color: "#d7be26",
-        timestamp: new Date()
-    };
+    if (themes === false) {
+        return {
+            title: `Template number ${page + 1}`,
+            image: {
+                url: `${templist[page]}`,
+            },
+            color: "#d7be26",
+            timestamp: new Date()
+        };
+    }
+    if (themes === true) {
+        return {
+            title: `Theme number ${page + 1}`,
+            description: `${templist[page]}`,
+            color: "#d7be26",
+            timestamp: new Date()
+        };
+    }
 }
 async function templatecheck(message, client, args) {
     let page = typeof args[1] == "undefined" ? isNaN(parseInt(args[0])) ? 1 : parseInt(args[0]) : args[1];
@@ -169,9 +180,9 @@ async function templatecheck(message, client, args) {
     await m.react("⬅");
     await m.react("➡");
     await m.react('🗡️');
-    const backwards = m.createReactionCollector(utils_1.backwardsFilter, { time: 500000 });
-    const forwards = m.createReactionCollector(utils_1.forwardsFilter, { time: 500000 });
-    const remove = m.createReactionCollector(((reaction, user) => reaction.emoji.name === '🗡️' && !user.bot), { time: 500000 });
+    const backwards = m.createReactionCollector(utils_1.backwardsFilter, { time: 300000 });
+    const forwards = m.createReactionCollector(utils_1.forwardsFilter, { time: 300000 });
+    const remove = m.createReactionCollector(((reaction, user) => reaction.emoji.name === '🗡️' && !user.bot), { time: 300000 });
     backwards.on('collect', async () => {
         m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
         m.edit({ embed: await templatecheckembed(--page, client, ratings.list) });
@@ -184,7 +195,19 @@ async function templatecheck(message, client, args) {
         var _a;
         m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
         removelinks.push((_a = m.embeds[0].image) === null || _a === void 0 ? void 0 : _a.url);
-        m.reactions.message.channel.send(removelinks);
+    });
+    remove.on("end", async () => {
+        await templatelinksremoved(removelinks);
+        await message.reply("Finished");
     });
 }
 exports.templatecheck = templatecheck;
+async function templatelinksremoved(list, themes = false) {
+    let tempdb = [];
+    tempdb = await (await db_1.gettemplatedb()).list;
+    for (let x = 0; x < list.length; x++) {
+        let e = tempdb.findIndex(i => i === list[x]);
+        tempdb.splice(e, 1);
+    }
+    await db_1.updatetemplatedb(tempdb);
+}

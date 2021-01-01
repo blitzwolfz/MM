@@ -14,7 +14,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -96,6 +96,7 @@ client.on("guildMemberAdd", async function (member) {
     console.log(`a user joins a guild: ${(_b = member.user) === null || _b === void 0 ? void 0 : _b.username}`);
 });
 client.on("messageReactionAdd", async function (messageReaction, user) {
+    var _a;
     if (user.bot)
         return;
     let temps = await db_1.getalltempStructs();
@@ -212,9 +213,25 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
                 console.log(l);
                 console.log(messageReaction.message.embeds[0].image);
                 if (l === 3) {
-                    let e = await db_1.gettemplatedb();
-                    e.list.push(await messageReaction.message.embeds[0].image.url);
-                    await db_1.updatetemplatedb(e.list);
+                    let id = await utils_1.getUser(await messageReaction.message.embeds[0].description);
+                    if (await ((_a = messageReaction.message.embeds[0].image) === null || _a === void 0 ? void 0 : _a.url)) {
+                        let e = await db_1.gettemplatedb();
+                        e.list.push(await messageReaction.message.embeds[0].image.url);
+                        await db_1.updateProfile(id, "points", 2);
+                        await db_1.updatetemplatedb(e.list);
+                    }
+                    else if (await messageReaction.message.embeds[0].fields) {
+                        "pepe";
+                        let obj = await db_1.getthemes();
+                        for (let i = 0; i < messageReaction.message.embeds[0].fields.length; i++) {
+                            obj.list.push(messageReaction.message.embeds[0].fields[i].value);
+                        }
+                        await db_1.updateThemedb({
+                            _id: "themelist",
+                            list: obj.list
+                        });
+                        await db_1.updateProfile(id, "points", 2);
+                    }
                     await messageReaction.message.delete();
                 }
             }
@@ -456,9 +473,6 @@ client.on("message", async (message) => {
         message.delete().catch(console.log);
         message.channel.send(sayMessage);
     }
-    else if (command === "purge" || command === "clear") {
-        return message.reply("Feature no longer in use");
-    }
     else if (command === "reminder") {
         await utils_1.reminders(client, args);
     }
@@ -473,7 +487,72 @@ client.on("message", async (message) => {
         await utils_1.deletechannels(message, args);
     }
     else if (command === "test") {
-        (await (await client.channels.fetch(args[0])).messages.fetch(args[1])).react('🗳️');
+        await message.reply("no").then(async (message) => { await message.react('🤏'); });
+        let c = (await client.channels.cache.get(args[0]));
+        console.time("original");
+        await utils_1.qualifierresultadd(c, client, args[1], args[2]);
+        console.timeEnd("original");
+        console.time("rewrite");
+        let m = await c.messages.fetch(args[1]);
+        let m2 = await c.messages.fetch(args[2]);
+        let em = m.embeds[0].fields;
+        let em2 = m2.embeds[0].fields;
+        for (let i = 0; i < em.length; i++) {
+            em[i].name = (em[i].value.split(/[^0-9.]+/g))[3];
+            em[i].value = (em[i].value.split(/[^0-9.]+/g))[2];
+        }
+        for (let ii = 0; ii < em.length; ii++) {
+            em2[ii].name = (em2[ii].value.split(/[^0-9.]+/g))[3];
+            em2[ii].value = (em2[ii].value.split(/[^0-9.]+/g))[2];
+        }
+        em.sort(function (a, b) {
+            return (parseInt(b.name) - parseInt(a.name));
+        });
+        em2.sort(function (a, b) {
+            return (parseInt(b.name) - parseInt(a.name));
+        });
+        let fields = em;
+        const em3 = [];
+        for (let y = 0; y < em.length; y++) {
+            em3.push({
+                name: (await client.users.cache.get(em[y].name)).username,
+                value: `${parseInt(em[y].value) + parseInt(em2[y].value)}`,
+                inline: false
+            });
+        }
+        message.channel
+            .send({
+            embed: {
+                title: `Final Results for Group ${message.channel.id}`,
+                description: `Top two move on`,
+                fields,
+                color: "#d7be26",
+                timestamp: new Date()
+            }
+        });
+        fields = em2;
+        message.channel
+            .send({
+            embed: {
+                title: `Final Results for Group ${message.channel.id}`,
+                description: `Top two move on`,
+                fields,
+                color: "#d7be26",
+                timestamp: new Date()
+            }
+        });
+        fields = em3;
+        message.channel
+            .send({
+            embed: {
+                title: `Final Results for Group ${message.channel.id}`,
+                description: `Top two move on`,
+                fields,
+                color: "#d7be26",
+                timestamp: new Date()
+            }
+        });
+        console.timeEnd("rewrite");
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))
@@ -535,6 +614,27 @@ client.on("message", async (message) => {
         if (message.channel.id === "722285800225505879" || message.channel.id === "722285842705547305" || message.channel.id === "724839353129369681")
             return;
         await submit_1.qualsubmit(message, client);
+    }
+    else if (command === "themesubmit") {
+        let channel = client.channels.cache.get("722291683030466621");
+        let targs = message.content
+            .slice(process.env.PREFIX.length)
+            .trim()
+            .substr(message.content.slice(process.env.PREFIX.length)
+            .trim()
+            .indexOf(" ") + 1)
+            .split(/,+/g);
+        let em = new Discord.MessageEmbed()
+            .setTitle(`${message.author.username} has submitted a new Theme(s)`)
+            .setDescription(`<@${message.author.id}>`);
+        for (let i = 0; i < targs.length; i++) {
+            em.addField(`Theme: ${i + 1}`, targs[i]);
+        }
+        await channel.send(em).then(async (message) => {
+            await message.react('🏁');
+            await message.react('🗡️');
+        });
+        await message.reply(`Thank you for submitting themes. You will gain a maximum of ${targs.length} points if they are approved`);
     }
     else if (command === "start") {
         if (!message.member.roles.cache.has('719936221572235295'))
@@ -600,7 +700,7 @@ client.on("message", async (message) => {
             return message.reply("You don't have those premissions");
         await template_1.addTheme(message, client, args);
     }
-    else if (command === "deletetheme") {
+    else if (command === "deletetheme" || command === "removetheme") {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
         await template_1.removeTheme(message, client, args);
