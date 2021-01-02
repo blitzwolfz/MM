@@ -266,7 +266,7 @@ async function  memereminder(client:Discord.Client) {
   for (let i of r) {
     if (Math.floor(Date.now() / 1000) - i.timestamp >= i.time) {
 
-      (await client.users.cache.get(i.channel))!.send(
+      (await client.users.cache.get(i._id))!.send(
         `You have ${Math.floor((3600 - i.time)/60)}m left to do your match`
       )
       await deleteReminder(i)
@@ -274,7 +274,7 @@ async function  memereminder(client:Discord.Client) {
       if(i.time === 1800){
         await insertReminder(
           {
-            _id:i.channel,
+            _id:i._id,
             mention:i.mention,
             channel:i.channel,
             type:"meme",
@@ -287,7 +287,7 @@ async function  memereminder(client:Discord.Client) {
       if(i.time === 2700){
         await insertReminder(
           {
-            _id:i.channel,
+            _id:i._id,
             mention:i.mention,
             channel:i.channel,
             type:"meme",
