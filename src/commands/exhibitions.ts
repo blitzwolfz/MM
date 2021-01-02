@@ -6,7 +6,7 @@ import { toHHMMSS } from "../misc/utils"
 
 export async function exhibition(message: Discord.Message, client: Discord.Client, args: string[]){
 
-    console.log(args)
+    //console.log(args)
 
     if (!message.mentions.users.array()){
         return message.reply("Please mention someone")
@@ -56,7 +56,7 @@ export async function exhibition(message: Discord.Message, client: Discord.Clien
     };
 
     var res;
-    console.log(`Value of res is: ${res}`)
+    //console.log(`Value of res is: ${res}`)
 
     let id2 =  message.mentions.users.first()!
 
@@ -76,7 +76,7 @@ export async function exhibition(message: Discord.Message, client: Discord.Clien
     
     
     await message.mentions.users.first()?.send(`<@${m.author.id}> wants to duel you. Send Accept to continue, or don't reply to not`).then(async (userdm:Discord.Message) => {
-        console.log(userdm.channel.id)
+        //console.log(userdm.channel.id)
         await userdm.channel.awaitMessages(filter, { max: 1, time: 90000, errors: ['time'] })
             .then(async collected => {
                 await m.channel.send(`${collected.first()!.author} accepted, <@${m.author.id}>!`);
@@ -95,7 +95,7 @@ export async function exhibition(message: Discord.Message, client: Discord.Clien
             });
     });
 
-    console.log(`Value of res is: ${res}`)
+    //console.log(`Value of res is: ${res}`)
     
 
     if(res){

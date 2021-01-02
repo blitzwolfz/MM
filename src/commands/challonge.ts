@@ -161,7 +161,7 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
         let match = await getMatchlist()
 
         for (let i = 0; i < match.users.length; i++) {
-            console.log(match.users[i])
+            //console.log(match.users[i])
             try {
                 let name = ((await (await guild!.members.fetch(match.users[i])).nickname) || await (await disclient.users.fetch(match.users[i])).username)
                 names.push([name, match.users[i]])
@@ -175,9 +175,9 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
 
         let matchlist = await getMatchlist()
 
-        console.log(disclient.ws.ping)
+        // console.log(disclient.ws.ping)
 
-        console.log("OK")
+        // console.log("OK")
         //console.log(client)
 
         await client.matches.index({
@@ -251,8 +251,8 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
                                             .then(async channel => {
                                                 let category = await message.guild!.channels.cache.find(c => c.name == "matches" && c.type == "category");
 
-                                                console.log(name1)
-                                                console.log(name1)
+                                                // console.log(name1)
+                                                // console.log(name1)
 
                                                 let id1 = indexOf2d(names, name1, 0, 1)
                                                 let id2 = indexOf2d(names, name2, 0, 1)
@@ -296,7 +296,7 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
 export async function QualChannelCreation(message: Discord.Message, args: string[]) {
 
     let groups = await getQuallist()
-    console.log(groups.users)
+    //console.log(groups.users)
 
     let time = args[1]
 

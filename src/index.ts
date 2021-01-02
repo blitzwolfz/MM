@@ -108,7 +108,6 @@ client.on('ready', async () => {
   await connectToDB()
   client.user!.setActivity(`Warming up`);
   console.log(`Logged in as ${client.user?.tag}`);
-  console.log("OK")
   // for(let i = 0; i < 2; i++) console.log(i)
 
 
@@ -130,13 +129,16 @@ client.on('ready', async () => {
   }
 
   setInterval(async function () {
-    // console.log("A Kiss every 5 seconds");
+    console.time("time to running");
     await running(client)
+    console.timeEnd("time to running");
   }, 15000);
 
   setInterval(async function () {
     // console.log("A Second Kiss every 5 seconds");
+    console.time("time to qualrunning");
     await qualrunning(client)
+    console.timeEnd("time to qualrunning");
   }, 15000);
 
   setInterval(async function () {
@@ -200,7 +202,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             .setImage(random)
             .setColor("#d7be26")
             .setTimestamp()
-          console.log(await messageReaction.message.id)
+          //console.log(await messageReaction.message.id)
 
           temp.url = random
           //temp.time = temp.time - (110 * 1000) 
@@ -223,7 +225,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             .setDescription(`Theme is: ${random}`)
             .setColor("#d7be26")
             .setTimestamp()
-          console.log(await messageReaction.message.id)
+          //console.log(await messageReaction.message.id)
 
           temp.url = random
           //temp.time = temp.time - (110 * 1000) 
@@ -333,8 +335,8 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
         await messageReaction.message.channel.messages.fetch(messageReaction.message.id).then(msg => voteCollection = msg.reactions.cache);
 
         let l = voteCollection!.first()!.count!
-        console.log(l)
-        console.log(messageReaction.message.embeds[0].image)
+        // console.log(l)
+        // console.log(messageReaction.message.embeds[0].image)
 
         if (l >= 3) {
           let id:string | undefined;          
@@ -381,8 +383,8 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
         await messageReaction.message.channel.messages.fetch(messageReaction.message.id).then(msg => voteCollection = msg.reactions.cache);
 
         let l = voteCollection!.array()[1]!.count!
-        console.log(l)
-        console.log(messageReaction.message.embeds[0].image)
+        // console.log(l)
+        // console.log(messageReaction.message.embeds[0].image)
 
         if (l === 3) {
           //await tempccc.send(await messageReaction.message.embeds[0].image?.url)
@@ -464,9 +466,9 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
     if (!match) return;
 
     if (user.id !== match.p1.userid && user.id !== match.p2.userid) { // != match.p1.userid || user.id != match.p2.userid
-      console.log("checkq1")
+      //console.log("checkq1")
       if (messageReaction.emoji.name === emojis[0]) {
-        console.log("checkq2")
+        //console.log("checkq2")
         if (match.p1.voters.includes(user.id)) {
           await user.send("You can't vote on the same meme twice")
           await messageReaction.users.remove(user.id)
@@ -490,13 +492,13 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
           else {
             await user.send(`Vote counted for Player 1's memes in <#${match.channelid}>.`)
           }
-          console.log("checkq3")
+          //console.log("checkq3")
 
         }
       }
 
       else if (messageReaction.emoji.name === emojis[1]) {
-        console.log("checkq4")
+        //console.log("checkq4")
 
         if (match.p2.voters.includes(user.id)) {
           await user.send("You can't vote on the same meme twice")
@@ -522,7 +524,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
           else {
             await user.send(`Vote counted for Player 2's memes in <#${match.channelid}>.`)
           }
-          console.log("checkq5")
+          //console.log("checkq5")
         }
       }
 

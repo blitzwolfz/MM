@@ -120,7 +120,6 @@ async function ChannelCreation(message, disclient, args) {
         let guild = disclient.guilds.cache.get("719406444109103117");
         let match = await db_1.getMatchlist();
         for (let i = 0; i < match.users.length; i++) {
-            console.log(match.users[i]);
             try {
                 let name = ((await (await guild.members.fetch(match.users[i])).nickname) || await (await disclient.users.fetch(match.users[i])).username);
                 names.push([name, match.users[i]]);
@@ -133,8 +132,6 @@ async function ChannelCreation(message, disclient, args) {
             apiKey: process.env.CHALLONGE
         });
         let matchlist = await db_1.getMatchlist();
-        console.log(disclient.ws.ping);
-        console.log("OK");
         await client.matches.index({
             id: matchlist.url,
             callback: async (err, data) => {
@@ -174,8 +171,6 @@ async function ChannelCreation(message, disclient, args) {
                                         await message.guild.channels.create(channelstringname, { type: 'text', topic: `${matchid},${oneid},${twoid}` })
                                             .then(async (channel) => {
                                             let category = await message.guild.channels.cache.find(c => c.name == "matches" && c.type == "category");
-                                            console.log(name1);
-                                            console.log(name1);
                                             let id1 = utils_1.indexOf2d(names, name1, 0, 1);
                                             let id2 = utils_1.indexOf2d(names, name2, 0, 1);
                                             await channel.send(`<@${id1}> <@${id2}> You have ${args[1]}h to complete this match. Contact a ref to begin, you may also split your match`);
@@ -209,7 +204,6 @@ async function ChannelCreation(message, disclient, args) {
 exports.ChannelCreation = ChannelCreation;
 async function QualChannelCreation(message, args) {
     let groups = await db_1.getQuallist();
-    console.log(groups.users);
     let time = args[1];
     for (let i = 0; i < groups.users.length; i++) {
         if (groups.users[i].length > 0) {

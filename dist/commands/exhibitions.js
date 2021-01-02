@@ -26,7 +26,6 @@ const randomtemp_1 = require("../misc/randomtemp");
 const utils_1 = require("../misc/utils");
 async function exhibition(message, client, args) {
     var _a, _b, _c;
-    console.log(args);
     if (!message.mentions.users.array()) {
         return message.reply("Please mention someone");
     }
@@ -51,7 +50,6 @@ async function exhibition(message, client, args) {
         return (("accept").toLowerCase() === response.content.toLowerCase());
     };
     var res;
-    console.log(`Value of res is: ${res}`);
     let id2 = message.mentions.users.first();
     ex.cooldowns.push({
         user: id2.id,
@@ -64,7 +62,6 @@ async function exhibition(message, client, args) {
     await db_1.updateExhibition(ex);
     ex = await db_1.getExhibition();
     await ((_b = message.mentions.users.first()) === null || _b === void 0 ? void 0 : _b.send(`<@${m.author.id}> wants to duel you. Send Accept to continue, or don't reply to not`).then(async (userdm) => {
-        console.log(userdm.channel.id);
         await userdm.channel.awaitMessages(filter, { max: 1, time: 90000, errors: ['time'] })
             .then(async (collected) => {
             await m.channel.send(`${collected.first().author} accepted, <@${m.author.id}>!`);
@@ -79,7 +76,6 @@ async function exhibition(message, client, args) {
             return;
         });
     }));
-    console.log(`Value of res is: ${res}`);
     if (res) {
         await db_1.updateExhibition(ex);
         ex = await db_1.getExhibition();

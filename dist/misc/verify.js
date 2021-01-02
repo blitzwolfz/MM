@@ -22,12 +22,6 @@ async function verify(message, client) {
             let e = String(`${process.env.RTOKEN}`);
             let f = String(`${process.env.SECRET}`);
             let g = String(`${process.env.RPASSWORD}`);
-            console.log(typeof (e));
-            console.log(typeof (f));
-            console.log(typeof (g));
-            console.log(e);
-            console.log((f));
-            console.log((g));
             const r = new snoowrap({
                 userAgent: 'memeroyaleverification by u/meme_royale',
                 clientId: e,
@@ -36,9 +30,6 @@ async function verify(message, client) {
                 password: g,
             });
             r.getUser(args[1]).fetch().then(async (userInfo) => {
-                console.log(userInfo.name);
-                console.log(userInfo.created_utc > (Math.floor(Date.now() / 100) - (30 * 24 * 60 * 60)));
-                console.log(userInfo.verified);
                 if (!(userInfo.created_utc < (Math.floor(Date.now() / 100) - (30 * 24 * 60 * 60)))) {
                     return message.author.send("Your account is not old enough. Please contact a mod if there is an issue.");
                 }
@@ -58,7 +49,6 @@ async function verify(message, client) {
                         return (id.toLowerCase() === response.content.toLowerCase());
                     };
                     await message.author.send("Code has been sent to your reddit dm. Please send that to this dm! You only get one chance at it!").then(async (userdm) => {
-                        console.log(userdm.channel.id);
                         await userdm.channel.awaitMessages(filter, { max: 1, time: 90000, errors: ['time'] })
                             .then(async (collected) => {
                             var _a, _b, _c;
