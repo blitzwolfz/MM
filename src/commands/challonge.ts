@@ -29,7 +29,7 @@ export async function CreateChallongeQualBracket(message: Discord.Message, discl
 
         let Signups = await getSignups()
 
-        console.log(id)
+        //console.log(id)
 
         if (Signups) {
             if (Signups.open === false) {
@@ -112,8 +112,8 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
 
 
 
-            console.log("ok")
-            console.log(name)
+            // console.log("ok")
+            // console.log(name)
 
 
             client.participants.create({
@@ -150,7 +150,7 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
 }
 
 export async function ChannelCreation(message: Discord.Message, disclient: Discord.Client, args: string[]) {
-    console.log("OK")
+    //console.log("OK")
     if (!args) return message.reply("Please input round number!")
 
     else {

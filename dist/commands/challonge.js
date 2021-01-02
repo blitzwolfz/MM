@@ -33,7 +33,6 @@ async function CreateChallongeQualBracket(message, disclient, args) {
         let id = (args.join("")).replace("https://challonge.com/", "");
         let matchlist = await db_1.getMatchlist();
         let Signups = await db_1.getSignups();
-        console.log(id);
         if (Signups) {
             if (Signups.open === false) {
                 for (let i = 0; i < Signups.users.length; i++) {
@@ -86,8 +85,6 @@ async function CreateChallongeMatchBracket(message, disclient, args, guild) {
         for (let i = 0; i < matchlist.users.length; i++) {
             console.log("ok");
             let name = (await (await guild.members.fetch(matchlist.users[i])).nickname) || await (await disclient.users.fetch(matchlist.users[i])).username;
-            console.log("ok");
-            console.log(name);
             client.participants.create({
                 id: matchid,
                 participant: {
@@ -112,7 +109,6 @@ async function CreateChallongeMatchBracket(message, disclient, args, guild) {
 }
 exports.CreateChallongeMatchBracket = CreateChallongeMatchBracket;
 async function ChannelCreation(message, disclient, args) {
-    console.log("OK");
     if (!args)
         return message.reply("Please input round number!");
     else {

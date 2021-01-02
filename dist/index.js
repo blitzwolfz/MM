@@ -840,7 +840,7 @@ client.on("message", async (message) => {
         if (a) {
             for (let i = 0; i < a.length; i++) {
                 if (a[i].exhibition === false)
-                    await message.channel.send(`${a[i].channelid} ---> <#${a[i].channelid}>`);
+                    await message.channel.send(`${a[i].channelid} ---> <#${a[i].channelid}>\nTime to finish: ${await utils_1.toHHMMSS(7200, a[i].votetime)}`);
             }
         }
         let aa = await db_1.getQuals();
