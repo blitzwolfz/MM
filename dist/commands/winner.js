@@ -170,6 +170,14 @@ async function end(client, id) {
             }
         }
     }
+    try {
+        await db_1.deleteReminder(await db_1.getReminder(match._id));
+        await db_1.deleteReminder(await db_1.getReminder(match.p1.userid));
+        await db_1.deleteReminder(await db_1.getReminder(match.p2.userid));
+    }
+    catch {
+        console.log("fuck");
+    }
     return;
 }
 exports.end = end;
@@ -252,6 +260,12 @@ async function qualend(client, id) {
                     timestamp: new Date()
                 }
             });
+            try {
+                await db_1.deleteReminder(await db_1.getReminder(match._id));
+            }
+            catch {
+                console.log("fuck");
+            }
             channel.send({
                 embed: {
                     title: `Votes for ${channel.name} are in!`,
@@ -280,6 +294,12 @@ async function qualend(client, id) {
     }
     else if (!match.votingperiod) {
         await db_1.deleteQuals(match);
+        try {
+            await db_1.deleteReminder(await db_1.getReminder(match._id));
+        }
+        catch {
+            console.log("fuck");
+        }
         return channel.send({
             embed: {
                 title: `Votes for this qualifier are in!`,

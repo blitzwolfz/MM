@@ -219,6 +219,15 @@ export async function end(client: discord.Client, id: string) {
             }
         }
     }
+
+    try{
+        await deleteReminder(await getReminder(match._id))
+        await deleteReminder(await getReminder(match.p1.userid))
+        await deleteReminder(await getReminder(match.p2.userid))
+    } catch {
+        console.log("fuck")
+    }
+
     // matches.splice(matches.indexOf(match), 1)
     return;
 }
@@ -328,7 +337,11 @@ export async function qualend(client: discord.Client, id: string) {
                         timestamp: new Date()
                     }
                 });
-
+                try{
+                    await deleteReminder(await getReminder(match._id))
+                } catch {
+                    console.log("fuck")
+                }
             channel.send({
                 embed: {
                     title: `Votes for ${channel.name} are in!`,
@@ -377,6 +390,12 @@ export async function qualend(client: discord.Client, id: string) {
 
     else if (!match.votingperiod) {
         await deleteQuals(match)
+
+        try{
+            await deleteReminder(await getReminder(match._id))
+        } catch {
+            console.log("fuck")
+        }
 
         return channel.send({
             embed: {

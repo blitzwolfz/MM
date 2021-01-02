@@ -435,53 +435,53 @@ export async function running(client: discord.Client): Promise<void> {
       
         if (match.votingperiod === false) {
 
-            console.log('okk')
-            if (!match.exhibition && ((Math.floor(Date.now() / 1000) - match.p1.time <= 1860 && Math.floor(Date.now() / 1000) - match.p1.time >= 1800) 
-            && match.p1.memedone === false && match.p1.donesplit && match.p1.halfreminder === false)) {
+            // console.log('okk')
+            // if (!match.exhibition && ((Math.floor(Date.now() / 1000) - match.p1.time <= 1860 && Math.floor(Date.now() / 1000) - match.p1.time >= 1800) 
+            // && match.p1.memedone === false && match.p1.donesplit && match.p1.halfreminder === false)) {
 
-                console.log("OK")
-                match.p1.halfreminder = true
+            //     console.log("OK")
+            //     match.p1.halfreminder = true
 
-                let embed = new discord.MessageEmbed()
-                    .setColor("#d7be26")
-                    .setTitle(`Match between ${user1.username} and ${user2.username}`)
-                    .setDescription(`You have 30 mins left.\nUse \`!submit\` to submit`)
-                    .setTimestamp()
+            //     let embed = new discord.MessageEmbed()
+            //         .setColor("#d7be26")
+            //         .setTitle(`Match between ${user1.username} and ${user2.username}`)
+            //         .setDescription(`You have 30 mins left.\nUse \`!submit\` to submit`)
+            //         .setTimestamp()
 
-                try{
-                    user1.send(embed)
-                } catch(err) { 
-                    await (<discord.TextChannel>client.channels.cache.get("722616679280148504"))
-                    .send("```" + err + "```")
-                    await (<discord.TextChannel>client.channels.cache.get("722616679280148504"))
-                    .send(`Can't send embed to <@${user1.id}>`)
-                }
-                // matches.splice(matches.indexOf(match), 1)
-            }
+            //     try{
+            //         user1.send(embed)
+            //     } catch(err) { 
+            //         await (<discord.TextChannel>client.channels.cache.get("722616679280148504"))
+            //         .send("```" + err + "```")
+            //         await (<discord.TextChannel>client.channels.cache.get("722616679280148504"))
+            //         .send(`Can't send embed to <@${user1.id}>`)
+            //     }
+            //     // matches.splice(matches.indexOf(match), 1)
+            // }
 
-            else if (!match.exhibition && (Math.floor(Date.now() / 1000) - match.p2.time <= 1860 && Math.floor(Date.now() / 1000) - match.p2.time >= 1800) 
-            && match.p2.memedone === false && match.p2.donesplit && match.p2.halfreminder === false) {
-                console.log("OK")
-                match.p2.halfreminder = true
-                let embed = new discord.MessageEmbed()
-                    .setColor("#d7be26")
-                    .setTitle(`Match between ${user1.username} and ${user2.username}`)
-                    .setDescription(`You have 30 mins left.\nUse \`!submit\` to submit`)
-                    .setTimestamp()
+            // else if (!match.exhibition && (Math.floor(Date.now() / 1000) - match.p2.time <= 1860 && Math.floor(Date.now() / 1000) - match.p2.time >= 1800) 
+            // && match.p2.memedone === false && match.p2.donesplit && match.p2.halfreminder === false) {
+            //     console.log("OK")
+            //     match.p2.halfreminder = true
+            //     let embed = new discord.MessageEmbed()
+            //         .setColor("#d7be26")
+            //         .setTitle(`Match between ${user1.username} and ${user2.username}`)
+            //         .setDescription(`You have 30 mins left.\nUse \`!submit\` to submit`)
+            //         .setTimestamp()
                 
 
-                try{
-                    user2.send(embed)
-                } catch(err) { 
-                    await (<discord.TextChannel>client.channels.cache.get("722616679280148504"))
-                    .send("```" + err + "```")
-                    await (<discord.TextChannel>client.channels.cache.get("722616679280148504"))
-                    .send(`Can't send embed to <@${user2.id}>`)
-                }
-                // matches.splice(matches.indexOf(match), 1)
+            //     try{
+            //         user2.send(embed)
+            //     } catch(err) { 
+            //         await (<discord.TextChannel>client.channels.cache.get("722616679280148504"))
+            //         .send("```" + err + "```")
+            //         await (<discord.TextChannel>client.channels.cache.get("722616679280148504"))
+            //         .send(`Can't send embed to <@${user2.id}>`)
+            //     }
+            //     // matches.splice(matches.indexOf(match), 1)
 
                 
-            }
+            // }
 
             // else if (((Math.floor(Date.now() / 1000) - match.p1.time <= 2160 && Math.floor(Date.now() / 1000) - match.p1.time >= 2100) 
             // && match.p1.memedone === false && match.p1.donesplit && match.p1.fivereminder === false)) {
@@ -526,7 +526,7 @@ export async function running(client: discord.Client): Promise<void> {
             //     // matches.splice(matches.indexOf(match), 1)
             // }
 
-            else if (!(match.split) && ((Math.floor(Date.now() / 1000) - match.p2.time > 3600) && match.p2.memedone === false)
+            if (!(match.split) && ((Math.floor(Date.now() / 1000) - match.p2.time > 3600) && match.p2.memedone === false)
                 && ((Math.floor(Date.now() / 1000) - match.p1.time > 3600) && match.p1.memedone === false)) {
                 user1.send("You have lost because did not submit your meme")
                 user2.send("You have lost because did not submit your meme")
