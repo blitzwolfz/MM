@@ -61,10 +61,8 @@ export async function getActive(): Promise<activematch[]>{
     return await client.db(process.env.DBNAME).collection("activematch").find({}, {projection:{_id:0}}).toArray();
 }
 
-export async function getMatch(_id:string): Promise<activematch>{
-    let e = await client.db(process.env.DBNAME).collection("activematch").findOne({_id})!;
-    console.log(e)
-    return e;
+export async function getMatch(_id:string, q?:string): Promise<activematch>{
+    return await client.db(process.env.DBNAME).collection("activematch").findOne({_id})!;
 }
 
 export async function getQual(channelid:string): Promise<qualmatch>{

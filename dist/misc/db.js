@@ -75,10 +75,8 @@ async function getActive() {
     return await client.db(process.env.DBNAME).collection("activematch").find({}, { projection: { _id: 0 } }).toArray();
 }
 exports.getActive = getActive;
-async function getMatch(_id) {
-    let e = await client.db(process.env.DBNAME).collection("activematch").findOne({ _id });
-    console.log(e);
-    return e;
+async function getMatch(_id, q) {
+    return await client.db(process.env.DBNAME).collection("activematch").findOne({ _id });
 }
 exports.getMatch = getMatch;
 async function getQual(channelid) {
