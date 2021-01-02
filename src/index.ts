@@ -50,7 +50,6 @@ import {
   updateProfile,
   updateThemedb,
   getthemes,
-  insertReminder,
 } from "./misc/db";
 
 import { template, approvetemplate, addTheme, removeTheme, themelistLb, templatecheck } from "./commands/template";
@@ -710,18 +709,26 @@ client.on("message", async message => {
   }
 
   else if (command === "test") {
-    await message.reply("no").then(async message => { await message.react('🤏') })
+    // await message.reply("no").then(async message => { await message.react('🤏') })
+    // let t = await gettemplatedb()
+    // let c2 = <Discord.TextChannel>client.channels.cache.get("794958984569815060")
+    // let c3 = <Discord.TextChannel>client.channels.cache.get("794959006208229416")
+    // let c4 = <Discord.TextChannel>client.channels.cache.get("794959032422498315")
+    // for(let i = 0; i < t.list.length; i++){
+    //   await message.channel.send(t.list[i])
 
-    await insertReminder(
-      {
-        _id:message.author.id,
-        mention:`<@${message.author.id}>`,
-        channel:message.author.id,
-        type:"meme",
-        time:3300,
-        timestamp:Math.floor(Date.now()/1000) - 3360
-      }
-    )
+    // }
+
+    // await insertReminder(
+    //   {
+    //     _id:message.author.id,
+    //     mention:`<@${message.author.id}>`,
+    //     channel:message.author.id,
+    //     type:"meme",
+    //     time:3300,
+    //     timestamp:Math.floor(Date.now()/1000) - 3360
+    //   }
+    // )
   
   }
   

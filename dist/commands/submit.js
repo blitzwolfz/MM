@@ -44,10 +44,6 @@ async function submit(message, client) {
                             timestamp: new Date()
                         }
                     });
-                    let r = await db_1.getReminder(match.channelid);
-                    await db_1.deleteReminder(await db_1.getReminder(match.p1.userid));
-                    r.mention = `<@${match.p2.userid}>`;
-                    await db_1.updateReminder(r);
                 }
                 message.reply("Your meme has been attached!");
                 if (match.p1.donesplit && match.p2.donesplit && match.split) {
@@ -58,6 +54,10 @@ async function submit(message, client) {
                     await db_1.deleteReminder(await db_1.getReminder(match.channelid));
                 }
                 await db_1.updateActive(match);
+                let r = await db_1.getReminder(match.channelid);
+                await db_1.deleteReminder(await db_1.getReminder(match.p1.userid));
+                r.mention = `<@${match.p2.userid}>`;
+                await db_1.updateReminder(r);
                 return;
             }
             if ((match.p2.userid === message.author.id) && !match.p2.memedone && !match.p2.memelink.length) {
@@ -84,9 +84,6 @@ async function submit(message, client) {
                             timestamp: new Date()
                         }
                     });
-                    let r = await db_1.getReminder(match.channelid);
-                    r.mention = `<@${match.p2.userid}>`;
-                    await db_1.updateReminder(r);
                     await db_1.deleteReminder(await db_1.getReminder(match.p2.userid));
                 }
                 message.reply("Your meme has been attached!");
@@ -98,6 +95,9 @@ async function submit(message, client) {
                     await db_1.deleteReminder(await db_1.getReminder(match.channelid));
                 }
                 await db_1.updateActive(match);
+                let r = await db_1.getReminder(match.channelid);
+                r.mention = `<@${match.p2.userid}>`;
+                await db_1.updateReminder(r);
                 return;
             }
         }

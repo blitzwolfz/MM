@@ -494,15 +494,6 @@ client.on("message", async (message) => {
         await utils_1.deletechannels(message, args);
     }
     else if (command === "test") {
-        await message.reply("no").then(async (message) => { await message.react('🤏'); });
-        await db_1.insertReminder({
-            _id: message.author.id,
-            mention: `<@${message.author.id}>`,
-            channel: message.author.id,
-            type: "meme",
-            time: 3300,
-            timestamp: Math.floor(Date.now() / 1000) - 3360
-        });
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))

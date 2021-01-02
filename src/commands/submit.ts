@@ -57,13 +57,6 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
                         }
                     });
 
-                    let r = await getReminder(match.channelid)
-                    await deleteReminder(await getReminder(match.p1.userid))
-
-
-                    r.mention = `<@${match.p2.userid}>`
-
-                    await updateReminder(r)
                 }
 
                 
@@ -81,6 +74,15 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
                     // match.votetime = Math.floor(Date.now() / 1000)
                 }
                 await updateActive(match)
+
+                let r = await getReminder(match.channelid)
+                await deleteReminder(await getReminder(match.p1.userid))
+
+
+                r.mention = `<@${match.p2.userid}>`
+
+                await updateReminder(r)
+
                 return;
             }
 
@@ -114,12 +116,6 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
                         }
                     });
 
-                    let r = await getReminder(match.channelid)
-
-                    r.mention = `<@${match.p2.userid}>`
-
-                    await updateReminder(r)
-
                     await deleteReminder(await getReminder(match.p2.userid))
                     
                 }
@@ -135,8 +131,16 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
                     // match.votingperiod = true
                     // match.votetime = Math.floor(Date.now() / 1000)
                 }
+
+
                 
                 await updateActive(match)
+
+                let r = await getReminder(match.channelid)
+
+                r.mention = `<@${match.p2.userid}>`
+
+                await updateReminder(r)
                 return;
             }
         }
