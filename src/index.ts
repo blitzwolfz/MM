@@ -131,7 +131,7 @@ client.on('ready', async () => {
   setInterval(async function () {
     console.time("time to running");
     await running(client).catch((error) => {
-      console.error("it's in running");
+      console.log("it's in running");
     });
     console.timeEnd("time to running");
   }, 15000);
@@ -140,7 +140,7 @@ client.on('ready', async () => {
     // console.log("A Second Kiss every 5 seconds");
     console.time("time to qualrunning");
     await qualrunning(client).catch((error) => {
-      console.error("it's in qualrunning");
+      console.log("it's in qualrunning");
     });
     console.timeEnd("time to qualrunning");
   }, 15000);
