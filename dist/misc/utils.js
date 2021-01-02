@@ -208,7 +208,12 @@ async function memereminder(client) {
     let r = await db_1.getReminders({ type: "meme" });
     for (let i of r) {
         if (Math.floor(Date.now() / 1000) - i.timestamp >= i.time) {
-            (await client.users.cache.get(i._id)).send(`You have ${Math.floor((3600 - i.time) / 60)}m left to do your match`);
+            try {
+                (await client.users.cache.get(i._id)).send(`You have ${Math.floor((3600 - i.time) / 60)}m left to do your match`);
+            }
+            catch (error) {
+                console.log("User will not let bot dm");
+            }
             await db_1.deleteReminder(i);
             if (i.time === 1800) {
                 await db_1.insertReminder({

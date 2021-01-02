@@ -265,10 +265,16 @@ async function  memereminder(client:Discord.Client) {
 
   for (let i of r) {
     if (Math.floor(Date.now() / 1000) - i.timestamp >= i.time) {
+      try {
+        (await client.users.cache.get(i._id))!.send(
+          `You have ${Math.floor((3600 - i.time)/60)}m left to do your match`
+        )
+      } catch (
+        error
+      ) {
+         console.log("User will not let bot dm")
+      }
 
-      (await client.users.cache.get(i._id))!.send(
-        `You have ${Math.floor((3600 - i.time)/60)}m left to do your match`
-      )
       await deleteReminder(i)
 
       if(i.time === 1800){
