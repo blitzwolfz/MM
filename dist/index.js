@@ -72,12 +72,16 @@ client.on('ready', async () => {
     }
     setInterval(async function () {
         console.time("time to running");
-        await start_1.running(client);
+        await start_1.running(client).catch((error) => {
+            console.error("it's in running");
+        });
         console.timeEnd("time to running");
     }, 15000);
     setInterval(async function () {
         console.time("time to qualrunning");
-        await start_1.qualrunning(client);
+        await start_1.qualrunning(client).catch((error) => {
+            console.error("it's in qualrunning");
+        });
         console.timeEnd("time to qualrunning");
     }, 15000);
     setInterval(async function () {
