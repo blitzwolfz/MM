@@ -221,5 +221,5 @@ export async function manuallyverify(message: Discord.Message, client: Discord.C
 
     let ch = <Discord.TextChannel>client.channels.cache.get(("722285800225505879"))
 
-    ch.send(`A new contender entered the arena of Meme Royale. Welcome <@${message.author.id}>`)
+    ch.send(`A new contender entered the arena of Meme Royale. Welcome <@${message.mentions.users.first()!.id}>`)
 }

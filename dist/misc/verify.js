@@ -111,6 +111,6 @@ async function manuallyverify(message, client, args) {
     await (gm === null || gm === void 0 ? void 0 : gm.roles.add("719941380503371897"));
     await message.mentions.users.first().send("Remember to check #info, #annoucements, #rules, and to signup for both vote pings and signup pings in #roles! Enjoy your stay.");
     let ch = client.channels.cache.get(("722285800225505879"));
-    ch.send(`A new contender entered the arena of Meme Royale. Welcome <@${message.author.id}>`);
+    ch.send(`A new contender entered the arena of Meme Royale. Welcome <@${message.mentions.users.first().id}>`);
 }
 exports.manuallyverify = manuallyverify;
