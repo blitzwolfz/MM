@@ -54,10 +54,15 @@ async function submit(message, client) {
                     await db_1.deleteReminder(await db_1.getReminder(match.channelid));
                 }
                 await db_1.updateActive(match);
-                let r = await db_1.getReminder(match.channelid);
-                await db_1.deleteReminder(await db_1.getReminder(match.p1.userid));
-                r.mention = `<@${match.p2.userid}>`;
-                await db_1.updateReminder(r);
+                try {
+                    await db_1.deleteReminder(await db_1.getReminder(match.p1.userid));
+                    let r = await db_1.getReminder(match.channelid);
+                    r.mention = `<@${match.p2.userid}>`;
+                    await db_1.updateReminder(r);
+                }
+                catch (error) {
+                    console.log("");
+                }
                 return;
             }
             if ((match.p2.userid === message.author.id) && !match.p2.memedone && !match.p2.memelink.length) {
@@ -95,9 +100,15 @@ async function submit(message, client) {
                     await db_1.deleteReminder(await db_1.getReminder(match.channelid));
                 }
                 await db_1.updateActive(match);
-                let r = await db_1.getReminder(match.channelid);
-                r.mention = `<@${match.p2.userid}>`;
-                await db_1.updateReminder(r);
+                try {
+                    await db_1.deleteReminder(await db_1.getReminder(match.p2.userid));
+                    let r = await db_1.getReminder(match.channelid);
+                    r.mention = `<@${match.p1.userid}>`;
+                    await db_1.updateReminder(r);
+                }
+                catch (error) {
+                    console.log("");
+                }
                 return;
             }
         }
@@ -151,9 +162,14 @@ async function qualsubmit(message, client) {
                                 }
                             });
                             player.memedone = true;
-                            let r = await db_1.getReminder(match.channelid);
-                            r.mention = r.mention.replace(`<@${message.author.id}>`, "");
-                            await db_1.updateReminder(r);
+                            try {
+                                let r = await db_1.getReminder(match.channelid);
+                                r.mention = r.mention.replace(`<@${message.author.id}>`, "");
+                                await db_1.updateReminder(r);
+                            }
+                            catch (error) {
+                                console.log("");
+                            }
                             await db_1.updateQuals(match);
                             return;
                         }

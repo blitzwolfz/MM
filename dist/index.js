@@ -78,7 +78,9 @@ client.on('ready', async () => {
         await start_1.qualrunning(client);
     }, 15000);
     setInterval(async function () {
+        console.time("time");
         await utils_1.aaautoreminders(client);
+        console.timeEnd("time");
     }, 1000);
     await client.channels.cache.get("722616679280148504").send("<@239516219445608449>", {
         embed: {

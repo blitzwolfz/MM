@@ -75,13 +75,18 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
                 }
                 await updateActive(match)
 
-                let r = await getReminder(match.channelid)
-                await deleteReminder(await getReminder(match.p1.userid))
+                
 
+                try {
+                    await deleteReminder(await getReminder(match.p1.userid))
+                    let r = await getReminder(match.channelid)
 
-                r.mention = `<@${match.p2.userid}>`
+                    r.mention = `<@${match.p2.userid}>`
 
-                await updateReminder(r)
+                    await updateReminder(r)
+                } catch (error) {
+                    console.log("")
+                }
 
                 return;
             }
@@ -136,11 +141,18 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
                 
                 await updateActive(match)
 
-                let r = await getReminder(match.channelid)
+                try {
+                    await deleteReminder(await getReminder(match.p2.userid))
+                    let r = await getReminder(match.channelid)
 
-                r.mention = `<@${match.p2.userid}>`
+                    r.mention = `<@${match.p1.userid}>`
 
-                await updateReminder(r)
+                    await updateReminder(r)
+                } catch (error) {
+                    console.log("")
+                }
+
+
                 return;
             }
         }
@@ -213,11 +225,17 @@ export async function qualsubmit(message: Discord.Message, client: Discord.Clien
 
                             player.memedone = true
 
-                            let r = await getReminder(match.channelid)
+                            try {
+                                let r = await getReminder(match.channelid)
 
-                            r.mention = r.mention.replace(`<@${message.author.id}>`, "")
-        
-                            await updateReminder(r)
+                                r.mention = r.mention.replace(`<@${message.author.id}>`, "")
+            
+                                await updateReminder(r)
+                            } catch (error) {
+                                console.log("")
+                            }
+
+
 
                             await updateQuals(match)
                             return;

@@ -141,9 +141,9 @@ client.on('ready', async () => {
 
   setInterval(async function () {
     // console.log("A Third Kiss every 5 seconds");
-    //console.time("time")
+    console.time("time")
     await aaautoreminders(client)
-    //console.timeEnd("time")
+    console.timeEnd("time")
   }, 1000);
 
   //await autoreminders(client)
