@@ -282,3 +282,18 @@ export async function duelcheck(message: Discord.Message){
     }
 
 }
+
+export async function cooldownremove(message: Discord.Message){
+    let ex = await getExhibition()
+
+    for(let x of message.mentions.users.array()){
+        for(let i = 0; i < ex.cooldowns.length; i++){
+            if(ex.cooldowns[i].user === x.id){
+                ex.cooldowns.splice(i, 1)
+                i++
+            }
+        }
+    }
+    
+    await updateExhibition(ex)
+}

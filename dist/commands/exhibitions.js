@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.duelcheck = exports.deleteExhibitionchannels = exports.exhibition = void 0;
+exports.cooldownremove = exports.duelcheck = exports.deleteExhibitionchannels = exports.exhibition = void 0;
 const Discord = __importStar(require("discord.js"));
 const db_1 = require("../misc/db");
 const randomtemp_1 = require("../misc/randomtemp");
@@ -203,3 +203,16 @@ async function duelcheck(message) {
     }
 }
 exports.duelcheck = duelcheck;
+async function cooldownremove(message) {
+    let ex = await db_1.getExhibition();
+    for (let x of message.mentions.users.array()) {
+        for (let i = 0; i < ex.cooldowns.length; i++) {
+            if (ex.cooldowns[i].user === x.id) {
+                ex.cooldowns.splice(i, 1);
+                i++;
+            }
+        }
+    }
+    await db_1.updateExhibition(ex);
+}
+exports.cooldownremove = cooldownremove;
