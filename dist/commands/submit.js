@@ -44,6 +44,10 @@ async function submit(message, client) {
                             timestamp: new Date()
                         }
                     });
+                    let r = await db_1.getReminder(match.channelid);
+                    await db_1.deleteReminder(await db_1.getReminder(match.p1.userid));
+                    r.mention = `<@${match.p2.userid}>`;
+                    await db_1.updateReminder(r);
                 }
                 message.reply("Your meme has been attached!");
                 if (match.p1.donesplit && match.p2.donesplit && match.split) {
@@ -51,6 +55,7 @@ async function submit(message, client) {
                     match.split = false;
                     match.p1.time = Math.floor(Date.now() / 1000) - 3200;
                     match.p2.time = Math.floor(Date.now() / 1000) - 3200;
+                    await db_1.deleteReminder(await db_1.getReminder(match.channelid));
                 }
                 await db_1.updateActive(match);
                 return;
@@ -79,6 +84,10 @@ async function submit(message, client) {
                             timestamp: new Date()
                         }
                     });
+                    let r = await db_1.getReminder(match.channelid);
+                    r.mention = `<@${match.p2.userid}>`;
+                    await db_1.updateReminder(r);
+                    await db_1.deleteReminder(await db_1.getReminder(match.p2.userid));
                 }
                 message.reply("Your meme has been attached!");
                 if (match.p1.donesplit && match.p2.donesplit && match.split) {
@@ -86,6 +95,7 @@ async function submit(message, client) {
                     match.split = false;
                     match.p1.time = Math.floor(Date.now() / 1000) - 3200;
                     match.p2.time = Math.floor(Date.now() / 1000) - 3200;
+                    await db_1.deleteReminder(await db_1.getReminder(match.channelid));
                 }
                 await db_1.updateActive(match);
                 return;
@@ -141,6 +151,9 @@ async function qualsubmit(message, client) {
                                 }
                             });
                             player.memedone = true;
+                            let r = await db_1.getReminder(match.channelid);
+                            r.mention = r.mention.replace(`<@${message.author.id}>`, "");
+                            await db_1.updateReminder(r);
                             await db_1.updateQuals(match);
                             return;
                         }

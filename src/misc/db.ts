@@ -4,7 +4,7 @@ require("dotenv").config();
 
 import { activematch, qualmatch, user, signups, matchlist, 
     verificationform, quallist, cockratingInterface, 
-    modprofile, randomtempstruct, groupmatch, exhibition, configDB } from "./struct";
+    modprofile, randomtempstruct, groupmatch, exhibition, configDB, reminder } from "./struct";
 
 const MongoClient = mongo.MongoClient
 //const assert = require("assert")
@@ -359,4 +359,28 @@ export async function insertExhibition(){
         activeoffers: []
     }
     await client.db(process.env.DBNAME).collection("signup").insertOne(e);        
+}
+
+//Reminder db commands
+export async function insertReminder(r:reminder) {
+    await client.db(process.env.DBNAME).collection("reminders").insertOne(r) 
+}
+
+export async function getReminder(id:string): Promise<reminder> {
+    return await client.db(process.env.DBNAME).collection("reminders").findOne({_id:id})!
+}
+
+export async function getReminders(q?:object): Promise<reminder[]> {
+    if(q){
+        return await client.db(process.env.DBNAME).collection("reminders").find(q).toArray()
+    }
+    return await client.db(process.env.DBNAME).collection("reminders").find({}).toArray()
+}
+
+export async function updateReminder(r:reminder) {
+    await client.db(process.env.DBNAME).collection("reminders").updateOne({_id:r._id}, {$set: r})    
+}
+
+export async function deleteReminder(r:reminder) {
+    await client.db(process.env.DBNAME).collection("reminders").deleteOne({_id:r._id})  
 }

@@ -21,10 +21,10 @@ import {
   matchstats,
   qualstats,
 } from "./commands/start";
-import { duelcheck, exhibition } from "./commands/exhibitions"
+import { cooldownremove, duelcheck, exhibition } from "./commands/exhibitions"
 import { qualend, end, cancelmatch } from "./commands/winner";
 import { vs } from "./commands/card";
-import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, createrole, clearstats, qualifierresultadd, autoreminders, SeasonRestart, toHHMMSS } from "./misc/utils";
+import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, createrole, clearstats, qualifierresultadd, SeasonRestart, toHHMMSS, aaautoreminders } from "./misc/utils";
 import { ModHelp, UserHelp, ModSignupHelp, ModChallongeHelp, DuelHelp } from "./commands/help";
 
 import {
@@ -50,6 +50,7 @@ import {
   updateProfile,
   updateThemedb,
   getthemes,
+  insertReminder,
 } from "./misc/db";
 
 import { template, approvetemplate, addTheme, removeTheme, themelistLb, templatecheck } from "./commands/template";
@@ -141,7 +142,9 @@ client.on('ready', async () => {
 
   setInterval(async function () {
     // console.log("A Third Kiss every 5 seconds");
-    await autoreminders(client)
+    //console.time("time")
+    await aaautoreminders(client)
+    //console.timeEnd("time")
   }, 1000);
 
   //await autoreminders(client)
@@ -709,110 +712,124 @@ client.on("message", async message => {
   else if (command === "test") {
     await message.reply("no").then(async message => { await message.react('🤏') })
 
-    let c = (await (<Discord.TextChannel>client.channels.cache.get(args[0])))
-
-
-    console.time("original")
-    await qualifierresultadd(c, client, args[1], args[2])
-    console.timeEnd("original")
-
-    console.time("rewrite")
-    let m = await c.messages.fetch(args[1])
-
-    let m2 = await c.messages.fetch(args[2])
-    
-    let em = m.embeds[0].fields
-    
-    let em2 = m2.embeds[0].fields
-
-    for(let i = 0; i < em.length; i++){
-
-      em[i].name = (em[i].value.split(/[^0-9.]+/g))[3]
-
-      em[i].value = (em[i].value.split(/[^0-9.]+/g))[2]
-    }
-
-    for(let ii = 0; ii < em.length; ii++){
-
-      //console.log(em2[ii].value.split(/[^0-9.]+/g))
-      em2[ii].name = (em2[ii].value.split(/[^0-9.]+/g))[3]
-      em2[ii].value = (em2[ii].value.split(/[^0-9.]+/g))[2]
-    }
-
-    //console.log(em)
-    //console.log(em2)
-    
-    
-
-    em.sort(function (a, b) {
-      //ratings.sort((a: modprofile, b: modprofile) => (b.modactions) - (a.modactions));
-      return (parseInt(b.name) - parseInt(a.name));
-      //Sort could be modified to, for example, sort on the age 
-      // if the name is the same.
-    });
-
-    em2.sort(function (a, b) {
-      //ratings.sort((a: modprofile, b: modprofile) => (b.modactions) - (a.modactions));
-      return (parseInt(b.name) - parseInt(a.name));
-      //Sort could be modified to, for example, sort on the age 
-      // if the name is the same.
-    });
-
-    let fields = em
-
-    const em3 = [];
-
-    for(let y = 0; y < em.length; y++){
-
-      em3.push(
-        {
-          name:(await client.users.cache.get(em[y].name)!).username,
-          value: `${parseInt(em[y].value) + parseInt(em2[y].value)}`,
-          inline:false
-        }
-      )
-    }
-
-    message.channel
-      .send({
-        embed: {
-          title: `Final Results for Group ${message.channel.id}`,
-          description: `Top two move on`,
-          fields,
-          color: "#d7be26",
-          timestamp: new Date()
-        }
-    })
-
-    fields = em2
-    message.channel
-    .send({
-      embed: {
-        title: `Final Results for Group ${message.channel.id}`,
-        description: `Top two move on`,
-        fields,
-        color: "#d7be26",
-        timestamp: new Date()
+    await insertReminder(
+      {
+        _id:message.author.id,
+        mention:`<@${message.author.id}>`,
+        channel:message.author.id,
+        type:"meme",
+        time:3300,
+        timestamp:Math.floor(Date.now()/1000) - 3360
       }
-    })
-    //console.log(em3)
-
-    fields = em3
-    message.channel
-    .send({
-      embed: {
-        title: `Final Results for Group ${message.channel.id}`,
-        description: `Top two move on`,
-        fields,
-        color: "#d7be26",
-        timestamp: new Date()
-      }
-    })
-    console.timeEnd("rewrite")
+    )
   
   }
+  
+  // else if (command === "test") {
+  //   await message.reply("no").then(async message => { await message.react('🤏') })
+
+  //   let c = (await (<Discord.TextChannel>client.channels.cache.get(args[0])))
 
 
+  //   console.time("original")
+  //   await qualifierresultadd(c, client, args[1], args[2])
+  //   console.timeEnd("original")
+
+  //   console.time("rewrite")
+  //   let m = await c.messages.fetch(args[1])
+
+  //   let m2 = await c.messages.fetch(args[2])
+    
+  //   let em = m.embeds[0].fields
+    
+  //   let em2 = m2.embeds[0].fields
+
+  //   for(let i = 0; i < em.length; i++){
+
+  //     em[i].name = (em[i].value.split(/[^0-9.]+/g))[3]
+
+  //     em[i].value = (em[i].value.split(/[^0-9.]+/g))[2]
+  //   }
+
+  //   for(let ii = 0; ii < em.length; ii++){
+
+  //     //console.log(em2[ii].value.split(/[^0-9.]+/g))
+  //     em2[ii].name = (em2[ii].value.split(/[^0-9.]+/g))[3]
+  //     em2[ii].value = (em2[ii].value.split(/[^0-9.]+/g))[2]
+  //   }
+
+  //   //console.log(em)
+  //   //console.log(em2)
+    
+    
+
+  //   em.sort(function (a, b) {
+  //     //ratings.sort((a: modprofile, b: modprofile) => (b.modactions) - (a.modactions));
+  //     return (parseInt(b.name) - parseInt(a.name));
+  //     //Sort could be modified to, for example, sort on the age 
+  //     // if the name is the same.
+  //   });
+
+  //   em2.sort(function (a, b) {
+  //     //ratings.sort((a: modprofile, b: modprofile) => (b.modactions) - (a.modactions));
+  //     return (parseInt(b.name) - parseInt(a.name));
+  //     //Sort could be modified to, for example, sort on the age 
+  //     // if the name is the same.
+  //   });
+
+  //   let fields = em
+
+  //   const em3 = [];
+
+  //   for(let y = 0; y < em.length; y++){
+
+  //     em3.push(
+  //       {
+  //         name:(await client.users.cache.get(em[y].name)!).username,
+  //         value: `${parseInt(em[y].value) + parseInt(em2[y].value)}`,
+  //         inline:false
+  //       }
+  //     )
+  //   }
+
+  //   message.channel
+  //     .send({
+  //       embed: {
+  //         title: `Final Results for Group ${message.channel.id}`,
+  //         description: `Top two move on`,
+  //         fields,
+  //         color: "#d7be26",
+  //         timestamp: new Date()
+  //       }
+  //   })
+
+  //   fields = em2
+  //   message.channel
+  //   .send({
+  //     embed: {
+  //       title: `Final Results for Group ${message.channel.id}`,
+  //       description: `Top two move on`,
+  //       fields,
+  //       color: "#d7be26",
+  //       timestamp: new Date()
+  //     }
+  //   })
+  //   //console.log(em3)
+
+  //   fields = em3
+  //   message.channel
+  //   .send({
+  //     embed: {
+  //       title: `Final Results for Group ${message.channel.id}`,
+  //       description: `Top two move on`,
+  //       fields,
+  //       color: "#d7be26",
+  //       timestamp: new Date()
+  //     }
+  //   })
+  //   console.timeEnd("rewrite")
+  
+  // }
 
   else if (command === "createqualgroup") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
@@ -849,6 +866,11 @@ client.on("message", async message => {
 
     else if (args[0].toLowerCase() === "check") {
       await duelcheck(message)
+    }
+
+    else if(args[0].toLowerCase() === "resetcd"){
+      if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
+      await cooldownremove(message)
     }
 
     else {

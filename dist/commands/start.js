@@ -508,6 +508,14 @@ async function splitqual(client, message, ...userid) {
                     await db_1.updateQuals(match);
                 }
             }
+            await db_1.insertReminder({
+                _id: user.id,
+                mention: "",
+                channel: "",
+                type: "meme",
+                time: 2700,
+                timestamp: Math.floor(Date.now() / 1000) - 1800
+            });
         }
     }
 }
@@ -542,6 +550,14 @@ async function splitregular(message, client, ...userid) {
                                 .setTimestamp());
                         }
                         await db_1.updateActive(match);
+                        await db_1.insertReminder({
+                            _id: match.p1.userid,
+                            mention: "",
+                            channel: "",
+                            type: "meme",
+                            time: 1800,
+                            timestamp: Math.floor(Date.now() / 1000)
+                        });
                         return;
                     }
                 }
@@ -569,6 +585,14 @@ async function splitregular(message, client, ...userid) {
                                 .setTimestamp());
                         }
                         await db_1.updateActive(match);
+                        await db_1.insertReminder({
+                            _id: match.p2.userid,
+                            mention: "",
+                            channel: "",
+                            type: "meme",
+                            time: 1800,
+                            timestamp: Math.floor(Date.now() / 1000)
+                        });
                         return;
                     }
                 }
@@ -856,7 +880,7 @@ async function matchstats(message, client) {
     let channel = message.mentions.channels.first();
     try {
         if (!channel) {
-            return message.reply("No active matche exists in this channel");
+            return message.reply("No active match exists in this channel");
         }
         else {
             let match = await db_1.getMatch(channel.id);

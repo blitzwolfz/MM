@@ -85,6 +85,7 @@ async function qualrunn(match, channelid, client) {
                 await channel.send(`<@&719936221572235295>`);
                 await channel.send("You have 2 hours to vote. You can vote for 2 memes!");
                 await db_1.updateQuals(match);
+                await db_1.deleteReminder(await db_1.getReminder(channel.id));
             }
         }
         else if (match.split) {

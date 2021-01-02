@@ -192,3 +192,12 @@ export interface configDB {
     _id: "config";
     upmsg: string;
 }
+
+export interface reminder {
+    _id:string;
+    mention:string;
+    type: "meme" | "match";
+    channel:string;
+    time:number;
+    timestamp:number
+}

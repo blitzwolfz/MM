@@ -184,6 +184,14 @@ async function ChannelCreation(message, disclient, args) {
                                             await channel.setParent(category.id);
                                             await channel.lockPermissions();
                                             let t = await db_1.getMatchlist();
+                                            await db_1.insertReminder({
+                                                _id: channel.id,
+                                                mention: `<@${id1}> <@${id2}>`,
+                                                channel: channel.id,
+                                                type: "match",
+                                                time: 86400,
+                                                timestamp: Math.round(message.createdTimestamp / 1000)
+                                            });
                                             t.qualurl = Math.round(message.createdTimestamp / 1000).toString();
                                             await db_1.updateMatchlist(t);
                                         });
@@ -212,6 +220,14 @@ async function QualChannelCreation(message, args) {
                 for (let u of groups.users[i]) {
                     string += `<@${u}> `;
                 }
+                await db_1.insertReminder({
+                    _id: channel.id,
+                    mention: string,
+                    channel: channel.id,
+                    type: "match",
+                    time: 86400,
+                    timestamp: Math.round(message.createdTimestamp / 1000)
+                });
                 await channel.send(`${string}, Portion ${args[0]} has begun, and you have ${time}h to complete it. Contact a ref to begin your portion!`);
             });
         }

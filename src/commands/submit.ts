@@ -1,6 +1,6 @@
 import * as Discord from "discord.js";
 import { activematch, qualmatch } from "../misc/struct";
-import { updateQuals, updateActive, getActive, getQuals } from "../misc/db";
+import { updateQuals, updateActive, getActive, getQuals, deleteReminder, getReminder, updateReminder } from "../misc/db";
 
 
 export async function submit(message: Discord.Message, client: Discord.Client) {
@@ -56,6 +56,14 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
                             timestamp: new Date()
                         }
                     });
+
+                    let r = await getReminder(match.channelid)
+                    await deleteReminder(await getReminder(match.p1.userid))
+
+
+                    r.mention = `<@${match.p2.userid}>`
+
+                    await updateReminder(r)
                 }
 
                 
@@ -66,6 +74,9 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
                     match.split = false
                     match.p1.time = Math.floor(Date.now() / 1000) - 3200
                     match.p2.time = Math.floor(Date.now() / 1000) - 3200
+
+                    await deleteReminder(await getReminder(match.channelid))
+
                     // match.votingperiod = true
                     // match.votetime = Math.floor(Date.now() / 1000)
                 }
@@ -102,6 +113,15 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
                             timestamp: new Date()
                         }
                     });
+
+                    let r = await getReminder(match.channelid)
+
+                    r.mention = `<@${match.p2.userid}>`
+
+                    await updateReminder(r)
+
+                    await deleteReminder(await getReminder(match.p2.userid))
+                    
                 }
                 message.reply("Your meme has been attached!")
 
@@ -110,6 +130,8 @@ export async function submit(message: Discord.Message, client: Discord.Client) {
                     match.split = false
                     match.p1.time = Math.floor(Date.now() / 1000) - 3200
                     match.p2.time = Math.floor(Date.now() / 1000) - 3200
+
+                    await deleteReminder(await getReminder(match.channelid))
                     // match.votingperiod = true
                     // match.votetime = Math.floor(Date.now() / 1000)
                 }
@@ -186,6 +208,13 @@ export async function qualsubmit(message: Discord.Message, client: Discord.Clien
                             });
 
                             player.memedone = true
+
+                            let r = await getReminder(match.channelid)
+
+                            r.mention = r.mention.replace(`<@${message.author.id}>`, "")
+        
+                            await updateReminder(r)
+
                             await updateQuals(match)
                             return;
                         }

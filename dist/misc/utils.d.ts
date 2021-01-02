@@ -16,6 +16,7 @@ export declare const forwardsFilter: (reaction: {
 export declare function indexOf2d(arr: any[][], item: any, searchpos: number, returnpos: number): any;
 export declare function dateBuilder(): string;
 export declare function reminders(client: Discord.Client, args: string[]): Promise<void>;
+export declare function aaautoreminders(client: Discord.Client): Promise<void>;
 export declare function aautoreminders(client: Discord.Client, ...st: string[]): Promise<void>;
 export declare function autoreminders(client: Discord.Client): Promise<void>;
 export declare function deletechannels(message: Discord.Message, args: string[]): Promise<void>;

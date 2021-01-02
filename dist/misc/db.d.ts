@@ -1,4 +1,4 @@
-import { activematch, qualmatch, user, signups, matchlist, verificationform, quallist, cockratingInterface, modprofile, randomtempstruct, groupmatch, exhibition, configDB } from "./struct";
+import { activematch, qualmatch, user, signups, matchlist, verificationform, quallist, cockratingInterface, modprofile, randomtempstruct, groupmatch, exhibition, configDB, reminder } from "./struct";
 export declare function connectToDB(): Promise<void>;
 export declare function insertActive(activematch: activematch): Promise<void>;
 export declare function dbSoftReset(): Promise<void>;
@@ -71,3 +71,8 @@ export declare function deleteGroupmatch(match: groupmatch): Promise<void>;
 export declare function getExhibition(): Promise<exhibition>;
 export declare function updateExhibition(ex: exhibition): Promise<void>;
 export declare function insertExhibition(): Promise<void>;
+export declare function insertReminder(r: reminder): Promise<void>;
+export declare function getReminder(id: string): Promise<reminder>;
+export declare function getReminders(q?: object): Promise<reminder[]>;
+export declare function updateReminder(r: reminder): Promise<void>;
+export declare function deleteReminder(r: reminder): Promise<void>;

@@ -1,6 +1,6 @@
 import * as discord from "discord.js"
 import { activematch } from "../misc/struct"
-import { deleteActive, deleteQuals, updateProfile, getSingularQuals, getMatch, getQual } from "../misc/db"
+import { deleteActive, deleteQuals, updateProfile, getSingularQuals, getMatch, getQual, deleteReminder, getReminder } from "../misc/db"
 import { winner } from "./card"
 import { dateBuilder, qualifierresultadd } from "../misc/utils"
 import { matchwinner } from "./challonge"
@@ -387,17 +387,22 @@ export async function qualend(client: discord.Client, id: string) {
             }
         });
     }
+
+    await deleteReminder(await getReminder(channel.id))
 }
 
 
 export async function cancelmatch(message: discord.Message) {
     if (await getMatch(message.channel.id)) {
         await deleteActive(await getMatch(message.channel.id))
+        await deleteReminder(await getReminder(message.channel.id))
         return await message.reply("this match has been cancelled")
+
     }
 
     else if (await getQual(message.channel.id)) {
         await deleteQuals(await getQual(message.channel.id))
+        await deleteReminder(await getReminder(message.channel.id))
         return await message.reply("this qualifier has been cancelled")
     }
 

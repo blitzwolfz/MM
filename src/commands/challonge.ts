@@ -1,6 +1,6 @@
 //import { matchlist } from "../misc/struct";
 import * as Discord from "discord.js";
-import { getSignups, getMatchlist, updateMatchlist, insertMatchlist, insertQuallist, getQuallist, updateQuallist, updateProfile } from "../misc/db";
+import { getSignups, getMatchlist, updateMatchlist, insertMatchlist, insertQuallist, getQuallist, updateQuallist, updateProfile, insertReminder } from "../misc/db";
 import { matchlist, quallist } from "../misc/struct";
 import { indexOf2d } from "../misc/utils";
 //import { indexOf2d } from "../misc/utils";
@@ -262,7 +262,17 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
                                                 await channel.setParent(category.id);
                                                 await channel.lockPermissions()
                                                 let t = await getMatchlist()
-
+                                                
+                                                await insertReminder(
+                                                    {
+                                                      _id:channel.id,
+                                                      mention:`<@${id1}> <@${id2}>`,
+                                                      channel:channel.id,
+                                                      type:"match",
+                                                      time:86400,
+                                                      timestamp:Math.round(message.createdTimestamp / 1000)
+                                                    }
+                                                )
 
 
                                                 t.qualurl = Math.round(message.createdTimestamp / 1000).toString()
@@ -307,6 +317,18 @@ export async function QualChannelCreation(message: Discord.Message, args: string
                     for (let u of groups.users[i]) {
                         string += `<@${u}> `
                     }
+
+                    await insertReminder(
+                        {
+                          _id:channel.id,
+                          mention:string,
+                          channel:channel.id,
+                          type:"match",
+                          time:86400,
+                          timestamp:Math.round(message.createdTimestamp / 1000)
+                        }
+                    )
+
                     await channel.send(`${string}, Portion ${args[0]} has begun, and you have ${time}h to complete it. Contact a ref to begin your portion!`)
                 });
         }

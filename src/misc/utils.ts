@@ -1,6 +1,6 @@
 import * as Discord from "discord.js"
 import { matchlistmaker } from "../commands/challonge";
-import { getMatch, getAllProfiles, updateProfile, getQual, getMatchlist, getQuallist, dbSoftReset, deleteSignup, deleteQuallist, getAllModProfiles, getAllCockratings } from "./db";
+import { getMatch, getAllProfiles, updateProfile, getQual, getMatchlist, getQuallist, dbSoftReset, deleteSignup, deleteQuallist, getAllModProfiles, getAllCockratings, getReminders, deleteReminder, insertReminder } from "./db";
 import { clearmodstats } from "./modprofiles";
 
 export async function getUser(mention: string) {
@@ -206,6 +206,98 @@ export async function reminders(client: Discord.Client, args: string[]) {
   }
 
   await autoreminders(client)
+}
+
+export async function aaautoreminders(client: Discord.Client) {
+  await matchreminder(client)
+  await memereminder(client)
+}
+
+async function  matchreminder(client:Discord.Client) {
+
+  let r = await getReminders(
+    { type: "match" }
+  )
+
+  for (let i of r) {
+    if (Math.floor(Date.now() / 1000) - i.timestamp >= i.time) {
+      (<Discord.TextChannel>await client.channels.fetch(i.channel)).send(
+        `${i.mention} you have ${(172800 - i.time)/3600}h left to do your match`
+      )
+      await deleteReminder(i)
+
+      if(i.time === 86400){
+        await insertReminder(
+          {
+            _id:i.channel,
+            mention:i.mention,
+            channel:i.channel,
+            type:"match",
+            time:129600,
+            timestamp:i.timestamp
+          }
+        )
+      }
+
+      if(i.time === 129600){
+        await insertReminder(
+          {
+            _id:i.channel,
+            mention:i.mention,
+            channel:i.channel,
+            type:"match",
+            time:165600,
+            timestamp:i.timestamp
+          }
+        )
+      }
+
+    }
+  }
+
+}
+
+async function  memereminder(client:Discord.Client) {
+
+  let r = await getReminders(
+    { type: "meme" }
+  )
+
+  for (let i of r) {
+    if (Math.floor(Date.now() / 1000) - i.timestamp >= i.time) {
+
+      (await client.users.cache.get(i.channel))!.send(
+        `You have ${Math.floor((3600 - i.time)/60)}m left to do your match`
+      )
+      await deleteReminder(i)
+
+      if(i.time === 1800){
+        await insertReminder(
+          {
+            _id:i.channel,
+            mention:i.mention,
+            channel:i.channel,
+            type:"meme",
+            time:2700,
+            timestamp:i.timestamp
+          }
+        )
+      }
+
+      if(i.time === 2700){
+        await insertReminder(
+          {
+            _id:i.channel,
+            mention:i.mention,
+            channel:i.channel,
+            type:"meme",
+            time:3300,
+            timestamp:i.timestamp
+          }
+        )
+      }
+    }
+  }
 }
 
 export async function aautoreminders(client: Discord.Client, ...st: string[]) {
@@ -565,6 +657,7 @@ export async function oldqualifierresultadd(channel: Discord.TextChannel, client
 }
 
 export async function qualifierresultadd(c: Discord.TextChannel, client: Discord.Client, msg1: string, msg2: string) {
+  //let r = /\d+/g
   console.time("total time")
 
   let m = await c.messages.fetch(msg1)
@@ -576,7 +669,7 @@ export async function qualifierresultadd(c: Discord.TextChannel, client: Discord
   let em2 = m2.embeds[0].fields
 
   for(let i = 0; i < em.length; i++){
-
+    
     em[i].name = (em[i].value.split(/[^0-9.]+/g))[3]
 
     em[i].value = (em[i].value.split(/[^0-9.]+/g))[2]

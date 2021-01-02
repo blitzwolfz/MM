@@ -1,7 +1,7 @@
 import * as discord from "discord.js"
 import { emojis } from "../misc/utils"
 import { qualend } from "./winner"
-import { updateQuals} from "../misc/db"
+import { deleteReminder, getReminder, updateQuals} from "../misc/db"
 import { qualmatch } from "../misc/struct"
 
 
@@ -89,6 +89,8 @@ export async function qualrunn(match: qualmatch, channelid: string, client: disc
                 await channel.send("You have 2 hours to vote. You can vote for 2 memes!")
     
                 await updateQuals(match)
+
+                await deleteReminder(await getReminder(channel.id))
 
             }
         }

@@ -6,7 +6,7 @@ import { end, qualend } from "./winner"
 import { vs } from "./card"
 import { updateActive, deleteActive, insertActive, insertQuals, 
     updateQuals, getActive, getQuals, getSingularQuals, 
-    getMatch, gettempStruct, deletetempStruct, getQual} from "../misc/db"
+    getMatch, gettempStruct, deletetempStruct, getQual, insertReminder} from "../misc/db"
 import { createAtUsermatch } from "./user"
 import { qualrunn } from "./qualrunn"
 import { RandomTemplateFunc } from "../misc/randomtemp"
@@ -740,6 +740,17 @@ export async function splitqual(client: discord.Client, message: discord.Message
             //     match.split = false
             //     await updateQuals(match)
             // }
+
+            await insertReminder(
+                {
+                  _id:user.id,
+                  mention:"",
+                  channel:"",
+                  type:"meme",
+                  time:2700,
+                  timestamp:Math.floor(Date.now()/1000) - 1800
+                }
+            )
         }
     }
 }
@@ -798,6 +809,18 @@ export async function splitregular(message: discord.Message, client: discord.Cli
                         }
 
                         await updateActive(match)
+
+                        await insertReminder(
+                            {
+                              _id:match.p1.userid,
+                              mention:"",
+                              channel:"",
+                              type:"meme",
+                              time:1800,
+                              timestamp:Math.floor(Date.now()/1000)
+                            }
+                        )
+
                         return;
                     }
                 }
@@ -834,6 +857,19 @@ export async function splitregular(message: discord.Message, client: discord.Cli
                             )
                         }
                         await updateActive(match)
+
+
+                        await insertReminder(
+                            {
+                              _id:match.p2.userid,
+                              mention:"",
+                              channel:"",
+                              type:"meme",
+                              time:1800,
+                              timestamp:Math.floor(Date.now()/1000)
+                            }
+                        )
+
                         return;
                     }
                 }
@@ -1309,7 +1345,7 @@ export async function matchstats(message: discord.Message, client: discord.Clien
     
     try{
         if(!channel){
-            return message.reply("No active matche exists in this channel")
+            return message.reply("No active match exists in this channel")
         }
     
         else{

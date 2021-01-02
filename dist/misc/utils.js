@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.saveDatatofile = exports.SeasonRestart = exports.toS = exports.toHHMMSS = exports.qualifierresultadd = exports.oldqualifierresultadd = exports.clearstats = exports.createrole = exports.updatesomething = exports.deletechannels = exports.autoreminders = exports.aautoreminders = exports.reminders = exports.dateBuilder = exports.indexOf2d = exports.forwardsFilter = exports.backwardsFilter = exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
+exports.saveDatatofile = exports.SeasonRestart = exports.toS = exports.toHHMMSS = exports.qualifierresultadd = exports.oldqualifierresultadd = exports.clearstats = exports.createrole = exports.updatesomething = exports.deletechannels = exports.autoreminders = exports.aautoreminders = exports.aaautoreminders = exports.reminders = exports.dateBuilder = exports.indexOf2d = exports.forwardsFilter = exports.backwardsFilter = exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
 const Discord = __importStar(require("discord.js"));
 const challonge_1 = require("../commands/challonge");
 const db_1 = require("./db");
@@ -170,6 +170,69 @@ async function reminders(client, args) {
     await autoreminders(client);
 }
 exports.reminders = reminders;
+async function aaautoreminders(client) {
+    await matchreminder(client);
+    await memereminder(client);
+}
+exports.aaautoreminders = aaautoreminders;
+async function matchreminder(client) {
+    let r = await db_1.getReminders({ type: "match" });
+    for (let i of r) {
+        if (Math.floor(Date.now() / 1000) - i.timestamp >= i.time) {
+            (await client.channels.fetch(i.channel)).send(`${i.mention} you have ${(172800 - i.time) / 3600}h left to do your match`);
+            await db_1.deleteReminder(i);
+            if (i.time === 86400) {
+                await db_1.insertReminder({
+                    _id: i.channel,
+                    mention: i.mention,
+                    channel: i.channel,
+                    type: "match",
+                    time: 129600,
+                    timestamp: i.timestamp
+                });
+            }
+            if (i.time === 129600) {
+                await db_1.insertReminder({
+                    _id: i.channel,
+                    mention: i.mention,
+                    channel: i.channel,
+                    type: "match",
+                    time: 165600,
+                    timestamp: i.timestamp
+                });
+            }
+        }
+    }
+}
+async function memereminder(client) {
+    let r = await db_1.getReminders({ type: "meme" });
+    for (let i of r) {
+        if (Math.floor(Date.now() / 1000) - i.timestamp >= i.time) {
+            (await client.users.cache.get(i.channel)).send(`You have ${Math.floor((3600 - i.time) / 60)}m left to do your match`);
+            await db_1.deleteReminder(i);
+            if (i.time === 1800) {
+                await db_1.insertReminder({
+                    _id: i.channel,
+                    mention: i.mention,
+                    channel: i.channel,
+                    type: "meme",
+                    time: 2700,
+                    timestamp: i.timestamp
+                });
+            }
+            if (i.time === 2700) {
+                await db_1.insertReminder({
+                    _id: i.channel,
+                    mention: i.mention,
+                    channel: i.channel,
+                    type: "meme",
+                    time: 3300,
+                    timestamp: i.timestamp
+                });
+            }
+        }
+    }
+}
 async function aautoreminders(client, ...st) {
     var _a, _b, _c, _d, _e, _f;
     let catchannels = client.guilds.cache.get("719406444109103117").channels.cache.array();
