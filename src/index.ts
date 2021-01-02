@@ -169,6 +169,8 @@ client.on("guildMemberAdd", async function (member) {
   console.log(`a user joins a guild: ${member.user?.username}`);
 });
 
+client.on("error", (e) => console.error(e));
+
 client.on("messageReactionAdd", async function (messageReaction, user) {
   //console.log(messageReaction.message.member!.roles.cache.has('719936221572235295'))
   if (user.bot) return;

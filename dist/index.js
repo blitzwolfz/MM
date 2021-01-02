@@ -97,6 +97,7 @@ client.on("guildMemberAdd", async function (member) {
     await ((_a = member.user) === null || _a === void 0 ? void 0 : _a.send("Please start verification with `!verify <reddit username>` in the verification channel."));
     console.log(`a user joins a guild: ${(_b = member.user) === null || _b === void 0 ? void 0 : _b.username}`);
 });
+client.on("error", (e) => console.error(e));
 client.on("messageReactionAdd", async function (messageReaction, user) {
     var _a;
     if (user.bot)
