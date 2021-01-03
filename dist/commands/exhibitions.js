@@ -206,7 +206,13 @@ async function cooldownremove(message) {
             if (ex.cooldowns[i].user === x.id) {
                 ex.cooldowns.splice(i, 1);
                 i++;
-                await message.channel.send(`<@${ex.cooldowns[i].user}> cool down has been reset.`);
+                try {
+                    await message.channel.send(`<@${ex.cooldowns[i].user}> cool down has been reset.`);
+                }
+                catch (err) {
+                    console.log(err.lineNumber);
+                    await message.channel.send(`Users cd been reset`);
+                }
             }
         }
     }

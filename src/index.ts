@@ -130,9 +130,20 @@ client.on('ready', async () => {
 
   setInterval(async function () {
     console.time("time to running");
-    await running(client).catch((error) => {
-      console.log("it's in running");
-    });
+    // await running(client).catch((error) => {
+    //   console.log("it's in running");
+    // });
+
+
+    
+    try {
+      await running(client)
+      
+    } catch (err) {
+      console.log(err.lineNumber)
+    }
+
+
     console.timeEnd("time to running");
   }, 15000);
 
