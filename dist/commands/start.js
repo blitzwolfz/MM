@@ -29,7 +29,6 @@ const db_1 = require("../misc/db");
 const user_1 = require("./user");
 const qualrunn_1 = require("./qualrunn");
 const randomtemp_1 = require("../misc/randomtemp");
-const exhibitions_1 = require("./exhibitions");
 async function start(message, client) {
     var args = message.content.slice(prefix.length).trim().split(/ +/g);
     if (args.length < 3) {
@@ -425,7 +424,6 @@ async function running(client) {
             }
         }
     }
-    await exhibitions_1.deleteExhibitionchannels(client);
 }
 exports.running = running;
 async function qualrunning(client) {

@@ -89,6 +89,7 @@ client.on('ready', async () => {
     }, 15000);
     setInterval(async function () {
         console.time("time");
+        await exhibitions_1.deleteExhibitionchannels(client);
         await utils_1.aaautoreminders(client);
         console.timeEnd("time");
     }, 1000);

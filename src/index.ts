@@ -21,7 +21,7 @@ import {
   matchstats,
   qualstats,
 } from "./commands/start";
-import { cooldownremove, duelcheck, exhibition } from "./commands/exhibitions"
+import { cooldownremove, deleteExhibitionchannels, duelcheck, exhibition } from "./commands/exhibitions"
 import { qualend, end, cancelmatch } from "./commands/winner";
 import { vs } from "./commands/card";
 import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, createrole, clearstats, qualifierresultadd, SeasonRestart, toHHMMSS, aaautoreminders } from "./misc/utils";
@@ -159,6 +159,7 @@ client.on('ready', async () => {
   setInterval(async function () {
     // console.log("A Third Kiss every 5 seconds");
     console.time("time")
+    await deleteExhibitionchannels(client)
     await aaautoreminders(client)
     console.timeEnd("time")
   }, 1000);

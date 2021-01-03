@@ -10,7 +10,6 @@ import { updateActive, deleteActive, insertActive, insertQuals,
 import { createAtUsermatch } from "./user"
 import { qualrunn } from "./qualrunn"
 import { RandomTemplateFunc } from "../misc/randomtemp"
-import { deleteExhibitionchannels } from "./exhibitions"
 //const Canvas = require('canvas');
 
 export async function start(message: discord.Message, client: discord.Client) {
@@ -676,9 +675,6 @@ export async function running(client: discord.Client): Promise<void> {
         }
 
     }
-    await deleteExhibitionchannels(client)
-    //await autoreminders(client)
-    //await qualrunning(client)
 }
 
 export async function qualrunning(client: discord.Client) {

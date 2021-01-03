@@ -287,19 +287,8 @@ export async function cooldownremove(message: Discord.Message){
     let ex = await getExhibition()
 
     for(let x of message.mentions.users.array()){
-        for(let i = 0; i < ex.cooldowns.length; i++){
-            if(ex.cooldowns[i].user === x.id){
-                ex.cooldowns.splice(i, 1)
-                i++
-                try{
-                    await message.channel.send(`<@${ex.cooldowns[i].user}> cool down has been reset.`)
-                }catch(err){
-                    console.log(err.lineNumber)
-                    await message.channel.send(`Users cd been reset`)
-                }
-            }
-        }
-    }
-    
-    await updateExhibition(ex)
+        ex.cooldowns.splice(ex.cooldowns.findIndex(c => c.user === x.id))
+        await updateExhibition(ex)
+        await message.channel.send(`<@${x.id}> has been reset`)
+    } 
 }
