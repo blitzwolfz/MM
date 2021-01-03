@@ -76,7 +76,7 @@ client.on('ready', async () => {
             await start_1.running(client);
         }
         catch (err) {
-            console.log(err.lineNumber);
+            console.log(err.name + ": " + err.message);
         }
         console.timeEnd("time to running");
     }, 15000);

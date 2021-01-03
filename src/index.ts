@@ -140,7 +140,7 @@ client.on('ready', async () => {
       await running(client)
       
     } catch (err) {
-      console.log(err.lineNumber)
+      console.log(err.name + ": " + err.message)
     }
 
 
