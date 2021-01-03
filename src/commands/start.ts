@@ -432,6 +432,8 @@ export async function running(client: discord.Client): Promise<void> {
         let channelid = <discord.TextChannel>client.channels.cache.get(match.channelid)
         let user1 = (await client.users.fetch(match.p1.userid))
         let user2 = (await client.users.fetch(match.p2.userid))
+        console.log(user1.id)
+        console.log(user2.id)
       
         if (match.votingperiod === false) {
 

@@ -324,6 +324,8 @@ async function running(client) {
         let channelid = client.channels.cache.get(match.channelid);
         let user1 = (await client.users.fetch(match.p1.userid));
         let user2 = (await client.users.fetch(match.p2.userid));
+        console.log(user1.id);
+        console.log(user2.id);
         if (match.votingperiod === false) {
             if (!(match.split) && ((Math.floor(Date.now() / 1000) - match.p2.time > 3600) && match.p2.memedone === false)
                 && ((Math.floor(Date.now() / 1000) - match.p1.time > 3600) && match.p1.memedone === false)) {
