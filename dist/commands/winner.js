@@ -315,12 +315,22 @@ exports.qualend = qualend;
 async function cancelmatch(message) {
     if (await db_1.getMatch(message.channel.id)) {
         await db_1.deleteActive(await db_1.getMatch(message.channel.id));
-        await db_1.deleteReminder(await db_1.getReminder(message.channel.id));
+        try {
+            await db_1.deleteReminder(await db_1.getReminder(message.channel.id));
+        }
+        catch (error) {
+            console.log("");
+        }
         return await message.reply("this match has been cancelled");
     }
     else if (await db_1.getQual(message.channel.id)) {
         await db_1.deleteQuals(await db_1.getQual(message.channel.id));
-        await db_1.deleteReminder(await db_1.getReminder(message.channel.id));
+        try {
+            await db_1.deleteReminder(await db_1.getReminder(message.channel.id));
+        }
+        catch (error) {
+            console.log("");
+        }
         return await message.reply("this qualifier has been cancelled");
     }
     else {

@@ -414,14 +414,22 @@ export async function qualend(client: discord.Client, id: string) {
 export async function cancelmatch(message: discord.Message) {
     if (await getMatch(message.channel.id)) {
         await deleteActive(await getMatch(message.channel.id))
-        await deleteReminder(await getReminder(message.channel.id))
+        try {
+            await deleteReminder(await getReminder(message.channel.id))   
+        } catch (error) {
+            console.log("")
+        }
         return await message.reply("this match has been cancelled")
 
     }
 
     else if (await getQual(message.channel.id)) {
         await deleteQuals(await getQual(message.channel.id))
-        await deleteReminder(await getReminder(message.channel.id))
+        try {
+            await deleteReminder(await getReminder(message.channel.id))   
+        } catch (error) {
+            console.log("")
+        }
         return await message.reply("this qualifier has been cancelled")
     }
 

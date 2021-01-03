@@ -182,7 +182,7 @@ export async function submit(message: Discord.Message, client: Discord.Client){
         let match:activematch = await (await getActive()).find(x => (x.p1.userid === message.author.id || x.p2.userid === message.author.id))!
         console.log(match)
 
-        if(match.p1.donesplit === true && match.p1.memedone === false){
+        if(match.p1.donesplit === true && match.p1.memedone === false && !match.p1.memelink.length && match.p2.userid === message.author.id){
             match.p1.memelink = (message.attachments.array()[0].url)
             match.p1.memedone = true
 
@@ -247,7 +247,7 @@ export async function submit(message: Discord.Message, client: Discord.Client){
             return await message.channel.send("Your meme has been attached!")
         }
 
-        if(match.p2.donesplit === true && match.p2.memedone === false){
+        if(match.p2.donesplit === true && match.p2.memedone === false && !match.p2.memelink.length && match.p2.userid === message.author.id){
             match.p2.memelink = (message.attachments.array()[0].url)
             match.p2.memedone = true
 
