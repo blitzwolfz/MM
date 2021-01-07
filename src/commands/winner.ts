@@ -189,9 +189,11 @@ export async function end(client: discord.Client, id: string) {
         .setTitle(`Match between ${user1.username} and ${user2.username}`)
         .setDescription(`Both users have gotten ${match.p1.votes} vote(s). Both users came to a draw.`)
         .setFooter(dateBuilder()))
+        
+        if(match.exhibition === false){
+            let m = await channelid
+            .send(`<@${user1.id}> <@${user2.id}> You have 48h to complete this re-match. Contact a ref to begin, you may also split your match`)
 
-        await channelid
-        .send(`<@${user1.id}> <@${user2.id}> You have 48h to complete this re-match. Contact a ref to begin, you may also split your match`).then(async m => {
             await insertReminder(
                 {
                   _id:channelid.id,
@@ -202,9 +204,7 @@ export async function end(client: discord.Client, id: string) {
                   timestamp:Math.round(m.createdTimestamp / 1000)
                 }
             )
-        })
-
-
+        }
     }
 
     let t = channelid.topic!.toString().split(",")
