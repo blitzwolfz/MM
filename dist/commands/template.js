@@ -41,7 +41,7 @@ async function template(message, client) {
                 await message.react('🗡️');
             });
         }
-        await message.reply(`Thank you for submitting templates. You will gain a maximum of ${message.attachments.array().length * 2} points if they are approved`);
+        await message.reply(`Thank you for submitting templates. You will gain a maximum of ${message.attachments.array().length * 2} points if they are approved. You currently have ${(await db_1.getProfile(message.author.id)).points} points`);
     }
 }
 exports.template = template;

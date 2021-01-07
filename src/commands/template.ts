@@ -1,5 +1,5 @@
 import * as Discord from "discord.js"
-import { gettemplatedb, getthemes, updatetemplatedb, updateThemedb } from "../misc/db"
+import { getProfile, gettemplatedb, getthemes, updatetemplatedb, updateThemedb } from "../misc/db"
 import { backwardsFilter, forwardsFilter } from "../misc/utils"
 
 export async function template(message: Discord.Message, client: Discord.Client) {
@@ -30,7 +30,7 @@ export async function template(message: Discord.Message, client: Discord.Client)
         }
 
         // updateProfile(message.author.id, "points", (message.attachments.array().length * 2))
-        await message.reply(`Thank you for submitting templates. You will gain a maximum of ${message.attachments.array().length * 2} points if they are approved`)
+        await message.reply(`Thank you for submitting templates. You will gain a maximum of ${message.attachments.array().length * 2} points if they are approved. You currently have ${(await getProfile(message.author.id)).points} points`)
 
     }
 

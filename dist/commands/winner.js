@@ -140,14 +140,24 @@ async function end(client, id) {
         }
     }
     else if (match.p1.votes === match.p2.votes) {
-        let embed = new discord.MessageEmbed()
-            .setColor("#d7be26")
-            .setTitle(`Match between ${user1.username} and ${user2.username}`)
-            .setDescription(`Both users have gotten ${match.p1.votes} vote(s). Both users came to a draw.\nPlease find a new time for your rematch.`)
-            .setFooter(utils_1.dateBuilder());
-        await channelid.send(embed);
         await user1.send(`Your match is over,both of you ended in a tie of ${match.p1.votes}`);
         await user2.send(`Your match is over, both of you ended in a tie of ${match.p1.votes}`);
+        await channelid.send(new discord.MessageEmbed()
+            .setColor("#d7be26")
+            .setTitle(`Match between ${user1.username} and ${user2.username}`)
+            .setDescription(`Both users have gotten ${match.p1.votes} vote(s). Both users came to a draw.`)
+            .setFooter(utils_1.dateBuilder()));
+        await channelid
+            .send(`<@${user1.id}> <@${user2.id}> You have 48h to complete this re-match. Contact a ref to begin, you may also split your match`).then(async (m) => {
+            await db_1.insertReminder({
+                _id: channelid.id,
+                mention: `<@${user1.id}> <@${user2.id}>`,
+                channel: channelid.id,
+                type: "match",
+                time: 86400,
+                timestamp: Math.round(m.createdTimestamp / 1000)
+            });
+        });
     }
     let t = channelid.topic.toString().split(",");
     if (!match.exhibition) {

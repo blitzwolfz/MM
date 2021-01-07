@@ -1,6 +1,6 @@
 import * as discord from "discord.js"
 import { activematch } from "../misc/struct"
-import { deleteActive, deleteQuals, updateProfile, getSingularQuals, getMatch, getQual, deleteReminder, getReminder } from "../misc/db"
+import { deleteActive, deleteQuals, updateProfile, getSingularQuals, getMatch, getQual, deleteReminder, getReminder, insertReminder } from "../misc/db"
 import { winner } from "./card"
 import { dateBuilder, qualifierresultadd } from "../misc/utils"
 import { matchwinner } from "./challonge"
@@ -179,15 +179,32 @@ export async function end(client: discord.Client, id: string) {
     }
 
     else if (match.p1.votes === match.p2.votes) {
-        let embed = new discord.MessageEmbed()
-            .setColor("#d7be26")
-            .setTitle(`Match between ${user1.username} and ${user2.username}`)
-            .setDescription(`Both users have gotten ${match.p1.votes} vote(s). Both users came to a draw.\nPlease find a new time for your rematch.`)
-            .setFooter(dateBuilder())
 
-        await channelid.send(embed)
+        
         await user1.send(`Your match is over,both of you ended in a tie of ${match.p1.votes}`)
         await user2.send(`Your match is over, both of you ended in a tie of ${match.p1.votes}`)
+
+        await channelid.send(new discord.MessageEmbed()
+        .setColor("#d7be26")
+        .setTitle(`Match between ${user1.username} and ${user2.username}`)
+        .setDescription(`Both users have gotten ${match.p1.votes} vote(s). Both users came to a draw.`)
+        .setFooter(dateBuilder()))
+
+        await channelid
+        .send(`<@${user1.id}> <@${user2.id}> You have 48h to complete this re-match. Contact a ref to begin, you may also split your match`).then(async m => {
+            await insertReminder(
+                {
+                  _id:channelid.id,
+                  mention:`<@${user1.id}> <@${user2.id}>`,
+                  channel:channelid.id,
+                  type:"match",
+                  time:86400,
+                  timestamp:Math.round(m.createdTimestamp / 1000)
+                }
+            )
+        })
+
+
     }
 
     let t = channelid.topic!.toString().split(",")

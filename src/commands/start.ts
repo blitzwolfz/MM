@@ -6,7 +6,7 @@ import { end, qualend } from "./winner"
 import { vs } from "./card"
 import { updateActive, deleteActive, insertActive, insertQuals, 
     updateQuals, getActive, getQuals, getSingularQuals, 
-    getMatch, gettempStruct, deletetempStruct, getQual, insertReminder} from "../misc/db"
+    getMatch, gettempStruct, deletetempStruct, getQual, insertReminder, deleteReminder, getReminder} from "../misc/db"
 import { createAtUsermatch } from "./user"
 import { qualrunn } from "./qualrunn"
 import { RandomTemplateFunc } from "../misc/randomtemp"
@@ -663,6 +663,24 @@ export async function running(client: discord.Client): Promise<void> {
                 }
 
                 await updateActive(match)
+                try{
+                    await deleteReminder(await getReminder(match._id))
+                    
+                    try {
+                        await deleteReminder(await getReminder(match.p1.userid))   
+                    } catch {
+                        console.log(`Couldn't delete reminder for ${match.p1.userid}`)
+                    }
+                    
+                    try {
+                        await deleteReminder(await getReminder(match.p2.userid))   
+                    } catch {
+                        console.log(`Couldn't delete reminder for ${match.p2.userid}`)
+                    }
+
+                } catch{
+                    console.log("Couldn't delete reminders")
+                }
             }
             
         }

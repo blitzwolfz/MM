@@ -50,6 +50,7 @@ import {
   updateProfile,
   updateThemedb,
   getthemes,
+  getProfile,
 } from "./misc/db";
 
 import { template, approvetemplate, addTheme, removeTheme, themelistLb, templatecheck } from "./commands/template";
@@ -168,6 +169,7 @@ client.on('ready', async () => {
 
   //await running(client)
   //await qualrunning(client)
+  if(process.env.DBNAME === "mememania")
   await (<Discord.TextChannel>client.channels.cache.get("722616679280148504")).send("<@239516219445608449>", {
     embed: {
       description: `Updates/Restart has worked`,
@@ -729,15 +731,10 @@ client.on("message", async message => {
   }
 
   else if (command === "test") {
+	
     // await message.reply("no").then(async message => { await message.react('🤏') })
-    // let t = await gettemplatedb()
-    // let c2 = <Discord.TextChannel>client.channels.cache.get("794958984569815060")
-    // let c3 = <Discord.TextChannel>client.channels.cache.get("794959006208229416")
-    // let c4 = <Discord.TextChannel>client.channels.cache.get("794959032422498315")
-    // for(let i = 0; i < t.list.length; i++){
-    //   await message.channel.send(t.list[i])
-
-    // }
+    
+  
 
     // await insertReminder(
     //   {
@@ -970,7 +967,7 @@ client.on("message", async message => {
     })
 
     // updateProfile(message.author.id, "points", (message.attachments.array().length * 2))
-    await message.reply(`Thank you for submitting themes. You will gain a maximum of ${targs.length} points if they are approved`)
+    await message.reply(`Thank you for submitting themes. You will gain a maximum of ${targs.length} points if they are approved. You currently have ${(await getProfile(message.author.id)).points} points`)
   }
 
   else if (command === "start") {

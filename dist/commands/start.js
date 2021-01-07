@@ -416,6 +416,24 @@ async function running(client) {
                     await channelid.send(`<@&783003389390487582>`);
                 }
                 await db_1.updateActive(match);
+                try {
+                    await db_1.deleteReminder(await db_1.getReminder(match._id));
+                    try {
+                        await db_1.deleteReminder(await db_1.getReminder(match.p1.userid));
+                    }
+                    catch {
+                        console.log(`Couldn't delete reminder for ${match.p1.userid}`);
+                    }
+                    try {
+                        await db_1.deleteReminder(await db_1.getReminder(match.p2.userid));
+                    }
+                    catch {
+                        console.log(`Couldn't delete reminder for ${match.p2.userid}`);
+                    }
+                }
+                catch {
+                    console.log("Couldn't delete reminders");
+                }
             }
         }
         if (match.votingperiod === true && !match.split) {

@@ -93,13 +93,14 @@ client.on('ready', async () => {
         await utils_1.aaautoreminders(client);
         console.timeEnd("time");
     }, 1000);
-    await client.channels.cache.get("722616679280148504").send("<@239516219445608449>", {
-        embed: {
-            description: `Updates/Restart has worked`,
-            color: "#d7be26",
-            timestamp: new Date()
-        }
-    });
+    if (process.env.DBNAME === "mememania")
+        await client.channels.cache.get("722616679280148504").send("<@239516219445608449>", {
+            embed: {
+                description: `Updates/Restart has worked`,
+                color: "#d7be26",
+                timestamp: new Date()
+            }
+        });
     client.user.setActivity(`${process.env.STATUS}`);
 });
 client.on("guildMemberAdd", async function (member) {
@@ -497,6 +498,11 @@ client.on("message", async (message) => {
         await utils_1.deletechannels(message, args);
     }
     else if (command === "test") {
+        const fetch = require('node-fetch');
+        const { file } = await fetch('https://aws.random.cat/meow').then(response => {
+            response.json();
+        });
+        console.log(file);
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))
@@ -589,7 +595,7 @@ client.on("message", async (message) => {
             await message.react('🏁');
             await message.react('🗡️');
         });
-        await message.reply(`Thank you for submitting themes. You will gain a maximum of ${targs.length} points if they are approved`);
+        await message.reply(`Thank you for submitting themes. You will gain a maximum of ${targs.length} points if they are approved. You currently have ${(await db_1.getProfile(message.author.id)).points} points`);
     }
     else if (command === "start") {
         if (!message.member.roles.cache.has('719936221572235295'))
