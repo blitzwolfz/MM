@@ -1,7 +1,7 @@
 import * as discord from "discord.js"
 import { activematch } from "../misc/struct"
 import { deleteActive, deleteQuals, updateProfile, getSingularQuals, getMatch, getQual, deleteReminder, getReminder, insertReminder } from "../misc/db"
-import { winner } from "./card"
+import { grandwinner, winner } from "./card"
 import { dateBuilder, qualifierresultadd } from "../misc/utils"
 import { matchwinner } from "./challonge"
 
@@ -48,7 +48,7 @@ export async function end(client: discord.Client, id: string) {
 
 
         await channelid.send(embed)
-        await channelid.send([await winner(client, user2.id)!])
+        await channelid.send([await grandwinner(client, user2.id)!])
     }
 
     else if ((Math.floor(Date.now() / 1000) - match.p2.time > 1800) && match.p2.memedone === false) {
@@ -69,7 +69,7 @@ export async function end(client: discord.Client, id: string) {
 
 
         await channelid.send(embed)
-        await channelid.send([await winner(client, user1.id)!])
+        await channelid.send([await grandwinner(client, user1.id)!])
 
     }
 
@@ -104,7 +104,7 @@ export async function end(client: discord.Client, id: string) {
         await channelid.send(embed)
 
 
-        await channelid.send([await winner(client, user1.id)!])
+        await channelid.send([await grandwinner(client, user1.id)!])
 
         if (!match.exhibition) {
             await user1.send(`Your match is over, here is the final result. You gained 25 points for winning your match, and ${(match.p1.votes * 5)} points from your votes.`, { embed: embed })
@@ -150,7 +150,7 @@ export async function end(client: discord.Client, id: string) {
         }
 
         await channelid.send(embed)
-        await channelid.send([await winner(client, user2.id)!])
+        await channelid.send([await grandwinner(client, user2.id)!])
 
         // let d = new Date()
 

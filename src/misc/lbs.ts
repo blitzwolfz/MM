@@ -79,6 +79,7 @@ export async function winningLB(message: Discord.Message, client: Discord.Client
     const m = <Discord.Message>(await message.channel.send({ embed: await winlistEmbed(page!, client, ratings, message.author.id, (symbol)) }));
     await m.react("⬅")
     await m.react("➡");
+    
 
     const backwards = m.createReactionCollector(backwardsFilter, { time: 100000 });
     const forwards = m.createReactionCollector(forwardsFilter, { time: 100000 });

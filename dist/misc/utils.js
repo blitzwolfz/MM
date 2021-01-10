@@ -19,9 +19,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.saveDatatofile = exports.SeasonRestart = exports.toS = exports.toHHMMSS = exports.qualifierresultadd = exports.oldqualifierresultadd = exports.clearstats = exports.createrole = exports.updatesomething = exports.deletechannels = exports.autoreminders = exports.aautoreminders = exports.aaautoreminders = exports.reminders = exports.dateBuilder = exports.indexOf2d = exports.forwardsFilter = exports.backwardsFilter = exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
+exports.saveDatatofile = exports.CycleRestart = exports.SeasonRestart = exports.toS = exports.toHHMMSS = exports.qualifierresultadd = exports.oldqualifierresultadd = exports.clearstats = exports.createrole = exports.updatesomething = exports.deletechannels = exports.autoreminders = exports.aautoreminders = exports.aaautoreminders = exports.reminders = exports.dateBuilder = exports.indexOf2d = exports.forwardsFilter = exports.backwardsFilter = exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
 const Discord = __importStar(require("discord.js"));
 const challonge_1 = require("../commands/challonge");
+const signups_1 = require("../commands/signups");
 const db_1 = require("./db");
 const modprofiles_1 = require("./modprofiles");
 async function getUser(mention) {
@@ -517,6 +518,14 @@ async function SeasonRestart(message) {
     message.reply("Season has been reset");
 }
 exports.SeasonRestart = SeasonRestart;
+async function CycleRestart(message, client) {
+    await db_1.deleteSignup();
+    await db_1.deleteQuallist();
+    await challonge_1.matchlistmaker();
+    await signups_1.startsignup(message, client);
+    message.reply("Season has been reset");
+}
+exports.CycleRestart = CycleRestart;
 async function saveDatatofile(message) {
     let u = await db_1.getAllProfiles("wins");
     let m = await db_1.getAllModProfiles("matchportionsstarted");

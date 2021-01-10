@@ -1,5 +1,6 @@
 import * as Discord from "discord.js"
 import { matchlistmaker } from "../commands/challonge";
+import { startsignup } from "../commands/signups";
 import { getMatch, getAllProfiles, updateProfile, getQual, getMatchlist, getQuallist, dbSoftReset, deleteSignup, deleteQuallist, getAllModProfiles, getAllCockratings, getReminders, deleteReminder, insertReminder } from "./db";
 import { clearmodstats } from "./modprofiles";
 
@@ -770,6 +771,15 @@ export async function SeasonRestart(message: Discord.Message){
   await deleteQuallist()
   await matchlistmaker()
   await deleteQuallist()
+
+  message.reply("Season has been reset")
+}
+
+export async function CycleRestart(message: Discord.Message, client: Discord.Client){
+  await deleteSignup()
+  await deleteQuallist()
+  await matchlistmaker()
+  await startsignup(message, client)
 
   message.reply("Season has been reset")
 }

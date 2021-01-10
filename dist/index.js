@@ -234,21 +234,28 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
                         let e = await db_1.gettemplatedb();
                         e.list.push(await messageReaction.message.embeds[0].image.url);
                         await db_1.updatetemplatedb(e.list);
-                        if (id)
+                        if (id) {
                             await db_1.updateProfile(id, "points", 2);
+                        }
+                        let attach = new Discord.MessageAttachment(messageReaction.message.embeds[0].image.url);
+                        (await client.channels.fetch("724827952390340648")).send("New template:", attach);
                     }
                     else if (await messageReaction.message.embeds[0].fields) {
                         "pepe";
                         let obj = await db_1.getthemes();
+                        let st = "";
                         for (let i = 0; i < messageReaction.message.embeds[0].fields.length; i++) {
                             obj.list.push(messageReaction.message.embeds[0].fields[i].value);
+                            st = messageReaction.message.embeds[0].fields[i].value;
                         }
                         await db_1.updateThemedb({
                             _id: "themelist",
                             list: obj.list
                         });
-                        if (id)
+                        if (id) {
                             await db_1.updateProfile(id, "points", 2);
+                        }
+                        (await client.channels.fetch("724837977838059560")).send("New Theme:" + `${st}`);
                     }
                     await messageReaction.message.delete();
                 }
@@ -498,11 +505,6 @@ client.on("message", async (message) => {
         await utils_1.deletechannels(message, args);
     }
     else if (command === "test") {
-        const fetch = require('node-fetch');
-        const { file } = await fetch('https://aws.random.cat/meow').then(response => {
-            response.json();
-        });
-        console.log(file);
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))
@@ -831,6 +833,11 @@ client.on("message", async (message) => {
         if (message.author.id !== "239516219445608449")
             return message.reply("You don't have those premissions");
         await utils_1.SeasonRestart(message);
+    }
+    else if (command === "cyclerestart") {
+        if (message.author.id !== "239516219445608449")
+            return message.reply("You don't have those premissions");
+        await utils_1.CycleRestart(message, client);
     }
     else if (command === "challongehelp") {
         if (!message.member.roles.cache.has('719936221572235295'))

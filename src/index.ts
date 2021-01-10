@@ -24,7 +24,7 @@ import {
 import { cooldownremove, deleteExhibitionchannels, duelcheck, exhibition } from "./commands/exhibitions"
 import { qualend, end, cancelmatch } from "./commands/winner";
 import { vs } from "./commands/card";
-import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, createrole, clearstats, qualifierresultadd, SeasonRestart, toHHMMSS, aaautoreminders } from "./misc/utils";
+import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, createrole, clearstats, qualifierresultadd, SeasonRestart, toHHMMSS, aaautoreminders, CycleRestart } from "./misc/utils";
 import { ModHelp, UserHelp, ModSignupHelp, ModChallongeHelp, DuelHelp } from "./commands/help";
 
 import {
@@ -368,17 +368,23 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             let e = await gettemplatedb()
             e.list.push(await messageReaction.message.embeds[0].image!.url)
             await updatetemplatedb(e.list)
-            if(id)
-            await updateProfile(id, "points", 2)
+            if(id){
+              await updateProfile(id, "points", 2)
+            } 
+
+            let attach = new Discord.MessageAttachment(messageReaction.message.embeds[0].image!.url);
+            
+            (<Discord.TextChannel>await client.channels.fetch("724827952390340648")).send("New template:", attach)
           }
 
           else if (await messageReaction.message.embeds[0].fields) {
             "pepe"
             let obj = await getthemes()
 
-
+            let st = ""
             for (let i = 0; i < messageReaction.message.embeds[0].fields.length; i++) {
               obj.list.push(messageReaction.message.embeds[0].fields[i].value)
+              st = messageReaction.message.embeds[0].fields[i].value
             }
 
             await updateThemedb({
@@ -386,7 +392,9 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
               list: obj.list
             })
 
-            if(id) await updateProfile(id, "points", 2)
+            if(id) {await updateProfile(id, "points", 2)}
+
+            (<Discord.TextChannel>await client.channels.fetch("724837977838059560")).send("New Theme:" + `${st}`)
 
           }
 
@@ -1242,6 +1250,11 @@ client.on("message", async message => {
   else if (command === "seasonrestart") {
     if (message.author.id !== "239516219445608449") return message.reply("You don't have those premissions")
     await SeasonRestart(message)
+  }
+
+  else if (command === "cyclerestart") {
+    if (message.author.id !== "239516219445608449") return message.reply("You don't have those premissions")
+    await CycleRestart(message, client)
   }
 
   else if (command === "challongehelp") {
