@@ -906,7 +906,8 @@ client.on("message", async message => {
     }
 
     else {
-      await exhibition(message, client, args)
+      return message.reply("Duels are closed at the moment, please check back in a few hours")
+      //await exhibition(message, client, args)
     }
 
   }

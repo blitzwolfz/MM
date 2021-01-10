@@ -543,7 +543,7 @@ client.on("message", async (message) => {
             await exhibitions_1.cooldownremove(message);
         }
         else {
-            await exhibitions_1.exhibition(message, client, args);
+            return message.reply("Duels are closed at the moment, please check back in a few hours");
         }
     }
     else if (command === "dqw" || command === "declarequalwinner") {
