@@ -60,6 +60,7 @@ async function startsignup(message, client) {
 }
 exports.startsignup = startsignup;
 async function signup(message, client, id, dm = true) {
+    var _a;
     let signup = await db_1.getSignups();
     if (message.channel.type !== "dm" && dm === true) {
         return message.reply("You have to signup in bot DM.");
@@ -82,7 +83,7 @@ async function signup(message, client, id, dm = true) {
         return message.reply("You have been signed up!");
     }
     else {
-        return;
+        return (_a = (await client.users.fetch(id))) === null || _a === void 0 ? void 0 : _a.send("You have been signed up!");
     }
 }
 exports.signup = signup;

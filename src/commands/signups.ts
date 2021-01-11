@@ -80,7 +80,7 @@ export async function signup(message: Discord.Message, client: Discord.Client, i
     }
 
     else{
-        return;
+        return (await client.users.fetch(id))?.send("You have been signed up!");
     }
 
 }
