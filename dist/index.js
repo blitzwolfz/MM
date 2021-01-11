@@ -543,7 +543,7 @@ client.on("message", async (message) => {
             await exhibitions_1.cooldownremove(message);
         }
         else {
-            return message.reply("Duels are closed at the moment, please check back in a few hours");
+            await exhibitions_1.exhibition(message, client, args);
         }
     }
     else if (command === "dqw" || command === "declarequalwinner") {
@@ -952,6 +952,5 @@ client.on("message", async (message) => {
         }
         await card_1.vs(message.channel.id, client, users);
     }
-    (await client.channels.cache.get("734075282708758540")).send(`ok`);
 });
 client.login(process.env.TOKEN);

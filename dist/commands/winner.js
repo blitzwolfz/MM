@@ -25,6 +25,7 @@ const db_1 = require("../misc/db");
 const card_1 = require("./card");
 const utils_1 = require("../misc/utils");
 const challonge_1 = require("./challonge");
+require("dotenv").config();
 async function end(client, id) {
     let match = await db_1.getMatch(id);
     await db_1.deleteActive(match);
@@ -46,7 +47,12 @@ async function end(client, id) {
             db_1.updateProfile(user1.id, "loss", 1);
         }
         await channelid.send(embed);
-        await channelid.send([await card_1.grandwinner(client, user2.id)]);
+        if (process.env.winner && match.exhibition === false) {
+            await channelid.send([await card_1.grandwinner(client, user2.id)]);
+        }
+        else {
+            await channelid.send([await card_1.winner(client, user2.id)]);
+        }
     }
     else if ((Math.floor(Date.now() / 1000) - match.p2.time > 1800) && match.p2.memedone === false) {
         console.log(Date.now() - match.p2.time);
@@ -61,7 +67,12 @@ async function end(client, id) {
             db_1.updateProfile(user2.id, "loss", 1);
         }
         await channelid.send(embed);
-        await channelid.send([await card_1.grandwinner(client, user1.id)]);
+        if (process.env.winner && match.exhibition === false) {
+            await channelid.send([await card_1.grandwinner(client, user1.id)]);
+        }
+        else {
+            await channelid.send([await card_1.winner(client, user1.id)]);
+        }
     }
     else if (((Math.floor(Date.now() / 1000) - match.p2.time > 1800) && match.p2.memedone === false) && ((Math.floor(Date.now() / 1000) - match.p1.time > 1800) && match.p1.memedone === false)) {
         user1.send("You have failed to submit your meme");
@@ -86,7 +97,12 @@ async function end(client, id) {
             db_1.updateProfile(user2.id, "points", match.p2.votes * 5);
         }
         await channelid.send(embed);
-        await channelid.send([await card_1.grandwinner(client, user1.id)]);
+        if (process.env.winner && match.exhibition === false) {
+            await channelid.send([await card_1.grandwinner(client, user1.id)]);
+        }
+        else {
+            await channelid.send([await card_1.winner(client, user1.id)]);
+        }
         if (!match.exhibition) {
             await user1.send(`Your match is over, here is the final result. You gained 25 points for winning your match, and ${(match.p1.votes * 5)} points from your votes.`, { embed: embed });
             await user2.send(`Your match is over, here is the final result. You gained ${(match.p2.votes * 5)} points from your votes.`, { embed: embed });
@@ -119,7 +135,12 @@ async function end(client, id) {
             db_1.updateProfile(user2.id, "points", (25 + (match.p2.votes * 5)));
         }
         await channelid.send(embed);
-        await channelid.send([await card_1.grandwinner(client, user2.id)]);
+        if (process.env.winner && match.exhibition === false) {
+            await channelid.send([await card_1.grandwinner(client, user2.id)]);
+        }
+        else {
+            await channelid.send([await card_1.winner(client, user2.id)]);
+        }
         if (match.exhibition === false) {
             await client.channels.cache.get("734565012378746950").send((new discord.MessageEmbed()
                 .setColor("#d7be26")

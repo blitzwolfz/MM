@@ -906,8 +906,7 @@ client.on("message", async message => {
     }
 
     else {
-      return message.reply("Duels are closed at the moment, please check back in a few hours")
-      //await exhibition(message, client, args)
+      await exhibition(message, client, args)
     }
 
   }
@@ -1407,7 +1406,6 @@ client.on("message", async message => {
     }
     await vs(message.channel.id, client, users)
   }
-  (await <Discord.TextChannel>client.channels.cache.get("734075282708758540")).send(`ok`)
 });
 
 client.login(process.env.TOKEN);
