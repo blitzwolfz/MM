@@ -1,5 +1,5 @@
 import * as discord from "discord.js"
-import { getProfile, addProfile, updateProfile } from "../misc/db"
+import { getProfile, addProfile, updateProfile, getAllProfiles } from "../misc/db"
 import { user } from "../misc/struct";
 
 
@@ -105,18 +105,18 @@ export async function createAtUsermatch(User: discord.User){
     }
 }
 
-// export async function clearstats(message: discord.Message){
+export async function clearstats(message: discord.Message){
 
-//     let profiles = await getAllProfiles("memesvoted")
+    let profiles = await getAllProfiles("memesvoted")
 
-//     for(let i = 0; i < profiles.length; i++){
-//         profiles[i].memesvoted = 0
+    for(let i = 0; i < profiles.length; i++){
+        profiles[i].memesvoted = 0
 
-//         await updateProfile(profiles[i]._id, "memesvoted", -profiles[i].memesvoted)
+        await updateProfile(profiles[i]._id, "memesvoted", -profiles[i].memesvoted)
 
-//         //await resetModProfile(profiles[i]._id, profiles[i])
-//     }
+        //await resetModProfile(profiles[i]._id, profiles[i])
+    }
 
-//     await message.reply("Profiles have been cleared")
+    await message.reply("Profiles have been cleared")
 
-// }
+}

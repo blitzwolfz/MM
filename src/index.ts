@@ -1256,6 +1256,12 @@ client.on("message", async message => {
     if (message.author.id !== "239516219445608449") return message.reply("You don't have those premissions")
     await CycleRestart(message, client)
   }
+  
+
+  else if (command === "votereset") {
+    if (message.author.id !== "239516219445608449") return message.reply("You don't have those premissions")
+    await clearstats(message)
+  }
 
   else if (command === "challongehelp") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")

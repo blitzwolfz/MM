@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createAtUsermatch = exports.createrUser = exports.stats = void 0;
+exports.clearstats = exports.createAtUsermatch = exports.createrUser = exports.stats = void 0;
 const discord = __importStar(require("discord.js"));
 const db_1 = require("../misc/db");
 async function stats(message, client) {
@@ -99,3 +99,12 @@ async function createAtUsermatch(User) {
     }
 }
 exports.createAtUsermatch = createAtUsermatch;
+async function clearstats(message) {
+    let profiles = await db_1.getAllProfiles("memesvoted");
+    for (let i = 0; i < profiles.length; i++) {
+        profiles[i].memesvoted = 0;
+        await db_1.updateProfile(profiles[i]._id, "memesvoted", -profiles[i].memesvoted);
+    }
+    await message.reply("Profiles have been cleared");
+}
+exports.clearstats = clearstats;
