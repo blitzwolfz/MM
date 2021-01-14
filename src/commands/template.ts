@@ -180,6 +180,7 @@ async function templatecheckembed(page: number = 1, client: Discord.Client, temp
     if(themes === false){
         return {
             title: `Template number ${page + 1}`,
+            description:`Total amount is ${templist.length}`,
             image: {
                 url: `${templist[page]}`,
             },

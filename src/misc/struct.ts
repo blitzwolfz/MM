@@ -67,7 +67,6 @@ export interface groupstruct{
     memes:Array<string>
     halfreminder: boolean
     fivereminder: boolean;
-    
 }
 
 export interface players{

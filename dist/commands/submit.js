@@ -287,6 +287,11 @@ async function qualsubmit(message, client) {
                             catch (error) {
                                 console.log("");
                             }
+                            try {
+                                await db_1.deleteReminder(await db_1.getReminder(message.author.id));
+                            }
+                            catch (error) {
+                            }
                             await db_1.updateQuals(match);
                             return;
                         }

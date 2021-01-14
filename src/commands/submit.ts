@@ -388,6 +388,12 @@ export async function qualsubmit(message: Discord.Message, client: Discord.Clien
                                 console.log("")
                             }
 
+                            try {
+                                await deleteReminder(await getReminder(message.author.id))
+                            } catch (error) {
+                                
+                            }
+
 
 
                             await updateQuals(match)

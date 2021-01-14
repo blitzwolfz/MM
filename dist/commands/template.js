@@ -155,6 +155,7 @@ async function templatecheckembed(page = 1, client, templist, themes = false) {
     if (themes === false) {
         return {
             title: `Template number ${page + 1}`,
+            description: `Total amount is ${templist.length}`,
             image: {
                 url: `${templist[page]}`,
             },
