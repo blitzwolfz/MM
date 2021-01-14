@@ -416,15 +416,16 @@ export async function startmodqual(message: discord.Message, client: discord.Cli
                     .setDescription(`Mods please restart this match`)
                     .setTimestamp())
             }
-            rantemp = await gettempStruct(message.channel.id)
-            await (<discord.TextChannel>client.channels.cache.get("738047732312309870")).send(`<#${message.channel.id}> theme is ${newmatch.template}`)
-            
+            rantemp = await gettempStruct(message.channel.id)            
         }
 
         newmatch.template = rantemp.url
         newmatch.istheme = true
         await deletetempStruct(rantemp._id)
+        await (<discord.TextChannel>client.channels.cache.get("738047732312309870")).send(`<#${message.channel.id}> theme is ${newmatch.template}`)
     }
+
+
 
     let embed = new discord.MessageEmbed()
         .setTitle(`Qualifiying match`)

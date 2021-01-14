@@ -312,11 +312,11 @@ async function startmodqual(message, client) {
                     .setTimestamp());
             }
             rantemp = await db_1.gettempStruct(message.channel.id);
-            await client.channels.cache.get("738047732312309870").send(`<#${message.channel.id}> theme is ${newmatch.template}`);
         }
         newmatch.template = rantemp.url;
         newmatch.istheme = true;
         await db_1.deletetempStruct(rantemp._id);
+        await client.channels.cache.get("738047732312309870").send(`<#${message.channel.id}> theme is ${newmatch.template}`);
     }
     let embed = new discord.MessageEmbed()
         .setTitle(`Qualifiying match`)
