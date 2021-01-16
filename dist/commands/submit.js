@@ -131,7 +131,7 @@ async function submit(message, client) {
     else {
         let match = await (await db_1.getActive()).find(x => (x.p1.userid === message.author.id || x.p2.userid === message.author.id));
         console.log(match);
-        if (match.p1.memedone === false && match.p1.memelink.length === 0 && match.p1.userid === message.author.id) {
+        if (match.p1.memedone === false && match.p1.userid === message.author.id) {
             match.p1.memelink = (message.attachments.array()[0].url);
             match.p1.memedone = true;
             if (match.split) {
@@ -180,7 +180,7 @@ async function submit(message, client) {
             await db_1.updateActive(match);
             return await message.channel.send("Your meme has been attached!");
         }
-        if (match.p2.memedone === false && match.p2.memelink.length === 0 && match.p2.userid === message.author.id) {
+        if (match.p2.memedone === false && match.p2.userid === message.author.id) {
             match.p2.memelink = (message.attachments.array()[0].url);
             match.p2.memedone = true;
             if (match.split) {

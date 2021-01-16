@@ -193,6 +193,10 @@ export const DuelHelp = {
         {
             name: '`!duel check`',
             value: `Tells you how long till you can start another duel`,
+        },
+        {
+            name:'`!duel resetcd`',
+            value:'0_o'
         }
     ],
     timestamp: new Date()

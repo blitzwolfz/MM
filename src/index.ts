@@ -51,6 +51,7 @@ import {
   updateThemedb,
   getthemes,
   getProfile,
+  insertActive,
 } from "./misc/db";
 
 import { template, approvetemplate, addTheme, removeTheme, themelistLb, templatecheck } from "./commands/template";
@@ -740,10 +741,8 @@ client.on("message", async message => {
 
   else if (command === "test") {
 	
-    // await message.reply("no").then(async message => { await message.react('🤏') })
+    await message.reply("no").then(async message => { await message.react('🤏') })
     
-  
-
     // await insertReminder(
     //   {
     //     _id:message.author.id,
