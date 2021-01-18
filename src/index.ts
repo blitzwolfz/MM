@@ -286,10 +286,11 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
       .get(messageReaction.message.guild!.id)!
       .members.cache.get(user.id)!
       .roles.cache.has("719936221572235295")
-      === true) {
+      === true || await (await getMatch(messageReaction.message.channel.id)).p1.userid === user.id 
+      || await (await getMatch(messageReaction.message.channel.id)).p2.userid === user.id) {
 
       if (messageReaction.emoji.name === '🅰️') {
-
+        if(await (await getMatch(messageReaction.message.channel.id)).p1.userid !== user.id) return user.send("No.");
         let id = await (await getMatch(messageReaction.message.channel.id)).p1.userid
         await splitregular(messageReaction.message, client, id)
         await updateModProfile(messageReaction.message.author.id, "modactions", 1)
@@ -299,7 +300,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
         await (<Discord.TextChannel>client.channels.cache.get("748760056333336627")).send({
 
           embed: {
-            description: `<@${user.id}>  ${user.tag} has started <@${id}> in <#${messageReaction.message.channel}>`,
+            description: `<@${user.id}>/${user.tag} has started <@${id}> in <#${messageReaction.message.channel}>`,
             color: "#d7be26",
             timestamp: new Date()
           }
@@ -308,7 +309,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
       }
 
       else if (messageReaction.emoji.name === '🅱️') {
-
+        if(await (await getMatch(messageReaction.message.channel.id)).p2.userid !== user.id) return user.send("No.");
         let id = await (await getMatch(messageReaction.message.channel.id)).p2.userid
         await splitregular(messageReaction.message, client, id)
         await updateModProfile(messageReaction.message.author.id, "modactions", 1)
@@ -318,7 +319,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
         await (<Discord.TextChannel>client.channels.cache.get("748760056333336627")).send({
 
           embed: {
-            description: `<@${user.id}>  ${user.tag} has started <@${id}> in <#${messageReaction.message.channel}>`,
+            description: `<@${user.id}>/${user.tag} has started <@${id}> in <#${messageReaction.message.channel}>`,
             color: "#d7be26",
             timestamp: new Date()
           }

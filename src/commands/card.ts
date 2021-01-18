@@ -22,19 +22,12 @@ const prefix = process.env.PREFIX!
 
 export async function vs(channelid: string, client: Discord.Client, users: string[]){
 	//let users:string[] = []
-	console.log(prefix)
-
+	
 	let ch = <Discord.TextChannel> await client.channels.fetch(channelid)
 
     const canvas = Canvas.createCanvas(1917 , 1168);
 	const ctx = canvas.getContext('2d');
-		
-	
-	
-    
-    // console.log(args)
 
-    // console.log(users)
     let user1 = (await client.users.fetch(users[0]))
 	let user2 = (await client.users.fetch(users[1]))
 	const avatar = await Canvas.loadImage(user1.displayAvatarURL({ format: 'png', size: 1024}));
@@ -49,15 +42,10 @@ export async function vs(channelid: string, client: Discord.Client, users: strin
 
 	await ctx.drawImage(await Canvas.loadImage("newbackground.png"), 0, 0, canvas.width, canvas.height);
 
-
-
-
-    
 	const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'welcome-image.jpg');
 	//await message.channel.send({ files: [attachment]})
 	await ch.send(attachment)
 }
-
 
 export async function winner(client: Discord.Client, userid: string){
 	let user = await client.users.fetch(userid)

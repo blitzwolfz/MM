@@ -24,7 +24,6 @@ const Canvas = require('canvas');
 const Discord = __importStar(require("discord.js"));
 const prefix = process.env.PREFIX;
 async function vs(channelid, client, users) {
-    console.log(prefix);
     let ch = await client.channels.fetch(channelid);
     const canvas = Canvas.createCanvas(1917, 1168);
     const ctx = canvas.getContext('2d');
