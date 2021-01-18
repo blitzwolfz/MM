@@ -175,7 +175,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             === true || await (await db_1.getMatch(messageReaction.message.channel.id)).p1.userid === user.id
             || await (await db_1.getMatch(messageReaction.message.channel.id)).p2.userid === user.id) {
             if (messageReaction.emoji.name === '🅰️') {
-                if (await (await db_1.getMatch(messageReaction.message.channel.id)).p1.userid !== user.id) {
+                if (await (await db_1.getMatch(messageReaction.message.channel.id)).p2.userid === user.id) {
                     await messageReaction.users.remove(user.id);
                     return user.send("No.");
                 }
@@ -193,7 +193,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
                 });
             }
             else if (messageReaction.emoji.name === '🅱️') {
-                if (await (await db_1.getMatch(messageReaction.message.channel.id)).p2.userid !== user.id) {
+                if (await (await db_1.getMatch(messageReaction.message.channel.id)).p1.userid === user.id) {
                     await messageReaction.users.remove(user.id);
                     return user.send("No.");
                 }
