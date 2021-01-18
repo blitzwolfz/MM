@@ -175,8 +175,10 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             === true || await (await db_1.getMatch(messageReaction.message.channel.id)).p1.userid === user.id
             || await (await db_1.getMatch(messageReaction.message.channel.id)).p2.userid === user.id) {
             if (messageReaction.emoji.name === '🅰️') {
-                if (await (await db_1.getMatch(messageReaction.message.channel.id)).p1.userid !== user.id)
+                if (await (await db_1.getMatch(messageReaction.message.channel.id)).p1.userid !== user.id) {
+                    await messageReaction.users.remove(user.id);
                     return user.send("No.");
+                }
                 let id = await (await db_1.getMatch(messageReaction.message.channel.id)).p1.userid;
                 await start_1.splitregular(messageReaction.message, client, id);
                 await db_1.updateModProfile(messageReaction.message.author.id, "modactions", 1);
@@ -184,15 +186,17 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
                 await messageReaction.users.remove(user.id);
                 await client.channels.cache.get("748760056333336627").send({
                     embed: {
-                        description: `<@${user.id}>/${user.tag} has started <@${id}> in <#${messageReaction.message.channel}>`,
+                        description: `<@${user.id}>/${user.tag} has started <@${id}> in ${messageReaction.message.channel}`,
                         color: "#d7be26",
                         timestamp: new Date()
                     }
                 });
             }
             else if (messageReaction.emoji.name === '🅱️') {
-                if (await (await db_1.getMatch(messageReaction.message.channel.id)).p2.userid !== user.id)
+                if (await (await db_1.getMatch(messageReaction.message.channel.id)).p2.userid !== user.id) {
+                    await messageReaction.users.remove(user.id);
                     return user.send("No.");
+                }
                 let id = await (await db_1.getMatch(messageReaction.message.channel.id)).p2.userid;
                 await start_1.splitregular(messageReaction.message, client, id);
                 await db_1.updateModProfile(messageReaction.message.author.id, "modactions", 1);
@@ -200,7 +204,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
                 await messageReaction.users.remove(user.id);
                 await client.channels.cache.get("748760056333336627").send({
                     embed: {
-                        description: `<@${user.id}>/${user.tag} has started <@${id}> in <#${messageReaction.message.channel}>`,
+                        description: `<@${user.id}>/${user.tag} has started <@${id}> in ${messageReaction.message.channel}`,
                         color: "#d7be26",
                         timestamp: new Date()
                     }
