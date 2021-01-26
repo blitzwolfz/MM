@@ -522,8 +522,9 @@ async function CycleRestart(message, client) {
     await db_1.deleteSignup();
     await db_1.deleteQuallist();
     await challonge_1.matchlistmaker();
+    await clearstats(message);
     await signups_1.startsignup(message, client);
-    message.reply("Season has been reset");
+    await message.reply("Season has been reset");
 }
 exports.CycleRestart = CycleRestart;
 async function saveDatatofile(message) {

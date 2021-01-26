@@ -28,7 +28,9 @@ export async function startsignup(message: Discord.Message, client: Discord.Clie
 
                 let channel = <Discord.TextChannel> await client.channels.fetch("722284266108747880")
 
-                await channel.send(em)
+                await channel.send(em).then(async msg =>{
+                    msg.react('🗳️')
+                })
             }
 
             else{

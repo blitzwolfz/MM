@@ -43,7 +43,9 @@ async function startsignup(message, client) {
                     .setColor("#d7be26")
                     .setTimestamp();
                 let channel = await client.channels.fetch("722284266108747880");
-                await channel.send(em);
+                await channel.send(em).then(async (msg) => {
+                    msg.react('🗳️');
+                });
             }
             else {
                 return message.reply("A signup is already active!");

@@ -779,9 +779,10 @@ export async function CycleRestart(message: Discord.Message, client: Discord.Cli
   await deleteSignup()
   await deleteQuallist()
   await matchlistmaker()
+  await clearstats(message)
   await startsignup(message, client)
 
-  message.reply("Season has been reset")
+  await message.reply("Season has been reset")
 }
 
 export async function saveDatatofile(message: Discord.Message){
