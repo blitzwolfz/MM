@@ -283,6 +283,7 @@ async function CreateCustomQualGroups(message, args) {
                 if (qualgroups) {
                     qualgroups.users = groups;
                     await db_1.updateQuallist(qualgroups);
+                    return message.reply("Made qualifier groups");
                 }
                 else {
                     qualgroups = {
@@ -291,8 +292,8 @@ async function CreateCustomQualGroups(message, args) {
                         users: groups
                     };
                     await db_1.insertQuallist(qualgroups);
+                    return message.reply("Made qualifier groups");
                 }
-                return message.reply("Made qualifier groups");
             }
             else {
                 return message.reply("Signups haven't closed");

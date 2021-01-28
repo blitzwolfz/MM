@@ -422,6 +422,7 @@ export async function CreateCustomQualGroups(message: Discord.Message, args: str
                     qualgroups.users = groups
 
                     await updateQuallist(qualgroups)
+                    return message.reply("Made qualifier groups")
                 }
 
                 else {
@@ -432,9 +433,8 @@ export async function CreateCustomQualGroups(message: Discord.Message, args: str
                     }
 
                     await insertQuallist(qualgroups)
+                    return message.reply("Made qualifier groups")
                 }
-
-                return message.reply("Made qualifier groups")
 
             }
 
