@@ -277,7 +277,7 @@ async function CreateCustomQualGroups(message, args) {
                 let groups = [];
                 groups = (await makeCustomGroup(gNum, Signups.users.slice(0, am + 1)));
                 message.reply(await (await makeCustomGroup(gNum, Signups.users.slice(0, am + 1))).length);
-                groups.concat(groups, await makeCustomGroup(gNum2, Signups.users.slice(am + 1, am2)));
+                groups = groups.concat(await makeCustomGroup(gNum2, Signups.users.slice(am + 1, am2)));
                 message.reply(await (await makeCustomGroup(gNum, Signups.users.slice(am + 1, am2))).length);
                 let qualgroups = await db_1.getQuallist();
                 if (qualgroups) {
