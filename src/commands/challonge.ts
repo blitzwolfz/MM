@@ -410,10 +410,10 @@ export async function CreateCustomQualGroups(message: Discord.Message, args: str
 
                 let groups:string[][] = [];
 
-                groups = (await makeGroup(gNum, Signups.users.slice(0, am+1)))
-                message.reply(await (await makeGroup(gNum, Signups.users.slice(0, am+1))).length)
-                groups.concat(groups, await makeGroup(gNum2, Signups.users.slice(am+1, am2)))
-                message.reply(await (await makeGroup(gNum, Signups.users.slice(am+1, am2))).length)
+                groups = (await makeCustomGroup(gNum, Signups.users.slice(0, am+1)))
+                message.reply(await (await makeCustomGroup(gNum, Signups.users.slice(0, am+1))).length)
+                groups.concat(groups, await makeCustomGroup(gNum2, Signups.users.slice(am+1, am2)))
+                message.reply(await (await makeCustomGroup(gNum, Signups.users.slice(am+1, am2))).length)
 
                 
                 let qualgroups: quallist = await getQuallist()
@@ -464,6 +464,26 @@ async function makeGroup(amount: number, list: string[]) {
 
     while(i < n){
         chunks.push(list.slice(i, i += amount));
+    }
+
+    return chunks;
+
+}
+
+async function makeCustomGroup(amount: number, list: string[]) {
+    
+    // function splitArrayIntoChunksOfLen(arr, len) {
+    //     var chunks = [], i = 0, n = arr.length;
+    //     while (i < n) {
+    //       chunks.push(arr.slice(i, i += len));
+    //     }
+    //     return chunks;
+    //   }
+
+    let chunks:any[] = [], n = list.length;
+
+    for(let i = 0; i < n; i++){
+        chunks.push(list[i])
     }
 
     return chunks;

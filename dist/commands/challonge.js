@@ -275,10 +275,10 @@ async function CreateCustomQualGroups(message, args) {
         if (Signups) {
             if (Signups.open === false) {
                 let groups = [];
-                groups = (await makeGroup(gNum, Signups.users.slice(0, am + 1)));
-                message.reply(await (await makeGroup(gNum, Signups.users.slice(0, am + 1))).length);
-                groups.concat(groups, await makeGroup(gNum2, Signups.users.slice(am + 1, am2)));
-                message.reply(await (await makeGroup(gNum, Signups.users.slice(am + 1, am2))).length);
+                groups = (await makeCustomGroup(gNum, Signups.users.slice(0, am + 1)));
+                message.reply(await (await makeCustomGroup(gNum, Signups.users.slice(0, am + 1))).length);
+                groups.concat(groups, await makeCustomGroup(gNum2, Signups.users.slice(am + 1, am2)));
+                message.reply(await (await makeCustomGroup(gNum, Signups.users.slice(am + 1, am2))).length);
                 let qualgroups = await db_1.getQuallist();
                 if (qualgroups) {
                     qualgroups.users = groups;
@@ -309,6 +309,13 @@ async function makeGroup(amount, list) {
     let chunks = [], i = 0, n = list.length;
     while (i < n) {
         chunks.push(list.slice(i, i += amount));
+    }
+    return chunks;
+}
+async function makeCustomGroup(amount, list) {
+    let chunks = [], n = list.length;
+    for (let i = 0; i < n; i++) {
+        chunks.push(list[i]);
     }
     return chunks;
 }
