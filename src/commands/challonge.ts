@@ -480,10 +480,10 @@ async function makeCustomGroup(amount: number, list: string[]) {
     //     return chunks;
     //   }
 
-    let chunks:any[] = [], n = list.length;
+    let chunks:any[] = [], i = 0, n = list.length;
 
-    for(let i = 0; i < n; i++){
-        chunks.push(list[i])
+    while(i < n){
+        chunks.push(list.slice(i, i += amount));
     }
 
     return chunks;

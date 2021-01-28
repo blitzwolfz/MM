@@ -313,9 +313,9 @@ async function makeGroup(amount, list) {
     return chunks;
 }
 async function makeCustomGroup(amount, list) {
-    let chunks = [], n = list.length;
-    for (let i = 0; i < n; i++) {
-        chunks.push(list[i]);
+    let chunks = [], i = 0, n = list.length;
+    while (i < n) {
+        chunks.push(list.slice(i, i += amount));
     }
     return chunks;
 }
