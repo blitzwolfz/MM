@@ -411,9 +411,9 @@ export async function CreateCustomQualGroups(message: Discord.Message, args: str
                 let groups:string[][] = [];
 
                 for(let q = 0; q < 2; q++){
-                    groups.concat(await makeGroup(gNum, Signups.users.slice(0, am+1)))
+                    groups = (await makeGroup(gNum, Signups.users.slice(0, am+1)))
                     message.reply(await (await makeGroup(gNum, Signups.users.slice(0, am+1))).length)
-                    groups.concat(await makeGroup(gNum2, Signups.users.slice(am+1, am2)))
+                    groups.concat(groups, await makeGroup(gNum2, Signups.users.slice(am+1, am2)))
                     message.reply(await (await makeGroup(gNum, Signups.users.slice(am+1, am2))).length)
 
                 }
