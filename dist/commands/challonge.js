@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.matchlistmaker = exports.removequalwinner = exports.declarequalwinner = exports.GroupSearch = exports.matchwinner = exports.CreateQualGroups = exports.QualChannelCreation = exports.ChannelCreation = exports.CreateChallongeMatchBracket = exports.CreateChallongeQualBracket = void 0;
+exports.matchlistmaker = exports.removequalwinner = exports.declarequalwinner = exports.GroupSearch = exports.matchwinner = exports.CreateCustomQualGroups = exports.CreateQualGroups = exports.QualChannelCreation = exports.ChannelCreation = exports.CreateChallongeMatchBracket = exports.CreateChallongeQualBracket = void 0;
 const Discord = __importStar(require("discord.js"));
 const db_1 = require("../misc/db");
 const utils_1 = require("../misc/utils");
@@ -261,6 +261,49 @@ async function CreateQualGroups(message, args) {
     }
 }
 exports.CreateQualGroups = CreateQualGroups;
+async function CreateCustomQualGroups(message, args) {
+    if (message.member.roles.cache.has('724818272922501190')
+        || message.member.roles.cache.has('724832462286356590')) {
+        if (!args) {
+            return message.reply("Please enter how many people you want in a group");
+        }
+        let gNum = parseInt(args[0]);
+        let am = parseInt(args[2]);
+        let gNum2 = parseInt(args[1]);
+        let am2 = parseInt(args[3]);
+        let Signups = await db_1.getSignups();
+        if (Signups) {
+            if (Signups.open === false) {
+                let groups = [];
+                for (let q = 0; q < 2; q++) {
+                    groups.concat(await makeGroup(gNum, Signups.users.slice(0, am + 1)));
+                    groups.concat(await makeGroup(gNum2, Signups.users.slice(am + 1, am2)));
+                }
+                let qualgroups = await db_1.getQuallist();
+                if (qualgroups) {
+                    qualgroups.users = groups;
+                    await db_1.updateQuallist(qualgroups);
+                }
+                else {
+                    qualgroups = {
+                        _id: 2,
+                        url: "",
+                        users: groups
+                    };
+                    await db_1.insertQuallist(qualgroups);
+                }
+                return message.reply("Made qualifier groups");
+            }
+            else {
+                return message.reply("Signups haven't closed");
+            }
+        }
+        else {
+            return message.reply("No one signed up");
+        }
+    }
+}
+exports.CreateCustomQualGroups = CreateCustomQualGroups;
 async function makeGroup(amount, list) {
     let chunks = [], i = 0, n = list.length;
     while (i < n) {

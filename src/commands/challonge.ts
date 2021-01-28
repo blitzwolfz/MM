@@ -1,5 +1,6 @@
 //import { matchlist } from "../misc/struct";
 import * as Discord from "discord.js";
+import { parse } from "dotenv/types";
 import { getSignups, getMatchlist, updateMatchlist, insertMatchlist, insertQuallist, getQuallist, updateQuallist, updateProfile, insertReminder } from "../misc/db";
 import { matchlist, quallist } from "../misc/struct";
 import { indexOf2d } from "../misc/utils";
@@ -354,6 +355,68 @@ export async function CreateQualGroups(message: Discord.Message, args: string[])
         if (Signups) {
             if (Signups.open === false) {
                 let groups = await makeGroup(gNum, Signups.users)
+                let qualgroups: quallist = await getQuallist()
+                if (qualgroups) {
+                    qualgroups.users = groups
+
+                    await updateQuallist(qualgroups)
+                }
+
+                else {
+                    qualgroups = {
+                        _id: 2,
+                        url: "",
+                        users: groups
+                    }
+
+                    await insertQuallist(qualgroups)
+                }
+
+                return message.reply("Made qualifier groups")
+
+            }
+
+            else {
+                return message.reply("Signups haven't closed")
+            }
+
+        }
+
+        else {
+            return message.reply("No one signed up")
+        }
+
+    }
+}
+
+export async function CreateCustomQualGroups(message: Discord.Message, args: string[]) {
+    if (message.member!.roles.cache.has('724818272922501190')
+        || message.member!.roles.cache.has('724832462286356590')) {
+
+
+        if (!args) {
+            return message.reply("Please enter how many people you want in a group")
+        }
+        let gNum = parseInt(args[0])
+        let am = parseInt(args[2])
+        let gNum2 = parseInt(args[1])
+        let am2 = parseInt(args[3])
+
+        let Signups = await getSignups()
+
+
+        if (Signups) {
+            if (Signups.open === false) {
+
+                let groups:string[][] = [];
+
+                for(let q = 0; q < 2; q++){
+                    groups.concat(await makeGroup(gNum, Signups.users.slice(0, am+1)))
+                    groups.concat(await makeGroup(gNum2, Signups.users.slice(am+1, am2)))
+                }
+
+
+                
                 let qualgroups: quallist = await getQuallist()
                 if (qualgroups) {
                     qualgroups.users = groups

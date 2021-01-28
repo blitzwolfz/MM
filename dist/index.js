@@ -523,6 +523,13 @@ client.on("message", async (message) => {
             return;
         await challonge_1.CreateQualGroups(message, args);
     }
+    else if (command === "createcustomqualgroup") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
+        if (message.channel.id === "722285800225505879" || message.channel.id === "722285842705547305" || message.channel.id === "724839353129369681")
+            return;
+        await challonge_1.CreateCustomQualGroups(message, args);
+    }
     else if (command === "viewgroups") {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");

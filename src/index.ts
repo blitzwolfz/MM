@@ -75,6 +75,7 @@ import {
   GroupSearch,
   removequalwinner,
   QualChannelCreation,
+  CreateCustomQualGroups,
 } from "./commands/challonge";
 import { manuallyverify, verify } from "./misc/verify";
 import { cockratingLB, winningLB, quallistGroups } from "./misc/lbs";
@@ -875,6 +876,13 @@ client.on("message", async message => {
     if (message.channel.id === "722285800225505879" || message.channel.id === "722285842705547305" || message.channel.id === "724839353129369681") return;
 
     await CreateQualGroups(message, args)
+  }
+
+  else if (command === "createcustomqualgroup") {
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
+    if (message.channel.id === "722285800225505879" || message.channel.id === "722285842705547305" || message.channel.id === "724839353129369681") return;
+
+    await CreateCustomQualGroups(message, args)
   }
 
   else if (command === "viewgroups") {
