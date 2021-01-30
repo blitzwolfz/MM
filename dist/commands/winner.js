@@ -220,16 +220,22 @@ async function qualend(client, id) {
         if (match.playersdone.length <= 2 && match.playersdone.length >= 1) {
             let fields = [];
             for (let i = 0; i < match.votes.length; i++)
-                if (match.players[i].memedone) {
+                if (match.players[i].memedone && match.playersdone.length === 2) {
                     fields.push({
                         name: `<@${match.players[i].userid}>`,
-                        value: `Finished with 50`
+                        value: `Finished with 50 | Earned: 50% of the votes\nUserID: ${match.players[i].userid}`
+                    });
+                }
+                else if (match.players[i].memedone && match.playersdone.length === 1) {
+                    fields.push({
+                        name: `<@${match.players[i].userid}>`,
+                        value: `Finished with 100 | Earned: 100% of the votes\nUserID: ${match.players[i].userid}`
                     });
                 }
                 else if (match.players[i].memedone === false) {
                     fields.push({
-                        name: `<@${match.players[i].userid}>`,
-                        value: `Failed to submit meme!`
+                        name: `<@${match.players[i].userid}>-Failed`,
+                        value: `Finished with ${0} | Earned: ${0}% of the votes\nUserID: ${match.players[i].userid}`
                     });
                 }
             await db_1.deleteQuals(match);

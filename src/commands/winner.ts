@@ -286,17 +286,27 @@ export async function qualend(client: discord.Client, id: string) {
         if (match.playersdone.length <= 2 && match.playersdone.length >= 1) {
 
             let fields = [];
+            //value: `${match.players[i].memedone ? `Finished with ${match.votes[i].length} | Earned: ${Math.floor(match.votes[i].length / totalvotes * 100)}% of the votes\nUserID: ${match.players[i].userid}` : `Finished with ${0} | Earned: ${0}% of the votes\nUserID: ${match.players[i].userid}`}`, //`Came in with ${match.votes[i].length}`,
+
             for (let i = 0; i < match.votes.length; i++)
-                if (match.players[i].memedone) {
+                if (match.players[i].memedone && match.playersdone.length === 2) {
                     fields.push({
                         name: `<@${match.players[i].userid}>`,
-                        value: `Finished with 50`
+                        value: `Finished with 50 | Earned: 50% of the votes\nUserID: ${match.players[i].userid}`
                     });
                 }
-                else if (match.players[i].memedone === false) {
+
+                else if (match.players[i].memedone && match.playersdone.length === 1) {
                     fields.push({
                         name: `<@${match.players[i].userid}>`,
-                        value: `Failed to submit meme!`
+                        value: `Finished with 100 | Earned: 100% of the votes\nUserID: ${match.players[i].userid}`
+                    });
+                }
+
+                else if (match.players[i].memedone === false) {
+                    fields.push({
+                        name: `<@${match.players[i].userid}>-Failed`,
+                        value: `Finished with ${0} | Earned: ${0}% of the votes\nUserID: ${match.players[i].userid}`
                     });
                 }
 
