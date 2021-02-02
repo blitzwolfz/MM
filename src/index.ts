@@ -291,7 +291,11 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
       || await (await getMatch(messageReaction.message.channel.id)).p2.userid === user.id) {
 
       if (messageReaction.emoji.name === '🅰️') {
-        if(await (await getMatch(messageReaction.message.channel.id)).p2.userid === user.id){
+        if(await (await getMatch(messageReaction.message.channel.id)).p2.userid === user.id &&user.client.guilds.cache
+        .get(messageReaction.message.guild!.id)!
+        .members.cache.get(user.id)!
+        .roles.cache.has("719936221572235295")
+        === false){
           await messageReaction.users.remove(user.id)
           return user.send("No.");
         }
@@ -314,7 +318,11 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
 
       else if (messageReaction.emoji.name === '🅱️') {
         
-        if(await (await getMatch(messageReaction.message.channel.id)).p1.userid === user.id){
+        if(await (await getMatch(messageReaction.message.channel.id)).p1.userid === user.id && user.client.guilds.cache
+        .get(messageReaction.message.guild!.id)!
+        .members.cache.get(user.id)!
+        .roles.cache.has("719936221572235295")
+        === false){
           await messageReaction.users.remove(user.id)
           return user.send("No.");
         }

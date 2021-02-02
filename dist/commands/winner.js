@@ -222,19 +222,19 @@ async function qualend(client, id) {
             for (let i = 0; i < match.votes.length; i++)
                 if (match.players[i].memedone && match.playersdone.length === 2) {
                     fields.push({
-                        name: `<@${match.players[i].userid}>`,
+                        name: `${await (await client.users.fetch(match.players[i].userid)).username}`,
                         value: `Finished with 50 | Earned: 50% of the votes\nUserID: ${match.players[i].userid}`
                     });
                 }
                 else if (match.players[i].memedone && match.playersdone.length === 1) {
                     fields.push({
-                        name: `<@${match.players[i].userid}>`,
+                        name: `${await (await client.users.fetch(match.players[i].userid)).username}`,
                         value: `Finished with 100 | Earned: 100% of the votes\nUserID: ${match.players[i].userid}`
                     });
                 }
                 else if (match.players[i].memedone === false) {
                     fields.push({
-                        name: `<@${match.players[i].userid}>-Failed`,
+                        name: `<@${await (await client.users.fetch(match.players[i].userid)).username}>-Failed`,
                         value: `Finished with ${0} | Earned: ${0}% of the votes\nUserID: ${match.players[i].userid}`
                     });
                 }
