@@ -2,10 +2,14 @@ import * as Discord from "discord.js"
 import { getProfile, gettemplatedb, getthemes, updatetemplatedb, updateThemedb } from "../misc/db"
 import { backwardsFilter, forwardsFilter } from "../misc/utils"
 
-export async function template(message: Discord.Message, client: Discord.Client) {
+export async function template(message: Discord.Message, client: Discord.Client, args:string[]) {
     let channel = <Discord.TextChannel>client.channels.cache.get("722291683030466621")
 
-    if (message.attachments.size > 10) {
+    if (message.attachments.size > 10 ) {//&& !args.includes("-mod")
+        return message.reply("You can't submit more than ten images due to Discord limit.")
+    }
+
+    if (message.attachments.size > 1 && !args.includes("-mod")) {
         return message.reply("You can't submit more than ten images")
     }
 

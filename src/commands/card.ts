@@ -2,7 +2,6 @@
 const Canvas = require('canvas');
 
 import * as Discord from "discord.js"
-const prefix = process.env.PREFIX!
 
 // function applyText(canvas: any, text: string){
 //     const ctx = canvas.getContext('2d');

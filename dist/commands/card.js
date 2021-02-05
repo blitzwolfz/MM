@@ -22,7 +22,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.grandwinner = exports.winner = exports.vs = void 0;
 const Canvas = require('canvas');
 const Discord = __importStar(require("discord.js"));
-const prefix = process.env.PREFIX;
 async function vs(channelid, client, users) {
     let ch = await client.channels.fetch(channelid);
     const canvas = Canvas.createCanvas(1917, 1168);

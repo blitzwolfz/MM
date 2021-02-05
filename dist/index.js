@@ -598,7 +598,7 @@ client.on("message", async (message) => {
         await submit_1.qualsubmit(message, client);
     }
     else if (command === "submittemplate" || command === "template") {
-        await template_1.template(message, client);
+        await template_1.template(message, client, args);
     }
     else if (command === "themesubmit") {
         let channel = client.channels.cache.get("722291683030466621");

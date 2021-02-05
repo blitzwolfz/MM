@@ -1,6 +1,5 @@
 //import { matchlist } from "../misc/struct";
 import * as Discord from "discord.js";
-import { parse } from "dotenv/types";
 import { getSignups, getMatchlist, updateMatchlist, insertMatchlist, insertQuallist, getQuallist, updateQuallist, updateProfile, insertReminder } from "../misc/db";
 import { matchlist, quallist } from "../misc/struct";
 import { indexOf2d } from "../misc/utils";

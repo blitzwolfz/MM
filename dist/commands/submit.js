@@ -165,7 +165,7 @@ async function submit(message, client) {
                     console.log("");
                 }
             }
-            if (match.p1.donesplit && match.p2.donesplit && match.split) {
+            if (match.p1.donesplit && match.p1.memedone && match.p2.donesplit && match.p2.memedone && match.split) {
                 console.log("not a split match");
                 match.split = false;
                 match.p1.time = Math.floor(Date.now() / 1000) - 3200;

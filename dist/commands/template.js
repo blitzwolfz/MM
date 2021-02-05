@@ -23,9 +23,12 @@ exports.templatecheck = exports.themelistLb = exports.removeTheme = exports.addT
 const Discord = __importStar(require("discord.js"));
 const db_1 = require("../misc/db");
 const utils_1 = require("../misc/utils");
-async function template(message, client) {
+async function template(message, client, args) {
     let channel = client.channels.cache.get("722291683030466621");
     if (message.attachments.size > 10) {
+        return message.reply("You can't submit more than ten images due to Discord limit.");
+    }
+    if (message.attachments.size > 1 && !args.includes("-mod")) {
         return message.reply("You can't submit more than ten images");
     }
     else if (message.attachments.size <= 0) {

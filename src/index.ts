@@ -51,7 +51,6 @@ import {
   updateThemedb,
   getthemes,
   getProfile,
-  insertActive,
 } from "./misc/db";
 
 import { template, approvetemplate, addTheme, removeTheme, themelistLb, templatecheck } from "./commands/template";
@@ -964,7 +963,7 @@ client.on("message", async message => {
   }
 
   else if (command === "submittemplate" || command === "template") {
-    await template(message, client)
+    await template(message, client, args)
   }
 
   else if (command === "themesubmit") {
