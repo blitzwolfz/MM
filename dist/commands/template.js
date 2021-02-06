@@ -35,16 +35,32 @@ async function template(message, client, args) {
         return message.reply("Your image was not submitted properly. Contact a mod");
     }
     else {
-        for (let i = 0; i < message.attachments.array().length; i++) {
-            await channel.send(new Discord.MessageEmbed()
-                .setTitle(`${message.author.username} has submitted a new template(s)`)
-                .setDescription(`<@${message.author.id}>`)
-                .setImage(message.attachments.array()[i].url)).then(async (message) => {
-                await message.react('🏁');
-                await message.react('🗡️');
-            });
+        if (!args.includes("-mod")) {
+            for (let i = 0; i < message.attachments.array().length; i++) {
+                await channel.send(new Discord.MessageEmbed()
+                    .setTitle(`${message.author.username} has submitted a new template(s)`)
+                    .setDescription(`<@${message.author.id}>`)
+                    .setImage(message.attachments.array()[i].url)).then(async (message) => {
+                    await message.react('🏁');
+                    await message.react('🗡️');
+                });
+            }
+            await message.reply(`Thank you for submitting templates. You will gain a maximum of ${message.attachments.array().length * 2} points if they are approved. You currently have ${(await db_1.getProfile(message.author.id)).points} points`);
         }
-        await message.reply(`Thank you for submitting templates. You will gain a maximum of ${message.attachments.array().length * 2} points if they are approved. You currently have ${(await db_1.getProfile(message.author.id)).points} points`);
+        else if (args.includes("-mod")) {
+            let id = await utils_1.getUser(await message.author.id);
+            let e = await db_1.gettemplatedb();
+            for (let i = 0; i < message.attachments.array().length; i++) {
+                e.list.push(message.attachments.array()[i].url);
+                if (id) {
+                    await db_1.updateProfile(id, "points", 2);
+                }
+                let attach = new Discord.MessageAttachment(message.attachments.array()[i].url);
+                (await client.channels.fetch("724827952390340648")).send("New template:", attach);
+            }
+            await db_1.updatetemplatedb(e.list);
+            return message.reply(`You gained ${message.attachments.array().length * 2} points for submitting ${message.attachments.array().length} templates.`);
+        }
     }
 }
 exports.template = template;

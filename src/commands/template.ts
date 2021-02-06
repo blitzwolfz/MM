@@ -1,6 +1,6 @@
 import * as Discord from "discord.js"
-import { getProfile, gettemplatedb, getthemes, updatetemplatedb, updateThemedb } from "../misc/db"
-import { backwardsFilter, forwardsFilter } from "../misc/utils"
+import { getProfile, gettemplatedb, getthemes, updateProfile, updatetemplatedb, updateThemedb } from "../misc/db"
+import { backwardsFilter, forwardsFilter, getUser } from "../misc/utils"
 
 export async function template(message: Discord.Message, client: Discord.Client, args:string[]) {
     let channel = <Discord.TextChannel>client.channels.cache.get("722291683030466621")
@@ -18,23 +18,46 @@ export async function template(message: Discord.Message, client: Discord.Client,
     }
 
     else {
-        for (let i = 0; i < message.attachments.array().length; i++) {
-            //await channel.send(`${message.attachments.array()[i].url}`)
 
-            await channel.send(
-                new Discord.MessageEmbed()
-                    .setTitle(`${message.author.username} has submitted a new template(s)`)
-                    .setDescription(`<@${message.author.id}>`)
-                    .setImage(message.attachments.array()[i].url)
-            ).then(async message => {
-                await message.react('🏁')
-                await message.react('🗡️')
+        if(!args.includes("-mod")){
+            for (let i = 0; i < message.attachments.array().length; i++) {
+                //await channel.send(`${message.attachments.array()[i].url}`)
+    
+                await channel.send(
+                    new Discord.MessageEmbed()
+                        .setTitle(`${message.author.username} has submitted a new template(s)`)
+                        .setDescription(`<@${message.author.id}>`)
+                        .setImage(message.attachments.array()[i].url)
+                ).then(async message => {
+                    await message.react('🏁')
+                    await message.react('🗡️')
+                }
+                )
             }
-            )
+    
+            // updateProfile(message.author.id, "points", (message.attachments.array().length * 2))
+            await message.reply(`Thank you for submitting templates. You will gain a maximum of ${message.attachments.array().length * 2} points if they are approved. You currently have ${(await getProfile(message.author.id)).points} points`)
         }
 
-        // updateProfile(message.author.id, "points", (message.attachments.array().length * 2))
-        await message.reply(`Thank you for submitting templates. You will gain a maximum of ${message.attachments.array().length * 2} points if they are approved. You currently have ${(await getProfile(message.author.id)).points} points`)
+        else if(args.includes("-mod")){
+            let id = await getUser(await message.author.id)
+            let e = await gettemplatedb()
+
+            for (let i = 0; i < message.attachments.array().length; i++){
+                e.list.push(message.attachments.array()[i].url)
+                if(id){
+                    await updateProfile(id, "points", 2)
+                } 
+
+                let attach = new Discord.MessageAttachment(message.attachments.array()[i].url);
+            
+                (<Discord.TextChannel>await client.channels.fetch("724827952390340648")).send("New template:", attach)
+            }
+
+            await updatetemplatedb(e.list)
+
+            return message.reply(`You gained ${message.attachments.array().length*2} points for submitting ${message.attachments.array().length} templates.`)
+        }
 
     }
 
