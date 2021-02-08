@@ -181,7 +181,7 @@ export async function submit(message: Discord.Message, client: Discord.Client, a
         let q:any;
         console.log(args)
 
-        if(args.includes("-duel")){
+        if(args.includes("duel")){
             q = function(x:activematch) {
                 return ((x.p1.userid === message.author.id || x.p2.userid === message.author.id) && x.exhibition === true)
             }

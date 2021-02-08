@@ -131,7 +131,7 @@ async function submit(message, client, args) {
     else {
         let q;
         console.log(args);
-        if (args.includes("-duel")) {
+        if (args.includes("duel")) {
             q = function (x) {
                 return ((x.p1.userid === message.author.id || x.p2.userid === message.author.id) && x.exhibition === true);
             };
