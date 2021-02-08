@@ -115,7 +115,7 @@ async function ssubmit(message, client) {
     }
 }
 exports.ssubmit = ssubmit;
-async function submit(message, client) {
+async function submit(message, client, args) {
     if (message.content.includes("imgur")) {
         return message.reply("You can't submit imgur links");
     }
@@ -129,7 +129,15 @@ async function submit(message, client) {
         return message.reply("You didn't not submit this in the DM with the bot.\nPlease delete and try again.");
     }
     else {
-        let match = await (await db_1.getActive()).find(x => (x.p1.userid === message.author.id || x.p2.userid === message.author.id));
+        let q = function (x) {
+            return ((x.p1.userid === message.author.id || x.p2.userid === message.author.id));
+        };
+        if (args.includes("-duel")) {
+            q = function (x) {
+                return ((x.p1.userid === message.author.id || x.p2.userid === message.author.id) && x.exhibition === true);
+            };
+        }
+        let match = await (await db_1.getActive()).find(q);
         console.log(match);
         if (match.p1.memedone === false && match.p1.userid === message.author.id) {
             match.p1.memelink = (message.attachments.array()[0].url);
