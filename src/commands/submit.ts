@@ -179,7 +179,7 @@ export async function submit(message: Discord.Message, client: Discord.Client, a
     else{
 
         let q:any;
-
+        console.log(args)
 
         if(args.includes("-duel")){
             q = function(x:activematch) {
