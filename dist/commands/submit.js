@@ -129,18 +129,10 @@ async function submit(message, client, args) {
         return message.reply("You didn't not submit this in the DM with the bot.\nPlease delete and try again.");
     }
     else {
-        let q;
-        console.log(args);
-        if (args.includes("duel")) {
-            q = function (x) {
-                return ((x.p1.userid === message.author.id || x.p2.userid === message.author.id) && x.exhibition === true);
-            };
-        }
-        else {
-            q = function (x) {
-                return ((x.p1.userid === message.author.id || x.p2.userid === message.author.id));
-            };
-        }
+        console.log("Args is", args);
+        let q = function (x) {
+            return ((x.p1.userid === message.author.id || x.p2.userid === message.author.id));
+        };
         let match = await (await db_1.getActive()).find(q);
         console.log(match);
         if (match.p1.memedone === false && match.p1.userid === message.author.id) {
