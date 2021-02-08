@@ -178,14 +178,18 @@ export async function submit(message: Discord.Message, client: Discord.Client, a
 
     else{
 
-        //let q = { 'match.p1.userid': message.author.id}
-        let q = function(x:activematch) {
-            return ((x.p1.userid === message.author.id || x.p2.userid === message.author.id))
-        }
+        let q:any;
+
 
         if(args.includes("-duel")){
             q = function(x:activematch) {
                 return ((x.p1.userid === message.author.id || x.p2.userid === message.author.id) && x.exhibition === true)
+            }
+        }
+
+        else{
+            q = function(x:activematch) {
+                return ((x.p1.userid === message.author.id || x.p2.userid === message.author.id))
             }
         }
 
