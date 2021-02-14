@@ -218,7 +218,7 @@ async function templatecheck(message, client, args) {
     });
     remove.on("end", async () => {
         await templatelinksremoved(removelinks);
-        await message.reply("Finished");
+        await message.reply(`Finished. Removed ${removelinks.length} templates`);
     });
 }
 exports.templatecheck = templatecheck;

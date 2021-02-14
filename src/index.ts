@@ -5,6 +5,8 @@ import {
   activematch,
   cockratingInterface,
   configDB,
+  players,
+  qualmatch,
   randomtempstruct
 } from "./misc/struct";
 import { submit, qualsubmit } from "./commands/submit";
@@ -51,6 +53,7 @@ import {
   updateThemedb,
   getthemes,
   getProfile,
+  insertQuals,
 } from "./misc/db";
 
 import { template, approvetemplate, addTheme, removeTheme, themelistLb, templatecheck } from "./commands/template";
@@ -445,7 +448,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
 
   }
 
-  if (['🇦', '🇧', '🇨', '🇩', '🇪', '🇫'].includes(messageReaction.emoji.name) && user.id !== "722303830368190485") {
+  if (['🇦', '🇧', '🇨', '🇩', '🇪', '🇫'].includes(messageReaction.emoji.name) && user.id !== "722303830368190485" && await getQual(messageReaction.message.channel.id)) {
     //messageReaction.message.channel.send(user.client.guilds.cache.get(messageReaction.message.guild!.id)!.roles.cache.has("719936221572235295"))
 
     if (messageReaction.partial) await messageReaction.fetch();
@@ -455,25 +458,32 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
       .get(messageReaction.message.guild!.id)!
       .members.cache.get(user.id)!
       .roles.cache.has("719936221572235295")
-      === true) {
+      === true || await (await getQual(messageReaction.message.channel.id)).playerids.includes(user.id) === true) {
 
 
       let pos = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫'].indexOf(messageReaction.emoji.name)
       let id = await (await getQual(messageReaction.message.channel.id)).playerids[pos]
+      
+      if(id !== user.id){
+        return user.send("No.")
+      }
+
       await updateModProfile(messageReaction.message.author.id, "modactions", 1)
       await updateModProfile(messageReaction.message.author.id, "matchportionsstarted", 1)
       await splitqual(client, messageReaction.message, id)
-      await messageReaction.users.remove(user.id)
-      await messageReaction.remove()
+      
 
       await (<Discord.TextChannel>client.channels.cache.get("748760056333336627")).send({
 
         embed: {
-          description: `<@${user.id}>  ${user.tag} has started <@${id}> in <#${messageReaction.message.channel}>`,
+          description: `<@${user.id}>/${user.tag} has started <@${id}> in <#${messageReaction.message.channel}>`,
           color: "#d7be26",
           timestamp: new Date()
         }
       });
+
+      await messageReaction.users.remove(user.id)
+      await messageReaction.remove()
 
 
     }
@@ -758,18 +768,44 @@ client.on("message", async message => {
   else if (command === "test") {
 	
     await message.reply("no").then(async message => { await message.react('🤏') })
-    
-    // await insertReminder(
-    //   {
-    //     _id:message.author.id,
-    //     mention:`<@${message.author.id}>`,
-    //     channel:message.author.id,
-    //     type:"meme",
-    //     time:3300,
-    //     timestamp:Math.floor(Date.now()/1000) - 3360
-    //   }
-    // )
-  
+    let users: players[] = []
+    let plyerids: Array<string> = []
+    let votearray = []
+
+    for (let u in message.mentions.users) {
+      
+      if (u) {
+          let player: players = {
+              userid: u,
+              memedone: false,
+              memelink: "",
+              time: 0,
+              split: false,
+              failed: false
+          }
+          users.push(player)
+          plyerids.push(u)
+          votearray.push([])
+      }
+  }
+
+    let newmatch: qualmatch = {
+        _id: message.channel.id,
+        split: true,
+        playerids: plyerids,
+        channelid: message.channel.id,
+        players: users,
+        octime: 0,
+        votes: votearray,
+        template: "",
+        istheme: false,
+        playersdone: [],
+        votingperiod: false,
+        votetime: 0
+
+    }
+
+    await insertQuals(newmatch)
   }
   
   // else if (command === "test") {
@@ -954,7 +990,7 @@ client.on("message", async message => {
 
   else if (command === "submit") {
     if (message.channel.id === "722285800225505879" || message.channel.id === "722285842705547305" || message.channel.id === "724839353129369681") return;
-    await submit(message, client)
+    await submit(message, client, args)
   }
 
   else if (command === "qualsubmit") {

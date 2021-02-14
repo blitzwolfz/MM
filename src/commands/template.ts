@@ -259,7 +259,7 @@ export async function templatecheck(message: Discord.Message, client: Discord.Cl
 
     remove.on("end", async () => {
         await templatelinksremoved(removelinks)
-        await message.reply("Finished")
+        await message.reply(`Finished. Removed ${removelinks.length} templates`)
     })
 }
 

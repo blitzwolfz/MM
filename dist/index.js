@@ -291,7 +291,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             await user.send("No.");
         }
     }
-    if (['🇦', '🇧', '🇨', '🇩', '🇪', '🇫'].includes(messageReaction.emoji.name) && user.id !== "722303830368190485") {
+    if (['🇦', '🇧', '🇨', '🇩', '🇪', '🇫'].includes(messageReaction.emoji.name) && user.id !== "722303830368190485" && await db_1.getQual(messageReaction.message.channel.id)) {
         if (messageReaction.partial)
             await messageReaction.fetch();
         if (messageReaction.message.partial)
@@ -300,21 +300,24 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             .get(messageReaction.message.guild.id)
             .members.cache.get(user.id)
             .roles.cache.has("719936221572235295")
-            === true) {
+            === true || await (await db_1.getQual(messageReaction.message.channel.id)).playerids.includes(user.id) === true) {
             let pos = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫'].indexOf(messageReaction.emoji.name);
             let id = await (await db_1.getQual(messageReaction.message.channel.id)).playerids[pos];
+            if (id !== user.id) {
+                return user.send("No.");
+            }
             await db_1.updateModProfile(messageReaction.message.author.id, "modactions", 1);
             await db_1.updateModProfile(messageReaction.message.author.id, "matchportionsstarted", 1);
             await start_1.splitqual(client, messageReaction.message, id);
-            await messageReaction.users.remove(user.id);
-            await messageReaction.remove();
             await client.channels.cache.get("748760056333336627").send({
                 embed: {
-                    description: `<@${user.id}>  ${user.tag} has started <@${id}> in <#${messageReaction.message.channel}>`,
+                    description: `<@${user.id}>/${user.tag} has started <@${id}> in <#${messageReaction.message.channel}>`,
                     color: "#d7be26",
                     timestamp: new Date()
                 }
             });
+            await messageReaction.users.remove(user.id);
+            await messageReaction.remove();
         }
         else {
             await messageReaction.users.remove(user.id);
@@ -523,6 +526,39 @@ client.on("message", async (message) => {
     }
     else if (command === "test") {
         await message.reply("no").then(async (message) => { await message.react('🤏'); });
+        let users = [];
+        let plyerids = [];
+        let votearray = [];
+        for (let u in message.mentions.users) {
+            if (u) {
+                let player = {
+                    userid: u,
+                    memedone: false,
+                    memelink: "",
+                    time: 0,
+                    split: false,
+                    failed: false
+                };
+                users.push(player);
+                plyerids.push(u);
+                votearray.push([]);
+            }
+        }
+        let newmatch = {
+            _id: message.channel.id,
+            split: true,
+            playerids: plyerids,
+            channelid: message.channel.id,
+            players: users,
+            octime: 0,
+            votes: votearray,
+            template: "",
+            istheme: false,
+            playersdone: [],
+            votingperiod: false,
+            votetime: 0
+        };
+        await db_1.insertQuals(newmatch);
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))
@@ -590,7 +626,7 @@ client.on("message", async (message) => {
     else if (command === "submit") {
         if (message.channel.id === "722285800225505879" || message.channel.id === "722285842705547305" || message.channel.id === "724839353129369681")
             return;
-        await submit_1.submit(message, client);
+        await submit_1.submit(message, client, args);
     }
     else if (command === "qualsubmit") {
         if (message.channel.id === "722285800225505879" || message.channel.id === "722285842705547305" || message.channel.id === "724839353129369681")
