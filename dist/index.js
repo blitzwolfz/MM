@@ -303,7 +303,11 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             === true || await (await db_1.getQual(messageReaction.message.channel.id)).playerids.includes(user.id) === true) {
             let pos = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫'].indexOf(messageReaction.emoji.name);
             let id = await (await db_1.getQual(messageReaction.message.channel.id)).playerids[pos];
-            if (id !== user.id) {
+            if (id !== user.id && user.client.guilds.cache
+                .get(messageReaction.message.guild.id)
+                .members.cache.get(user.id)
+                .roles.cache.has("719936221572235295")
+                === false) {
                 return user.send("No.");
             }
             await db_1.updateModProfile(messageReaction.message.author.id, "modactions", 1);
