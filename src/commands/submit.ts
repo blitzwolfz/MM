@@ -354,10 +354,13 @@ export async function modsubmit(message: Discord.Message, client: Discord.Client
 
     //let match:activematch = await (await getActive()).find(x => (x.p1.userid === message.author.id || x.p2.userid === message.author.id))!;
     let match: activematch = await getMatch(message.mentions.channels.first()!.id);
-    let user = message.mentions.users.first()!
+    let user:Discord.User = message.mentions.users!.first()!
+
+    
 
 
     if(args.includes("1")){
+        user = await client.users.fetch(match.p1.userid)
         if (match.p1.memedone === false && match.p1.userid === user.id) {
             match.p1.memelink = (message.attachments.array()[0].url)
             match.p1.memedone = true
@@ -425,6 +428,7 @@ export async function modsubmit(message: Discord.Message, client: Discord.Client
     }
 
     else if(args.includes("2")){
+        user = await client.users.fetch(match.p1.userid)
         if (match.p2.memedone === false && match.p2.userid === user.id) {
             match.p2.memelink = (message.attachments.array()[0].url)
             match.p2.memedone = true

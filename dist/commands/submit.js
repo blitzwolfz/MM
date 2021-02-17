@@ -241,6 +241,7 @@ async function modsubmit(message, client, args) {
     let match = await db_1.getMatch(message.mentions.channels.first().id);
     let user = message.mentions.users.first();
     if (args.includes("1")) {
+        user = await client.users.fetch(match.p1.userid);
         if (match.p1.memedone === false && match.p1.userid === user.id) {
             match.p1.memelink = (message.attachments.array()[0].url);
             match.p1.memedone = true;
@@ -292,6 +293,7 @@ async function modsubmit(message, client, args) {
         }
     }
     else if (args.includes("2")) {
+        user = await client.users.fetch(match.p1.userid);
         if (match.p2.memedone === false && match.p2.userid === user.id) {
             match.p2.memelink = (message.attachments.array()[0].url);
             match.p2.memedone = true;
