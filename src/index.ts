@@ -9,7 +9,7 @@ import {
   qualmatch,
   randomtempstruct
 } from "./misc/struct";
-import { submit, qualsubmit } from "./commands/submit";
+import { submit, qualsubmit, modsubmit } from "./commands/submit";
 import {
   start,
   running,
@@ -994,7 +994,8 @@ client.on("message", async message => {
 
   else if (command === "submit") {
     if (message.channel.id === "722285800225505879" || message.channel.id === "722285842705547305" || message.channel.id === "724839353129369681") return;
-    await submit(message, client, args)
+    if(args.includes("-mod")) await modsubmit(message, client, args);
+    else await submit(message, client, args);
   }
 
   else if (command === "qualsubmit") {

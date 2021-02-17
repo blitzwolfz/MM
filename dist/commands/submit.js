@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.qualsubmit = exports.submit = exports.ssubmit = void 0;
+exports.qualsubmit = exports.modsubmit = exports.submit = exports.ssubmit = void 0;
 const db_1 = require("../misc/db");
 async function ssubmit(message, client) {
     if (message.content.includes("imgur")) {
@@ -236,6 +236,117 @@ async function submit(message, client, args) {
     }
 }
 exports.submit = submit;
+async function modsubmit(message, client, args) {
+    console.log("Args is", args);
+    let match = await db_1.getMatch(message.mentions.channels.first().id);
+    let user = message.mentions.users.first();
+    if (args.includes("1")) {
+        if (match.p1.memedone === false && match.p1.userid === user.id) {
+            match.p1.memelink = (message.attachments.array()[0].url);
+            match.p1.memedone = true;
+            if (match.split) {
+                match.p1.donesplit = true;
+            }
+            if (match.exhibition === false) {
+                await client.channels.cache.get("722616679280148504").send({
+                    embed: {
+                        description: `<@${user.id}> has submitted their meme\nChannel: <#${match.channelid}>`,
+                        color: "#d7be26",
+                        timestamp: new Date()
+                    }
+                });
+                await client.channels.cache.get("793242781892083742").send({
+                    embed: {
+                        description: `<@${user.id}>/${user.tag} has submitted their meme\nChannel: <#${match.channelid}>`,
+                        color: "#d7be26",
+                        image: {
+                            url: message.attachments.array()[0].url,
+                        },
+                        timestamp: new Date()
+                    }
+                });
+                try {
+                    await db_1.deleteReminder(await db_1.getReminder(match.p1.userid));
+                    let r = await db_1.getReminder(match.channelid);
+                    r.mention = `<@${match.p2.userid}>`;
+                    await db_1.updateReminder(r);
+                }
+                catch (error) {
+                    console.log("");
+                }
+            }
+            if (match.p1.donesplit && match.p1.memedone && match.p2.donesplit && match.p2.memedone && match.split) {
+                console.log("not a split match");
+                match.split = false;
+                match.p1.time = Math.floor(Date.now() / 1000) - 3200;
+                match.p2.time = Math.floor(Date.now() / 1000) - 3200;
+                try {
+                    await db_1.deleteReminder(await db_1.getReminder(match.channelid));
+                }
+                catch {
+                    console.log("");
+                }
+            }
+            await db_1.updateActive(match);
+            return await message.channel.send("Your meme has been attached!");
+        }
+    }
+    else if (args.includes("2")) {
+        if (match.p2.memedone === false && match.p2.userid === user.id) {
+            match.p2.memelink = (message.attachments.array()[0].url);
+            match.p2.memedone = true;
+            if (match.split) {
+                match.p2.donesplit = true;
+            }
+            if (match.exhibition === false) {
+                await client.channels.cache.get("722616679280148504").send({
+                    embed: {
+                        description: `<@${user.id}> has submitted their meme\nChannel: <#${match.channelid}>`,
+                        color: "#d7be26",
+                        timestamp: new Date()
+                    }
+                });
+                await client.channels.cache.get("793242781892083742").send({
+                    embed: {
+                        description: `<@${user.id}>/${user.tag} has submitted their meme\nChannel: <#${match.channelid}>`,
+                        color: "#d7be26",
+                        image: {
+                            url: message.attachments.array()[0].url,
+                        },
+                        timestamp: new Date()
+                    }
+                });
+                try {
+                    await db_1.deleteReminder(await db_1.getReminder(match.p2.userid));
+                    let r = await db_1.getReminder(match.channelid);
+                    r.mention = `<@${match.p1.userid}>`;
+                    await db_1.updateReminder(r);
+                }
+                catch (error) {
+                    console.log("");
+                }
+            }
+            if (match.p1.donesplit && match.p1.memedone && match.p2.donesplit && match.p2.memedone && match.split) {
+                console.log("not a split match");
+                match.split = false;
+                match.p1.time = Math.floor(Date.now() / 1000) - 3200;
+                match.p2.time = Math.floor(Date.now() / 1000) - 3200;
+                try {
+                    await db_1.deleteReminder(await db_1.getReminder(match.channelid));
+                }
+                catch {
+                    console.log("");
+                }
+            }
+            await db_1.updateActive(match);
+            return await message.channel.send("Your meme has been attached!");
+        }
+    }
+    else {
+        return message.reply("Please state which player 1 or 2");
+    }
+}
+exports.modsubmit = modsubmit;
 async function qualsubmit(message, client) {
     if (message.content.includes("imgur")) {
         return message.reply("You can't submit imgur links");

@@ -630,7 +630,10 @@ client.on("message", async (message) => {
     else if (command === "submit") {
         if (message.channel.id === "722285800225505879" || message.channel.id === "722285842705547305" || message.channel.id === "724839353129369681")
             return;
-        await submit_1.submit(message, client, args);
+        if (args.includes("-mod"))
+            await submit_1.modsubmit(message, client, args);
+        else
+            await submit_1.submit(message, client, args);
     }
     else if (command === "qualsubmit") {
         if (message.channel.id === "722285800225505879" || message.channel.id === "722285842705547305" || message.channel.id === "724839353129369681")
