@@ -293,7 +293,7 @@ async function modsubmit(message, client, args) {
         }
     }
     if (args.includes("2")) {
-        user = await client.users.fetch(match.p1.userid);
+        user = await client.users.fetch(match.p2.userid);
         if (match.p2.memedone === false && match.p2.userid === user.id) {
             match.p2.memelink = (message.attachments.array()[0].url);
             match.p2.memedone = true;
