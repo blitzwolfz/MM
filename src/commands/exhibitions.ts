@@ -241,13 +241,18 @@ export async function deleteExhibitionchannels(client: Discord.Client) {
             continue;
         }
         
-        let ch = await client.channels.fetch(ex.activematches[ii])
+        let ch = await client.channels?.fetch(ex.activematches[ii])
 
         if(Math.floor(Date.now() / 1000) - Math.floor(ch.createdTimestamp/1000 ) > 7200){
             await ch.delete()
             ex.activematches.splice(ii, 1)
             ii++
-        } 
+        }
+        
+        if(!ch || ch === undefined){
+            ex.activematches.splice(ii, 1)
+            ii++
+        }
     }
 
     

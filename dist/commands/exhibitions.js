@@ -159,6 +159,7 @@ async function exhibition(message, client, args) {
 }
 exports.exhibition = exhibition;
 async function deleteExhibitionchannels(client) {
+    var _a;
     var ex = await db_1.getExhibition();
     let guild = await client.guilds.cache.get("719406444109103117");
     for (let ii = 0; ii < ex.activematches.length; ii++) {
@@ -167,9 +168,13 @@ async function deleteExhibitionchannels(client) {
             ii++;
             continue;
         }
-        let ch = await client.channels.fetch(ex.activematches[ii]);
+        let ch = await ((_a = client.channels) === null || _a === void 0 ? void 0 : _a.fetch(ex.activematches[ii]));
         if (Math.floor(Date.now() / 1000) - Math.floor(ch.createdTimestamp / 1000) > 7200) {
             await ch.delete();
+            ex.activematches.splice(ii, 1);
+            ii++;
+        }
+        if (!ch || ch === undefined) {
             ex.activematches.splice(ii, 1);
             ii++;
         }
