@@ -265,7 +265,12 @@ export async function deleteExhibitionchannels(client: Discord.Client) {
         }
 
         if(Math.floor(Date.now() / 1000) - Math.floor(ex.cooldowns[i].time) >= 3600){
-            await us.send("You can start another exhibition match!")
+            try{
+                await us.send("You can start another exhibition match!")
+            } catch {
+                console.log("Could not dm user that cooldown is over")
+            }
+            
             ex.cooldowns.splice(i, 1)
             i++
         }
