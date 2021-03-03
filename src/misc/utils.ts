@@ -451,16 +451,6 @@ export async function autoreminders(client: Discord.Client) {
     await reminders(client, ["24"])
 
   }
-  
-  //console.log(Math.floor((Date.now()) - parseInt(await (await getMatchlist()).qualurl)))
-  // console.log(Math.floor((Date.now()) - parseInt(await (await getMatchlist()).qualurl)) < 165601*1000 && Math.floor((Date.now()) - parseInt(await (await getMatchlist()).qualurl)) > 165600*1000)
-
-  // console.log(Math.floor((Date.now()) - parseInt(await (await getMatchlist()).qualurl)) < 129601*1000 && Math.floor((Date.now()) - parseInt(await (await getMatchlist()).qualurl)) > 129600*1000)
-
-  // console.log( Math.floor((Date.now()) - parseInt(await (await getMatchlist()).qualurl)) < 86401*1000 && Math.floor((Date.now()) - parseInt(await (await getMatchlist()).qualurl)) > 86400*1000)
-
-
-  //setTimeout(() => reminders(client, [time]), ((t-(Math.floor((Date.now())/1000 - parseInt(await (await getMatchlist()).qualurl))))*1000));
 }
 
 export async function deletechannels(message: Discord.Message, args: string[]) {
@@ -749,6 +739,61 @@ export async function qualifierresultadd(c: Discord.TextChannel, client: Discord
     }
   })
   console.timeEnd("total time")
+}
+
+export async function resultadd(channel: Discord.TextChannel, client: Discord.Client, ids:string[]){
+  let msgArr:Discord.Message[] = [];
+
+  for(let i of ids){
+      msgArr.push(await channel.messages.fetch(i))
+  }
+
+
+  let finalResults:Array<{
+      name:string,
+      value:number
+  }> = []
+
+  console.log(finalResults)
+
+  for(let msg of msgArr){
+      let embed = msg.embeds[0]!
+
+      for(let f of embed.fields){
+          let key = `${f.value.match(/\d+/g)?.splice(1)[1]}`.toString()
+          if(!finalResults.find(x => x.name === key)){
+              finalResults.push({
+                  name:key,
+                  value: parseInt(f.value.match(/\d+/g)?.splice(1)[0]!)
+              })
+          }
+
+          else{
+              finalResults[finalResults.findIndex(x => x.name === key)].value += parseInt(f.value.match(/\d+/g)?.splice(1)[0]!)
+          }
+      }
+
+  }
+  
+  finalResults.sort(function(a, b){
+      return b.value - a.value
+  })
+
+  for(let f of finalResults){
+      f.name = (await client.users.fetch(f.name)).username
+      //@ts-ignore
+      //Ik types are important, but sometimes you want to cheat 
+      //and do this since it's much easier to work with lol
+      f.value = `Got ${f.value} in total`
+  }
+
+  return {
+      title: `Final Results for Group ${channel.name}`,
+      description: `Players with highest move on`,
+      fields:finalResults,
+      color: "#d7be26",
+      timestamp: new Date()
+    }
 }
 
 

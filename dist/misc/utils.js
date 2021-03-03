@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.saveDatatofile = exports.CycleRestart = exports.SeasonRestart = exports.toS = exports.toHHMMSS = exports.qualifierresultadd = exports.oldqualifierresultadd = exports.clearstats = exports.createrole = exports.updatesomething = exports.deletechannels = exports.autoreminders = exports.aautoreminders = exports.aaautoreminders = exports.reminders = exports.dateBuilder = exports.indexOf2d = exports.forwardsFilter = exports.backwardsFilter = exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
+exports.saveDatatofile = exports.CycleRestart = exports.SeasonRestart = exports.toS = exports.toHHMMSS = exports.resultadd = exports.qualifierresultadd = exports.oldqualifierresultadd = exports.clearstats = exports.createrole = exports.updatesomething = exports.deletechannels = exports.autoreminders = exports.aautoreminders = exports.aaautoreminders = exports.reminders = exports.dateBuilder = exports.indexOf2d = exports.forwardsFilter = exports.backwardsFilter = exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
 const Discord = __importStar(require("discord.js"));
 const challonge_1 = require("../commands/challonge");
 const signups_1 = require("../commands/signups");
@@ -498,6 +498,45 @@ async function qualifierresultadd(c, client, msg1, msg2) {
     console.timeEnd("total time");
 }
 exports.qualifierresultadd = qualifierresultadd;
+async function resultadd(channel, client, ids) {
+    var _a, _b, _c;
+    let msgArr = [];
+    for (let i of ids) {
+        msgArr.push(await channel.messages.fetch(i));
+    }
+    let finalResults = [];
+    console.log(finalResults);
+    for (let msg of msgArr) {
+        let embed = msg.embeds[0];
+        for (let f of embed.fields) {
+            let key = `${(_a = f.value.match(/\d+/g)) === null || _a === void 0 ? void 0 : _a.splice(1)[1]}`.toString();
+            if (!finalResults.find(x => x.name === key)) {
+                finalResults.push({
+                    name: key,
+                    value: parseInt((_b = f.value.match(/\d+/g)) === null || _b === void 0 ? void 0 : _b.splice(1)[0])
+                });
+            }
+            else {
+                finalResults[finalResults.findIndex(x => x.name === key)].value += parseInt((_c = f.value.match(/\d+/g)) === null || _c === void 0 ? void 0 : _c.splice(1)[0]);
+            }
+        }
+    }
+    finalResults.sort(function (a, b) {
+        return b.value - a.value;
+    });
+    for (let f of finalResults) {
+        f.name = (await client.users.fetch(f.name)).username;
+        f.value = `Got ${f.value} in total`;
+    }
+    return {
+        title: `Final Results for Group ${channel.name}`,
+        description: `Players with highest move on`,
+        fields: finalResults,
+        color: "#d7be26",
+        timestamp: new Date()
+    };
+}
+exports.resultadd = resultadd;
 async function toHHMMSS(timestamp, howlong) {
     return new Date((howlong - (Math.floor(Date.now() / 1000) - timestamp)) * 1000).toISOString().substr(11, 8);
 }

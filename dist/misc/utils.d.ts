@@ -25,6 +25,16 @@ export declare function createrole(message: Discord.Message, args: string[]): Pr
 export declare function clearstats(message: Discord.Message): Promise<void>;
 export declare function oldqualifierresultadd(channel: Discord.TextChannel, client: Discord.Client, msg1: string, msg2: string): Promise<void>;
 export declare function qualifierresultadd(c: Discord.TextChannel, client: Discord.Client, msg1: string, msg2: string): Promise<void>;
+export declare function resultadd(channel: Discord.TextChannel, client: Discord.Client, ids: string[]): Promise<{
+    title: string;
+    description: string;
+    fields: {
+        name: string;
+        value: number;
+    }[];
+    color: string;
+    timestamp: Date;
+}>;
 export declare function toHHMMSS(timestamp: number, howlong: number): Promise<string>;
 export declare function toS(timestamp: string): Promise<number | null>;
 export declare function SeasonRestart(message: Discord.Message): Promise<void>;

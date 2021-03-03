@@ -5,8 +5,6 @@ import {
   activematch,
   cockratingInterface,
   configDB,
-  players,
-  qualmatch,
   randomtempstruct
 } from "./misc/struct";
 import { submit, qualsubmit, modsubmit } from "./commands/submit";
@@ -26,7 +24,7 @@ import {
 import { cooldownremove, deleteExhibitionchannels, duelcheck, exhibition } from "./commands/exhibitions"
 import { qualend, end, cancelmatch } from "./commands/winner";
 import { vs } from "./commands/card";
-import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, createrole, clearstats, qualifierresultadd, SeasonRestart, toHHMMSS, aaautoreminders, CycleRestart } from "./misc/utils";
+import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, createrole, clearstats, qualifierresultadd, SeasonRestart, toHHMMSS, aaautoreminders, CycleRestart, resultadd } from "./misc/utils";
 import { ModHelp, UserHelp, ModSignupHelp, ModChallongeHelp, DuelHelp } from "./commands/help";
 
 import {
@@ -53,7 +51,6 @@ import {
   updateThemedb,
   getthemes,
   getProfile,
-  insertQuals,
 } from "./misc/db";
 
 import { template, approvetemplate, addTheme, removeTheme, themelistLb, templatecheck } from "./commands/template";
@@ -772,44 +769,47 @@ client.on("message", async message => {
   else if (command === "test") {
 	
     await message.reply("no").then(async message => { await message.react('🤏') })
-    let users: players[] = []
-    let plyerids: Array<string> = []
-    let votearray = []
 
-    for (let u in message.mentions.users) {
+    let a = new Discord.MessageAttachment(args[0])
+    message.channel.send(a)
+  //   let users: players[] = []
+  //   let plyerids: Array<string> = []
+  //   let votearray = []
+
+  //   for (let u in message.mentions.users) {
       
-      if (u) {
-          let player: players = {
-              userid: u,
-              memedone: false,
-              memelink: "",
-              time: 0,
-              split: false,
-              failed: false
-          }
-          users.push(player)
-          plyerids.push(u)
-          votearray.push([])
-      }
-  }
+  //     if (u) {
+  //         let player: players = {
+  //             userid: u,
+  //             memedone: false,
+  //             memelink: "",
+  //             time: 0,
+  //             split: false,
+  //             failed: false
+  //         }
+  //         users.push(player)
+  //         plyerids.push(u)
+  //         votearray.push([])
+  //     }
+  // }
 
-    let newmatch: qualmatch = {
-        _id: message.channel.id,
-        split: true,
-        playerids: plyerids,
-        channelid: message.channel.id,
-        players: users,
-        octime: 0,
-        votes: votearray,
-        template: "",
-        istheme: false,
-        playersdone: [],
-        votingperiod: false,
-        votetime: 0
+  //   let newmatch: qualmatch = {
+  //       _id: message.channel.id,
+  //       split: true,
+  //       playerids: plyerids,
+  //       channelid: message.channel.id,
+  //       players: users,
+  //       octime: 0,
+  //       votes: votearray,
+  //       template: "",
+  //       istheme: false,
+  //       playersdone: [],
+  //       votingperiod: false,
+  //       votetime: 0
 
-    }
+  //   }
 
-    await insertQuals(newmatch)
+  //   await insertQuals(newmatch)
   }
   
   // else if (command === "test") {
@@ -949,6 +949,16 @@ client.on("message", async message => {
   else if (command === "qrd") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await qualifierresultadd(await (<Discord.TextChannel>client.channels.cache.get(message.channel.id)), client, args[0], args[1])
+  }
+
+  else if(command === "qra"){
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
+    let emm = await resultadd(await (<Discord.TextChannel>client.channels.cache.get(message.channel.id)), client, [args[0], args[1]])
+
+    await message.channel.send({ embed:emm })
+    
+    await (await (<Discord.TextChannel>client.channels.cache.get("722291182461386804")))
+        .send({ embed:emm });
   }
 
   else if (command === "exhibition" || command === "duel") {

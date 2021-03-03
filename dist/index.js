@@ -530,39 +530,8 @@ client.on("message", async (message) => {
     }
     else if (command === "test") {
         await message.reply("no").then(async (message) => { await message.react('🤏'); });
-        let users = [];
-        let plyerids = [];
-        let votearray = [];
-        for (let u in message.mentions.users) {
-            if (u) {
-                let player = {
-                    userid: u,
-                    memedone: false,
-                    memelink: "",
-                    time: 0,
-                    split: false,
-                    failed: false
-                };
-                users.push(player);
-                plyerids.push(u);
-                votearray.push([]);
-            }
-        }
-        let newmatch = {
-            _id: message.channel.id,
-            split: true,
-            playerids: plyerids,
-            channelid: message.channel.id,
-            players: users,
-            octime: 0,
-            votes: votearray,
-            template: "",
-            istheme: false,
-            playersdone: [],
-            votingperiod: false,
-            votetime: 0
-        };
-        await db_1.insertQuals(newmatch);
+        let a = new Discord.MessageAttachment(args[0]);
+        message.channel.send(a);
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))
@@ -594,6 +563,14 @@ client.on("message", async (message) => {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
         await utils_1.qualifierresultadd(await client.channels.cache.get(message.channel.id), client, args[0], args[1]);
+    }
+    else if (command === "qra") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
+        let emm = await utils_1.resultadd(await client.channels.cache.get(message.channel.id), client, [args[0], args[1]]);
+        await message.channel.send({ embed: emm });
+        await (await client.channels.cache.get("722291182461386804"))
+            .send({ embed: emm });
     }
     else if (command === "exhibition" || command === "duel") {
         if (args[0].toLowerCase() === "help") {
