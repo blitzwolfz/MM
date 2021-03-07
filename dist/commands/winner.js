@@ -170,7 +170,7 @@ async function end(client, id) {
             .setFooter(utils_1.dateBuilder()));
         if (match.exhibition === false) {
             let m = await channelid
-                .send(`<@${user1.id}> <@${user2.id}> You have 48h to complete this re-match. Contact a ref to begin, you may also split your match`);
+                .send(`<@${user1.id}> <@${user2.id}> Please complete this re-match ASAP. Contact a ref to begin.`);
             await db_1.insertReminder({
                 _id: channelid.id,
                 mention: `<@${user1.id}> <@${user2.id}>`,
@@ -348,6 +348,11 @@ async function qualend(client, id) {
         });
     }
     await db_1.deleteReminder(await db_1.getReminder(channel.id));
+    let qlist = await db_1.getMatchlist();
+    let timestamp = parseInt(qlist.qualurl);
+    if (Math.floor(Date.now() / 1000) - Math.floor(timestamp / 1000) > 0) {
+        await channel.send(`Next portion has begun, and you have ${Math.floor((Math.floor(Date.now() / 1000) - Math.floor(timestamp / 1000)) / 3600)}h to complete it. Contact a ref to begin your portion!`);
+    }
 }
 exports.qualend = qualend;
 async function cancelmatch(message) {

@@ -1,6 +1,6 @@
 import * as discord from "discord.js"
 import { activematch } from "../misc/struct"
-import { deleteActive, deleteQuals, updateProfile, getSingularQuals, getMatch, getQual, deleteReminder, getReminder, insertReminder } from "../misc/db"
+import { deleteActive, deleteQuals, updateProfile, getSingularQuals, getMatch, getQual, deleteReminder, getReminder, insertReminder, getMatchlist } from "../misc/db"
 import { grandwinner, winner } from "./card"
 import { dateBuilder, qualifierresultadd } from "../misc/utils"
 import { matchwinner } from "./challonge"
@@ -218,7 +218,7 @@ export async function end(client: discord.Client, id: string) {
         
         if(match.exhibition === false){
             let m = await channelid
-            .send(`<@${user1.id}> <@${user2.id}> You have 48h to complete this re-match. Contact a ref to begin, you may also split your match`)
+            .send(`<@${user1.id}> <@${user2.id}> Please complete this re-match ASAP. Contact a ref to begin.`)
 
             await insertReminder(
                 {
@@ -461,6 +461,12 @@ export async function qualend(client: discord.Client, id: string) {
     }
 
     await deleteReminder(await getReminder(channel.id))
+
+    let qlist = await getMatchlist()
+    let timestamp = parseInt(qlist.qualurl)
+    if(Math.floor(Date.now()/1000) - Math.floor(timestamp/1000) > 0){
+        await channel.send(`Next portion has begun, and you have ${Math.floor((Math.floor(Date.now()/1000) - Math.floor(timestamp/1000))/3600)}h to complete it. Contact a ref to begin your portion!`)
+    }
 }
 
 
