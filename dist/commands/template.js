@@ -230,7 +230,20 @@ async function templatecheck(message, client, args) {
     };
     let struct = [];
     let removelinks = [];
-    for (let i = 0; i < 10; i++) {
+    let doc = await db_1.getDoc("tempstruct", message.author.id);
+    if (!doc) {
+        await db_1.insertDoc("tempstruct", {
+            _id: message.author.id,
+            pos: 0
+        });
+        doc = {
+            _id: message.author.id,
+            pos: 0
+        };
+    }
+    if (doc.pos > list.length)
+        doc.pos = 0;
+    for (let i = doc.pos; i < doc.pos + 10; i++) {
         await message.channel.send(list[i]).then(async (m) => {
             struct.push({
                 msg: m,
@@ -256,6 +269,8 @@ async function templatecheck(message, client, args) {
             s.tempstring = list[s.position + 10];
             s.position += 10;
         }
+        doc.pos += 10;
+        await db_1.updateDoc("tempstruct", doc._id, doc);
     });
     remove.on('collect', async () => {
         m.reactions.cache.forEach(async (reaction) => {

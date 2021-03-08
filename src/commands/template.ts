@@ -1,5 +1,5 @@
 import * as Discord from "discord.js"
-import { getProfile, gettemplatedb, getthemes, updateProfile, updatetemplatedb, updateThemedb } from "../misc/db"
+import { getDoc, getProfile, gettemplatedb, getthemes, insertDoc, updateDoc, updateProfile, updatetemplatedb, updateThemedb } from "../misc/db"
 import { backwardsFilter, forwardsFilter, getUser } from "../misc/utils"
 
 export async function template(message: Discord.Message, client: Discord.Client, args:string[]) {
@@ -279,7 +279,26 @@ export async function templatecheck(message: Discord.Message, client: Discord.Cl
 
     let removelinks:string[] = []
 
-    for(let i = 0; i < 10; i++){
+    let doc:{
+        _id:string,
+        pos:number
+    } = await getDoc("tempstruct", message.author.id)
+
+    if(!doc){
+        await insertDoc("tempstruct", {
+            _id:message.author.id,
+            pos:0
+        })
+
+        doc = {
+            _id:message.author.id,
+            pos:0
+        }
+    }
+
+    if(doc.pos > list.length) doc.pos = 0;
+
+    for(let i = doc.pos; i < doc.pos+10; i++){
         await message.channel.send(list[i]).then(async m => {
             struct.push({
                 msg:m,
@@ -319,6 +338,10 @@ export async function templatecheck(message: Discord.Message, client: Discord.Cl
             s.tempstring = list[s.position+10]
             s.position += 10
         }
+
+        doc.pos += 10
+
+        await updateDoc("tempstruct", doc._id, doc)
 
     });
 
