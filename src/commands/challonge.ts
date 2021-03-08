@@ -293,12 +293,14 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
     }
     return message.reply("Made all channels")
 }
+
 export async function QualChannelCreation(message: Discord.Message, args: string[]) {
 
     let groups = await getQuallist()
     //console.log(groups.users)
 
     let time = args[1]
+    let qlist = await getMatchlist()
 
     for (let i = 0; i < groups.users.length; i++) {
 
@@ -324,16 +326,20 @@ export async function QualChannelCreation(message: Discord.Message, args: string
                           mention:string,
                           channel:channel.id,
                           type:"match",
-                          time:86400,
+                          time:129600,
                           timestamp:Math.round(message.createdTimestamp / 1000)
                         }
                     )
 
                     await channel.send(`${string}, Portion ${args[0]} has begun, and you have ${time}h to complete it. Contact a ref to begin your portion!`)
+                    
+                    qlist.qualurl = channel.createdTimestamp.toString()
                 });
         }
 
     }
+
+    await updateMatchlist(qlist)
 
     return message.reply("Made all channels")
 }

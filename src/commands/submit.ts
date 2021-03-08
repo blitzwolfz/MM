@@ -2,7 +2,6 @@ import * as Discord from "discord.js";
 import { activematch, qualmatch } from "../misc/struct";
 import { updateQuals, updateActive, getActive, getQuals, deleteReminder, getReminder, updateReminder, getMatch } from "../misc/db";
 
-
 export async function ssubmit(message: Discord.Message, client: Discord.Client) {
 
     if (message.content.includes("imgur")) {

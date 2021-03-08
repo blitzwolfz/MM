@@ -227,7 +227,7 @@ async function templatecheckembed(page: number = 1, client: Discord.Client, temp
 
 }
 
-export async function templatecheck(message: Discord.Message, client: Discord.Client, args: string[]) {
+export async function ttemplatecheck(message: Discord.Message, client: Discord.Client, args: string[]) {
     //@ts-ignore
     let page:number = typeof args[1] == "undefined" ? isNaN(parseInt(args[0])) ? 1 : parseInt(args[0]) : args[1];;
     let ratings = await gettemplatedb()
@@ -261,6 +261,91 @@ export async function templatecheck(message: Discord.Message, client: Discord.Cl
         await templatelinksremoved(removelinks)
         await message.reply(`Finished. Removed ${removelinks.length} templates`)
     })
+}
+
+export async function templatecheck(message: Discord.Message, client: Discord.Client, args: string[]) {
+    let list = await (await gettemplatedb()).list
+    let emotes = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"]
+    const filter = (reaction: { emoji: { name: string; }; }, user: Discord.User) => {
+        return emotes.includes(reaction.emoji.name) && !user.bot;
+    };
+
+    let struct:{
+        msg:Discord.Message,
+        tempstring:string,
+        remove:boolean,
+        position:number
+    }[] = []
+
+    let removelinks:string[] = []
+
+    for(let i = 0; i < 10; i++){
+        await message.channel.send(list[i]).then(async m => {
+            struct.push({
+                msg:m,
+                tempstring:list[i], 
+                remove:false,
+                position:i,
+            })
+        })
+    }
+
+    const m = <Discord.Message>(
+        await message.channel.send(
+            new Discord.MessageEmbed()
+            .setColor("RANDOM")
+            .setDescription("Click on the emotes 1 to 10 to select a template to remove.\nClick next arrow to go to the next 10 templates.")
+        )
+    );
+
+    for(let l = 0; l < emotes.length; l++){
+        m.react(emotes[l])
+    }
+    await m.react("➡");
+    
+
+    //const remove = m.createReactionCollector(((reaction: { emoji: { name: string; }; }, user: Discord.User) => reaction.emoji.name === '🗡️' && !user.bot), { time: 300000 });
+    const forwards = m.createReactionCollector(forwardsFilter, { time: 300000 });
+    const remove = m.createReactionCollector(filter, { time: 300000 });
+    
+    forwards.on('collect', async () => {
+        m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
+
+        // for(let i = struct[struct.length-1].position; i < list.slice(i).length; i++){
+        //     struct
+        // }
+        for(let s of struct){
+            s.msg.edit(list[s.position+10])
+            s.tempstring = list[s.position+10]
+            s.position += 10
+        }
+
+    });
+
+    remove.on('collect', async () => {
+        
+        m.reactions.cache.forEach(async reaction => {
+            reaction.users.remove(message.author.id)
+            
+            if(reaction.count! >= 2 ){
+                let pos = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"].indexOf(reaction.emoji.name)
+                console.log(pos)
+    
+                if(pos >= 0){
+                    removelinks.push(struct[pos].tempstring)
+                    console.log(removelinks)
+                }
+            }
+        })
+        //removelinks.push(m.embeds[0].image?.url!)
+        //m.reactions.message.channel.send(removelinks)
+    });
+
+    remove.on("end", async () => {
+        await templatelinksremoved(removelinks)
+        await message.reply(`Finished. Removed ${removelinks.length} templates`)
+    })
+
 }
 
 async function templatelinksremoved(list:string[], themes:boolean = false) {

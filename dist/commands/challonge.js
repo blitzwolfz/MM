@@ -201,6 +201,7 @@ exports.ChannelCreation = ChannelCreation;
 async function QualChannelCreation(message, args) {
     let groups = await db_1.getQuallist();
     let time = args[1];
+    let qlist = await db_1.getMatchlist();
     for (let i = 0; i < groups.users.length; i++) {
         if (groups.users[i].length > 0) {
             let category = await message.guild.channels.cache.find(c => c.name == "qualifiers" && c.type == "category");
@@ -215,13 +216,15 @@ async function QualChannelCreation(message, args) {
                     mention: string,
                     channel: channel.id,
                     type: "match",
-                    time: 86400,
+                    time: 129600,
                     timestamp: Math.round(message.createdTimestamp / 1000)
                 });
                 await channel.send(`${string}, Portion ${args[0]} has begun, and you have ${time}h to complete it. Contact a ref to begin your portion!`);
+                qlist.qualurl = channel.createdTimestamp.toString();
             });
         }
     }
+    await db_1.updateMatchlist(qlist);
     return message.reply("Made all channels");
 }
 exports.QualChannelCreation = QualChannelCreation;

@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.templatecheck = exports.themelistLb = exports.removeTheme = exports.addTheme = exports.approvetemplate = exports.template = void 0;
+exports.templatecheck = exports.ttemplatecheck = exports.themelistLb = exports.removeTheme = exports.addTheme = exports.approvetemplate = exports.template = void 0;
 const Discord = __importStar(require("discord.js"));
 const db_1 = require("../misc/db");
 const utils_1 = require("../misc/utils");
@@ -191,7 +191,7 @@ async function templatecheckembed(page = 1, client, templist, themes = false) {
         };
     }
 }
-async function templatecheck(message, client, args) {
+async function ttemplatecheck(message, client, args) {
     let page = typeof args[1] == "undefined" ? isNaN(parseInt(args[0])) ? 1 : parseInt(args[0]) : args[1];
     ;
     let ratings = await db_1.gettemplatedb();
@@ -215,6 +215,60 @@ async function templatecheck(message, client, args) {
         var _a;
         m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
         removelinks.push((_a = m.embeds[0].image) === null || _a === void 0 ? void 0 : _a.url);
+    });
+    remove.on("end", async () => {
+        await templatelinksremoved(removelinks);
+        await message.reply(`Finished. Removed ${removelinks.length} templates`);
+    });
+}
+exports.ttemplatecheck = ttemplatecheck;
+async function templatecheck(message, client, args) {
+    let list = await (await db_1.gettemplatedb()).list;
+    let emotes = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"];
+    const filter = (reaction, user) => {
+        return emotes.includes(reaction.emoji.name) && !user.bot;
+    };
+    let struct = [];
+    let removelinks = [];
+    for (let i = 0; i < 10; i++) {
+        await message.channel.send(list[i]).then(async (m) => {
+            struct.push({
+                msg: m,
+                tempstring: list[i],
+                remove: false,
+                position: i,
+            });
+        });
+    }
+    const m = (await message.channel.send(new Discord.MessageEmbed()
+        .setColor("RANDOM")
+        .setDescription("Click on the emotes 1 to 10 to select a template to remove.\nClick next arrow to go to the next 10 templates.")));
+    for (let l = 0; l < emotes.length; l++) {
+        m.react(emotes[l]);
+    }
+    await m.react("➡");
+    const forwards = m.createReactionCollector(utils_1.forwardsFilter, { time: 300000 });
+    const remove = m.createReactionCollector(filter, { time: 300000 });
+    forwards.on('collect', async () => {
+        m.reactions.cache.forEach(reaction => reaction.users.remove(message.author.id));
+        for (let s of struct) {
+            s.msg.edit(list[s.position + 10]);
+            s.tempstring = list[s.position + 10];
+            s.position += 10;
+        }
+    });
+    remove.on('collect', async () => {
+        m.reactions.cache.forEach(async (reaction) => {
+            reaction.users.remove(message.author.id);
+            if (reaction.count >= 2) {
+                let pos = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"].indexOf(reaction.emoji.name);
+                console.log(pos);
+                if (pos >= 0) {
+                    removelinks.push(struct[pos].tempstring);
+                    console.log(removelinks);
+                }
+            }
+        });
     });
     remove.on("end", async () => {
         await templatelinksremoved(removelinks);
