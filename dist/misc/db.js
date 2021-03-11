@@ -19,8 +19,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getthemes = exports.updatetemplatedb = exports.gettemplatedb = exports.inserttemplate = exports.gettempStruct = exports.getAllModProfiles = exports.resetModProfile = exports.updateModProfile = exports.addModProfile = exports.getModProfile = exports.getAllCockratings = exports.updateCockrating = exports.getCockrating = exports.insertCockrating = exports.updateVerify = exports.getVerify = exports.insertVerify = exports.insertConfig = exports.updateConfig = exports.getConfig = exports.updateMatchlist = exports.getMatchlist = exports.insertMatchlist = exports.deleteQuallist = exports.updateQuallist = exports.getQuallist = exports.insertQuallist = exports.deleteSignup = exports.updateSignup = exports.getSignups = exports.insertSignups = exports.deleteQuals = exports.deleteActive = exports.addUser = exports.changefield = exports.updateProfile = exports.getProfile = exports.getAllProfiles = exports.addProfile = exports.getSingularQuals = exports.getQuals = exports.getQual = exports.getMatch = exports.getActive = exports.updateQuals = exports.insertQuals = exports.updateActive = exports.dbSoftReset = exports.insertActive = exports.connectToDB = void 0;
-exports.deleteReminder = exports.updateReminder = exports.getReminders = exports.getReminder = exports.insertReminder = exports.insertExhibition = exports.updateExhibition = exports.getExhibition = exports.deleteGroupmatch = exports.getGroupmatch = exports.getGroupmatches = exports.updateGroupmatch = exports.insertGroupmatch = exports.getalltempStructs = exports.deletetempStruct = exports.updatetempStruct = exports.inserttempStruct = exports.updateThemedb = void 0;
+exports.getAllModProfiles = exports.resetModProfile = exports.updateModProfile = exports.addModProfile = exports.getModProfile = exports.getAllCockratings = exports.updateCockrating = exports.getCockrating = exports.insertCockrating = exports.updateVerify = exports.getVerify = exports.insertVerify = exports.insertConfig = exports.updateConfig = exports.getConfig = exports.updateMatchlist = exports.getMatchlist = exports.insertMatchlist = exports.deleteQuallist = exports.updateQuallist = exports.getQuallist = exports.insertQuallist = exports.deleteSignup = exports.updateSignup = exports.getSignups = exports.insertSignups = exports.deleteQuals = exports.deleteActive = exports.addUser = exports.changefield = exports.updateProfile = exports.getProfile = exports.getAllProfiles = exports.addProfile = exports.getSingularQuals = exports.getQuals = exports.getQual = exports.getMatch = exports.getActive = exports.updateQuals = exports.insertQuals = exports.updateActive = exports.dbSoftReset = exports.insertActive = exports.deleteDoc = exports.updateDoc = exports.getDoc = exports.insertDoc = exports.updater = exports.connectToDB = void 0;
+exports.deleteReminder = exports.updateReminder = exports.getReminders = exports.getReminder = exports.insertReminder = exports.insertExhibition = exports.updateExhibition = exports.getExhibition = exports.deleteGroupmatch = exports.getGroupmatch = exports.getGroupmatches = exports.updateGroupmatch = exports.insertGroupmatch = exports.getalltempStructs = exports.deletetempStruct = exports.updatetempStruct = exports.inserttempStruct = exports.updateThemedb = exports.getthemes = exports.updatetemplatedb = exports.gettemplatedb = exports.inserttemplate = exports.gettempStruct = void 0;
 const mongo = __importStar(require("mongodb"));
 require("dotenv").config();
 const MongoClient = mongo.MongoClient;
@@ -42,6 +42,26 @@ async function connectToDB() {
     });
 }
 exports.connectToDB = connectToDB;
+async function updater(coll, filter, update) {
+    await client.db(process.env.DBNAME).collection(coll).updateMany(filter, update);
+}
+exports.updater = updater;
+async function insertDoc(coll, upd) {
+    await client.db(process.env.DBNAME).collection(coll).insertOne(upd);
+}
+exports.insertDoc = insertDoc;
+async function getDoc(coll, id) {
+    return await client.db(process.env.DBNAME).collection(coll).findOne({ _id: id });
+}
+exports.getDoc = getDoc;
+async function updateDoc(coll, id, upd) {
+    return await client.db(process.env.DBNAME).collection(coll).updateOne({ _id: id }, { $set: upd });
+}
+exports.updateDoc = updateDoc;
+async function deleteDoc(coll, id) {
+    return await client.db(process.env.DBNAME).collection(coll).deleteOne({ _id: id });
+}
+exports.deleteDoc = deleteDoc;
 async function insertActive(activematch) {
     await client.db(process.env.DBNAME).collection("activematch").insertOne(activematch);
     console.log("Inserted ActiveMatches!");

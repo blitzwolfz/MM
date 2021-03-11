@@ -466,9 +466,7 @@ export async function deletechannels(message: Discord.Message, args: string[]) {
     } catch {
       continue
     }
-
   }
-
 
 }
 

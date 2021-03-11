@@ -27,6 +27,26 @@ export async function connectToDB(): Promise<void> {
     });
 }
 
+export async function updater(coll:string, filter:object, update:object){
+    await client.db(process.env.DBNAME).collection(coll).updateMany(filter, update)
+}
+
+export async function insertDoc(coll:string, upd:object){
+    await client.db(process.env.DBNAME).collection(coll).insertOne(upd)
+}
+
+export async function getDoc(coll:string, id:string) {
+    return await client.db(process.env.DBNAME).collection(coll).findOne({_id:id})
+}
+
+export async function updateDoc(coll:string, id:string, upd:object) {
+    return await client.db(process.env.DBNAME).collection(coll).updateOne({_id:id}, {$set:upd})
+}
+
+export async function deleteDoc(coll:string, id:string) {
+    return await client.db(process.env.DBNAME).collection(coll).deleteOne({_id:id})
+}
+
 export async function insertActive(activematch: activematch): Promise<void> {
     await client.db(process.env.DBNAME).collection("activematch").insertOne(activematch);
     console.log("Inserted ActiveMatches!")
