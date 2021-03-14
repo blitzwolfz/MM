@@ -388,14 +388,14 @@ export async function startmodqual(message: discord.Message, client: discord.Cli
     }
 
 
-    // else if (args.includes("theme")) {
-    //     newmatch.template = args.slice(args.indexOf("theme") + 1).join(" ")
+    else if (args.includes("theme")) {
+        newmatch.template = args.slice(args.indexOf("theme") + 1).join(" ")
 
-    //     await (<discord.TextChannel>client.channels.cache.get("738047732312309870")).send(`<#${message.channel.id}> theme is ${args.slice(args.indexOf("theme") + 1).join(" ")}`);
-    //     //     let user = await client.fetchUser(u.userid)
-    //     //     await user.send(`Your theme is: ${args.splice(5+x)}`)
-    //     // }
-    // }
+        await (<discord.TextChannel>client.channels.cache.get("738047732312309870")).send(`<#${message.channel.id}> theme is ${args.slice(args.indexOf("theme") + 1).join(" ")}`);
+        //     let user = await client.fetchUser(u.userid)
+        //     await user.send(`Your theme is: ${args.splice(5+x)}`)
+        // }
+    }
 
     else {
         await RandomTemplateFunc(message, client, message.channel.id, true)
@@ -996,30 +996,33 @@ export async function startregularsplit(message: discord.Message, client: discor
 
     message.channel.send(templook)
 
-    if (["th", "theme"].includes(args[3])) {
+    if (["th", "theme", "settheme"].includes(args[3])) {
+
         await RandomTemplateFunc(message, client, message.channel.id, true)
 
-        let rantemp = await gettempStruct(message.channel.id)
-
-        rantemp.time = rantemp.time - 2.5
-
-        while (rantemp.found === false) {
-
-            if (Math.floor(Date.now() / 1000) - rantemp.time > 120) {
-
-                await deletetempStruct(rantemp._id)
-                await (await (<discord.TextChannel>client.channels.cache.get("722616679280148504")).messages.fetch(rantemp.messageid)).delete()
-                return await message.channel.send(new discord.MessageEmbed()
-                    .setTitle(`Random Theme Selection failed `)
-                    .setColor("red")
-                    .setDescription(`Mods please restart this match`)
-                    .setTimestamp())
+            let rantemp = await gettempStruct(message.channel.id)
+    
+            rantemp.time = rantemp.time - 2.5
+    
+    
+    
+            while (rantemp.found === false) {
+    
+                if (Math.floor(Date.now() / 1000) - rantemp.time > 120) {
+    
+                    await deletetempStruct(rantemp._id)
+                    await (await (<discord.TextChannel>client.channels.cache.get("722616679280148504")).messages.fetch(rantemp.messageid)).delete()
+                    return await message.channel.send(new discord.MessageEmbed()
+                        .setTitle(`Random Theme Selection failed `)
+                        .setColor("red")
+                        .setDescription(`Mods please restart this match`)
+                        .setTimestamp())
+                }
+                rantemp = await gettempStruct(message.channel.id)
             }
-            rantemp = await gettempStruct(message.channel.id)
-        }
-
-        newmatch.theme = rantemp.url
-        await deletetempStruct(rantemp._id)
+    
+            newmatch.theme = rantemp.url
+            await deletetempStruct(rantemp._id)
 
         await insertActive(newmatch)
 
@@ -1037,6 +1040,8 @@ export async function startregularsplit(message: discord.Message, client: discor
             await message.react('🅰️')
             await message.react('🅱️')
         })
+
+            
     }
 
     else {

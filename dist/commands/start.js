@@ -297,6 +297,10 @@ async function startmodqual(message, client) {
         newmatch.template = rantemp.url;
         await db_1.deletetempStruct(rantemp._id);
     }
+    else if (args.includes("theme")) {
+        newmatch.template = args.slice(args.indexOf("theme") + 1).join(" ");
+        await client.channels.cache.get("738047732312309870").send(`<#${message.channel.id}> theme is ${args.slice(args.indexOf("theme") + 1).join(" ")}`);
+    }
     else {
         await randomtemp_1.RandomTemplateFunc(message, client, message.channel.id, true);
         let rantemp = await db_1.gettempStruct(message.channel.id);
@@ -646,7 +650,7 @@ async function startregularsplit(message, client) {
         .setColor("#d7be26")
         .setTimestamp();
     message.channel.send(templook);
-    if (["th", "theme"].includes(args[3])) {
+    if (["th", "theme", "settheme"].includes(args[3])) {
         await randomtemp_1.RandomTemplateFunc(message, client, message.channel.id, true);
         let rantemp = await db_1.gettempStruct(message.channel.id);
         rantemp.time = rantemp.time - 2.5;
