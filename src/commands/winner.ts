@@ -2,7 +2,7 @@ import * as discord from "discord.js"
 import { activematch } from "../misc/struct"
 import { deleteActive, deleteQuals, updateProfile, getSingularQuals, getMatch, getQual, deleteReminder, getReminder, insertReminder, getMatchlist } from "../misc/db"
 import { grandwinner, winner } from "./card"
-import { dateBuilder, qualifierresultadd } from "../misc/utils"
+import { dateBuilder, resultadd } from "../misc/utils"
 import { matchwinner } from "./challonge"
 require("dotenv").config();
 
@@ -421,7 +421,7 @@ export async function qualend(client: discord.Client, id: string) {
 
                     // await channel.setTopic(t.join(" "))
 
-                    let emm = await qualifierresultadd(channel, client, channel.topic!.split(" ")[0], message.id)
+                    let emm = await resultadd(channel, client, [channel.topic!.split(" ")[0], message.id])
 
                     await channel.send({ emm })
 

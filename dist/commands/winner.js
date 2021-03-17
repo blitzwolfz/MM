@@ -322,7 +322,7 @@ async function qualend(client, id) {
                 else if (t.join("").toLowerCase() === "round1")
                     await channel.setTopic(message.id);
                 else if (t.length === 1) {
-                    let emm = await utils_1.qualifierresultadd(channel, client, channel.topic.split(" ")[0], message.id);
+                    let emm = await utils_1.resultadd(channel, client, [channel.topic.split(" ")[0], message.id]);
                     await channel.send({ emm });
                     await (await client.channels.cache.get("722291182461386804"))
                         .send({ emm });
