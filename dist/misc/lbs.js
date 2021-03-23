@@ -55,6 +55,9 @@ async function winningLB(message, client, args) {
         case "p":
             symbol = "points";
             break;
+        case "r":
+            symbol = "ratio";
+            break;
         case "l":
             symbol = "loss";
             break;
@@ -89,9 +92,19 @@ async function winlistEmbed(page = 1, client, ratings, ...rest) {
     for (let i = index; i < index + 10; i++) {
         let obj = ratings[i];
         try {
+            let strr = "";
+            if (rest[1] === "ratio") {
+                let mat = Math.floor(obj.wins / (obj.wins + obj.loss) * 100);
+                if (obj.wins + obj.loss === 0)
+                    mat = 0;
+                strr += "Win Ratio: " + `${mat}`;
+            }
+            else {
+                strr += `${rest[1] === "memesvoted" ? "Memes voted on" : `${rest[1][0].toUpperCase()}${rest[1].substring(1)}`}: ${obj[rest[1]]}`;
+            }
             fields.push({
                 name: `${i + 1}) ${await (await client.users.fetch(ratings[i]._id)).username}`,
-                value: `${rest[1] === "memesvoted" ? "Memes voted on" : `${rest[1][0].toUpperCase()}${rest[1].substring(1)}`}: ${obj[rest[1]]}`
+                value: strr,
             });
         }
         catch {

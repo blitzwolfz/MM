@@ -62,7 +62,7 @@ async function ratingslistEmbed(page: number = 1, client: Discord.Client, rating
 
 export async function winningLB(message: Discord.Message, client: Discord.Client, args: string[]) {
     
-    let symbol: "wins" | "points" | "loss" | "memesvoted"  = "wins"
+    let symbol: "wins" | "points" | "loss" | "memesvoted" | "ratio"  = "wins"
 
     //@ts-ignore
     let page:number = typeof args[1] == "undefined" ? isNaN(parseInt(args[0])) ? 1 : parseInt(args[0]) : args[1];;
@@ -70,6 +70,7 @@ export async function winningLB(message: Discord.Message, client: Discord.Client
 
     switch (args[0]?.[0]) {
         case "p": symbol = "points"; break;
+        case "r": symbol = "ratio"; break;
         case "l": symbol = "loss"; break;
         case "v": symbol = "memesvoted"; break;
         default: symbol = "wins";
@@ -110,11 +111,26 @@ async function winlistEmbed(page: number = 1, client: Discord.Client, ratings: u
 
         let obj = ratings[i]
         try{
+            let strr = "";
+            if(rest[1] === "ratio"){
+                let mat = Math.floor(obj.wins/(obj.wins+obj.loss) * 100)
+
+                if(obj.wins + obj.loss === 0) mat = 0;
+
+                strr += "Win Ratio: " + `${mat}`
+            }
+
+            else {
+                //@ts-ignore
+                strr += `${rest[1] === "memesvoted" ? "Memes voted on" : `${rest[1][0].toUpperCase()}${rest[1].substring(1)}`}: ${obj[rest[1]]}`
+            }
+
             fields.push({
                 name: `${i+1}) ${await (await client.users.fetch(ratings[i]._id)).username}`,
                 //`${rest[1] === "memesvoted" ? "memesvoted" : rest[1]}`
                 //@ts-ignore
-                value: `${rest[1] === "memesvoted" ? "Memes voted on" : `${rest[1][0].toUpperCase()}${rest[1].substring(1)}`}: ${obj[rest[1]]}`
+                //value: `${rest[1] === "memesvoted" ? "Memes voted on" : `${rest[1][0].toUpperCase()}${rest[1].substring(1)}`}: ${obj[rest[1]]}`
+                value: strr,
             });
         }
         catch{

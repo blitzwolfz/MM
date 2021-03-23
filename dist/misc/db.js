@@ -118,7 +118,34 @@ async function addProfile(User) {
 }
 exports.addProfile = addProfile;
 async function getAllProfiles(field) {
-    return await client.db(process.env.DBNAME).collection("users").find({}).sort({ [field]: -1 }).toArray();
+    if (field !== "ratio") {
+        return await client.db(process.env.DBNAME).collection("users").find({}).sort({ [field]: -1 }).toArray();
+    }
+    else {
+        let arr = await client.db(process.env.DBNAME).collection("users").find({}).sort({ [field]: -1 }).toArray();
+        console.log(await arr.sort(function (a, b) {
+            let sum1 = 0;
+            if (b.wins + b.loss !== 0) {
+                sum1 = (Math.floor(b.wins / (b.wins + b.loss) * 100));
+            }
+            let sum2 = 0;
+            if (a.wins + a.loss !== 0) {
+                sum2 = (Math.floor(a.wins / (a.wins + a.loss) * 100));
+            }
+            return sum1 - sum2;
+        }));
+        return await arr.sort(function (a, b) {
+            let sum1 = 0;
+            if (b.wins + b.loss !== 0) {
+                sum1 = (Math.floor(b.wins / (b.wins + b.loss) * 100));
+            }
+            let sum2 = 0;
+            if (a.wins + a.loss !== 0) {
+                sum2 = (Math.floor(a.wins / (a.wins + a.loss) * 100));
+            }
+            return sum1 - sum2;
+        });
+    }
 }
 exports.getAllProfiles = getAllProfiles;
 async function getProfile(_id) {
