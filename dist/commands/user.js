@@ -36,21 +36,14 @@ async function stats(message, client) {
             user.name = name;
             await db_1.updateProfile(user._id, "name", name);
         }
-        let wr = 0;
-        if (user.loss === 0 && user.wins === 0)
+        let wr = Math.floor(user.wins / (user.wins + user.loss)) * 100;
+        if (user.loss + user.wins === 0)
             wr = 0;
-        else if (user.loss === 0)
-            wr = 100;
-        else if (user.wins === 0)
-            wr = 0;
-        else {
-            wr = Math.floor(user.wins / (user.wins + user.loss)) * 100;
-        }
         let UserEmbed = new discord.MessageEmbed()
             .setTitle(`${user.name}`)
             .setThumbnail(user.img)
-            .setColor("#d7be26")
-            .addFields({ name: 'Total points', value: `${user.points}` }, { name: 'Total wins', value: `${user.wins}` }, { name: 'Total loss', value: `${user.loss}` }, { name: 'Total matches', value: `${user.wins + user.loss}` }, { name: 'Win Rate', value: `${wr}%` });
+            .setColor("RANDOM")
+            .addFields({ name: 'Total Points', value: `${user.points}` }, { name: 'Total Wins', value: `${user.wins}` }, { name: 'Total Loss', value: `${user.loss}` }, { name: 'Total Matches', value: `${user.wins + user.loss}` }, { name: 'Win Rate', value: `${wr}%` });
         await message.channel.send(UserEmbed);
     }
 }

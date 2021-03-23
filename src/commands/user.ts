@@ -20,26 +20,20 @@ export async function stats(message: discord.Message, client: discord.Client){
             await updateProfile(user._id, "name", name)
         }
 
-        let wr = 0;
+        let wr = Math.floor(user.wins/(user.wins+user.loss)) * 100;
         
-        if(user.loss === 0 && user.wins === 0) wr = 0;
-        
-        else if(user.loss === 0) wr = 100;
-        
-        else if(user.wins === 0) wr = 0;
-        else{
-            wr = Math.floor(user.wins/(user.wins+user.loss)) * 100
-        }
+        if(user.loss + user.wins === 0) wr = 0;
 
         let UserEmbed = new discord.MessageEmbed()
             .setTitle(`${user.name}`)
             .setThumbnail(user.img)
-            .setColor("#d7be26")
+            //.setColor("#d7be26")
+            .setColor("RANDOM")
             .addFields(
-                { name: 'Total points', value: `${user.points}` },
-                { name: 'Total wins', value: `${user.wins}` },
-                { name: 'Total loss', value: `${user.loss}`  },
-                { name: 'Total matches', value: `${user.wins+user.loss}` },
+                { name: 'Total Points', value: `${user.points}` },
+                { name: 'Total Wins', value: `${user.wins}` },
+                { name: 'Total Loss', value: `${user.loss}`  },
+                { name: 'Total Matches', value: `${user.wins+user.loss}` },
                 { name: 'Win Rate', value: `${wr}%` },
             )
         
