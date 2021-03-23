@@ -20,7 +20,7 @@ export async function stats(message: discord.Message, client: discord.Client){
             await updateProfile(user._id, "name", name)
         }
 
-        let wr = Math.floor(user.wins/(user.wins+user.loss)) * 100;
+        let wr = Math.floor(user.wins/(user.wins+user.loss) * 100);
         
         if(user.loss + user.wins === 0) wr = 0;
 

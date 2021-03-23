@@ -36,7 +36,7 @@ async function stats(message, client) {
             user.name = name;
             await db_1.updateProfile(user._id, "name", name);
         }
-        let wr = Math.floor(user.wins / (user.wins + user.loss)) * 100;
+        let wr = Math.floor(user.wins / (user.wins + user.loss) * 100);
         if (user.loss + user.wins === 0)
             wr = 0;
         let UserEmbed = new discord.MessageEmbed()
