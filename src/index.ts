@@ -7,7 +7,7 @@ import {
   configDB,
   randomtempstruct
 } from "./misc/struct";
-import { submit, qualsubmit, modsubmit } from "./commands/submit";
+import { submit, qualsubmit, modsubmit, modqualsubmit } from "./commands/submit";
 import {
   start,
   running,
@@ -75,6 +75,7 @@ import {
   removequalwinner,
   QualChannelCreation,
   CreateCustomQualGroups,
+  dirtyChannelcreate,
 } from "./commands/challonge";
 import { manuallyverify, verify } from "./misc/verify";
 import { cockratingLB, winningLB, quallistGroups } from "./misc/lbs";
@@ -131,7 +132,6 @@ client.on('ready', async () => {
   }
 
   setInterval(async function () {
-    console.time("time to running");
     // await running(client).catch((error) => {
     //   console.log("it's in running");
     // });
@@ -146,24 +146,24 @@ client.on('ready', async () => {
     }
 
 
-    console.timeEnd("time to running");
+    
   }, 15000);
 
   setInterval(async function () {
     // console.log("A Second Kiss every 5 seconds");
-    console.time("time to qualrunning");
+
     await qualrunning(client).catch((error) => {
       console.log("it's in qualrunning");
     });
-    console.timeEnd("time to qualrunning");
+    
   }, 15000);
 
   setInterval(async function () {
     // console.log("A Third Kiss every 5 seconds");
-    console.time("time")
+    
     await deleteExhibitionchannels(client)
     await aaautoreminders(client)
-    console.timeEnd("time")
+    
   }, 1000);
 
   //await autoreminders(client)
@@ -769,9 +769,6 @@ client.on("message", async message => {
   else if (command === "test") {
 	
     await message.reply("no").then(async message => { await message.react('🤏') })
-
-    let a = new Discord.MessageAttachment(args[0])
-    message.channel.send(a)
   //   let users: players[] = []
   //   let plyerids: Array<string> = []
   //   let votearray = []
@@ -1010,7 +1007,8 @@ client.on("message", async message => {
 
   else if (command === "qualsubmit") {
     if (message.channel.id === "722285800225505879" || message.channel.id === "722285842705547305" || message.channel.id === "724839353129369681") return;
-    await qualsubmit(message, client)
+    if(args.includes("-mod")) await modqualsubmit(message, client, args);
+    else await qualsubmit(message, client);
   }
 
   else if (command === "submittemplate" || command === "template") {
@@ -1405,6 +1403,12 @@ client.on("message", async message => {
     if (message.member!.roles.cache.has('724818272922501190')
       || message.member!.roles.cache.has('724832462286356590'))
       await ChannelCreation(message, client, args)
+  }
+
+  else if (command === "dirtychannelcreate") {
+    if (message.member!.roles.cache.has('724818272922501190')
+      || message.member!.roles.cache.has('724832462286356590'))
+      await dirtyChannelcreate(message, client, args)
   }
 
   else if (command === "qualchannelcreate") {

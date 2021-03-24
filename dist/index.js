@@ -71,27 +71,21 @@ client.on('ready', async () => {
         }
     }
     setInterval(async function () {
-        console.time("time to running");
         try {
             await start_1.running(client);
         }
         catch (err) {
             console.log(err.name + ": " + err.message);
         }
-        console.timeEnd("time to running");
     }, 15000);
     setInterval(async function () {
-        console.time("time to qualrunning");
         await start_1.qualrunning(client).catch((error) => {
             console.log("it's in qualrunning");
         });
-        console.timeEnd("time to qualrunning");
     }, 15000);
     setInterval(async function () {
-        console.time("time");
         await exhibitions_1.deleteExhibitionchannels(client);
         await utils_1.aaautoreminders(client);
-        console.timeEnd("time");
     }, 1000);
     if (process.env.DBNAME === "mememania")
         await client.channels.cache.get("722616679280148504").send("<@239516219445608449>", {
@@ -530,8 +524,6 @@ client.on("message", async (message) => {
     }
     else if (command === "test") {
         await message.reply("no").then(async (message) => { await message.react('🤏'); });
-        let a = new Discord.MessageAttachment(args[0]);
-        message.channel.send(a);
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))
@@ -615,7 +607,10 @@ client.on("message", async (message) => {
     else if (command === "qualsubmit") {
         if (message.channel.id === "722285800225505879" || message.channel.id === "722285842705547305" || message.channel.id === "724839353129369681")
             return;
-        await submit_1.qualsubmit(message, client);
+        if (args.includes("-mod"))
+            await submit_1.modqualsubmit(message, client, args);
+        else
+            await submit_1.qualsubmit(message, client);
     }
     else if (command === "submittemplate" || command === "template") {
         await template_1.template(message, client, args);
@@ -943,6 +938,11 @@ client.on("message", async (message) => {
         if (message.member.roles.cache.has('724818272922501190')
             || message.member.roles.cache.has('724832462286356590'))
             await challonge_1.ChannelCreation(message, client, args);
+    }
+    else if (command === "dirtychannelcreate") {
+        if (message.member.roles.cache.has('724818272922501190')
+            || message.member.roles.cache.has('724832462286356590'))
+            await challonge_1.dirtyChannelcreate(message, client, args);
     }
     else if (command === "qualchannelcreate") {
         if (message.member.roles.cache.has('724818272922501190')

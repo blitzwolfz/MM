@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.matchlistmaker = exports.removequalwinner = exports.declarequalwinner = exports.GroupSearch = exports.matchwinner = exports.CreateCustomQualGroups = exports.CreateQualGroups = exports.QualChannelCreation = exports.ChannelCreation = exports.CreateChallongeMatchBracket = exports.CreateChallongeQualBracket = void 0;
+exports.matchlistmaker = exports.removequalwinner = exports.declarequalwinner = exports.GroupSearch = exports.matchwinner = exports.CreateCustomQualGroups = exports.CreateQualGroups = exports.QualChannelCreation = exports.dirtyChannelcreate = exports.ChannelCreation = exports.CreateChallongeMatchBracket = exports.CreateChallongeQualBracket = void 0;
 const Discord = __importStar(require("discord.js"));
 const db_1 = require("../misc/db");
 const utils_1 = require("../misc/utils");
@@ -198,6 +198,34 @@ async function ChannelCreation(message, disclient, args) {
     return message.reply("Made all channels");
 }
 exports.ChannelCreation = ChannelCreation;
+async function dirtyChannelcreate(message, disclient, args) {
+    let ids = args.slice(2);
+    for (let i = 0; i < ids.length; i++) {
+        let channelstringname = await (await disclient.users.fetch(ids[i])).username.substring(0, 10) + "-vs-" + await (await disclient.users.fetch(ids[i + 1])).username.substring(0, 10);
+        await message.guild.channels.create(channelstringname, { type: 'text', topic: `` })
+            .then(async (channel) => {
+            let category = await message.guild.channels.cache.find(c => c.name == "matches" && c.type == "category");
+            await channel.send(`<@${ids[i]}> <@${ids[i + 1]}> You have ${args[1]}h to complete this match. Contact a ref to begin, you may also split your match`);
+            if (!category)
+                throw new Error("Category channel does not exist");
+            await channel.setParent(category.id);
+            await channel.lockPermissions();
+            let t = await db_1.getMatchlist();
+            await db_1.insertReminder({
+                _id: channel.id,
+                mention: `<@${ids[i]}> <@${ids[i + 1]}>`,
+                channel: channel.id,
+                type: "match",
+                time: 86400,
+                timestamp: Math.round(message.createdTimestamp / 1000)
+            });
+            t.qualurl = Math.round(message.createdTimestamp / 1000).toString();
+            await db_1.updateMatchlist(t);
+        });
+        i += 2;
+    }
+}
+exports.dirtyChannelcreate = dirtyChannelcreate;
 async function QualChannelCreation(message, args) {
     let groups = await db_1.getQuallist();
     let time = args[1];

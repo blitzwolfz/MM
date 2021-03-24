@@ -278,7 +278,7 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
                                                 t.qualurl = Math.round(message.createdTimestamp / 1000).toString()
 
                                                 await updateMatchlist(t)
-                                            });
+                                        });
                                     }
 
                                 }
@@ -292,6 +292,44 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
         });
     }
     return message.reply("Made all channels")
+}
+
+export async function dirtyChannelcreate(message: Discord.Message, disclient: Discord.Client, args: string[]) {
+    let ids = args.slice(2)
+
+    for(let i = 0; i < ids.length; i++){
+        let channelstringname = await (await disclient.users.fetch(ids[i])).username.substring(0, 10) + "-vs-" + await (await disclient.users.fetch(ids[i+1])).username.substring(0, 10)
+        await message.guild!.channels.create(channelstringname, { type: 'text', topic: `` })
+        .then(async channel => {
+            let category = await message.guild!.channels.cache.find(c => c.name == "matches" && c.type == "category");
+
+            // console.log(name1)
+            // console.log(name1)
+
+            await channel.send(`<@${ids[i]}> <@${ids[i+1]}> You have ${args[1]}h to complete this match. Contact a ref to begin, you may also split your match`)
+            if (!category) throw new Error("Category channel does not exist");
+            await channel.setParent(category.id);
+            await channel.lockPermissions()
+            let t = await getMatchlist()
+            
+            await insertReminder(
+                {
+                  _id:channel.id,
+                  mention:`<@${ids[i]}> <@${ids[i+1]}>`,
+                  channel:channel.id,
+                  type:"match",
+                  time:86400,
+                  timestamp:Math.round(message.createdTimestamp / 1000)
+                }
+            )
+
+
+            t.qualurl = Math.round(message.createdTimestamp / 1000).toString()
+
+            await updateMatchlist(t)
+        });
+        i+= 2
+    }
 }
 
 export async function QualChannelCreation(message: Discord.Message, args: string[]) {

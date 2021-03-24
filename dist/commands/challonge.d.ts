@@ -2,6 +2,7 @@ import * as Discord from "discord.js";
 export declare function CreateChallongeQualBracket(message: Discord.Message, disclient: Discord.Client, args: string[]): Promise<Discord.Message | undefined>;
 export declare function CreateChallongeMatchBracket(message: Discord.Message, disclient: Discord.Client, args: string[], guild: Discord.Guild): Promise<void>;
 export declare function ChannelCreation(message: Discord.Message, disclient: Discord.Client, args: string[]): Promise<Discord.Message>;
+export declare function dirtyChannelcreate(message: Discord.Message, disclient: Discord.Client, args: string[]): Promise<void>;
 export declare function QualChannelCreation(message: Discord.Message, args: string[]): Promise<Discord.Message>;
 export declare function CreateQualGroups(message: Discord.Message, args: string[]): Promise<Discord.Message | undefined>;
 export declare function CreateCustomQualGroups(message: Discord.Message, args: string[]): Promise<Discord.Message | undefined>;
