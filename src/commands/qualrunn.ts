@@ -14,16 +14,16 @@ export async function qualrunn(match: qualmatch, channelid: string, client: disc
     
     // console.log(qual)
     if(!match) {
-        console.log("Check 1")
+        
         return;
     }
     
 
     if(match.votingperiod === false){
         
-        console.log("Check 2")
+        
         if(!match.split){
-            console.log("Check 3")
+            
             if(Math.floor(Date.now() / 1000) - match.octime > 1800 || match.playersdone.length === match.playerids.length){
 
                 if(match.playersdone.length <= 2){
@@ -98,7 +98,7 @@ export async function qualrunn(match: qualmatch, channelid: string, client: disc
     
     
         else if(match.split){
-            console.log("Check 4")
+            
             for(let player of match.players){
                 if(player.split){
                     if(Math.floor(Date.now() / 1000) - player.time > 1800 && player.failed === false){
@@ -135,7 +135,7 @@ export async function qualrunn(match: qualmatch, channelid: string, client: disc
                 //Doing this because a split match uses playersdone to turn into a regular match. 
                 //When this block of code excutes, the match will already be transforming into a regular match
 
-                console.log("Check 5")
+                
                 match.split = false
                 match.octime = ((Math.floor(Date.now())) /1000) - 1800
 

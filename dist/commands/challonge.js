@@ -245,7 +245,7 @@ async function QualChannelCreation(message, args) {
                     channel: channel.id,
                     type: "match",
                     time: 129600,
-                    timestamp: Math.round(message.createdTimestamp / 1000)
+                    timestamp: Math.round(message.createdTimestamp / 1000) - 43200
                 });
                 await channel.send(`${string}, Portion ${args[0]} has begun, and you have ${time}h to complete it. Contact a ref to begin your portion!`);
                 qlist.qualurl = channel.createdTimestamp.toString();
