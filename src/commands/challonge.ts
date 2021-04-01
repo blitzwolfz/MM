@@ -452,6 +452,11 @@ export async function CreateCustomQualGroups(message: Discord.Message, args: str
             if (Signups.open === false) {
 
                 let groups:string[][] = [];
+                for(let x = 0; x < am2+gNum2+am+gNum; x++){
+                    Signups.users = await shuffle(Signups.users)
+                }
+                
+
 
                 groups = (await makeCustomGroup(gNum, Signups.users.slice(0, am+1)))
                 message.reply(await (await makeCustomGroup(gNum, Signups.users.slice(0, am+1))).length)

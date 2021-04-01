@@ -306,6 +306,9 @@ async function CreateCustomQualGroups(message, args) {
         if (Signups) {
             if (Signups.open === false) {
                 let groups = [];
+                for (let x = 0; x < am2 + gNum2 + am + gNum; x++) {
+                    Signups.users = await shuffle(Signups.users);
+                }
                 groups = (await makeCustomGroup(gNum, Signups.users.slice(0, am + 1)));
                 message.reply(await (await makeCustomGroup(gNum, Signups.users.slice(0, am + 1))).length);
                 groups = groups.concat(await makeCustomGroup(gNum2, Signups.users.slice(am + 1, am2)));

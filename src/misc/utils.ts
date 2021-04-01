@@ -653,7 +653,7 @@ export async function oldqualifierresultadd(channel: Discord.TextChannel, client
 
 export async function qualifierresultadd(c: Discord.TextChannel, client: Discord.Client, msg1: string, msg2: string) {
   //let r = /\d+/g
-  console.time("total time")
+  
 
   let m = await c.messages.fetch(msg1)
 
@@ -736,7 +736,7 @@ export async function qualifierresultadd(c: Discord.TextChannel, client: Discord
       timestamp: new Date()
     }
   })
-  console.timeEnd("total time")
+  
 }
 
 export async function resultadd(channel: Discord.TextChannel, client: Discord.Client, ids:string[]){
