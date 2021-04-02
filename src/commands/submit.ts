@@ -598,12 +598,13 @@ export async function modqualsubmit(message: Discord.Message, client: Discord.Cl
 
     let matches: qualmatch[] = await getQuals()
 
-    let num = parseInt(args[1])-1
+    let num = parseInt(args[3])-1
 
     for (const match of matches) {
         for (let player of match.players) {
             if (player.split === true || match.split === false) {
                 if (player.memedone === false) {
+                    console.log(match.players.findIndex(x => x === player))
                     if (match.players.findIndex(x => x === player) === num) {
                         player.memedone = true;
                         player.memelink = message.attachments.array()[0].url;
