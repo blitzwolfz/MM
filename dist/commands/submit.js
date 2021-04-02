@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.qualsubmit = exports.modsubmit = exports.submit = exports.ssubmit = void 0;
+exports.modqualsubmit = exports.modsubmit = exports.qualsubmit = exports.submit = exports.ssubmit = void 0;
 const db_1 = require("../misc/db");
 async function ssubmit(message, client) {
     if (message.content.includes("imgur")) {
@@ -236,6 +236,76 @@ async function submit(message, client, args) {
     }
 }
 exports.submit = submit;
+async function qualsubmit(message, client) {
+    if (message.content.includes("imgur")) {
+        return message.reply("You can't submit imgur links");
+    }
+    if (message.attachments.size > 1) {
+        return message.reply("You can't submit more than one image");
+    }
+    else if (message.attachments.size <= 0) {
+        return message.reply("Your image was not submitted properly. Contact a mod");
+    }
+    else if (message.channel.type !== "dm") {
+        return message.reply("You didn't not submit this in the DM with the bot.\nPlease delete and try again.");
+    }
+    else if (message.attachments.array()[0].url.toString().includes("mp4"))
+        return message.reply("Video submissions aren't allowed");
+    else {
+        let matches = await db_1.getQuals();
+        for (const match of matches) {
+            for (let player of match.players) {
+                if (player.split === true || match.split === false) {
+                    if (player.memedone === false) {
+                        if (player.userid === message.author.id) {
+                            player.memedone = true;
+                            player.memelink = message.attachments.array()[0].url;
+                            player.split = false;
+                            if (!match.playersdone.includes(message.author.id)) {
+                                match.playersdone.push(message.author.id);
+                            }
+                            await message.reply("You meme has been attached!");
+                            await client.channels.cache.get("722616679280148504").send({
+                                embed: {
+                                    description: `<@${message.author.id}> has submitted their meme\nChannel: <#${match.channelid}>`,
+                                    color: "#d7be26",
+                                    timestamp: new Date()
+                                }
+                            });
+                            await client.channels.cache.get("793242781892083742").send({
+                                embed: {
+                                    description: `<@${message.author.id}>  ${message.author.tag} has submitted their meme\nChannel: <#${match.channelid}>`,
+                                    color: "#d7be26",
+                                    image: {
+                                        url: message.attachments.array()[0].url,
+                                    },
+                                    timestamp: new Date()
+                                }
+                            });
+                            player.memedone = true;
+                            try {
+                                let r = await db_1.getReminder(match.channelid);
+                                r.mention = r.mention.replace(`<@${message.author.id}>`, "");
+                                await db_1.updateReminder(r);
+                            }
+                            catch (error) {
+                                console.log("");
+                            }
+                            try {
+                                await db_1.deleteReminder(await db_1.getReminder(message.author.id));
+                            }
+                            catch (error) {
+                            }
+                            await db_1.updateQuals(match);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+exports.qualsubmit = qualsubmit;
 async function modsubmit(message, client, args) {
     console.log("Args is", args);
     let match = await db_1.getMatch(message.mentions.channels.first().id);
@@ -349,73 +419,58 @@ async function modsubmit(message, client, args) {
     }
 }
 exports.modsubmit = modsubmit;
-async function qualsubmit(message, client) {
-    if (message.content.includes("imgur")) {
-        return message.reply("You can't submit imgur links");
-    }
-    if (message.attachments.size > 1) {
-        return message.reply("You can't submit more than one image");
-    }
-    else if (message.attachments.size <= 0) {
-        return message.reply("Your image was not submitted properly. Contact a mod");
-    }
-    else if (message.channel.type !== "dm") {
-        return message.reply("You didn't not submit this in the DM with the bot.\nPlease delete and try again.");
-    }
-    else if (message.attachments.array()[0].url.toString().includes("mp4"))
-        return message.reply("Video submissions aren't allowed");
-    else {
-        let matches = await db_1.getQuals();
-        for (const match of matches) {
-            for (let player of match.players) {
-                if (player.split === true || match.split === false) {
-                    if (player.memedone === false) {
-                        if (player.userid === message.author.id) {
-                            player.memedone = true;
-                            player.memelink = message.attachments.array()[0].url;
-                            player.split = false;
-                            if (!match.playersdone.includes(message.author.id)) {
-                                match.playersdone.push(message.author.id);
-                            }
-                            await message.reply("You meme has been attached!");
-                            await client.channels.cache.get("722616679280148504").send({
-                                embed: {
-                                    description: `<@${message.author.id}> has submitted their meme\nChannel: <#${match.channelid}>`,
-                                    color: "#d7be26",
-                                    timestamp: new Date()
-                                }
-                            });
-                            await client.channels.cache.get("793242781892083742").send({
-                                embed: {
-                                    description: `<@${message.author.id}>  ${message.author.tag} has submitted their meme\nChannel: <#${match.channelid}>`,
-                                    color: "#d7be26",
-                                    image: {
-                                        url: message.attachments.array()[0].url,
-                                    },
-                                    timestamp: new Date()
-                                }
-                            });
-                            player.memedone = true;
-                            try {
-                                let r = await db_1.getReminder(match.channelid);
-                                r.mention = r.mention.replace(`<@${message.author.id}>`, "");
-                                await db_1.updateReminder(r);
-                            }
-                            catch (error) {
-                                console.log("");
-                            }
-                            try {
-                                await db_1.deleteReminder(await db_1.getReminder(message.author.id));
-                            }
-                            catch (error) {
-                            }
-                            await db_1.updateQuals(match);
-                            return;
+async function modqualsubmit(message, client, args) {
+    let matches = await db_1.getQuals();
+    let num = parseInt(args[1]) - 1;
+    for (const match of matches) {
+        for (let player of match.players) {
+            if (player.split === true || match.split === false) {
+                if (player.memedone === false) {
+                    if (match.players.findIndex(x => x === player) === num) {
+                        player.memedone = true;
+                        player.memelink = message.attachments.array()[0].url;
+                        player.split = false;
+                        if (!match.playersdone.includes(message.mentions.users.first().id)) {
+                            match.playersdone.push(message.mentions.users.first().id);
                         }
+                        await message.reply("You meme has been attached!");
+                        await client.channels.cache.get("722616679280148504").send({
+                            embed: {
+                                description: `<@${message.mentions.users.first().id}> has submitted their meme\nChannel: <#${match.channelid}>`,
+                                color: "#d7be26",
+                                timestamp: new Date()
+                            }
+                        });
+                        await client.channels.cache.get("793242781892083742").send({
+                            embed: {
+                                description: `<@${message.mentions.users.first().id}>  ${message.mentions.users.first().tag} has submitted their meme\nChannel: <#${match.channelid}>`,
+                                color: "#d7be26",
+                                image: {
+                                    url: message.attachments.array()[0].url,
+                                },
+                                timestamp: new Date()
+                            }
+                        });
+                        player.memedone = true;
+                        try {
+                            let r = await db_1.getReminder(match.channelid);
+                            r.mention = r.mention.replace(`<@${message.mentions.users.first().id}>`, "");
+                            await db_1.updateReminder(r);
+                        }
+                        catch (error) {
+                            console.log("");
+                        }
+                        try {
+                            await db_1.deleteReminder(await db_1.getReminder(message.mentions.users.first().id));
+                        }
+                        catch (error) {
+                        }
+                        await db_1.updateQuals(match);
+                        return;
                     }
                 }
             }
         }
     }
 }
-exports.qualsubmit = qualsubmit;
+exports.modqualsubmit = modqualsubmit;
