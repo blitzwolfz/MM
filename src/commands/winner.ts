@@ -423,10 +423,10 @@ export async function qualend(client: discord.Client, id: string) {
 
                     let emm = await resultadd(channel, client, [channel.topic!.split(" ")[0], message.id])
 
-                    await channel.send({ emm })
+                    await channel.send({ embed:emm })
 
                     await (await (<discord.TextChannel>client.channels.cache.get("722291182461386804")))
-                        .send({ emm });
+                        .send({ embed:emm });
                 }
 
             });
