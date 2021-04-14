@@ -201,7 +201,7 @@ async function startqual(message, client) {
         channelid: message.channel.id,
         players: users,
         playerids: plyerids,
-        template: "",
+        template: [],
         istheme: false,
         votes: votearray,
         octime: Math.floor(Date.now() / 1000),
@@ -271,7 +271,7 @@ async function startmodqual(message, client) {
         players: users,
         octime: 0,
         votes: votearray,
-        template: "",
+        template: [],
         istheme: false,
         playersdone: [],
         votingperiod: false,
@@ -294,11 +294,29 @@ async function startmodqual(message, client) {
             }
             rantemp = await db_1.gettempStruct(message.channel.id);
         }
-        newmatch.template = rantemp.url;
+        newmatch.template.push(rantemp.url);
+        await db_1.deletetempStruct(rantemp._id);
+        await randomtemp_1.RandomTemplateFunc(message, client, message.channel.id, false);
+        rantemp = await db_1.gettempStruct(message.channel.id);
+        rantemp.time = rantemp.time - 2.5;
+        console.log(rantemp);
+        while (rantemp.found === false) {
+            if (Math.floor(Date.now() / 1000) - rantemp.time > 120) {
+                await db_1.deletetempStruct(rantemp._id);
+                await (await client.channels.cache.get("722616679280148504").messages.fetch(rantemp.messageid)).delete();
+                return await message.channel.send(new discord.MessageEmbed()
+                    .setTitle(`Random Template Selection failed `)
+                    .setColor("RED")
+                    .setDescription(`Mods please restart this match`)
+                    .setTimestamp());
+            }
+            rantemp = await db_1.gettempStruct(message.channel.id);
+        }
+        newmatch.template.push(rantemp.url);
         await db_1.deletetempStruct(rantemp._id);
     }
     else if (args.includes("theme")) {
-        newmatch.template = args.slice(args.indexOf("theme") + 1).join(" ");
+        newmatch.template.push(args.slice(args.indexOf("theme") + 1).join(" "));
         await client.channels.cache.get("738047732312309870").send(`<#${message.channel.id}> theme is ${args.slice(args.indexOf("theme") + 1).join(" ")}`);
     }
     else {
@@ -317,7 +335,26 @@ async function startmodqual(message, client) {
             }
             rantemp = await db_1.gettempStruct(message.channel.id);
         }
-        newmatch.template = rantemp.url;
+        newmatch.template.push(rantemp.url);
+        newmatch.istheme = true;
+        await db_1.deletetempStruct(rantemp._id);
+        await client.channels.cache.get("738047732312309870").send(`<#${message.channel.id}> theme is ${newmatch.template}`);
+        await randomtemp_1.RandomTemplateFunc(message, client, message.channel.id, true);
+        rantemp = await db_1.gettempStruct(message.channel.id);
+        rantemp.time = rantemp.time - 2.5;
+        while (rantemp.found === false) {
+            if (Math.floor(Date.now() / 1000) - rantemp.time > 120) {
+                await db_1.deletetempStruct(rantemp._id);
+                await (await client.channels.cache.get("722616679280148504").messages.fetch(rantemp.messageid)).delete();
+                return await message.channel.send(new discord.MessageEmbed()
+                    .setTitle(`Random Theme Selection failed `)
+                    .setColor("red")
+                    .setDescription(`Mods please restart this match`)
+                    .setTimestamp());
+            }
+            rantemp = await db_1.gettempStruct(message.channel.id);
+        }
+        newmatch.template.push(rantemp.url);
         newmatch.istheme = true;
         await db_1.deletetempStruct(rantemp._id);
         await client.channels.cache.get("738047732312309870").send(`<#${message.channel.id}> theme is ${newmatch.template}`);
@@ -495,7 +532,12 @@ async function splitqual(client, message, ...userid) {
                     else if (match.istheme === false) {
                         await user.send(new discord.MessageEmbed()
                             .setTitle("Your template")
-                            .setImage(match.template)
+                            .setImage(match.template[0])
+                            .setColor("#d7be26")
+                            .setTimestamp());
+                        await user.send(new discord.MessageEmbed()
+                            .setTitle("Your template")
+                            .setImage(match.template[1])
                             .setColor("#d7be26")
                             .setTimestamp());
                     }
@@ -718,16 +760,18 @@ async function reload(message, client) {
     if (match) {
         let channel = client.channels.cache.get(match.channelid);
         if (!match) {
-            console.log("Check 1");
             return;
         }
-        console.log("Check 2");
-        console.log("Check 3");
         if (Math.floor(Date.now() / 1000) - match.octime > 1800 || match.playersdone.length === match.playerids.length) {
             if (match.istheme === false) {
                 await channel.send(new discord.MessageEmbed()
                     .setTitle("Template")
-                    .setImage(match.template)
+                    .setImage(match.template[0])
+                    .setColor("#07da63")
+                    .setTimestamp());
+                await channel.send(new discord.MessageEmbed()
+                    .setTitle("Template")
+                    .setImage(match.template[1])
                     .setColor("#07da63")
                     .setTimestamp());
             }

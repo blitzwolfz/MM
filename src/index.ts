@@ -769,6 +769,13 @@ client.on("message", async message => {
   else if (command === "test") {
 	
     await message.reply("no").then(async message => { await message.react('🤏') })
+
+    let c = <Discord.TextChannel>client.channels.cache.get(message.channel.id)
+
+    let m = (await c.messages.fetch({limit:100})).last()!
+
+    await message.channel.send(Math.floor(m.createdTimestamp/1000))
+    await message.channel.send(Math.floor(((Math.floor(m.createdTimestamp/1000)+ 259200) - Math.floor(Date.now()/1000))/3600))
   //   let users: players[] = []
   //   let plyerids: Array<string> = []
   //   let votearray = []
@@ -1107,7 +1114,7 @@ client.on("message", async message => {
 
     let match = await getQual(message.mentions.channels.first()!.id)
 
-    match.template = args.slice(1).join(" ")
+    match.template.push(args.slice(1).join(" "))
 
     await (<Discord.TextChannel>client.channels.cache.get("738047732312309870"))
       .send(`<#${match.channelid}> theme is ${args.slice(1).join(" ")}`);

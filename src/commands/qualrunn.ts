@@ -39,7 +39,13 @@ export async function qualrunn(match: qualmatch, channelid: string, client: disc
                 if(match.istheme === false){
                     await channel.send(new discord.MessageEmbed()
                     .setTitle("Template")
-                    .setImage(match.template)
+                    .setImage(match.template[0])
+                    .setColor("#07da63")
+                    .setTimestamp())
+
+                    await channel.send(new discord.MessageEmbed()
+                    .setTitle("Template")
+                    .setImage(match.template[1])
                     .setColor("#07da63")
                     .setTimestamp())
                 }

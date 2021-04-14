@@ -365,7 +365,7 @@ export async function QualChannelCreation(message: Discord.Message, args: string
                           channel:channel.id,
                           type:"match",
                           time:129600,
-                          timestamp:Math.round(message.createdTimestamp / 1000)
+                          timestamp:Math.round(message.createdTimestamp / 1000)-43200
                         }
                     )
 

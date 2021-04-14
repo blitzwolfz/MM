@@ -29,13 +29,10 @@ async function qualrunn(match, channelid, client) {
     console.log((Math.floor(Date.now() / 1000) - match.votetime > 7200));
     console.log((Math.floor(Date.now() / 1000) - match.votetime));
     if (!match) {
-        console.log("Check 1");
         return;
     }
     if (match.votingperiod === false) {
-        console.log("Check 2");
         if (!match.split) {
-            console.log("Check 3");
             if (Math.floor(Date.now() / 1000) - match.octime > 1800 || match.playersdone.length === match.playerids.length) {
                 if (match.playersdone.length <= 2) {
                     match.votingperiod = true;
@@ -46,7 +43,12 @@ async function qualrunn(match, channelid, client) {
                 if (match.istheme === false) {
                     await channel.send(new discord.MessageEmbed()
                         .setTitle("Template")
-                        .setImage(match.template)
+                        .setImage(match.template[0])
+                        .setColor("#07da63")
+                        .setTimestamp());
+                    await channel.send(new discord.MessageEmbed()
+                        .setTitle("Template")
+                        .setImage(match.template[1])
                         .setColor("#07da63")
                         .setTimestamp());
                 }
@@ -89,7 +91,6 @@ async function qualrunn(match, channelid, client) {
             }
         }
         else if (match.split) {
-            console.log("Check 4");
             for (let player of match.players) {
                 if (player.split) {
                     if (Math.floor(Date.now() / 1000) - player.time > 1800 && player.failed === false) {
@@ -116,7 +117,6 @@ async function qualrunn(match, channelid, client) {
                 }
             }
             if (match.playersdone.length === match.playerids.length) {
-                console.log("Check 5");
                 match.split = false;
                 match.octime = ((Math.floor(Date.now())) / 1000) - 1800;
                 let temparr = [];
