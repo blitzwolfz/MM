@@ -129,7 +129,7 @@ export async function exhibition(message: Discord.Message, client: Discord.Clien
                 split: false,
                 exhibition:true,
                 messageID: "",
-                template: "",
+                template: [],
                 theme: "",
                 tempfound: false,
                 p1: {
@@ -165,7 +165,7 @@ export async function exhibition(message: Discord.Message, client: Discord.Clien
 
             if(args[1] === "template"){
                 let templatelist = await getRandomTemplateList(client)
-                newmatch.template = templatelist[Math.floor(Math.random() * (((templatelist.length - 1) - 1) - 1) + 1)];
+                newmatch.template.push(templatelist[Math.floor(Math.random() * (((templatelist.length - 1) - 1) - 1) + 1)])
             }
 
             if(args[1] === "theme"){
@@ -192,13 +192,13 @@ export async function exhibition(message: Discord.Message, client: Discord.Clien
             else{
                 await user1.send(new Discord.MessageEmbed()
                 .setTitle("Your template")
-                .setImage(newmatch.template)
+                .setImage(newmatch.template[0])
                 .setColor("#d7be26")
                 .setTimestamp())
             
                 await user2.send(new Discord.MessageEmbed()
                 .setTitle("Your template")
-                .setImage(newmatch.template)
+                .setImage(newmatch.template[0])
                 .setColor("#d7be26")
                 .setTimestamp())
             }

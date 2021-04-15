@@ -4,7 +4,7 @@ export interface activematch {
     messageID: string;
     split: boolean;
     exhibition: boolean;
-    template: string;
+    template: Array<string>;
     theme: string;
     tempfound: boolean;
     p1: {
@@ -38,7 +38,7 @@ export interface qualmatch {
     players: Array<players>;
     playerids: Array<string>;
     octime: number;
-    template: string;
+    template: Array<string>;
     istheme: boolean;
     split: boolean;
     votes: Array<Array<string>>;

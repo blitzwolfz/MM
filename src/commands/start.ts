@@ -46,7 +46,7 @@ export async function start(message: discord.Message, client: discord.Client) {
         split: false,
         exhibition: false,
         messageID: "",
-        template: "",
+        template: [],
         theme: "",
         tempfound: false,
         p1: {
@@ -163,7 +163,7 @@ export async function start(message: discord.Message, client: discord.Client) {
             rantemp = await gettempStruct(message.channel.id)
         }
 
-        newmatch.template = rantemp.url
+        newmatch.template.push(rantemp.url)
         await deletetempStruct(rantemp._id)
 
         await insertActive(newmatch)
@@ -449,7 +449,7 @@ export async function startmodqual(message: discord.Message, client: discord.Cli
         newmatch.template.push(rantemp.url)
         newmatch.istheme = true
         await deletetempStruct(rantemp._id)
-        await (<discord.TextChannel>client.channels.cache.get("738047732312309870")).send(`<#${message.channel.id}> theme is ${newmatch.template}`)
+        //await (<discord.TextChannel>client.channels.cache.get("738047732312309870")).send(`<#${message.channel.id}> theme is ${newmatch.template}`)
 
         await RandomTemplateFunc(message, client, message.channel.id, true)
 
@@ -678,7 +678,15 @@ export async function running(client: discord.Client): Promise<void> {
                     channelid.send(
                         new discord.MessageEmbed()
                             .setTitle("Template")
-                            .setImage(match.template)
+                            .setImage(match.template[0])
+                            .setColor("#07da63")
+                            .setTimestamp()
+                    )
+
+                    channelid.send(
+                        new discord.MessageEmbed()
+                            .setTitle("Template")
+                            .setImage(match.template[1])
                             .setColor("#07da63")
                             .setTimestamp()
                     )
@@ -812,7 +820,8 @@ export async function splitqual(client: discord.Client, message: discord.Message
 
 
                     if (match.template.length > 0 && match.istheme || match.template && match.istheme) {
-                        await user.send("\n\nHere is your theme: " + match.template)
+                        await user.send("\n\nHere is your themes: " + match.template.join(", "))
+                        
                         //await user.send({ files: [new discord.MessageAttachment(match.template)] })
                     }
 
@@ -899,7 +908,15 @@ export async function splitregular(message: discord.Message, client: discord.Cli
                             await (await client.users.fetch(match.p1.userid)).send(
                                 new discord.MessageEmbed()
                                     .setTitle("Your template")
-                                    .setImage(match.template)
+                                    .setImage(match.template[0])
+                                    .setColor("#d7be26")
+                                    .setTimestamp()
+                            )
+
+                            await (await client.users.fetch(match.p1.userid)).send(
+                                new discord.MessageEmbed()
+                                    .setTitle("Your template")
+                                    .setImage(match.template[1])
                                     .setColor("#d7be26")
                                     .setTimestamp()
                             )
@@ -948,7 +965,15 @@ export async function splitregular(message: discord.Message, client: discord.Cli
                             await (await client.users.fetch(match.p2.userid)).send(
                                 new discord.MessageEmbed()
                                     .setTitle("Your template")
-                                    .setImage(match.template)
+                                    .setImage(match.template[0])
+                                    .setColor("#d7be26")
+                                    .setTimestamp()
+                            )
+
+                            await (await client.users.fetch(match.p2.userid)).send(
+                                new discord.MessageEmbed()
+                                    .setTitle("Your template")
+                                    .setImage(match.template[1])
                                     .setColor("#d7be26")
                                     .setTimestamp()
                             )
@@ -1016,7 +1041,7 @@ export async function startregularsplit(message: discord.Message, client: discor
         split: true,
         exhibition: false,
         messageID: "",
-        template: "",
+        template: [],
         theme: "",
         tempfound: false,
         p1: {
@@ -1128,7 +1153,34 @@ export async function startregularsplit(message: discord.Message, client: discor
             rantemp = await gettempStruct(message.channel.id)
         }
 
-        newmatch.template = rantemp.url
+        newmatch.template.push(rantemp.url)
+        await deletetempStruct(rantemp._id)
+
+        await RandomTemplateFunc(message, client, message.channel.id, false)
+
+
+        rantemp = await gettempStruct(message.channel.id)
+
+        rantemp.time = rantemp.time - 2.5
+
+        console.log(rantemp)
+
+        while (rantemp.found === false) {
+
+            if (Math.floor(Date.now() / 1000) - rantemp.time > 120) {
+
+                await deletetempStruct(rantemp._id)
+                await (await (<discord.TextChannel>client.channels.cache.get("722616679280148504")).messages.fetch(rantemp.messageid)).delete()
+                return await message.channel.send(new discord.MessageEmbed()
+                    .setTitle(`Random Template Selection failed `)
+                    .setColor("red")
+                    .setDescription(`Mods please restart this match`)
+                    .setTimestamp())
+            }
+            rantemp = await gettempStruct(message.channel.id)
+        }
+
+        newmatch.template.push(rantemp.url)
         await deletetempStruct(rantemp._id)
 
         await insertActive(newmatch)
@@ -1373,7 +1425,15 @@ export async function reload(message: discord.Message, client: discord.Client) {
                 channelid.send(
                     new discord.MessageEmbed()
                         .setTitle("Template")
-                        .setImage(match.template)
+                        .setImage(match.template[0])
+                        .setColor("#07da63")
+                        .setTimestamp()
+                )
+
+                channelid.send(
+                    new discord.MessageEmbed()
+                        .setTitle("Template")
+                        .setImage(match.template[1])
                         .setColor("#07da63")
                         .setTimestamp()
                 )

@@ -52,7 +52,7 @@ async function start(message, client) {
         split: false,
         exhibition: false,
         messageID: "",
-        template: "",
+        template: [],
         theme: "",
         tempfound: false,
         p1: {
@@ -139,7 +139,7 @@ async function start(message, client) {
             }
             rantemp = await db_1.gettempStruct(message.channel.id);
         }
-        newmatch.template = rantemp.url;
+        newmatch.template.push(rantemp.url);
         await db_1.deletetempStruct(rantemp._id);
         await db_1.insertActive(newmatch);
         await card_1.vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[1].id]);
@@ -338,7 +338,6 @@ async function startmodqual(message, client) {
         newmatch.template.push(rantemp.url);
         newmatch.istheme = true;
         await db_1.deletetempStruct(rantemp._id);
-        await client.channels.cache.get("738047732312309870").send(`<#${message.channel.id}> theme is ${newmatch.template}`);
         await randomtemp_1.RandomTemplateFunc(message, client, message.channel.id, true);
         rantemp = await db_1.gettempStruct(message.channel.id);
         rantemp.time = rantemp.time - 2.5;
@@ -430,7 +429,12 @@ async function running(client) {
                 if (match.template) {
                     channelid.send(new discord.MessageEmbed()
                         .setTitle("Template")
-                        .setImage(match.template)
+                        .setImage(match.template[0])
+                        .setColor("#07da63")
+                        .setTimestamp());
+                    channelid.send(new discord.MessageEmbed()
+                        .setTitle("Template")
+                        .setImage(match.template[1])
                         .setColor("#07da63")
                         .setTimestamp());
                 }
@@ -527,7 +531,7 @@ async function splitqual(client, message, ...userid) {
                     u.split = true;
                     await user.send(`<@${user.id}> your qualifier match has been split.\nYou have 30 mins to complete your memes\nUse \`!qualsubmit\` to submit`);
                     if (match.template.length > 0 && match.istheme || match.template && match.istheme) {
-                        await user.send("\n\nHere is your theme: " + match.template);
+                        await user.send("\n\nHere is your themes: " + match.template.join(", "));
                     }
                     else if (match.istheme === false) {
                         await user.send(new discord.MessageEmbed()
@@ -581,7 +585,12 @@ async function splitregular(message, client, ...userid) {
                         if (match.template) {
                             await (await client.users.fetch(match.p1.userid)).send(new discord.MessageEmbed()
                                 .setTitle("Your template")
-                                .setImage(match.template)
+                                .setImage(match.template[0])
+                                .setColor("#d7be26")
+                                .setTimestamp());
+                            await (await client.users.fetch(match.p1.userid)).send(new discord.MessageEmbed()
+                                .setTitle("Your template")
+                                .setImage(match.template[1])
                                 .setColor("#d7be26")
                                 .setTimestamp());
                         }
@@ -616,7 +625,12 @@ async function splitregular(message, client, ...userid) {
                         if (match.template) {
                             await (await client.users.fetch(match.p2.userid)).send(new discord.MessageEmbed()
                                 .setTitle("Your template")
-                                .setImage(match.template)
+                                .setImage(match.template[0])
+                                .setColor("#d7be26")
+                                .setTimestamp());
+                            await (await client.users.fetch(match.p2.userid)).send(new discord.MessageEmbed()
+                                .setTitle("Your template")
+                                .setImage(match.template[1])
                                 .setColor("#d7be26")
                                 .setTimestamp());
                         }
@@ -659,7 +673,7 @@ async function startregularsplit(message, client) {
         split: true,
         exhibition: false,
         messageID: "",
-        template: "",
+        template: [],
         theme: "",
         tempfound: false,
         p1: {
@@ -739,7 +753,25 @@ async function startregularsplit(message, client) {
             }
             rantemp = await db_1.gettempStruct(message.channel.id);
         }
-        newmatch.template = rantemp.url;
+        newmatch.template.push(rantemp.url);
+        await db_1.deletetempStruct(rantemp._id);
+        await randomtemp_1.RandomTemplateFunc(message, client, message.channel.id, false);
+        rantemp = await db_1.gettempStruct(message.channel.id);
+        rantemp.time = rantemp.time - 2.5;
+        console.log(rantemp);
+        while (rantemp.found === false) {
+            if (Math.floor(Date.now() / 1000) - rantemp.time > 120) {
+                await db_1.deletetempStruct(rantemp._id);
+                await (await client.channels.cache.get("722616679280148504").messages.fetch(rantemp.messageid)).delete();
+                return await message.channel.send(new discord.MessageEmbed()
+                    .setTitle(`Random Template Selection failed `)
+                    .setColor("red")
+                    .setDescription(`Mods please restart this match`)
+                    .setTimestamp());
+            }
+            rantemp = await db_1.gettempStruct(message.channel.id);
+        }
+        newmatch.template.push(rantemp.url);
         await db_1.deletetempStruct(rantemp._id);
         await db_1.insertActive(newmatch);
         await card_1.vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[1].id]);
@@ -867,7 +899,12 @@ async function reload(message, client) {
             if (match.template) {
                 channelid.send(new discord.MessageEmbed()
                     .setTitle("Template")
-                    .setImage(match.template)
+                    .setImage(match.template[0])
+                    .setColor("#07da63")
+                    .setTimestamp());
+                channelid.send(new discord.MessageEmbed()
+                    .setTitle("Template")
+                    .setImage(match.template[1])
                     .setColor("#07da63")
                     .setTimestamp());
             }
