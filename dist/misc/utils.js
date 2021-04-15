@@ -447,7 +447,6 @@ async function oldqualifierresultadd(channel, client, msg1, msg2) {
 }
 exports.oldqualifierresultadd = oldqualifierresultadd;
 async function qualifierresultadd(c, client, msg1, msg2) {
-    console.time("total time");
     let m = await c.messages.fetch(msg1);
     let m2 = await c.messages.fetch(msg2);
     let em = m.embeds[0].fields;
@@ -495,7 +494,6 @@ async function qualifierresultadd(c, client, msg1, msg2) {
             timestamp: new Date()
         }
     });
-    console.timeEnd("total time");
 }
 exports.qualifierresultadd = qualifierresultadd;
 async function resultadd(channel, client, ids) {
@@ -558,7 +556,9 @@ async function SeasonRestart(message) {
 }
 exports.SeasonRestart = SeasonRestart;
 async function CycleRestart(message, client) {
-    await db_1.deleteSignup();
+    if (await (await db_1.getSignups()).open === false) {
+        await db_1.deleteSignup();
+    }
     await db_1.deleteQuallist();
     await challonge_1.matchlistmaker();
     await clearstats(message);

@@ -1,7 +1,7 @@
 import * as Discord from "discord.js"
 import { matchlistmaker } from "../commands/challonge";
 import { startsignup } from "../commands/signups";
-import { getMatch, getAllProfiles, updateProfile, getQual, getMatchlist, getQuallist, dbSoftReset, deleteSignup, deleteQuallist, getAllModProfiles, getAllCockratings, getReminders, deleteReminder, insertReminder } from "./db";
+import { getMatch, getAllProfiles, updateProfile, getQual, getMatchlist, getQuallist, dbSoftReset, deleteSignup, deleteQuallist, getAllModProfiles, getAllCockratings, getReminders, deleteReminder, insertReminder, getSignups } from "./db";
 import { clearmodstats } from "./modprofiles";
 
 export async function getUser(mention: string) {
@@ -819,7 +819,10 @@ export async function SeasonRestart(message: Discord.Message){
 }
 
 export async function CycleRestart(message: Discord.Message, client: Discord.Client){
-  await deleteSignup()
+
+  if(await (await getSignups()).open === false){
+    await deleteSignup()
+  }
   await deleteQuallist()
   await matchlistmaker()
   await clearstats(message)
