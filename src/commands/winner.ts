@@ -280,12 +280,11 @@ export async function qualend(client: discord.Client, id: string) {
 
     const match = await getSingularQuals(id)
     let s = ""
-          
+    
     for (let i = 0; i < match.players.length; i++) {
-      if (!match.playersdone.includes(match.players[i].userid)) {
         s += `<@${match.players[i].userid}> `
-      }
     }
+    
     let channel = <discord.TextChannel>client.channels.cache.get(id)
 
     if (match.votingperiod) {
@@ -318,6 +317,15 @@ export async function qualend(client: discord.Client, id: string) {
                 }
 
             await deleteQuals(match)
+            let c = <discord.TextChannel>client.channels.cache.get(channel.id)
+
+            let m = (await c.messages.fetch({limit:100})).last()!
+
+            let time = Math.floor(((Math.floor(m.createdTimestamp/1000)+ 259200) - Math.floor(Date.now()/1000))/3600)
+
+            if(time <= 72){
+                await channel.send(`${s} you have ${time}h left to complete Portion 2`)
+            }
             return channel.send({
                 embed: {
                     title: `Qualifier has ended`,
@@ -330,6 +338,15 @@ export async function qualend(client: discord.Client, id: string) {
 
         if (match.playersdone.length === 0) {
             await deleteQuals(match)
+            let c = <discord.TextChannel>client.channels.cache.get(channel.id)
+
+            let m = (await c.messages.fetch({limit:100})).last()!
+
+            let time = Math.floor(((Math.floor(m.createdTimestamp/1000)+ 259200) - Math.floor(Date.now()/1000))/3600)
+
+            if(time <= 72){
+                await channel.send(`${s} you have ${time}h left to complete Portion 2`)
+            }
             return channel.send({
                 embed: {
                     title: `Qualifier has ended. No one submitted a meme.`,

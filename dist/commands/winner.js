@@ -217,9 +217,7 @@ async function qualend(client, id) {
     const match = await db_1.getSingularQuals(id);
     let s = "";
     for (let i = 0; i < match.players.length; i++) {
-        if (!match.playersdone.includes(match.players[i].userid)) {
-            s += `<@${match.players[i].userid}> `;
-        }
+        s += `<@${match.players[i].userid}> `;
     }
     let channel = client.channels.cache.get(id);
     if (match.votingperiod) {
@@ -245,6 +243,12 @@ async function qualend(client, id) {
                     });
                 }
             await db_1.deleteQuals(match);
+            let c = client.channels.cache.get(channel.id);
+            let m = (await c.messages.fetch({ limit: 100 })).last();
+            let time = Math.floor(((Math.floor(m.createdTimestamp / 1000) + 259200) - Math.floor(Date.now() / 1000)) / 3600);
+            if (time <= 72) {
+                await channel.send(`${s} you have ${time}h left to complete Portion 2`);
+            }
             return channel.send({
                 embed: {
                     title: `Qualifier has ended`,
@@ -256,6 +260,12 @@ async function qualend(client, id) {
         }
         if (match.playersdone.length === 0) {
             await db_1.deleteQuals(match);
+            let c = client.channels.cache.get(channel.id);
+            let m = (await c.messages.fetch({ limit: 100 })).last();
+            let time = Math.floor(((Math.floor(m.createdTimestamp / 1000) + 259200) - Math.floor(Date.now() / 1000)) / 3600);
+            if (time <= 72) {
+                await channel.send(`${s} you have ${time}h left to complete Portion 2`);
+            }
             return channel.send({
                 embed: {
                     title: `Qualifier has ended. No one submitted a meme.`,
