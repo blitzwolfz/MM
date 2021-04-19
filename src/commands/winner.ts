@@ -344,7 +344,7 @@ export async function qualend(client: discord.Client, id: string) {
 
             let time = Math.floor(((Math.floor(m.createdTimestamp/1000)+ 259200) - Math.floor(Date.now()/1000))/3600)
 
-            if(time <= 72){
+            if(time <= 72 && channel.topic?.split(" ").length !== 1){
                 await channel.send(`${s} you have ${time}h left to complete Portion 2`)
             }
             return channel.send({
@@ -433,6 +433,7 @@ export async function qualend(client: discord.Client, id: string) {
 
                 let t = channel.topic?.split(" ")
 
+
                 if (!t) {
                     await channel.setTopic(message.id)
 
@@ -462,7 +463,7 @@ export async function qualend(client: discord.Client, id: string) {
 
             let time = Math.floor(((Math.floor(m.createdTimestamp/1000)+ 259200) - Math.floor(Date.now()/1000))/3600)
 
-            if(time <= 72){
+            if(time <= 72 && channel.topic?.split(" ").join("").toLowerCase() === "round1"){
                 await channel.send(`${s} you have ${time}h left to complete Portion 2`)
             }
             //return;

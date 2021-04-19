@@ -214,6 +214,7 @@ async function end(client, id) {
 }
 exports.end = end;
 async function qualend(client, id) {
+    var _a, _b;
     const match = await db_1.getSingularQuals(id);
     let s = "";
     for (let i = 0; i < match.players.length; i++) {
@@ -263,7 +264,7 @@ async function qualend(client, id) {
             let c = client.channels.cache.get(channel.id);
             let m = (await c.messages.fetch({ limit: 100 })).last();
             let time = Math.floor(((Math.floor(m.createdTimestamp / 1000) + 259200) - Math.floor(Date.now() / 1000)) / 3600);
-            if (time <= 72) {
+            if (time <= 72 && ((_a = channel.topic) === null || _a === void 0 ? void 0 : _a.split(" ").length) !== 1) {
                 await channel.send(`${s} you have ${time}h left to complete Portion 2`);
             }
             return channel.send({
@@ -347,7 +348,7 @@ async function qualend(client, id) {
             let c = client.channels.cache.get(channel.id);
             let m = (await c.messages.fetch({ limit: 100 })).last();
             let time = Math.floor(((Math.floor(m.createdTimestamp / 1000) + 259200) - Math.floor(Date.now() / 1000)) / 3600);
-            if (time <= 72) {
+            if (time <= 72 && ((_b = channel.topic) === null || _b === void 0 ? void 0 : _b.split(" ").join("").toLowerCase()) === "round1") {
                 await channel.send(`${s} you have ${time}h left to complete Portion 2`);
             }
         }
