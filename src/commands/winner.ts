@@ -450,7 +450,7 @@ export async function qualend(client: discord.Client, id: string) {
 
                     await channel.send({ embed:emm })
 
-                    await (await (<discord.TextChannel>client.channels.cache.get("722291182461386804")))
+                    return await (await (<discord.TextChannel>client.channels.cache.get("722291182461386804")))
                         .send({ embed:emm });
                 }
 

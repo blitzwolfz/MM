@@ -341,7 +341,7 @@ async function qualend(client, id) {
                 else if (t.length === 1) {
                     let emm = await utils_1.resultadd(channel, client, [channel.topic.split(" ")[0], message.id]);
                     await channel.send({ embed: emm });
-                    await (await client.channels.cache.get("722291182461386804"))
+                    return await (await client.channels.cache.get("722291182461386804"))
                         .send({ embed: emm });
                 }
             });
