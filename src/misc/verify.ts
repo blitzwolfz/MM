@@ -16,8 +16,15 @@ export async function verify(message: Discord.Message, client: Discord.Client){
     if(args[0] === "verify"){
         for(let i = 0; i < form.codes.length; i++){
             if (form.codes[i][0] === message.author.id){
-                return message.reply("You already have been sent a code. to reset do `!code 2`")
+                return message.reply("Please check your Discord DM for further instructions. To reset do `!verify reset`")
             }
+        }
+
+        if(args[1] === "reset"){
+            form.codes.splice(form.users.indexOf(message.author.id), 1)
+
+            await updateVerify(form)
+            return message.channel.send("To start do `!verify <reddit username>`")
         }
 
         if(!args[1]){
@@ -32,13 +39,6 @@ export async function verify(message: Discord.Message, client: Discord.Client){
             let f = String(`${process.env.SECRET}`)
             let g = String(`${process.env.RPASSWORD}`)
 
-            // console.log(typeof(e))
-            // console.log(typeof(f))
-            // console.log(typeof(g))
-            // console.log(e)
-            // console.log((f))
-            // console.log((g))
-
             const r = new snoowrap({
                 userAgent: 'memeroyaleverification by u/meme_royale',
                 clientId: e,
@@ -49,12 +49,6 @@ export async function verify(message: Discord.Message, client: Discord.Client){
             
             
             r.getUser(args[1]).fetch().then(async (userInfo: any) => {
-                // console.log(userInfo.name);
-                // console.log(userInfo.created_utc > (Math.floor(Date.now()/100) - (30*24*60*60)));
-                // console.log(userInfo.verified)
-
-
-
 
                 if(!(userInfo.created_utc < (Math.floor(Date.now()/100) - (30*24*60*60)))){
                     return message.author.send("Your account is not old enough. Please contact a mod if there is an issue.")

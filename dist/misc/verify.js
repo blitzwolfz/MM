@@ -11,8 +11,13 @@ async function verify(message, client) {
     if (args[0] === "verify") {
         for (let i = 0; i < form.codes.length; i++) {
             if (form.codes[i][0] === message.author.id) {
-                return message.reply("You already have been sent a code. to reset do `!code 2`");
+                return message.reply("Please check your Discord DM for further instructions. To reset do `!verify reset`");
             }
+        }
+        if (args[1] === "reset") {
+            form.codes.splice(form.users.indexOf(message.author.id), 1);
+            await db_1.updateVerify(form);
+            return message.channel.send("To start do `!verify <reddit username>`");
         }
         if (!args[1]) {
             return message.reply("Please supply reddit username.");
