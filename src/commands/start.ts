@@ -682,14 +682,6 @@ export async function running(client: discord.Client): Promise<void> {
                             .setColor("#07da63")
                             .setTimestamp()
                     )
-
-                    channelid.send(
-                        new discord.MessageEmbed()
-                            .setTitle("Template")
-                            .setImage(match.template[1])
-                            .setColor("#07da63")
-                            .setTimestamp()
-                    )
                 }
 
                 if (match.theme) {
@@ -912,14 +904,6 @@ export async function splitregular(message: discord.Message, client: discord.Cli
                                     .setColor("#d7be26")
                                     .setTimestamp()
                             )
-
-                            await (await client.users.fetch(match.p1.userid)).send(
-                                new discord.MessageEmbed()
-                                    .setTitle("Your template")
-                                    .setImage(match.template[1])
-                                    .setColor("#d7be26")
-                                    .setTimestamp()
-                            )
                         }
 
                         if (match.theme) {
@@ -966,14 +950,6 @@ export async function splitregular(message: discord.Message, client: discord.Cli
                                 new discord.MessageEmbed()
                                     .setTitle("Your template")
                                     .setImage(match.template[0])
-                                    .setColor("#d7be26")
-                                    .setTimestamp()
-                            )
-
-                            await (await client.users.fetch(match.p2.userid)).send(
-                                new discord.MessageEmbed()
-                                    .setTitle("Your template")
-                                    .setImage(match.template[1])
                                     .setColor("#d7be26")
                                     .setTimestamp()
                             )
@@ -1156,33 +1132,6 @@ export async function startregularsplit(message: discord.Message, client: discor
         newmatch.template.push(rantemp.url)
         await deletetempStruct(rantemp._id)
 
-        await RandomTemplateFunc(message, client, message.channel.id, false)
-
-
-        rantemp = await gettempStruct(message.channel.id)
-
-        rantemp.time = rantemp.time - 2.5
-
-        console.log(rantemp)
-
-        while (rantemp.found === false) {
-
-            if (Math.floor(Date.now() / 1000) - rantemp.time > 120) {
-
-                await deletetempStruct(rantemp._id)
-                await (await (<discord.TextChannel>client.channels.cache.get("722616679280148504")).messages.fetch(rantemp.messageid)).delete()
-                return await message.channel.send(new discord.MessageEmbed()
-                    .setTitle(`Random Template Selection failed `)
-                    .setColor("red")
-                    .setDescription(`Mods please restart this match`)
-                    .setTimestamp())
-            }
-            rantemp = await gettempStruct(message.channel.id)
-        }
-
-        newmatch.template.push(rantemp.url)
-        await deletetempStruct(rantemp._id)
-
         await insertActive(newmatch)
 
         await vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[1].id])
@@ -1279,12 +1228,6 @@ export async function reload(message: discord.Message, client: discord.Client) {
                 await channel.send(new discord.MessageEmbed()
                     .setTitle("Template")
                     .setImage(match.template[0])
-                    .setColor("#07da63")
-                    .setTimestamp())
-
-                await channel.send(new discord.MessageEmbed()
-                    .setTitle("Template")
-                    .setImage(match.template[1])
                     .setColor("#07da63")
                     .setTimestamp())
             }
