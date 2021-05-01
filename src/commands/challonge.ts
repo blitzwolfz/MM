@@ -397,6 +397,9 @@ export async function CreateQualGroups(message: Discord.Message, args: string[])
 
         if (Signups) {
             if (Signups.open === false) {
+                for(let x = 0; x < 1000; x++){
+                    Signups.users = await shuffle(Signups.users)
+                }
                 let groups = await makeGroup(gNum, Signups.users)
                 let qualgroups: quallist = await getQuallist()
                 if (qualgroups) {
@@ -508,10 +511,20 @@ async function makeGroup(amount: number, list: string[]) {
     //     return chunks;
     //   }
 
-    let chunks:any[] = [], i = 0, n = list.length;
+    let chunks:any[][] = [], i = 0, n = 63;
 
-    while(i < n){
+    while(i <= n){
         chunks.push(list.slice(i, i += amount));
+    }
+
+    n = Math.abs(list.length - i)
+
+    if(n > 0){
+        for(let x = 0; x < n; x++){
+            console.log(x)
+            chunks[x].push(list[i])
+            i += 1
+        }
     }
 
     return chunks;

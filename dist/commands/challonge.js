@@ -266,6 +266,9 @@ async function CreateQualGroups(message, args) {
         let Signups = await db_1.getSignups();
         if (Signups) {
             if (Signups.open === false) {
+                for (let x = 0; x < 1000; x++) {
+                    Signups.users = await shuffle(Signups.users);
+                }
                 let groups = await makeGroup(gNum, Signups.users);
                 let qualgroups = await db_1.getQuallist();
                 if (qualgroups) {
@@ -340,9 +343,23 @@ async function CreateCustomQualGroups(message, args) {
 }
 exports.CreateCustomQualGroups = CreateCustomQualGroups;
 async function makeGroup(amount, list) {
-    let chunks = [], i = 0, n = list.length;
-    while (i < n) {
+    for (let y = 1; y < list.length + 1; y++) {
+        list[y] = `${y}`;
+    }
+    let chunks = [], i = 0, n = 63;
+    while (i <= n) {
         chunks.push(list.slice(i, i += amount));
+    }
+    n = Math.abs(list.length - i);
+    console.log(n);
+    console.log(i);
+    console.log(i + 1);
+    if (n > 0) {
+        for (let x = 0; x < n; x++) {
+            console.log(x);
+            chunks[x].push(list[i]);
+            i += 1;
+        }
     }
     return chunks;
 }
