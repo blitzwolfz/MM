@@ -465,6 +465,19 @@ export async function qualend(client: discord.Client, id: string) {
 
             if(time <= 72 && channel.topic?.split(" ").join("").toLowerCase() === "round1"){
                 await channel.send(`${s} you have ${time}h left to complete Portion 2`)
+
+                let rtimestamp = Math.round(Math.floor(Date.now()/1000))-43200 + (Math.abs(time - 36) * 3600)
+
+                await insertReminder(
+                    {
+                      _id:channel.id,
+                      mention:s,
+                      channel:channel.id,
+                      type:"match",
+                      time:129600,
+                      timestamp:rtimestamp
+                    }
+                )
             }
             //return;
 

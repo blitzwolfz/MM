@@ -223,7 +223,6 @@ export async function exhibition(message: Discord.Message, client: Discord.Clien
 
 }
 
-
 export async function deleteExhibitionchannels(client: Discord.Client) {
     var ex = await getExhibition()
     //console.log(ex)

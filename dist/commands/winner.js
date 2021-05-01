@@ -350,6 +350,15 @@ async function qualend(client, id) {
             let time = Math.floor(((Math.floor(m.createdTimestamp / 1000) + 259200) - Math.floor(Date.now() / 1000)) / 3600);
             if (time <= 72 && ((_b = channel.topic) === null || _b === void 0 ? void 0 : _b.split(" ").join("").toLowerCase()) === "round1") {
                 await channel.send(`${s} you have ${time}h left to complete Portion 2`);
+                let rtimestamp = Math.round(Math.floor(Date.now() / 1000)) - 43200 + (Math.abs(time - 36) * 3600);
+                await db_1.insertReminder({
+                    _id: channel.id,
+                    mention: s,
+                    channel: channel.id,
+                    type: "match",
+                    time: 129600,
+                    timestamp: rtimestamp
+                });
             }
         }
     }
