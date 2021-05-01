@@ -397,7 +397,7 @@ export async function CreateQualGroups(message: Discord.Message, args: string[])
 
         if (Signups) {
             if (Signups.open === false) {
-                for(let x = 0; x < 1000; x++){
+                for(let x = 0; x < 5; x++){
                     Signups.users = await shuffle(Signups.users)
                 }
                 let groups = await makeGroup(gNum, Signups.users)
