@@ -523,11 +523,24 @@ client.on("message", async (message) => {
         await utils_1.deletechannels(message, args);
     }
     else if (command === "test") {
-        await message.reply("no").then(async (message) => { await message.react('🤏'); });
-        let c = client.channels.cache.get(message.channel.id);
+        let c = client.channels.cache.get(args[0]);
         let m = (await c.messages.fetch({ limit: 100 })).last();
-        await message.channel.send(Math.floor(m.createdTimestamp / 1000));
-        await message.channel.send(Math.floor(((Math.floor(m.createdTimestamp / 1000) + 259200) - Math.floor(Date.now() / 1000)) / 3600));
+        let time = Math.floor(((Math.floor(m.createdTimestamp / 1000) + 259200) - Math.floor(Date.now() / 1000)) / 3600);
+        let rtimestamp = Math.round(Math.floor(Date.now() / 1000)) - 43200 + (Math.abs(time - 36) * 3600);
+        message.channel.send(time);
+        message.channel.send(rtimestamp);
+        let s = "";
+        for (let x = 0; x < m.mentions.users.array().length; x++) {
+            s += `<@${m.mentions.users.array()[x].id}>`;
+        }
+        await db_1.insertReminder({
+            _id: args[0],
+            mention: s,
+            channel: args[0],
+            type: "match",
+            time: 129600,
+            timestamp: rtimestamp
+        });
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))

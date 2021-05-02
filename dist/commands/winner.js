@@ -221,6 +221,7 @@ async function qualend(client, id) {
         s += `<@${match.players[i].userid}> `;
     }
     let channel = client.channels.cache.get(id);
+    await db_1.deleteReminder(await db_1.getReminder(channel.id));
     if (match.votingperiod) {
         if (match.playersdone.length <= 2 && match.playersdone.length >= 1) {
             let fields = [];
@@ -378,12 +379,6 @@ async function qualend(client, id) {
                 timestamp: new Date()
             }
         });
-    }
-    await db_1.deleteReminder(await db_1.getReminder(channel.id));
-    let qlist = await db_1.getMatchlist();
-    let timestamp = parseInt(qlist.qualurl);
-    if (Math.floor(Date.now() / 1000) - Math.floor(timestamp / 1000) > 0) {
-        await channel.send(`Next portion has begun, and you have ${Math.floor((Math.floor(Date.now() / 1000) - Math.floor(timestamp / 1000)) / 3600)}h to complete it. Contact a ref to begin your portion!`);
     }
 }
 exports.qualend = qualend;

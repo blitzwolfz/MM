@@ -51,6 +51,7 @@ import {
   updateThemedb,
   getthemes,
   getProfile,
+  insertReminder,
 } from "./misc/db";
 
 import { template, approvetemplate, addTheme, removeTheme, themelistLb, templatecheck } from "./commands/template";
@@ -768,159 +769,39 @@ client.on("message", async message => {
 
   else if (command === "test") {
 	
-    await message.reply("no").then(async message => { await message.react('🤏') })
+    // await message.reply("no").then(async message => { await message.react('🤏') })
 
-    let c = <Discord.TextChannel>client.channels.cache.get(message.channel.id)
+    // let c = <Discord.TextChannel>client.channels.cache.get(args[0])
+
+    // let m = (await c.messages.fetch({limit:100})).last()!
+    // await message.channel.send(Math.floor(((Math.floor(m.createdTimestamp/1000)+ 259200) - Math.floor(Date.now()/1000))/3600))
+
+    let c = <Discord.TextChannel>client.channels.cache.get(args[0])
 
     let m = (await c.messages.fetch({limit:100})).last()!
+    let time = Math.floor(((Math.floor(m.createdTimestamp/1000)+ 259200) - Math.floor(Date.now()/1000))/3600)
+    let rtimestamp = Math.round(Math.floor(Date.now()/1000))-43200 + (Math.abs(time - 36) * 3600)
+    message.channel.send(time)
+    message.channel.send(rtimestamp)
 
-    await message.channel.send(Math.floor(m.createdTimestamp/1000))
-    await message.channel.send(Math.floor(((Math.floor(m.createdTimestamp/1000)+ 259200) - Math.floor(Date.now()/1000))/3600))
-  //   let users: players[] = []
-  //   let plyerids: Array<string> = []
-  //   let votearray = []
+    let s = ""
 
-  //   for (let u in message.mentions.users) {
-      
-  //     if (u) {
-  //         let player: players = {
-  //             userid: u,
-  //             memedone: false,
-  //             memelink: "",
-  //             time: 0,
-  //             split: false,
-  //             failed: false
-  //         }
-  //         users.push(player)
-  //         plyerids.push(u)
-  //         votearray.push([])
-  //     }
-  // }
+    for(let x = 0; x < m.mentions.users.array().length; x++){
+      s += `<@${m.mentions.users.array()[x].id}>`
+    }
 
-  //   let newmatch: qualmatch = {
-  //       _id: message.channel.id,
-  //       split: true,
-  //       playerids: plyerids,
-  //       channelid: message.channel.id,
-  //       players: users,
-  //       octime: 0,
-  //       votes: votearray,
-  //       template: "",
-  //       istheme: false,
-  //       playersdone: [],
-  //       votingperiod: false,
-  //       votetime: 0
+    await insertReminder(
+      {
+        _id:args[0],
+        mention:s,
+        channel:args[0],
+        type:"match",
+        time:129600,
+        timestamp:rtimestamp
+      }
+  )
 
-  //   }
-
-  //   await insertQuals(newmatch)
   }
-  
-  // else if (command === "test") {
-  //   await message.reply("no").then(async message => { await message.react('🤏') })
-
-  //   let c = (await (<Discord.TextChannel>client.channels.cache.get(args[0])))
-
-
-  //   console.time("original")
-  //   await qualifierresultadd(c, client, args[1], args[2])
-  //   console.timeEnd("original")
-
-  //   console.time("rewrite")
-  //   let m = await c.messages.fetch(args[1])
-
-  //   let m2 = await c.messages.fetch(args[2])
-    
-  //   let em = m.embeds[0].fields
-    
-  //   let em2 = m2.embeds[0].fields
-
-  //   for(let i = 0; i < em.length; i++){
-
-  //     em[i].name = (em[i].value.split(/[^0-9.]+/g))[3]
-
-  //     em[i].value = (em[i].value.split(/[^0-9.]+/g))[2]
-  //   }
-
-  //   for(let ii = 0; ii < em.length; ii++){
-
-  //     //console.log(em2[ii].value.split(/[^0-9.]+/g))
-  //     em2[ii].name = (em2[ii].value.split(/[^0-9.]+/g))[3]
-  //     em2[ii].value = (em2[ii].value.split(/[^0-9.]+/g))[2]
-  //   }
-
-  //   //console.log(em)
-  //   //console.log(em2)
-    
-    
-
-  //   em.sort(function (a, b) {
-  //     //ratings.sort((a: modprofile, b: modprofile) => (b.modactions) - (a.modactions));
-  //     return (parseInt(b.name) - parseInt(a.name));
-  //     //Sort could be modified to, for example, sort on the age 
-  //     // if the name is the same.
-  //   });
-
-  //   em2.sort(function (a, b) {
-  //     //ratings.sort((a: modprofile, b: modprofile) => (b.modactions) - (a.modactions));
-  //     return (parseInt(b.name) - parseInt(a.name));
-  //     //Sort could be modified to, for example, sort on the age 
-  //     // if the name is the same.
-  //   });
-
-  //   let fields = em
-
-  //   const em3 = [];
-
-  //   for(let y = 0; y < em.length; y++){
-
-  //     em3.push(
-  //       {
-  //         name:(await client.users.cache.get(em[y].name)!).username,
-  //         value: `${parseInt(em[y].value) + parseInt(em2[y].value)}`,
-  //         inline:false
-  //       }
-  //     )
-  //   }
-
-  //   message.channel
-  //     .send({
-  //       embed: {
-  //         title: `Final Results for Group ${message.channel.id}`,
-  //         description: `Top two move on`,
-  //         fields,
-  //         color: "#d7be26",
-  //         timestamp: new Date()
-  //       }
-  //   })
-
-  //   fields = em2
-  //   message.channel
-  //   .send({
-  //     embed: {
-  //       title: `Final Results for Group ${message.channel.id}`,
-  //       description: `Top two move on`,
-  //       fields,
-  //       color: "#d7be26",
-  //       timestamp: new Date()
-  //     }
-  //   })
-  //   //console.log(em3)
-
-  //   fields = em3
-  //   message.channel
-  //   .send({
-  //     embed: {
-  //       title: `Final Results for Group ${message.channel.id}`,
-  //       description: `Top two move on`,
-  //       fields,
-  //       color: "#d7be26",
-  //       timestamp: new Date()
-  //     }
-  //   })
-  //   console.timeEnd("rewrite")
-  
-  // }
 
   else if (command === "createqualgroup") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")

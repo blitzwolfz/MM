@@ -1,6 +1,6 @@
 import * as discord from "discord.js"
 import { activematch } from "../misc/struct"
-import { deleteActive, deleteQuals, updateProfile, getSingularQuals, getMatch, getQual, deleteReminder, getReminder, insertReminder, getMatchlist } from "../misc/db"
+import { deleteActive, deleteQuals, updateProfile, getSingularQuals, getMatch, getQual, deleteReminder, getReminder, insertReminder } from "../misc/db"
 import { grandwinner, winner } from "./card"
 import { dateBuilder, resultadd } from "../misc/utils"
 import { matchwinner } from "./challonge"
@@ -277,6 +277,7 @@ export async function end(client: discord.Client, id: string) {
 
 
 export async function qualend(client: discord.Client, id: string) {
+    
 
     const match = await getSingularQuals(id)
     let s = ""
@@ -286,6 +287,7 @@ export async function qualend(client: discord.Client, id: string) {
     }
     
     let channel = <discord.TextChannel>client.channels.cache.get(id)
+    await deleteReminder(await getReminder(channel.id))
 
     if (match.votingperiod) {
 
@@ -373,7 +375,7 @@ export async function qualend(client: discord.Client, id: string) {
                 fields.push({
                     name: name,
                     //value: `${match.votes[i].length > 0 ? `Came in with ${match.votes[i].length} vote(s)` : `Failed to submit meme`}`
-                    value: `${match.players[i].memedone ? `Finished with ${match.votes[i].length} | Earned: ${Math.floor(match.votes[i].length / totalvotes * 100)}% of the votes\nUserID: ${match.players[i].userid}` : `Finished with ${0} | Earned: ${0}% of the votes\nUserID: ${match.players[i].userid}`}`, //`Came in with ${match.votes[i].length}`,
+                    value: `${match.players[i].memedone ? `Finished with ${match.votes[i].length} | Earned: ${Math.floor(match.votes[i].length / totalvotes * 100)}% of the votes\nUserID: ${match.players[i].userid}` : `Finished with ${0} | Earned: ${0}% of the votes\nUserID: ${match.players[i].userid}`}`,
                 });
             }
 
@@ -508,13 +510,11 @@ export async function qualend(client: discord.Client, id: string) {
         });
     }
 
-    await deleteReminder(await getReminder(channel.id))
-
-    let qlist = await getMatchlist()
-    let timestamp = parseInt(qlist.qualurl)
-    if(Math.floor(Date.now()/1000) - Math.floor(timestamp/1000) > 0){
-        await channel.send(`Next portion has begun, and you have ${Math.floor((Math.floor(Date.now()/1000) - Math.floor(timestamp/1000))/3600)}h to complete it. Contact a ref to begin your portion!`)
-    }
+    //let qlist = await getMatchlist()
+    // let timestamp = parseInt(qlist.qualurl)
+    // if(Math.floor(Date.now()/1000) - Math.floor(timestamp/1000) > 0){
+    //     await channel.send(`Next portion has begun, and you have ${Math.floor((Math.floor(Date.now()/1000) - Math.floor(timestamp/1000))/3600)}h to complete it. Contact a ref to begin your portion!`)
+    // }
 }
 
 
