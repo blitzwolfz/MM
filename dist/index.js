@@ -81,6 +81,8 @@ client.on('ready', async () => {
     setInterval(async function () {
         await start_1.qualrunning(client).catch((error) => {
             console.log("it's in qualrunning");
+            console.log(error.message);
+            console.log(error.stack);
         });
     }, 15000);
     setInterval(async function () {

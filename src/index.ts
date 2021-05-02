@@ -155,6 +155,8 @@ client.on('ready', async () => {
 
     await qualrunning(client).catch((error) => {
       console.log("it's in qualrunning");
+      console.log(error.message)
+      console.log(error.stack)
     });
     
   }, 15000);
