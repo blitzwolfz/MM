@@ -51,7 +51,6 @@ import {
   updateThemedb,
   getthemes,
   getProfile,
-  insertReminder,
 } from "./misc/db";
 
 import { template, approvetemplate, addTheme, removeTheme, themelistLb, templatecheck } from "./commands/template";
@@ -627,12 +626,12 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
 
       if (!match.playersdone.includes(match.playerids[i])) {
         await messageReaction.users.remove(user.id)
-        return user.send("You can't for a non meme")
+        return user.send("You can't vote for a user who failed.")
       }
 
       else if (match.votes[i].includes(user.id)) {
         await messageReaction.users.remove(user.id)
-        return user.send("You can't for a meme twice. Hit the recycle emote to reset your votes")
+        return user.send("You can't vote for a meme twice. Hit the recycle emote to reset your votes")
       }
 
       else {
@@ -781,27 +780,28 @@ client.on("message", async message => {
     let c = <Discord.TextChannel>client.channels.cache.get(args[0])
 
     let m = (await c.messages.fetch({limit:100})).last()!
-    let time = Math.floor(((Math.floor(m.createdTimestamp/1000)+ 259200) - Math.floor(Date.now()/1000))/3600)
-    let rtimestamp = Math.round(Math.floor(Date.now()/1000))-43200 + (Math.abs(time - 36) * 3600)
-    message.channel.send(time)
-    message.channel.send(rtimestamp)
+    message.channel.send(await toHHMMSS(Math.floor(m.createdTimestamp/1000), 129600))
+    // let time = Math.floor(((Math.floor(m.createdTimestamp/1000)+ 259200) - Math.floor(Date.now()/1000))/3600)
+    // let rtimestamp = Math.round(Math.floor(Date.now()/1000))-43200 + (Math.abs(time - 36) * 3600)
+    // message.channel.send(time)
+    // message.channel.send(rtimestamp)
 
-    let s = ""
+    // let s = ""
 
-    for(let x = 0; x < m.mentions.users.array().length; x++){
-      s += `<@${m.mentions.users.array()[x].id}>`
-    }
+    // for(let x = 0; x < m.mentions.users.array().length; x++){
+    //   s += `<@${m.mentions.users.array()[x].id}>`
+    // }
 
-    await insertReminder(
-      {
-        _id:args[0],
-        mention:s,
-        channel:args[0],
-        type:"match",
-        time:129600,
-        timestamp:rtimestamp
-      }
-  )
+    // await insertReminder(
+    //   {
+    //     _id:args[0],
+    //     mention:s,
+    //     channel:args[0],
+    //     type:"match",
+    //     time:129600,
+    //     timestamp:rtimestamp
+    //   }
+    // )
 
   }
 

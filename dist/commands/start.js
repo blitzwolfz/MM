@@ -526,7 +526,7 @@ async function splitqual(client, message, ...userid) {
                     u.split = true;
                     await user.send(`<@${user.id}> your qualifier match has been split.\nYou have 30 mins to complete your memes\nUse \`!qualsubmit\` to submit`);
                     if (match.template.length > 0 && match.istheme || match.template && match.istheme) {
-                        await user.send("\n\nHere is your themes: " + match.template.join(", "));
+                        await user.send("\n\nHere is your theme(s): " + match.template.join(", "));
                     }
                     else if (match.istheme === false) {
                         await user.send(new discord.MessageEmbed()

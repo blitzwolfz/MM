@@ -812,7 +812,7 @@ export async function splitqual(client: discord.Client, message: discord.Message
 
 
                     if (match.template.length > 0 && match.istheme || match.template && match.istheme) {
-                        await user.send("\n\nHere is your themes: " + match.template.join(", "))
+                        await user.send("\n\nHere is your theme(s): " + match.template.join(", "))
                         
                         //await user.send({ files: [new discord.MessageAttachment(match.template)] })
                     }
