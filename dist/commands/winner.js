@@ -221,7 +221,12 @@ async function qualend(client, id) {
         s += `<@${match.players[i].userid}> `;
     }
     let channel = client.channels.cache.get(id);
-    await db_1.deleteReminder(await db_1.getReminder(channel.id));
+    try {
+        await db_1.deleteReminder(await db_1.getReminder(channel.id));
+    }
+    catch {
+        console.log("Reminder has already been deleted");
+    }
     if (match.votingperiod) {
         if (match.playersdone.length <= 2 && match.playersdone.length >= 1) {
             let fields = [];

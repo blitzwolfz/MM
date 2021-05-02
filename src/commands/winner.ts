@@ -287,7 +287,11 @@ export async function qualend(client: discord.Client, id: string) {
     }
     
     let channel = <discord.TextChannel>client.channels.cache.get(id)
-    await deleteReminder(await getReminder(channel.id))
+    try{
+        await deleteReminder(await getReminder(channel.id))
+    } catch {
+        console.log("Reminder has already been deleted")
+    }
 
     if (match.votingperiod) {
 
