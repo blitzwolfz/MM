@@ -97,7 +97,7 @@ async function qualrunn(match, channelid, client) {
                         player.failed = true;
                         player.memedone = false;
                         let embed2 = new discord.MessageEmbed()
-                            .setDescription("You failed to submit meme on time")
+                            .setDescription("You failed to submit your meme on time")
                             .setColor("#d7be26")
                             .setTimestamp();
                         try {

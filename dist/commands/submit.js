@@ -420,58 +420,43 @@ async function modsubmit(message, client, args) {
 }
 exports.modsubmit = modsubmit;
 async function modqualsubmit(message, client, args) {
-    let matches = await db_1.getQuals();
-    let num = parseInt(args[3]) - 1;
-    for (const match of matches) {
-        for (let player of match.players) {
-            if (player.split === true || match.split === false) {
-                if (player.memedone === false) {
-                    console.log(match.players.findIndex(x => x === player));
-                    if (match.players.findIndex(x => x === player) === num) {
-                        player.memedone = true;
-                        player.memelink = message.attachments.array()[0].url;
-                        player.split = false;
-                        if (!match.playersdone.includes(message.mentions.users.first().id)) {
-                            match.playersdone.push(message.mentions.users.first().id);
-                        }
-                        await message.reply("You meme has been attached!");
-                        await client.channels.cache.get("722616679280148504").send({
-                            embed: {
-                                description: `<@${message.mentions.users.first().id}> has submitted their meme\nChannel: <#${match.channelid}>`,
-                                color: "#d7be26",
-                                timestamp: new Date()
-                            }
-                        });
-                        await client.channels.cache.get("793242781892083742").send({
-                            embed: {
-                                description: `<@${message.mentions.users.first().id}>  ${message.mentions.users.first().tag} has submitted their meme\nChannel: <#${match.channelid}>`,
-                                color: "#d7be26",
-                                image: {
-                                    url: message.attachments.array()[0].url,
-                                },
-                                timestamp: new Date()
-                            }
-                        });
-                        player.memedone = true;
-                        try {
-                            let r = await db_1.getReminder(match.channelid);
-                            r.mention = r.mention.replace(`<@${message.mentions.users.first().id}>`, "");
-                            await db_1.updateReminder(r);
-                        }
-                        catch (error) {
-                            console.log("");
-                        }
-                        try {
-                            await db_1.deleteReminder(await db_1.getReminder(message.mentions.users.first().id));
-                        }
-                        catch (error) {
-                        }
-                        await db_1.updateQuals(match);
-                        return;
-                    }
-                }
-            }
+    var _a;
+    args = args.splice(1, 1);
+    let match = await db_1.getSingularQuals(message.mentions.channels.first().id);
+    let index = parseInt(args[0]) - 1;
+    let u = match.players[index];
+    u.split = false;
+    u.memedone = true;
+    u.memelink = message.attachments.array()[0].url;
+    await client.channels.cache.get("793242781892083742").send({
+        embed: {
+            description: `<@${u.userid}>\\${(_a = client.users.cache.get(u.userid)) === null || _a === void 0 ? void 0 : _a.tag} has submitted their meme\nChannel: <#${match._id}>`,
+            color: "#d7be26",
+            image: {
+                url: message.attachments.array()[0].url,
+            },
+            timestamp: new Date()
         }
+    });
+    match.players[index] = u;
+    if (!match.playersdone.includes(u.userid)) {
+        match.playersdone.push(u.userid);
     }
+    await db_1.updateQuals(match);
+    try {
+        let r = await db_1.getReminder(match._id);
+        r.mention = r.mention.replace(`<@${u.userid}>`, "");
+        await db_1.updateReminder(r);
+    }
+    catch (error) {
+        console.log("");
+    }
+    try {
+        await db_1.deleteReminder(await db_1.getReminder(u.userid));
+    }
+    catch (error) {
+        console.log("");
+    }
+    return message.reply(`The meme has been attached for <@${u.userid}>.`);
 }
 exports.modqualsubmit = modqualsubmit;

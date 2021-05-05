@@ -1,6 +1,6 @@
 import * as Discord from "discord.js";
 import { activematch, qualmatch } from "../misc/struct";
-import { updateQuals, updateActive, getActive, getQuals, deleteReminder, getReminder, updateReminder, getMatch } from "../misc/db";
+import { updateQuals, updateActive, getActive, getQuals, deleteReminder, getReminder, updateReminder, getMatch, getSingularQuals } from "../misc/db";
 
 export async function ssubmit(message: Discord.Message, client: Discord.Client) {
 
@@ -595,75 +595,52 @@ export async function modsubmit(message: Discord.Message, client: Discord.Client
 }
 
 export async function modqualsubmit(message: Discord.Message, client: Discord.Client, args: string[]) {
+    args = args.splice(1, 1)
 
-    let matches: qualmatch[] = await getQuals()
+    let match = await getSingularQuals(message.mentions.channels.first()!.id)
+    let index = parseInt(args[0]) - 1 
+    let u = match.players[index]
 
-    let num = parseInt(args[3])-1
+    //Modsubmit so their portion started already, unless bug from other area
+    //if(u.split === false) return message.reply("Can't submit when you haven't started your portion");
+    u.split = false
+    u.memedone = true
+    u.memelink = message.attachments.array()[0].url
 
-    for (const match of matches) {
-        for (let player of match.players) {
-            if (player.split === true || match.split === false) {
-                if (player.memedone === false) {
-                    console.log(match.players.findIndex(x => x === player))
-                    if (match.players.findIndex(x => x === player) === num) {
-                        player.memedone = true;
-                        player.memelink = message.attachments.array()[0].url;
-                        player.split = false
-
-                        if (!match.playersdone.includes(message.mentions.users.first()!.id)) {
-                            match.playersdone.push(message.mentions.users.first()!.id)
-                        }
-
-                        // if(match.playersdone.length == match.players.length){
-                        //     match.split = false
-                        //     match.votingperiod = true
-                        //     match.votetime = Math.floor(Date.now() / 1000)
-                        // }
-                        await message.reply("You meme has been attached!")
-                        await (<Discord.TextChannel>client.channels.cache.get("722616679280148504")).send({
-                            embed: {
-                                description: `<@${message.mentions.users.first()!.id}> has submitted their meme\nChannel: <#${match.channelid}>`,
-                                color: "#d7be26",
-                                timestamp: new Date()
-                            }
-                        });
-
-                        await (<Discord.TextChannel>client.channels.cache.get("793242781892083742")).send({
-
-                            embed: {
-                                description: `<@${message.mentions.users.first()!.id}>  ${message.mentions.users.first()!.tag} has submitted their meme\nChannel: <#${match.channelid}>`,
-                                color: "#d7be26",
-                                image: {
-                                    url: message.attachments.array()[0].url,
-                                },
-                                timestamp: new Date()
-                            }
-                        });
-
-                        player.memedone = true
-
-                        try {
-                            let r = await getReminder(match.channelid)
-
-                            r.mention = r.mention.replace(`<@${message.mentions.users.first()!.id}>`, "")
-
-                            await updateReminder(r)
-                        } catch (error) {
-                            console.log("")
-                        }
-
-                        try {
-                            await deleteReminder(await getReminder(message.mentions.users.first()!.id))
-                        } catch (error) {
-
-                        }
-                        await updateQuals(match)
-                        return;
-                    }
-                }
-
-            }
-
+    await (<Discord.TextChannel>client.channels.cache.get("793242781892083742")).send({
+        
+        embed:{
+            description: `<@${u.userid}>\\${client.users.cache.get(u.userid)?.tag} has submitted their meme\nChannel: <#${match._id}>`,
+            color:"#d7be26",
+            image: {
+                url: message.attachments.array()[0].url,
+            },
+            timestamp: new Date()
         }
+    });
+
+    match.players[index] = u
+    if (!match.playersdone.includes(u.userid)) {
+        match.playersdone.push(u.userid)
     }
+
+    await updateQuals(match)
+
+    try {
+        let r = await getReminder(match._id)
+
+        r.mention = r.mention.replace(`<@${u.userid}>`, "")
+
+        await updateReminder(r)
+    } catch (error) {
+        console.log("")
+    }
+
+    try {
+        await deleteReminder(await getReminder(u.userid))
+    } catch (error) {
+        console.log("")
+    }
+    
+    return message.reply(`The meme has been attached for <@${u.userid}>.`)
 }

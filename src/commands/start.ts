@@ -117,7 +117,7 @@ export async function start(message: discord.Message, client: discord.Client) {
         let embed = new discord.MessageEmbed()
             .setTitle(`Match between ${user1.username ? user1.username : (await message.guild!.members.fetch(user1.id)).nickname} and ${user2.username ? user2.username : (await message.guild!.members.fetch(user2.id)).nickname}`)
             .setColor("#d7be26")
-            .setDescription(`<@${user1.id}> and <@${user2.id}> both have 1 hours to complete your memes.\n Contact admins if you have an issue.`)
+            .setDescription(`<@${user1.id}> and <@${user2.id}> both have 1 hours to complete your meme.\n Contact admins if you have an issue.`)
             .setTimestamp()
 
 
@@ -630,7 +630,7 @@ export async function running(client: discord.Client): Promise<void> {
 
             else if ((Math.floor(Date.now() / 1000) - match.p1.time > 3600)
                 && match.p1.memedone === false && match.p1.donesplit) {
-                user1.send("You have failed to submit your meme, your opponet is the winner.")
+                user1.send("You have failed to submit your meme, your opponent  is the winner.")
 
                 let embed = new discord.MessageEmbed()
                     .setColor("#d7be26")
@@ -646,7 +646,7 @@ export async function running(client: discord.Client): Promise<void> {
             else if ((Math.floor(Date.now() / 1000) - match.p2.time > 3600)
                 && match.p2.memedone === false && match.p2.donesplit) {
                 console.log(Date.now() - match.p2.time)
-                user2.send("You have failed to submit your meme, your opponet is the winner.")
+                user2.send("You have failed to submit your meme, your opponent  is the winner.")
 
                 let embed = new discord.MessageEmbed()
                     .setTitle(`Match between ${user1.username} and ${user2.username}`)
@@ -803,12 +803,12 @@ export async function splitqual(client: discord.Client, message: discord.Message
                 if (u.userid === user.id && u.memedone === false && u.split === false) {
                     u.time = Math.floor(Date.now() / 1000)
                     await channelid.send(new discord.MessageEmbed()
-                        .setDescription(`<@${user.id}> your qualifier match has been split.\nYou have 30 mins to complete your memes\nUse \`!qualsubmit\` to submit`)
+                        .setDescription(`<@${user.id}> your qualifier match has been split.\nYou have 30 mins to complete your meme\nUse \`!qualsubmit\` to submit`)
                         .setColor("#d7be26")
                         .setTimestamp())
                     u.split = true
 
-                    await user.send(`<@${user.id}> your qualifier match has been split.\nYou have 30 mins to complete your memes\nUse \`!qualsubmit\` to submit`)
+                    await user.send(`<@${user.id}> your qualifier match has been split.\nYou have 30 mins to complete your meme\nUse \`!qualsubmit\` to submit`)
 
 
                     if (match.template.length > 0 && match.istheme || match.template && match.istheme) {
@@ -889,13 +889,13 @@ export async function splitregular(message: discord.Message, client: discord.Cli
 
 
                         await message.channel.send(new discord.MessageEmbed()
-                            .setDescription(`<@${user.id}> your match has been split.\nYou have 1 hours to complete your memes\nUse ${`!submit`} to submit to submit each image seperately`)
+                            .setDescription(`<@${user.id}> your match has been split.\nYou have 1 hours to complete your meme\nUse ${`!submit`} to submit to submit your meme`)
                             .setColor("#d7be26")
                             .setTimestamp())
 
                         match.p1.donesplit = true
                         match.p1.time = Math.floor(Date.now() / 1000)
-                        await (await client.users.fetch(match.p1.userid)).send(`Your match has been split.\nYou have 1 hours to complete your portion\nUse ${`!submit`} to submit to submit each image seperately`)
+                        await (await client.users.fetch(match.p1.userid)).send(`Your match has been split.\nYou have 1 hours to complete your portion\nUse ${`!submit`} to submit to submit your meme`)
                         if (match.template) {
                             await (await client.users.fetch(match.p1.userid)).send(
                                 new discord.MessageEmbed()
@@ -937,13 +937,13 @@ export async function splitregular(message: discord.Message, client: discord.Cli
                     if (!(match.p2.donesplit)) {
 
                         await message.channel.send(new discord.MessageEmbed()
-                            .setDescription(`<@${user.id}> your match has been split.\nYou have 1 hours to complete your memes\nUse ${`!submit`} to submit to submit each image seperately`)
+                            .setDescription(`<@${user.id}> your match has been split.\nYou have 1 hours to complete your meme\nUse ${`!submit`} to submit to submit your meme`)
                             .setColor("#d7be26")
                             .setTimestamp())
 
                         match.p2.donesplit = true
                         match.p2.time = Math.floor(Date.now() / 1000)
-                        await (await client.users.fetch(match.p2.userid)).send(`Your match has been split.\nYou have 1 hours to complete your portion\nUse ${`!submit`} to submit to submit each image seperately`)
+                        await (await client.users.fetch(match.p2.userid)).send(`Your match has been split.\nYou have 1 hours to complete your portion\nUse ${`!submit`} to submit to submit your meme`)
 
                         if (match.template) {
                             await (await client.users.fetch(match.p2.userid)).send(
@@ -1091,7 +1091,7 @@ export async function startregularsplit(message: discord.Message, client: discor
         let embed = new discord.MessageEmbed()
             .setTitle(`Match between ${user1.username ? user1.username : (await message.guild!.members.fetch(user1.id)).nickname} and ${user2.username ? user2.username : (await message.guild!.members.fetch(user2.id)).nickname}`)
             .setColor("#d7be26")
-            .setDescription(`<@${user1.id}> and <@${user2.id}> both have 1 hours to complete your memes.\n Contact admins if you have an issue.`)
+            .setDescription(`<@${user1.id}> and <@${user2.id}> both have 1 hours to complete your meme.\n Contact admins if you have an issue.`)
             .setTimestamp()
 
 
@@ -1139,7 +1139,7 @@ export async function startregularsplit(message: discord.Message, client: discor
         let embed = new discord.MessageEmbed()
             .setTitle(`Match between ${user1.username ? user1.username : (await message.guild!.members.fetch(user1.id)).nickname} and ${user2.username ? user2.username : (await message.guild!.members.fetch(user2.id)).nickname}`)
             .setColor("#d7be26")
-            .setDescription(`<@${user1.id}> and <@${user2.id}> both have 1 hours to complete your memes.\n Contact admins if you have an issue.`)
+            .setDescription(`<@${user1.id}> and <@${user2.id}> both have 1 hours to complete your meme.\n Contact admins if you have an issue.`)
             .setTimestamp()
 
 
@@ -1320,7 +1320,7 @@ export async function reload(message: discord.Message, client: discord.Client) {
 
         else if ((Math.floor(Date.now() / 1000) - match.p1.time > 3600)
             && match.p1.memedone === false && match.p1.donesplit) {
-            user1.send("You have failed to submit your meme, your opponet is the winner.")
+            user1.send("You have failed to submit your meme, your opponent  is the winner.")
 
             let embed = new discord.MessageEmbed()
                 .setColor("#d7be26")
@@ -1336,7 +1336,7 @@ export async function reload(message: discord.Message, client: discord.Client) {
         else if ((Math.floor(Date.now() / 1000) - match.p2.time > 3600)
             && match.p2.memedone === false && match.p2.donesplit) {
             console.log(Date.now() - match.p2.time)
-            user2.send("You have failed to submit your meme, your opponet is the winner.")
+            user2.send("You have failed to submit your meme, your opponent  is the winner.")
 
             let embed = new discord.MessageEmbed()
                 .setTitle(`Match between ${user1.username} and ${user2.username}`)
