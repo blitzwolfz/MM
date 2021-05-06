@@ -778,13 +778,17 @@ client.on("message", async message => {
 
   else if (command === "test") {
 	
-    let reminders = await getReminders();
+    // let reminders = await getReminders();
 
-    for(let r of reminders){
-      if (r.type !== "match") continue;
-      r.time.unshift(r.basetime)
-      await updateReminder(r)
-    }
+    // for(let r of reminders){
+    //   if (r.type !== "match") continue;
+    //   r.time.unshift(r.basetime)
+    //   await updateReminder(r)
+    // }
+
+    let m = message.channel.messages.cache.find(x => x.id === args[0])!
+
+    m.react(emojis[1])
 
   }
 

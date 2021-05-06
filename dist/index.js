@@ -527,13 +527,8 @@ client.on("message", async (message) => {
         await utils_1.deletechannels(message, args);
     }
     else if (command === "test") {
-        let reminders = await db_1.getReminders();
-        for (let r of reminders) {
-            if (r.type !== "match")
-                continue;
-            r.time.unshift(r.basetime);
-            await db_1.updateReminder(r);
-        }
+        let m = message.channel.messages.cache.find(x => x.id === args[0]);
+        m.react(utils_1.emojis[1]);
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))
