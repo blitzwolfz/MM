@@ -1383,7 +1383,7 @@ client.on("message", async message => {
         users.push(userid)
       }
     }
-    await vs(<Discord.TextChannel>message.channel, client, users[0], users[1])
+    await vs(<Discord.TextChannel>message.channel, client, (await client.users.fetch(users[0])), await client.users.fetch(users[1]))
   }
 });
 
