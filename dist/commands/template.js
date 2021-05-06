@@ -98,6 +98,7 @@ async function addTheme(message, client, args) {
         console.log(list);
         list.push(args.join(" "));
         console.log(list);
+        list.sort();
         await db_1.updateThemedb({
             _id: "themelist",
             list: list
@@ -116,6 +117,7 @@ async function removeTheme(message, client, args) {
         let word = list[parseInt(args[0]) - 1];
         list.splice(parseInt(args[0]) - 1, 1);
         console.log(list);
+        list.sort();
         await db_1.updateThemedb({
             _id: "themelist",
             list: list

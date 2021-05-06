@@ -87,6 +87,8 @@ client.on('ready', async () => {
     }, 15000);
     setInterval(async function () {
         await exhibitions_1.deleteExhibitionchannels(client);
+    }, 1000);
+    setInterval(async function () {
         await utils_1.aaautoreminders(client);
     }, 1000);
     if (process.env.DBNAME === "mememania")
@@ -534,9 +536,6 @@ client.on("message", async (message) => {
             }
             if ((time - 12) * 3600 > 0) {
                 timeArr.push((time - 12) * 3600);
-            }
-            if ((time - 24) * 3600 > 0) {
-                timeArr.push((time - 24) * 3600);
             }
             r.time = timeArr,
                 r.basetime = time * 3600;

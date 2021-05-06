@@ -108,6 +108,8 @@ export async function addTheme(message: Discord.Message, client: Discord.Client,
         list.push(args.join(" "))
         console.log(list)
 
+        list.sort()
+
         await updateThemedb({
             _id: "themelist",
             list: list
@@ -129,7 +131,7 @@ export async function removeTheme(message: Discord.Message, client: Discord.Clie
         let word = list[parseInt(args[0])-1]
         list.splice(parseInt(args[0])-1, 1)
         console.log(list)
-
+        list.sort()
         await updateThemedb({
             _id: "themelist",
             list: list

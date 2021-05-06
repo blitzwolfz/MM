@@ -166,6 +166,12 @@ client.on('ready', async () => {
     // console.log("A Third Kiss every 5 seconds");
     
     await deleteExhibitionchannels(client)
+    
+  }, 1000);
+
+  setInterval(async function () {
+    // console.log("A Third Kiss every 5 seconds");
+    
     await aaautoreminders(client)
     
   }, 1000);
