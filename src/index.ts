@@ -51,6 +51,8 @@ import {
   updateThemedb,
   getthemes,
   getProfile,
+  getReminders,
+  updateReminder,
 } from "./misc/db";
 
 import { template, approvetemplate, addTheme, removeTheme, themelistLb, templatecheck } from "./commands/template";
@@ -626,7 +628,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
 
       if (!match.playersdone.includes(match.playerids[i])) {
         await messageReaction.users.remove(user.id)
-        return user.send("You can't vote for a user who failed.")
+        return user.send("You can't vote for a user who failed to submit a meme.")
       }
 
       else if (match.votes[i].includes(user.id)) {
@@ -770,38 +772,30 @@ client.on("message", async message => {
 
   else if (command === "test") {
 	
-    // await message.reply("no").then(async message => { await message.react('🤏') })
+    let reminders = await getReminders();
 
-    // let c = <Discord.TextChannel>client.channels.cache.get(args[0])
+    for(let r of reminders){
+      let time = 48
 
-    // let m = (await c.messages.fetch({limit:100})).last()!
-    // await message.channel.send(Math.floor(((Math.floor(m.createdTimestamp/1000)+ 259200) - Math.floor(Date.now()/1000))/3600))
+      let timeArr:Array<number> = []
 
-    let c = <Discord.TextChannel>client.channels.cache.get(args[0])
+      if((time-2)*3600 > 0){
+          timeArr.push((time-2)*3600)
+      }
 
-    let m = (await c.messages.fetch({limit:100})).last()!
-    message.channel.send(await toHHMMSS(Math.floor(m.createdTimestamp/1000), 129600))
-    // let time = Math.floor(((Math.floor(m.createdTimestamp/1000)+ 259200) - Math.floor(Date.now()/1000))/3600)
-    // let rtimestamp = Math.round(Math.floor(Date.now()/1000))-43200 + (Math.abs(time - 36) * 3600)
-    // message.channel.send(time)
-    // message.channel.send(rtimestamp)
+      if((time-12)*3600 > 0){
+          timeArr.push((time-12)*3600)
+      }
 
-    // let s = ""
+      // if((time-24)*3600 > 0){
+      //     timeArr.push((time-24)*3600)
+      // }
 
-    // for(let x = 0; x < m.mentions.users.array().length; x++){
-    //   s += `<@${m.mentions.users.array()[x].id}>`
-    // }
+      r.time = timeArr,
+      r.basetime = time*3600
 
-    // await insertReminder(
-    //   {
-    //     _id:args[0],
-    //     mention:s,
-    //     channel:args[0],
-    //     type:"match",
-    //     time:129600,
-    //     timestamp:rtimestamp
-    //   }
-    // )
+      await updateReminder(r)
+    }
 
   }
 
@@ -956,15 +950,15 @@ client.on("message", async message => {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
 
     if (await getMatch(message.channel.id)) {
-      message.reply("there is an active match")
+      message.reply("There is an active match")
     }
 
     else if (await getQual(message.channel.id)) {
-      message.reply("there is an active qualifier match")
+      message.reply("There is an active qualifier match")
     }
 
     else {
-      message.reply("there are no matches")
+      message.reply("There are no matches")
     }
   }
 
@@ -991,7 +985,7 @@ client.on("message", async message => {
 
   else if (command === "settheme" || command === "themeset") {
     //let id = message.mentions.channels.first()!.id
-    if (!message.mentions.channels.first()) return message.reply("please, state the channel for the qualifier")
+    if (!message.mentions.channels.first()) return message.reply("Please, state the channel for the qualifier")
 
     if (!args[1]) return message.reply("please enter a theme")
 
@@ -1259,6 +1253,26 @@ client.on("message", async message => {
     }
 
 
+  }
+
+  else if(command === "allreminders"){
+    let reminders = await getReminders(
+      { type: "match" }
+    )
+
+    if(reminders.length === 0) return message.reply("No reminders");
+
+    for(let r of reminders){
+      await message.channel.send(`Channel: <#${r._id}>\nTime Left: ${Math.floor(Date.now() / 1000) - r.timestamp}\nOther thing: ${r.time}`)
+      //await message.channel.send("_ _")
+
+      // r.timestamp = 1620008978
+      // r.time = 165600
+
+      // await updateReminder(r)
+    }
+
+    await message.channel.send("Done.")
   }
 
   else if (command === "viewmatchlist" || command === "matchlist") {

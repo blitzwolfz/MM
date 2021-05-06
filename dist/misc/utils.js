@@ -172,73 +172,31 @@ async function reminders(client, args) {
 }
 exports.reminders = reminders;
 async function aaautoreminders(client) {
-    await matchreminder(client);
-    await memereminder(client);
+    let reminders = await db_1.getReminders();
+    for (let r of reminders) {
+        if (Math.floor(Date.now() / 1000) - r.timestamp >= r.time[r.time.length - 1]) {
+            if (r.type === "match") {
+                (await client.channels.fetch(r.channel)).send(`${r.mention} you have ${(r.basetime - r.time[r.time.length - 1]) / 3600}h left to do your match`);
+                r.time.pop();
+                if (r.time.length === 0) {
+                    await db_1.deleteReminder(r);
+                }
+                else
+                    await db_1.updateReminder(r);
+            }
+            if (r.type === "meme") {
+                (await client.users.cache.get(r._id)).send(`${r.mention} you have ${(r.basetime - r.time[r.time.length - 1]) / 60}m left to do your portion`);
+                r.time.pop();
+                if (r.time.length === 0) {
+                    await db_1.deleteReminder(r);
+                }
+                else
+                    await db_1.updateReminder(r);
+            }
+        }
+    }
 }
 exports.aaautoreminders = aaautoreminders;
-async function matchreminder(client) {
-    let r = await db_1.getReminders({ type: "match" });
-    for (let i of r) {
-        if (Math.floor(Date.now() / 1000) - i.timestamp >= i.time) {
-            (await client.channels.fetch(i.channel)).send(`${i.mention} you have ${(172800 - i.time) / 3600}h left to do your match`);
-            await db_1.deleteReminder(i);
-            if (i.time === 86400) {
-                await db_1.insertReminder({
-                    _id: i.channel,
-                    mention: i.mention,
-                    channel: i.channel,
-                    type: "match",
-                    time: 129600,
-                    timestamp: i.timestamp
-                });
-            }
-            if (i.time === 129600) {
-                await db_1.insertReminder({
-                    _id: i.channel,
-                    mention: i.mention,
-                    channel: i.channel,
-                    type: "match",
-                    time: 165600,
-                    timestamp: i.timestamp
-                });
-            }
-        }
-    }
-}
-async function memereminder(client) {
-    let r = await db_1.getReminders({ type: "meme" });
-    for (let i of r) {
-        if (Math.floor(Date.now() / 1000) - i.timestamp >= i.time) {
-            try {
-                (await client.users.cache.get(i._id)).send(`You have ${Math.floor((3600 - i.time) / 60)}m left to do your match`);
-            }
-            catch (error) {
-                console.log("User will not let bot dm");
-            }
-            await db_1.deleteReminder(i);
-            if (i.time === 1800) {
-                await db_1.insertReminder({
-                    _id: i._id,
-                    mention: i.mention,
-                    channel: i.channel,
-                    type: "meme",
-                    time: 2700,
-                    timestamp: i.timestamp
-                });
-            }
-            if (i.time === 2700) {
-                await db_1.insertReminder({
-                    _id: i._id,
-                    mention: i.mention,
-                    channel: i.channel,
-                    type: "meme",
-                    time: 3300,
-                    timestamp: i.timestamp
-                });
-            }
-        }
-    }
-}
 async function aautoreminders(client, ...st) {
     var _a, _b, _c, _d, _e, _f;
     let catchannels = client.guilds.cache.get("719406444109103117").channels.cache.array();

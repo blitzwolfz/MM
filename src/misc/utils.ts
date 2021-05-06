@@ -1,7 +1,7 @@
 import * as Discord from "discord.js"
 import { matchlistmaker } from "../commands/challonge";
 import { startsignup } from "../commands/signups";
-import { getMatch, getAllProfiles, updateProfile, getQual, getMatchlist, getQuallist, dbSoftReset, deleteSignup, deleteQuallist, getAllModProfiles, getAllCockratings, getReminders, deleteReminder, insertReminder, getSignups } from "./db";
+import { getMatch, getAllProfiles, updateProfile, getQual, getMatchlist, getQuallist, dbSoftReset, deleteSignup, deleteQuallist, getAllModProfiles, getAllCockratings, getReminders, deleteReminder, getSignups, updateReminder } from "./db";
 import { clearmodstats } from "./modprofiles";
 
 export async function getUser(mention: string) {
@@ -210,102 +210,137 @@ export async function reminders(client: Discord.Client, args: string[]) {
 }
 
 export async function aaautoreminders(client: Discord.Client) {
-  await matchreminder(client)
-  await memereminder(client)
-}
+  // await matchreminder(client)
+  // await memereminder(client)
 
-async function  matchreminder(client:Discord.Client) {
+  let reminders = await getReminders();
 
-  let r = await getReminders(
-    { type: "match" }
-  )
+  for(let r of reminders){
+      if (Math.floor(Date.now() / 1000) - r.timestamp >= r.time[r.time.length-1]){
+          if(r.type === "match"){
+              (<Discord.TextChannel>await client.channels.fetch(r.channel)).send(
+                  `${r.mention} you have ${(r.basetime - r.time[r.time.length-1])/3600}h left to do your match`
+              )
 
-  for (let i of r) {
-    if (Math.floor(Date.now() / 1000) - i.timestamp >= i.time) {
-      (<Discord.TextChannel>await client.channels.fetch(i.channel)).send(
-        `${i.mention} you have ${(172800 - i.time)/3600}h left to do your match`
-      )
-      await deleteReminder(i)
+              r.time.pop()
 
-      if(i.time === 86400){
-        await insertReminder(
-          {
-            _id:i.channel,
-            mention:i.mention,
-            channel:i.channel,
-            type:"match",
-            time:129600,
-            timestamp:i.timestamp
+              if(r.time.length === 0){
+                  await deleteReminder(r);
+              }
+
+              else await updateReminder(r);
           }
-        )
-      }
 
-      if(i.time === 129600){
-        await insertReminder(
-          {
-            _id:i.channel,
-            mention:i.mention,
-            channel:i.channel,
-            type:"match",
-            time:165600,
-            timestamp:i.timestamp
+          if(r.type === "meme"){
+              (await client.users.cache.get(r._id))!.send(
+                  `${r.mention} you have ${(r.basetime - r.time[r.time.length-1])/60}m left to do your portion`
+              )
+
+              r.time.pop()
+
+              if(r.time.length === 0){
+                  await deleteReminder(r);
+              }
+
+              else await updateReminder(r);
           }
-        )
       }
 
-    }
-  }
-
-}
-
-async function  memereminder(client:Discord.Client) {
-
-  let r = await getReminders(
-    { type: "meme" }
-  )
-
-  for (let i of r) {
-    if (Math.floor(Date.now() / 1000) - i.timestamp >= i.time) {
-      try {
-        (await client.users.cache.get(i._id))!.send(
-          `You have ${Math.floor((3600 - i.time)/60)}m left to do your match`
-        )
-      } catch (
-        error
-      ) {
-         console.log("User will not let bot dm")
-      }
-
-      await deleteReminder(i)
-
-      if(i.time === 1800){
-        await insertReminder(
-          {
-            _id:i._id,
-            mention:i.mention,
-            channel:i.channel,
-            type:"meme",
-            time:2700,
-            timestamp:i.timestamp
-          }
-        )
-      }
-
-      if(i.time === 2700){
-        await insertReminder(
-          {
-            _id:i._id,
-            mention:i.mention,
-            channel:i.channel,
-            type:"meme",
-            time:3300,
-            timestamp:i.timestamp
-          }
-        )
-      }
-    }
   }
 }
+
+// async function  matchreminder(client:Discord.Client) {
+
+//   let r = await getReminders(
+//     { type: "match" }
+//   )
+
+//   for (let i of r) {
+//     if (Math.floor(Date.now() / 1000) - i.timestamp >= i.time) {
+//       (<Discord.TextChannel>await client.channels.fetch(i.channel)).send(
+//         `${i.mention} you have ${(172800 - i.time)/3600}h left to do your match`
+//       )
+//       await deleteReminder(i)
+
+//       if(i.time === 86400){
+//         await insertReminder(
+//           {
+//             _id:i.channel,
+//             mention:i.mention,
+//             channel:i.channel,
+//             type:"match",
+//             time:129600,
+//             timestamp:i.timestamp
+//           }
+//         )
+//       }
+
+//       if(i.time === 129600){
+//         await insertReminder(
+//           {
+//             _id:i.channel,
+//             mention:i.mention,
+//             channel:i.channel,
+//             type:"match",
+//             time:165600,
+//             timestamp:i.timestamp
+//           }
+//         )
+//       }
+
+//     }
+//   }
+
+// }
+
+// async function  memereminder(client:Discord.Client) {
+
+//   let r = await getReminders(
+//     { type: "meme" }
+//   )
+
+//   for (let i of r) {
+//     if (Math.floor(Date.now() / 1000) - i.timestamp >= i.time) {
+//       try {
+//         (await client.users.cache.get(i._id))!.send(
+//           `You have ${Math.floor((3600 - i.time)/60)}m left to do your match`
+//         )
+//       } catch (
+//         error
+//       ) {
+//          console.log("User will not let bot dm")
+//       }
+
+//       await deleteReminder(i)
+
+//       if(i.time === 1800){
+//         await insertReminder(
+//           {
+//             _id:i._id,
+//             mention:i.mention,
+//             channel:i.channel,
+//             type:"meme",
+//             time:2700,
+//             timestamp:i.timestamp
+//           }
+//         )
+//       }
+
+//       if(i.time === 2700){
+//         await insertReminder(
+//           {
+//             _id:i._id,
+//             mention:i.mention,
+//             channel:i.channel,
+//             type:"meme",
+//             time:3300,
+//             timestamp:i.timestamp
+//           }
+//         )
+//       }
+//     }
+//   }
+// }
 
 export async function aautoreminders(client: Discord.Client, ...st: string[]) {
   let catchannels = client.guilds.cache.get("719406444109103117")!.channels.cache.array()!

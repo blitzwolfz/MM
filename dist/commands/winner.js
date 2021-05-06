@@ -169,16 +169,8 @@ async function end(client, id) {
             .setDescription(`Both users have gotten ${match.p1.votes} vote(s). Both users came to a draw.`)
             .setFooter(utils_1.dateBuilder()));
         if (match.exhibition === false) {
-            let m = await channelid
+            await channelid
                 .send(`<@${user1.id}> <@${user2.id}> Please complete this re-match ASAP. Contact a ref to begin.`);
-            await db_1.insertReminder({
-                _id: channelid.id,
-                mention: `<@${user1.id}> <@${user2.id}>`,
-                channel: channelid.id,
-                type: "match",
-                time: 86400,
-                timestamp: Math.round(m.createdTimestamp / 1000)
-            });
         }
     }
     let t = channelid.topic.toString().split(",");
@@ -356,14 +348,24 @@ async function qualend(client, id) {
             let time = Math.floor(((Math.floor(m.createdTimestamp / 1000) + 259200) - Math.floor(Date.now() / 1000)) / 3600);
             if (time <= 72 && ((_b = channel.topic) === null || _b === void 0 ? void 0 : _b.split(" ").join("").toLowerCase()) === "round1") {
                 await channel.send(`${s} you have ${time}h left to complete Portion 2`);
-                let rtimestamp = Math.round(Math.floor(Date.now() / 1000)) - 43200 + (Math.abs(time - 36) * 3600);
+                let timeArr = [];
+                if ((time - 2) * 3600 > 0) {
+                    timeArr.push((time - 2) * 3600);
+                }
+                if ((time - 12) * 3600 > 0) {
+                    timeArr.push((time - 12) * 3600);
+                }
+                if ((time - 24) * 3600 > 0) {
+                    timeArr.push((time - 24) * 3600);
+                }
                 await db_1.insertReminder({
                     _id: channel.id,
-                    mention: s,
+                    mention: `${s}`,
                     channel: channel.id,
                     type: "match",
-                    time: 129600,
-                    timestamp: rtimestamp
+                    time: timeArr,
+                    timestamp: Math.floor(Date.now() / 1000),
+                    basetime: time * 3600
                 });
             }
         }

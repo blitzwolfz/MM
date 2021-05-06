@@ -176,6 +176,7 @@ export interface reminder {
     mention: string;
     type: "meme" | "match";
     channel: string;
-    time: number;
+    time: number[];
     timestamp: number;
+    basetime: number;
 }

@@ -263,14 +263,31 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
                                                 await channel.lockPermissions()
                                                 let t = await getMatchlist()
                                                 
+                                                let time = 48
+
+                                                let timeArr:Array<number> = []
+                                        
+                                                if((time-2)*3600 > 0){
+                                                    timeArr.push((time-2)*3600)
+                                                }
+                                        
+                                                if((time-12)*3600 > 0){
+                                                    timeArr.push((time-12)*3600)
+                                                }
+                                        
+                                                if((time-24)*3600 > 0){
+                                                    timeArr.push((time-24)*3600)
+                                                }
+                                        
                                                 await insertReminder(
                                                     {
-                                                      _id:channel.id,
-                                                      mention:`<@${id1}> <@${id2}>`,
-                                                      channel:channel.id,
-                                                      type:"match",
-                                                      time:86400,
-                                                      timestamp:Math.round(message.createdTimestamp / 1000)
+                                                        _id:channel.id,
+                                                        mention:`<@${id1}> <@${id2}>`,
+                                                        channel:channel.id,
+                                                        type:"match",
+                                                        time:timeArr,
+                                                        timestamp:Math.floor(Date.now()/1000),
+                                                        basetime:time*3600
                                                     }
                                                 )
 
@@ -312,14 +329,31 @@ export async function dirtyChannelcreate(message: Discord.Message, disclient: Di
             await channel.lockPermissions()
             let t = await getMatchlist()
             
+            let time = 48
+
+            let timeArr:Array<number> = []
+    
+            if((time-2)*3600 > 0){
+                timeArr.push((time-2)*3600)
+            }
+    
+            if((time-12)*3600 > 0){
+                timeArr.push((time-12)*3600)
+            }
+    
+            if((time-24)*3600 > 0){
+                timeArr.push((time-24)*3600)
+            }
+    
             await insertReminder(
                 {
-                  _id:channel.id,
-                  mention:`<@${ids[i]}> <@${ids[i+1]}>`,
-                  channel:channel.id,
-                  type:"match",
-                  time:86400,
-                  timestamp:Math.round(message.createdTimestamp / 1000)
+                    _id:channel.id,
+                    mention:`<@${ids[i]}> <@${ids[i+1]}>`,
+                    channel:channel.id,
+                    type:"match",
+                    time:timeArr,
+                    timestamp:Math.floor(Date.now()/1000),
+                    basetime:time*3600
                 }
             )
 
@@ -358,14 +392,27 @@ export async function QualChannelCreation(message: Discord.Message, args: string
                         string += `<@${u}> `
                     }
 
+                    let time2 = 36
+
+                    let timeArr:Array<number> = []
+                
+                    if((time2-2)*3600 > 0){
+                        timeArr.push((time2-2)*3600)
+                    }
+            
+                    if((time2-12)*3600 > 0){
+                        timeArr.push((time2-12)*3600)
+                    }
+            
                     await insertReminder(
                         {
-                          _id:channel.id,
-                          mention:string,
-                          channel:channel.id,
-                          type:"match",
-                          time:129600,
-                          timestamp:Math.round(message.createdTimestamp / 1000)-43200
+                            _id:channel.id,
+                            mention:string,
+                            channel:channel.id,
+                            type:"match",
+                            time:timeArr,
+                            timestamp:Math.floor(Date.now()/1000),
+                            basetime:time2*3600
                         }
                     )
 

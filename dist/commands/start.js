@@ -146,7 +146,7 @@ async function start(message, client) {
         let embed = new discord.MessageEmbed()
             .setTitle(`Match between ${user1.username ? user1.username : (await message.guild.members.fetch(user1.id)).nickname} and ${user2.username ? user2.username : (await message.guild.members.fetch(user2.id)).nickname}`)
             .setColor("#d7be26")
-            .setDescription(`<@${user1.id}> and <@${user2.id}> both have 1 hours to complete your memes.\n Contact admins if you have an issue.`)
+            .setDescription(`<@${user1.id}> and <@${user2.id}> both have 1 hours to complete your meme.\n Contact admins if you have an issue.`)
             .setTimestamp();
         message.channel.send({ embed });
         await user1.send(new discord.MessageEmbed()
@@ -541,6 +541,18 @@ async function splitqual(client, message, ...userid) {
                             .setTimestamp());
                     }
                     await db_1.updateQuals(match);
+                    let timeArr = [];
+                    timeArr.push(3300);
+                    timeArr.push(2700);
+                    await db_1.insertReminder({
+                        _id: u.userid,
+                        mention: "",
+                        channel: "",
+                        type: "meme",
+                        time: timeArr,
+                        timestamp: Math.floor(Date.now() / 1000),
+                        basetime: 3600
+                    });
                 }
                 else if (u.split === true && u.userid === user.id) {
                     await channelid.send(new discord.MessageEmbed()
@@ -550,14 +562,6 @@ async function splitqual(client, message, ...userid) {
                     await db_1.updateQuals(match);
                 }
             }
-            await db_1.insertReminder({
-                _id: user.id,
-                mention: "",
-                channel: "",
-                type: "meme",
-                time: 2700,
-                timestamp: Math.floor(Date.now() / 1000) - 1800
-            });
         }
     }
 }
@@ -592,13 +596,18 @@ async function splitregular(message, client, ...userid) {
                                 .setTimestamp());
                         }
                         await db_1.updateActive(match);
+                        let timeArr = [];
+                        timeArr.push(3300);
+                        timeArr.push(2700);
+                        timeArr.push(1800);
                         await db_1.insertReminder({
                             _id: match.p1.userid,
                             mention: "",
                             channel: "",
                             type: "meme",
-                            time: 1800,
-                            timestamp: Math.floor(Date.now() / 1000)
+                            time: timeArr,
+                            timestamp: Math.floor(Date.now() / 1000),
+                            basetime: 3600
                         });
                         return;
                     }
@@ -627,13 +636,18 @@ async function splitregular(message, client, ...userid) {
                                 .setTimestamp());
                         }
                         await db_1.updateActive(match);
+                        let timeArr = [];
+                        timeArr.push(3300);
+                        timeArr.push(2700);
+                        timeArr.push(1800);
                         await db_1.insertReminder({
                             _id: match.p2.userid,
                             mention: "",
                             channel: "",
                             type: "meme",
-                            time: 1800,
-                            timestamp: Math.floor(Date.now() / 1000)
+                            time: timeArr,
+                            timestamp: Math.floor(Date.now() / 1000),
+                            basetime: 3600
                         });
                         return;
                     }

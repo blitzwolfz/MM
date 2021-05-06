@@ -423,7 +423,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             }
             if (!match.playersdone.includes(match.playerids[i])) {
                 await messageReaction.users.remove(user.id);
-                return user.send("You can't vote for a user who failed.");
+                return user.send("You can't vote for a user who failed to submit a meme.");
             }
             else if (match.votes[i].includes(user.id)) {
                 await messageReaction.users.remove(user.id);
@@ -525,9 +525,23 @@ client.on("message", async (message) => {
         await utils_1.deletechannels(message, args);
     }
     else if (command === "test") {
-        let c = client.channels.cache.get(args[0]);
-        let m = (await c.messages.fetch({ limit: 100 })).last();
-        message.channel.send(await utils_1.toHHMMSS(Math.floor(m.createdTimestamp / 1000), 129600));
+        let reminders = await db_1.getReminders();
+        for (let r of reminders) {
+            let time = 48;
+            let timeArr = [];
+            if ((time - 2) * 3600 > 0) {
+                timeArr.push((time - 2) * 3600);
+            }
+            if ((time - 12) * 3600 > 0) {
+                timeArr.push((time - 12) * 3600);
+            }
+            if ((time - 24) * 3600 > 0) {
+                timeArr.push((time - 24) * 3600);
+            }
+            r.time = timeArr,
+                r.basetime = time * 3600;
+            await db_1.updateReminder(r);
+        }
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))
@@ -659,13 +673,13 @@ client.on("message", async (message) => {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
         if (await db_1.getMatch(message.channel.id)) {
-            message.reply("there is an active match");
+            message.reply("There is an active match");
         }
         else if (await db_1.getQual(message.channel.id)) {
-            message.reply("there is an active qualifier match");
+            message.reply("There is an active qualifier match");
         }
         else {
-            message.reply("there are no matches");
+            message.reply("There are no matches");
         }
     }
     else if (command === "startqual") {
@@ -691,7 +705,7 @@ client.on("message", async (message) => {
     }
     else if (command === "settheme" || command === "themeset") {
         if (!message.mentions.channels.first())
-            return message.reply("please, state the channel for the qualifier");
+            return message.reply("Please, state the channel for the qualifier");
         if (!args[1])
             return message.reply("please enter a theme");
         let match = await db_1.getQual(message.mentions.channels.first().id);
@@ -915,6 +929,15 @@ client.on("message", async (message) => {
                 await message.channel.send(`${aa[i].channelid} ---> <#${aa[i].channelid}>\nTime to finish: ${await utils_1.toHHMMSS(7200, aa[i].votetime)}`);
             }
         }
+    }
+    else if (command === "allreminders") {
+        let reminders = await db_1.getReminders({ type: "match" });
+        if (reminders.length === 0)
+            return message.reply("No reminders");
+        for (let r of reminders) {
+            await message.channel.send(`Channel: <#${r._id}>\nTime Left: ${Math.floor(Date.now() / 1000) - r.timestamp}\nOther thing: ${r.time}`);
+        }
+        await message.channel.send("Done.");
     }
     else if (command === "viewmatchlist" || command === "matchlist") {
         await signups_1.matchlistEmbed(message, client);
