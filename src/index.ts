@@ -52,7 +52,6 @@ import {
   getthemes,
   getProfile,
   getReminders,
-  updateReminder,
 } from "./misc/db";
 
 import { template, approvetemplate, addTheme, removeTheme, themelistLb, templatecheck } from "./commands/template";

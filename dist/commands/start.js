@@ -24,7 +24,6 @@ const discord = __importStar(require("discord.js"));
 const utils_1 = require("../misc/utils");
 const prefix = process.env.PREFIX;
 const winner_1 = require("./winner");
-const card_1 = require("./card");
 const db_1 = require("../misc/db");
 const user_1 = require("./user");
 const qualrunn_1 = require("./qualrunn");
@@ -104,7 +103,6 @@ async function start(message, client) {
         newmatch.theme = rantemp.url;
         await db_1.deletetempStruct(rantemp._id);
         await db_1.insertActive(newmatch);
-        await card_1.vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[1].id]);
         let embed = new discord.MessageEmbed()
             .setTitle(`Match between ${user1.username ? user1.username : (await message.guild.members.fetch(user1.id)).nickname} and ${user2.username ? user2.username : (await message.guild.members.fetch(user2.id)).nickname}`)
             .setColor("#d7be26")
@@ -142,7 +140,6 @@ async function start(message, client) {
         newmatch.template.push(rantemp.url);
         await db_1.deletetempStruct(rantemp._id);
         await db_1.insertActive(newmatch);
-        await card_1.vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[1].id]);
         let embed = new discord.MessageEmbed()
             .setTitle(`Match between ${user1.username ? user1.username : (await message.guild.members.fetch(user1.id)).nickname} and ${user2.username ? user2.username : (await message.guild.members.fetch(user2.id)).nickname}`)
             .setColor("#d7be26")
@@ -724,7 +721,6 @@ async function startregularsplit(message, client) {
         newmatch.theme = rantemp.url;
         await db_1.deletetempStruct(rantemp._id);
         await db_1.insertActive(newmatch);
-        await card_1.vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[1].id]);
         let embed = new discord.MessageEmbed()
             .setTitle(`Match between ${user1.username ? user1.username : (await message.guild.members.fetch(user1.id)).nickname} and ${user2.username ? user2.username : (await message.guild.members.fetch(user2.id)).nickname}`)
             .setColor("#d7be26")
@@ -755,7 +751,6 @@ async function startregularsplit(message, client) {
         newmatch.template.push(rantemp.url);
         await db_1.deletetempStruct(rantemp._id);
         await db_1.insertActive(newmatch);
-        await card_1.vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[1].id]);
         let embed = new discord.MessageEmbed()
             .setTitle(`Match between ${user1.username ? user1.username : (await message.guild.members.fetch(user1.id)).nickname} and ${user2.username ? user2.username : (await message.guild.members.fetch(user2.id)).nickname}`)
             .setColor("#d7be26")

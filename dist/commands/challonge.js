@@ -23,6 +23,7 @@ exports.matchlistmaker = exports.removequalwinner = exports.declarequalwinner = 
 const Discord = __importStar(require("discord.js"));
 const db_1 = require("../misc/db");
 const utils_1 = require("../misc/utils");
+const card_1 = require("./card");
 const challonge = require("challonge-js");
 async function CreateChallongeQualBracket(message, disclient, args) {
     if (message.member.roles.cache.has('724818272922501190')
@@ -167,14 +168,14 @@ async function ChannelCreation(message, disclient, args) {
                                         await message.guild.channels.create(channelstringname, { type: 'text', topic: `${matchid},${oneid},${twoid}` })
                                             .then(async (channel) => {
                                             let category = await message.guild.channels.cache.find(c => c.name == "matches" && c.type == "category");
-                                            let id1 = utils_1.indexOf2d(names, name1, 0, 1);
-                                            let id2 = utils_1.indexOf2d(names, name2, 0, 1);
-                                            await channel.send(`<@${id1}> <@${id2}> You have ${args[1]}h to complete this match. Contact a ref to begin, you may also split your match`);
                                             if (!category)
                                                 throw new Error("Category channel does not exist");
                                             await channel.setParent(category.id);
                                             await channel.lockPermissions();
-                                            let t = await db_1.getMatchlist();
+                                            let id1 = utils_1.indexOf2d(names, name1, 0, 1);
+                                            let id2 = utils_1.indexOf2d(names, name2, 0, 1);
+                                            await card_1.vs(channel.id, client, [id1, id2]);
+                                            await channel.send(`<@${id1}> <@${id2}> You have ${args[1]}h to complete this match. Contact a ref to begin, you may also split your match`);
                                             let time = 48;
                                             let timeArr = [];
                                             timeArr.push(time * 3600);
@@ -196,8 +197,6 @@ async function ChannelCreation(message, disclient, args) {
                                                 timestamp: Math.floor(Date.now() / 1000),
                                                 basetime: time * 3600
                                             });
-                                            t.qualurl = Math.round(message.createdTimestamp / 1000).toString();
-                                            await db_1.updateMatchlist(t);
                                         });
                                     }
                                 }

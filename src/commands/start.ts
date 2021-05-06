@@ -3,7 +3,7 @@ import { getUser, emojis } from "../misc/utils"
 const prefix = process.env.PREFIX!
 import { activematch, qualmatch, players } from "../misc/struct"
 import { end, qualend } from "./winner"
-import { vs } from "./card"
+//import { vs } from "./card"
 import {
     updateActive, deleteActive, insertActive, insertQuals,
     updateQuals, getActive, getQuals, getSingularQuals,
@@ -112,7 +112,7 @@ export async function start(message: discord.Message, client: discord.Client) {
 
         await insertActive(newmatch)
 
-        await vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[1].id])
+        //await vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[1].id])
 
         let embed = new discord.MessageEmbed()
             .setTitle(`Match between ${user1.username ? user1.username : (await message.guild!.members.fetch(user1.id)).nickname} and ${user2.username ? user2.username : (await message.guild!.members.fetch(user2.id)).nickname}`)
@@ -168,7 +168,7 @@ export async function start(message: discord.Message, client: discord.Client) {
 
         await insertActive(newmatch)
 
-        await vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[1].id])
+        //await vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[1].id])
 
         let embed = new discord.MessageEmbed()
             .setTitle(`Match between ${user1.username ? user1.username : (await message.guild!.members.fetch(user1.id)).nickname} and ${user2.username ? user2.username : (await message.guild!.members.fetch(user2.id)).nickname}`)
@@ -1102,7 +1102,7 @@ export async function startregularsplit(message: discord.Message, client: discor
 
         await insertActive(newmatch)
 
-        await vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[1].id])
+        //await vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[1].id])
 
         let embed = new discord.MessageEmbed()
             .setTitle(`Match between ${user1.username ? user1.username : (await message.guild!.members.fetch(user1.id)).nickname} and ${user2.username ? user2.username : (await message.guild!.members.fetch(user2.id)).nickname}`)
@@ -1150,7 +1150,7 @@ export async function startregularsplit(message: discord.Message, client: discor
 
         await insertActive(newmatch)
 
-        await vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[1].id])
+        //await vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[1].id])
 
         let embed = new discord.MessageEmbed()
             .setTitle(`Match between ${user1.username ? user1.username : (await message.guild!.members.fetch(user1.id)).nickname} and ${user2.username ? user2.username : (await message.guild!.members.fetch(user2.id)).nickname}`)

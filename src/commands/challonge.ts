@@ -3,6 +3,7 @@ import * as Discord from "discord.js";
 import { getSignups, getMatchlist, updateMatchlist, insertMatchlist, insertQuallist, getQuallist, updateQuallist, updateProfile, insertReminder } from "../misc/db";
 import { matchlist, quallist } from "../misc/struct";
 import { indexOf2d } from "../misc/utils";
+import { vs } from "./card";
 //import { indexOf2d } from "../misc/utils";
 
 
@@ -253,15 +254,16 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
 
                                                 // console.log(name1)
                                                 // console.log(name1)
-
-                                                let id1 = indexOf2d(names, name1, 0, 1)
-                                                let id2 = indexOf2d(names, name2, 0, 1)
-
-                                                await channel.send(`<@${id1}> <@${id2}> You have ${args[1]}h to complete this match. Contact a ref to begin, you may also split your match`)
                                                 if (!category) throw new Error("Category channel does not exist");
                                                 await channel.setParent(category.id);
                                                 await channel.lockPermissions()
-                                                let t = await getMatchlist()
+
+                                                let id1 = indexOf2d(names, name1, 0, 1)
+                                                let id2 = indexOf2d(names, name2, 0, 1)
+                                                await vs(channel.id, client, [id1, id2])
+                                                await channel.send(`<@${id1}> <@${id2}> You have ${args[1]}h to complete this match. Contact a ref to begin, you may also split your match`)
+
+                                                
                                                 
                                                 let time = 48
 
@@ -291,11 +293,6 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
                                                         basetime:time*3600
                                                     }
                                                 )
-
-
-                                                t.qualurl = Math.round(message.createdTimestamp / 1000).toString()
-
-                                                await updateMatchlist(t)
                                         });
                                     }
 
