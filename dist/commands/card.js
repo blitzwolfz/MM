@@ -22,12 +22,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.grandwinner = exports.winner = exports.vs = void 0;
 const Canvas = require('canvas');
 const Discord = __importStar(require("discord.js"));
-async function vs(channelid, client, users) {
+async function vs(channelid, client, user1id, user2id) {
     let ch = channelid;
     const canvas = Canvas.createCanvas(1917, 1168);
     const ctx = canvas.getContext('2d');
-    let user1 = (await client.users.fetch(users[0]));
-    let user2 = (await client.users.fetch(users[1]));
+    let user1 = (await client.users.fetch(user1id));
+    let user2 = (await client.users.fetch(user2id));
     const avatar = await Canvas.loadImage(user1.displayAvatarURL({ format: 'png', size: 1024 }));
     const avatar2 = await Canvas.loadImage(user2.displayAvatarURL({ format: 'png', size: 1024 }));
     await ctx.drawImage(avatar, ((canvas.height / 2) - 602.5), 300 - 26, 740, 636);

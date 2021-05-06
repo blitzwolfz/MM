@@ -260,7 +260,7 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
 
                                                 let id1 = indexOf2d(names, name1, 0, 1)
                                                 let id2 = indexOf2d(names, name2, 0, 1)
-                                                await vs(channel, client, [id1, id2])
+                                                await vs(channel, client, id1, id2)
                                                 await channel.send(`<@${id1}> <@${id2}> You have ${args[1]}h to complete this match. Contact a ref to begin, you may also split your match`)
 
                                                 

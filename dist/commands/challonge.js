@@ -174,7 +174,7 @@ async function ChannelCreation(message, disclient, args) {
                                             await channel.lockPermissions();
                                             let id1 = utils_1.indexOf2d(names, name1, 0, 1);
                                             let id2 = utils_1.indexOf2d(names, name2, 0, 1);
-                                            await card_1.vs(channel, client, [id1, id2]);
+                                            await card_1.vs(channel, client, id1, id2);
                                             await channel.send(`<@${id1}> <@${id2}> You have ${args[1]}h to complete this match. Contact a ref to begin, you may also split your match`);
                                             let time = 48;
                                             let timeArr = [];

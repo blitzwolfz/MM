@@ -1014,7 +1014,7 @@ client.on("message", async (message) => {
                 users.push(userid);
             }
         }
-        await card_1.vs(message.channel, client, users);
+        await card_1.vs(message.channel, client, users[0], users[1]);
     }
 });
 client.login(process.env.TOKEN);

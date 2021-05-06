@@ -19,7 +19,7 @@ import * as Discord from "discord.js"
 //     return ctx.font;
 // };
 
-export async function vs(channelid: Discord.TextChannel, client: Discord.Client, users: string[]){
+export async function vs(channelid: Discord.TextChannel, client: Discord.Client, user1id: string, user2id: string){
 	//let users:string[] = []
 	
 	let ch = channelid
@@ -27,8 +27,8 @@ export async function vs(channelid: Discord.TextChannel, client: Discord.Client,
     const canvas = Canvas.createCanvas(1917 , 1168);
 	const ctx = canvas.getContext('2d');
 
-    let user1 = (await client.users.fetch(users[0]))
-	let user2 = (await client.users.fetch(users[1]))
+    let user1 = (await client.users.fetch(user1id))
+	let user2 = (await client.users.fetch(user2id))
 	const avatar = await Canvas.loadImage(user1.displayAvatarURL({ format: 'png', size: 1024}));
     const avatar2 = await Canvas.loadImage(user2.displayAvatarURL({ format: 'png', size: 1024}));
 
