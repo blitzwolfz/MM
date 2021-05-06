@@ -23,7 +23,7 @@ exports.grandwinner = exports.winner = exports.vs = void 0;
 const Canvas = require('canvas');
 const Discord = __importStar(require("discord.js"));
 async function vs(channelid, client, users) {
-    let ch = await client.channels.fetch(channelid);
+    let ch = channelid;
     const canvas = Canvas.createCanvas(1917, 1168);
     const ctx = canvas.getContext('2d');
     let user1 = (await client.users.fetch(users[0]));

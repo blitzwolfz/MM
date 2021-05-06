@@ -19,10 +19,10 @@ import * as Discord from "discord.js"
 //     return ctx.font;
 // };
 
-export async function vs(channelid: string, client: Discord.Client, users: string[]){
+export async function vs(channelid: Discord.TextChannel, client: Discord.Client, users: string[]){
 	//let users:string[] = []
 	
-	let ch = <Discord.TextChannel> await client.channels.fetch(channelid)
+	let ch = channelid
 
     const canvas = Canvas.createCanvas(1917 , 1168);
 	const ctx = canvas.getContext('2d');
