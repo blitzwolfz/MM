@@ -225,8 +225,6 @@ export async function aaautoreminders(client: Discord.Client) {
                 )
               }
 
-              
-              r.time.pop()
               if(r.basetime === r.time[r.time.length-1]){
                 let c = <Discord.TextChannel>client.channels.cache.get(r.channel)
 
@@ -247,8 +245,9 @@ export async function aaautoreminders(client: Discord.Client) {
                   });
                 }
               }
-
               
+              r.time.pop()
+
               if(r.time.length === 0){
                 await deleteReminder(r);
 

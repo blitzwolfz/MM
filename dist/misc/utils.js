@@ -181,7 +181,6 @@ async function aaautoreminders(client) {
                 if (r.basetime !== r.time[r.time.length - 1]) {
                     (await client.channels.fetch(r.channel)).send(`${r.mention} you have ${(r.basetime - r.time[r.time.length - 1]) / 3600}h left to do your match`);
                 }
-                r.time.pop();
                 if (r.basetime === r.time[r.time.length - 1]) {
                     let c = client.channels.cache.get(r.channel);
                     let m = (await c.messages.fetch({ limit: 100 })).last();
@@ -197,6 +196,7 @@ async function aaautoreminders(client) {
                         });
                     }
                 }
+                r.time.pop();
                 if (r.time.length === 0) {
                     await db_1.deleteReminder(r);
                 }
