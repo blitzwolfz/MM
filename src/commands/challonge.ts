@@ -266,7 +266,8 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
                                                 let time = 48
 
                                                 let timeArr:Array<number> = []
-                                        
+                                                timeArr.push(time*3600)
+                                                
                                                 if((time-2)*3600 > 0){
                                                     timeArr.push((time-2)*3600)
                                                 }

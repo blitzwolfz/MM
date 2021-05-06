@@ -177,6 +177,7 @@ async function ChannelCreation(message, disclient, args) {
                                             let t = await db_1.getMatchlist();
                                             let time = 48;
                                             let timeArr = [];
+                                            timeArr.push(time * 3600);
                                             if ((time - 2) * 3600 > 0) {
                                                 timeArr.push((time - 2) * 3600);
                                             }

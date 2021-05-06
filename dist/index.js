@@ -529,16 +529,9 @@ client.on("message", async (message) => {
     else if (command === "test") {
         let reminders = await db_1.getReminders();
         for (let r of reminders) {
-            let time = 48;
-            let timeArr = [];
-            if ((time - 2) * 3600 > 0) {
-                timeArr.push((time - 2) * 3600);
-            }
-            if ((time - 12) * 3600 > 0) {
-                timeArr.push((time - 12) * 3600);
-            }
-            r.time = timeArr,
-                r.basetime = time * 3600;
+            if (r.type !== "match")
+                continue;
+            r.time.unshift(r.basetime);
             await db_1.updateReminder(r);
         }
     }

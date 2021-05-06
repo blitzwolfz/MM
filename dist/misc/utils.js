@@ -23,6 +23,7 @@ exports.saveDatatofile = exports.CycleRestart = exports.SeasonRestart = exports.
 const Discord = __importStar(require("discord.js"));
 const challonge_1 = require("../commands/challonge");
 const signups_1 = require("../commands/signups");
+const start_1 = require("../commands/start");
 const db_1 = require("./db");
 const modprofiles_1 = require("./modprofiles");
 async function getUser(mention) {
@@ -172,12 +173,30 @@ async function reminders(client, args) {
 }
 exports.reminders = reminders;
 async function aaautoreminders(client) {
+    var _a, _b;
     let reminders = await db_1.getReminders();
     for (let r of reminders) {
         if (Math.floor(Date.now() / 1000) - r.timestamp >= r.time[r.time.length - 1]) {
             if (r.type === "match") {
-                (await client.channels.fetch(r.channel)).send(`${r.mention} you have ${(r.basetime - r.time[r.time.length - 1]) / 3600}h left to do your match`);
+                if (r.basetime !== r.time[r.time.length - 1]) {
+                    (await client.channels.fetch(r.channel)).send(`${r.mention} you have ${(r.basetime - r.time[r.time.length - 1]) / 3600}h left to do your match`);
+                }
                 r.time.pop();
+                if (r.basetime === r.time[r.time.length - 1]) {
+                    let c = client.channels.cache.get(r.channel);
+                    let m = (await c.messages.fetch({ limit: 100 })).last();
+                    let arr = r.mention.match(/\d+/g);
+                    for (let xx of arr) {
+                        await start_1.splitregular(m, client, xx);
+                        await client.channels.cache.get("748760056333336627").send({
+                            embed: {
+                                description: `<@${(_a = client.user) === null || _a === void 0 ? void 0 : _a.id}>/${(_b = client.user) === null || _b === void 0 ? void 0 : _b.tag} has auto started <@${xx}> in <#${r.channel}>`,
+                                color: "#d7be26",
+                                timestamp: new Date()
+                            }
+                        });
+                    }
+                }
                 if (r.time.length === 0) {
                     await db_1.deleteReminder(r);
                 }

@@ -1,6 +1,7 @@
 import * as Discord from "discord.js"
 import { matchlistmaker } from "../commands/challonge";
 import { startsignup } from "../commands/signups";
+import { splitregular } from "../commands/start";
 import { getMatch, getAllProfiles, updateProfile, getQual, getMatchlist, getQuallist, dbSoftReset, deleteSignup, deleteQuallist, getAllModProfiles, getAllCockratings, getReminders, deleteReminder, getSignups, updateReminder } from "./db";
 import { clearmodstats } from "./modprofiles";
 
@@ -218,14 +219,44 @@ export async function aaautoreminders(client: Discord.Client) {
   for(let r of reminders){
       if (Math.floor(Date.now() / 1000) - r.timestamp >= r.time[r.time.length-1]){
           if(r.type === "match"){
-              (<Discord.TextChannel>await client.channels.fetch(r.channel)).send(
+              if(r.basetime !== r.time[r.time.length-1]){
+                (<Discord.TextChannel>await client.channels.fetch(r.channel)).send(
                   `${r.mention} you have ${(r.basetime - r.time[r.time.length-1])/3600}h left to do your match`
-              )
+                )
+              }
 
+              
               r.time.pop()
+              if(r.basetime === r.time[r.time.length-1]){
+                let c = <Discord.TextChannel>client.channels.cache.get(r.channel)
 
+                let m = (await c.messages.fetch({limit:100})).last()!
+
+                let arr = r.mention.match(/\d+/g)!
+
+                for(let xx of arr){
+                  await splitregular(m, client, xx)
+
+                  await (<Discord.TextChannel>client.channels.cache.get("748760056333336627")).send({
+
+                    embed: {
+                      description: `<@${client.user?.id}>/${client.user?.tag} has auto started <@${xx}> in <#${r.channel}>`,
+                      color: "#d7be26",
+                      timestamp: new Date()
+                    }
+                  });
+                }
+              }
+
+              
               if(r.time.length === 0){
-                  await deleteReminder(r);
+                await deleteReminder(r);
+
+                // let c = <Discord.TextChannel>client.channels.cache.get(r.channel)
+
+                // let m = (await c.messages.fetch({limit:100})).last()!
+
+                // await splitregular(m, client, id)
               }
 
               else await updateReminder(r);
