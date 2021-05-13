@@ -73,7 +73,7 @@ export async function signup(message: Discord.Message, client: Discord.Client, i
 
         await updateSignup(signup)
 
-        await (await (await client.guilds!.cache.get("719406444109103117")!).members.fetch(id)).roles.add("731568704499875932")!
+        //await (await (await client.guilds!.cache.get("719406444109103117")!).members.fetch(id)).roles.add("731568704499875932")!
 
     }
 

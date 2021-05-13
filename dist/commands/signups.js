@@ -79,7 +79,6 @@ async function signup(message, client, id, dm = true) {
     else {
         signup.users.push(id);
         await db_1.updateSignup(signup);
-        await (await (await client.guilds.cache.get("719406444109103117")).members.fetch(id)).roles.add("731568704499875932");
     }
     if (dm === true) {
         return message.reply("You have been signed up!");
