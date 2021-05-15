@@ -590,6 +590,14 @@ client.on("message", async (message) => {
             return message.reply("You don't have those premissions");
         await challonge_1.declarequalwinner(message, client);
     }
+    else if (command === "mdqw") {
+        let match = await db_1.getMatchlist();
+        match.users = [];
+        for (let m of message.mentions.users.array()) {
+            match.users.push(m.id);
+        }
+        await db_1.updateMatchlist(match);
+    }
     else if (command === "removequalwinner") {
         await challonge_1.removequalwinner(message, client);
     }
@@ -996,6 +1004,9 @@ client.on("message", async (message) => {
     }
     else if (command === "removesignup") {
         await signups_1.removesignup(message);
+    }
+    else if (command === "delay") {
+        await utils_1.delay(message, client, args);
     }
     else if (command === "deletesignup") {
         if (message.member.roles.cache.has('724818272922501190')

@@ -24,7 +24,7 @@ import {
 import { cooldownremove, deleteExhibitionchannels, duelcheck, exhibition } from "./commands/exhibitions"
 import { qualend, end, cancelmatch } from "./commands/winner";
 import { vs } from "./commands/card";
-import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, createrole, clearstats, qualifierresultadd, SeasonRestart, toHHMMSS, aaautoreminders, CycleRestart, resultadd } from "./misc/utils";
+import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, createrole, clearstats, qualifierresultadd, SeasonRestart, toHHMMSS, aaautoreminders, CycleRestart, resultadd, delay } from "./misc/utils";
 import { ModHelp, UserHelp, ModSignupHelp, ModChallongeHelp, DuelHelp } from "./commands/help";
 
 import {
@@ -52,6 +52,8 @@ import {
   getthemes,
   getProfile,
   getReminders,
+  getMatchlist,
+  updateMatchlist,
 } from "./misc/db";
 
 import { template, approvetemplate, addTheme, removeTheme, themelistLb, templatecheck } from "./commands/template";
@@ -862,6 +864,16 @@ client.on("message", async message => {
     await declarequalwinner(message, client)
   }
 
+  else if (command === "mdqw"){
+    let match = await getMatchlist()
+    match.users = []
+
+    for(let m of message.mentions.users.array()){
+      match.users.push(m.id)
+    }
+    await updateMatchlist(match)
+  }
+
   else if (command === "removequalwinner") {
     await removequalwinner(message, client)
   }
@@ -1360,6 +1372,10 @@ client.on("message", async message => {
 
   else if (command === "removesignup") {
     await removesignup(message)
+  }
+
+  else if (command === "delay"){
+    await delay(message, client, args)
   }
 
   else if (command === "deletesignup") {
