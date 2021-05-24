@@ -24,7 +24,7 @@ import {
 import { cooldownremove, deleteExhibitionchannels, duelcheck, exhibition } from "./commands/exhibitions"
 import { qualend, end, cancelmatch } from "./commands/winner";
 import { vs } from "./commands/card";
-import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, createrole, clearstats, qualifierresultadd, SeasonRestart, toHHMMSS, aaautoreminders, CycleRestart, resultadd, delay } from "./misc/utils";
+import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, createrole, clearstats, qualifierresultadd, SeasonRestart, toHHMMSS, aaautoreminders, CycleRestart, resultadd, delay, saveDatatofile } from "./misc/utils";
 import { ModHelp, UserHelp, ModSignupHelp, ModChallongeHelp, DuelHelp } from "./commands/help";
 
 import {
@@ -787,9 +787,9 @@ client.on("message", async message => {
     //   await updateReminder(r)
     // }
 
-    let m = message.channel.messages.cache.find(x => x.id === args[0])!
 
-    m.react(emojis[1])
+
+    await saveDatatofile(message)
 
   }
 
@@ -1208,7 +1208,7 @@ client.on("message", async message => {
 
   else if (command === "seasonrestart") {
     if (message.author.id !== "239516219445608449") return message.reply("You don't have those premissions")
-    await SeasonRestart(message)
+    await SeasonRestart(message, client)
   }
 
   else if (command === "cyclerestart") {

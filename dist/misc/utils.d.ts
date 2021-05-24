@@ -17,6 +17,7 @@ export declare function indexOf2d(arr: any[][], item: any, searchpos: number, re
 export declare function dateBuilder(): string;
 export declare function reminders(client: Discord.Client, args: string[]): Promise<void>;
 export declare function aaautoreminders(client: Discord.Client): Promise<void>;
+export declare function delay(message: Discord.Message, client: Discord.Client, args: string[]): Promise<Discord.Message>;
 export declare function aautoreminders(client: Discord.Client, ...st: string[]): Promise<void>;
 export declare function autoreminders(client: Discord.Client): Promise<void>;
 export declare function deletechannels(message: Discord.Message, args: string[]): Promise<void>;
@@ -37,6 +38,6 @@ export declare function resultadd(channel: Discord.TextChannel, client: Discord.
 }>;
 export declare function toHHMMSS(timestamp: number, howlong: number): Promise<string>;
 export declare function toS(timestamp: string): Promise<number | null>;
-export declare function SeasonRestart(message: Discord.Message): Promise<void>;
+export declare function SeasonRestart(message: Discord.Message, client: Discord.Client): Promise<void>;
 export declare function CycleRestart(message: Discord.Message, client: Discord.Client): Promise<void>;
 export declare function saveDatatofile(message: Discord.Message): Promise<void>;

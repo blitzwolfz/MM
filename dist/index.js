@@ -527,8 +527,7 @@ client.on("message", async (message) => {
         await utils_1.deletechannels(message, args);
     }
     else if (command === "test") {
-        let m = message.channel.messages.cache.find(x => x.id === args[0]);
-        m.react(utils_1.emojis[1]);
+        await utils_1.saveDatatofile(message);
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))
@@ -885,7 +884,7 @@ client.on("message", async (message) => {
     else if (command === "seasonrestart") {
         if (message.author.id !== "239516219445608449")
             return message.reply("You don't have those premissions");
-        await utils_1.SeasonRestart(message);
+        await utils_1.SeasonRestart(message, client);
     }
     else if (command === "cyclerestart") {
         if (message.author.id !== "239516219445608449")

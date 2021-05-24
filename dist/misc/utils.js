@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.saveDatatofile = exports.CycleRestart = exports.SeasonRestart = exports.toS = exports.toHHMMSS = exports.resultadd = exports.qualifierresultadd = exports.oldqualifierresultadd = exports.clearstats = exports.createrole = exports.updatesomething = exports.deletechannels = exports.autoreminders = exports.aautoreminders = exports.aaautoreminders = exports.reminders = exports.dateBuilder = exports.indexOf2d = exports.forwardsFilter = exports.backwardsFilter = exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
+exports.saveDatatofile = exports.CycleRestart = exports.SeasonRestart = exports.toS = exports.toHHMMSS = exports.resultadd = exports.qualifierresultadd = exports.oldqualifierresultadd = exports.clearstats = exports.createrole = exports.updatesomething = exports.deletechannels = exports.autoreminders = exports.aautoreminders = exports.delay = exports.aaautoreminders = exports.reminders = exports.dateBuilder = exports.indexOf2d = exports.forwardsFilter = exports.backwardsFilter = exports.removethreevotes = exports.hasthreevotes = exports.emojis = exports.getUser = void 0;
 const Discord = __importStar(require("discord.js"));
 const challonge_1 = require("../commands/challonge");
 const signups_1 = require("../commands/signups");
@@ -216,6 +216,32 @@ async function aaautoreminders(client) {
     }
 }
 exports.aaautoreminders = aaautoreminders;
+async function delay(message, client, args) {
+    let reminder = await db_1.getReminder(await message.mentions.channels.first().id);
+    if (message.mentions.channels.array().length === 0) {
+        return message.reply("Please mention a channel");
+    }
+    args.pop();
+    let time = 0;
+    for (let x of args) {
+        if (x.includes("h")) {
+            x.replace("h", "");
+            time += (parseInt(x) * 3600);
+        }
+        if (x.includes("m")) {
+            x.replace("m", "");
+            time += (parseInt(x) * 60);
+        }
+    }
+    if (time === 0) {
+        return message.reply("Please enter a valid time in either ``xh xm``, ``xh``, or ``xm`` format.");
+    }
+    reminder.basetime += time;
+    reminder.time[0] += time;
+    await db_1.updateReminder(reminder);
+    return message.channel.send(`Delayed by ${args.join(" ")}`);
+}
+exports.delay = delay;
 async function aautoreminders(client, ...st) {
     var _a, _b, _c, _d, _e, _f;
     let catchannels = client.guilds.cache.get("719406444109103117").channels.cache.array();
@@ -523,13 +549,10 @@ async function toS(timestamp) {
     return (+hms[0]) * 60 * 60 + (+hms[1]) * 60 + (+hms[2] || 0);
 }
 exports.toS = toS;
-async function SeasonRestart(message) {
+async function SeasonRestart(message, client) {
     await db_1.dbSoftReset();
-    await db_1.deleteSignup();
-    await db_1.deleteQuallist();
-    await challonge_1.matchlistmaker();
-    await db_1.deleteQuallist();
-    message.reply("Season has been reset");
+    await message.reply("Season has been reset");
+    await CycleRestart(message, client);
 }
 exports.SeasonRestart = SeasonRestart;
 async function CycleRestart(message, client) {

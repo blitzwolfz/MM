@@ -2,7 +2,7 @@ import * as Discord from "discord.js"
 import { matchlistmaker } from "../commands/challonge";
 import { startsignup } from "../commands/signups";
 import { splitregular } from "../commands/start";
-import { getMatch, getAllProfiles, updateProfile, getQual, getMatchlist, getQuallist, dbSoftReset, deleteSignup, deleteQuallist, getAllModProfiles, getAllCockratings, getReminders, deleteReminder, getSignups, updateReminder } from "./db";
+import { getMatch, getAllProfiles, updateProfile, getQual, getMatchlist, getQuallist, dbSoftReset, deleteSignup, deleteQuallist, getAllModProfiles, getAllCockratings, getReminders, deleteReminder, getSignups, updateReminder, getReminder } from "./db";
 import { clearmodstats } from "./modprofiles";
 
 export async function getUser(mention: string) {
@@ -277,6 +277,45 @@ export async function aaautoreminders(client: Discord.Client) {
       }
 
   }
+}
+
+export async function delay(message:Discord.Message, client:Discord.Client, args:string[]) {
+  let reminder = await getReminder(await message.mentions.channels.first()!.id)
+  if(message.mentions.channels.array().length === 0){
+    return message.reply("Please mention a channel")
+  }
+  args.pop()
+  
+  let time = 0;
+
+  for(let x of args){
+    if(x.includes("h")){
+      x.replace("h", "")
+
+      time += (parseInt(x) * 3600)
+
+    }
+
+    if(x.includes("m")){
+      x.replace("m", "")
+
+      time += (parseInt(x) * 60) 
+
+    }
+
+  }
+
+  if(time === 0){
+    return message.reply("Please enter a valid time in either ``xh xm``, ``xh``, or ``xm`` format.")
+  }
+
+  reminder.basetime += time
+  reminder.time[0] += time
+
+  await updateReminder(reminder)
+  
+  return message.channel.send(`Delayed by ${args.join(" ")}`)
+
 }
 
 // async function  matchreminder(client:Discord.Client) {
@@ -873,14 +912,16 @@ export async function toS(timestamp: string) {
   return (+hms[0]) * 60 * 60 + (+hms[1]) * 60 + (+hms[2] || 0);
 }
 
-export async function SeasonRestart(message: Discord.Message){
+export async function SeasonRestart(message: Discord.Message, client: Discord.Client){
   await dbSoftReset()
-  await deleteSignup()
-  await deleteQuallist()
-  await matchlistmaker()
-  await deleteQuallist()
+  // await deleteSignup()
+  // await deleteQuallist()
+  // await matchlistmaker()
+  // await deleteQuallist()
 
-  message.reply("Season has been reset")
+  await message.reply("Season has been reset")
+
+  await CycleRestart(message, client)
 }
 
 export async function CycleRestart(message: Discord.Message, client: Discord.Client){
