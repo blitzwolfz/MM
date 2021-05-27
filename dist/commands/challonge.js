@@ -303,6 +303,7 @@ async function CreateQualGroups(message, args) {
                     Signups.users = await shuffle(Signups.users);
                 }
                 let groups = await makeGroup(gNum, Signups.users);
+                await shuffle(groups);
                 let qualgroups = await db_1.getQuallist();
                 if (qualgroups) {
                     qualgroups.users = groups;

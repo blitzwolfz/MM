@@ -446,6 +446,7 @@ export async function CreateQualGroups(message: Discord.Message, args: string[])
                     Signups.users = await shuffle(Signups.users)
                 }
                 let groups = await makeGroup(gNum, Signups.users)
+                await shuffle(groups)
                 let qualgroups: quallist = await getQuallist()
                 if (qualgroups) {
                     qualgroups.users = groups

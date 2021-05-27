@@ -200,7 +200,7 @@ async function quallistEmbed(page: number = 1, client: Discord.Client, signup: q
 
 
     return {
-        title: `Qualifier Groups ${page! || 1} of ${Math.floor(signup.users.length / 10) + 1}`,
+        title: `Qualifier Groups ${page! || 1} of ${Math.floor(signup.users.length)}`,
         description: fields.length === 0 ?
             `There are no groups` :
             `there are ${signup.users.length} groups`,
