@@ -460,18 +460,42 @@ export async function qualend(client: discord.Client, id: string) {
 
             if(time <= 72 && channel.topic?.split(" ").join("").toLowerCase() === "round1"){
                 await channel.send(`${s} you have ${time}h left to complete Portion 2`)
+                // let timeArr:Array<number> = []
+            
+                // if((time-2)*3600 > 0){
+                //     timeArr.push((time-2)*3600)
+                // }
+        
+                // if((time-12)*3600 > 0){
+                //     timeArr.push((time-12)*3600)
+                // }
+        
+                // if((time-24)*3600 > 0){
+                //     timeArr.push((time-24)*3600)
+                // }
+        
+                // await insertReminder(
+                //     {
+                //         _id:channel.id,
+                //         mention:`${s}`,
+                //         channel:channel.id,
+                //         type:"match",
+                //         time:timeArr,
+                //         timestamp:Math.floor(Date.now()/1000),
+                //         basetime:time*3600
+                //     }
+                // )
+
+                let time2 = 36
+
                 let timeArr:Array<number> = []
             
-                if((time-2)*3600 > 0){
-                    timeArr.push((time-2)*3600)
+                if((time2-2)*3600 > 0){
+                    timeArr.push((time2-2)*3600)
                 }
         
-                if((time-12)*3600 > 0){
-                    timeArr.push((time-12)*3600)
-                }
-        
-                if((time-24)*3600 > 0){
-                    timeArr.push((time-24)*3600)
+                if((time2-12)*3600 > 0){
+                    timeArr.push((time2-12)*3600)
                 }
         
                 await insertReminder(
@@ -481,8 +505,8 @@ export async function qualend(client: discord.Client, id: string) {
                         channel:channel.id,
                         type:"match",
                         time:timeArr,
-                        timestamp:Math.floor(Date.now()/1000),
-                        basetime:time*3600
+                        timestamp:Math.floor(Date.now()/1000)+Math.abs(time - 36),
+                        basetime:time2*3600
                     }
                 )
             }

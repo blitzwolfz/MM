@@ -385,33 +385,6 @@ export async function startmodqual(message: discord.Message, client: discord.Cli
 
         newmatch.template.push(rantemp.url)
         await deletetempStruct(rantemp._id)
-
-        await RandomTemplateFunc(message, client, message.channel.id, false)
-
-
-        rantemp = await gettempStruct(message.channel.id)
-
-        rantemp.time = rantemp.time - 2.5
-
-        console.log(rantemp)
-
-        while (rantemp.found === false) {
-
-            if (Math.floor(Date.now() / 1000) - rantemp.time > 120) {
-
-                await deletetempStruct(rantemp._id)
-                await (await (<discord.TextChannel>client.channels.cache.get("722616679280148504")).messages.fetch(rantemp.messageid)).delete()
-                return await message.channel.send(new discord.MessageEmbed()
-                    .setTitle(`Random Template Selection failed `)
-                    .setColor("RED")
-                    .setDescription(`Mods please restart this match`)
-                    .setTimestamp())
-            }
-            rantemp = await gettempStruct(message.channel.id)
-        }
-
-        newmatch.template.push(rantemp.url)
-        await deletetempStruct(rantemp._id)
     }
 
 
@@ -448,33 +421,6 @@ export async function startmodqual(message: discord.Message, client: discord.Cli
 
         newmatch.template.push(rantemp.url)
         newmatch.istheme = true
-        await deletetempStruct(rantemp._id)
-        //await (<discord.TextChannel>client.channels.cache.get("738047732312309870")).send(`<#${message.channel.id}> theme is ${newmatch.template}`)
-
-        await RandomTemplateFunc(message, client, message.channel.id, true)
-
-        rantemp = await gettempStruct(message.channel.id)
-
-        rantemp.time = rantemp.time - 2.5
-
-        while (rantemp.found === false) {
-
-            if (Math.floor(Date.now() / 1000) - rantemp.time > 120) {
-
-                await deletetempStruct(rantemp._id)
-                await (await (<discord.TextChannel>client.channels.cache.get("722616679280148504")).messages.fetch(rantemp.messageid)).delete()
-                return await message.channel.send(new discord.MessageEmbed()
-                    .setTitle(`Random Theme Selection failed `)
-                    .setColor("red")
-                    .setDescription(`Mods please restart this match`)
-                    .setTimestamp())
-            }
-            rantemp = await gettempStruct(message.channel.id)            
-        }
-
-        newmatch.template.push(rantemp.url)
-        newmatch.istheme = true
-        await deletetempStruct(rantemp._id)
         await (<discord.TextChannel>client.channels.cache.get("738047732312309870")).send(`<#${message.channel.id}> theme is ${newmatch.template}`)
     }
 
@@ -812,7 +758,7 @@ export async function splitqual(client: discord.Client, message: discord.Message
 
 
                     if (match.template.length > 0 && match.istheme || match.template && match.istheme) {
-                        await user.send("\n\nHere is your theme(s): " + match.template.join(", "))
+                        await user.send("\n\nHere is your theme(s): " + match.template[0])
                         
                         //await user.send({ files: [new discord.MessageAttachment(match.template)] })
                     }
@@ -821,12 +767,6 @@ export async function splitqual(client: discord.Client, message: discord.Message
                         await user.send(new discord.MessageEmbed()
                             .setTitle("Your template")
                             .setImage(match.template[0])
-                            .setColor("#d7be26")
-                            .setTimestamp())
-
-                        await user.send(new discord.MessageEmbed()
-                            .setTitle("Your template")
-                            .setImage(match.template[1])
                             .setColor("#d7be26")
                             .setTimestamp())
                     }

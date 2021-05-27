@@ -348,15 +348,13 @@ async function qualend(client, id) {
             let time = Math.floor(((Math.floor(m.createdTimestamp / 1000) + 259200) - Math.floor(Date.now() / 1000)) / 3600);
             if (time <= 72 && ((_b = channel.topic) === null || _b === void 0 ? void 0 : _b.split(" ").join("").toLowerCase()) === "round1") {
                 await channel.send(`${s} you have ${time}h left to complete Portion 2`);
+                let time2 = 36;
                 let timeArr = [];
-                if ((time - 2) * 3600 > 0) {
-                    timeArr.push((time - 2) * 3600);
+                if ((time2 - 2) * 3600 > 0) {
+                    timeArr.push((time2 - 2) * 3600);
                 }
-                if ((time - 12) * 3600 > 0) {
-                    timeArr.push((time - 12) * 3600);
-                }
-                if ((time - 24) * 3600 > 0) {
-                    timeArr.push((time - 24) * 3600);
+                if ((time2 - 12) * 3600 > 0) {
+                    timeArr.push((time2 - 12) * 3600);
                 }
                 await db_1.insertReminder({
                     _id: channel.id,
@@ -364,8 +362,8 @@ async function qualend(client, id) {
                     channel: channel.id,
                     type: "match",
                     time: timeArr,
-                    timestamp: Math.floor(Date.now() / 1000),
-                    basetime: time * 3600
+                    timestamp: Math.floor(Date.now() / 1000) + Math.abs(time - 36),
+                    basetime: time2 * 3600
                 });
             }
         }
