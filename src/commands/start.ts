@@ -421,6 +421,7 @@ export async function startmodqual(message: discord.Message, client: discord.Cli
 
         newmatch.template.push(rantemp.url)
         newmatch.istheme = true
+        await deletetempStruct(rantemp._id)
         await (<discord.TextChannel>client.channels.cache.get("738047732312309870")).send(`<#${message.channel.id}> theme is ${newmatch.template}`)
     }
 

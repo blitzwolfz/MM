@@ -316,6 +316,7 @@ async function startmodqual(message, client) {
         }
         newmatch.template.push(rantemp.url);
         newmatch.istheme = true;
+        await db_1.deletetempStruct(rantemp._id);
         await client.channels.cache.get("738047732312309870").send(`<#${message.channel.id}> theme is ${newmatch.template}`);
     }
     let embed = new discord.MessageEmbed()
