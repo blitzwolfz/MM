@@ -429,12 +429,28 @@ async function GroupSearch(message, args) {
     let id = (((_c = (_b = (_a = message.mentions) === null || _a === void 0 ? void 0 : _a.users) === null || _b === void 0 ? void 0 : _b.first()) === null || _c === void 0 ? void 0 : _c.id) || args[0]);
     if (!id)
         return message.reply("invaild input. Please use User ID or a User mention");
-    for (let i = 0; i < signup.users.length; i++) {
-        if (signup.users[i].includes(id)) {
-            return await message.reply(`This person is in <#${message.guild.channels.cache.find(channel => channel.name === `group-${i + 1}`).id}>`);
+    if (!message.member.roles.cache.has('719936221572235295')) {
+        for (let i = 0; i < signup.users.length; i++) {
+            if (signup.users[i].includes(id)) {
+                return await message.reply(`This person is in <#${message.guild.channels.cache.find(channel => channel.name === `group-${i + 1}`).id}>`);
+            }
+        }
+        return message.reply("They are not in a group");
+    }
+    else {
+        if (id !== message.author.id)
+            return message.reply("You don't have those premissions");
+        else {
+            if (!message.member.roles.cache.has('719936221572235295')) {
+                for (let i = 0; i < signup.users.length; i++) {
+                    if (signup.users[i].includes(id)) {
+                        return await message.reply(`You are in <#${message.guild.channels.cache.find(channel => channel.name === `group-${i + 1}`).id}>`);
+                    }
+                }
+                return message.reply("They are not in a group");
+            }
         }
     }
-    return message.reply("they are not in a group");
 }
 exports.GroupSearch = GroupSearch;
 async function declarequalwinner(message, client) {

@@ -665,17 +665,30 @@ export async function GroupSearch(message: Discord.Message, args: string[]) {
     if (!id) return message.reply("invaild input. Please use User ID or a User mention")
 
     //let name = await (await message.guild!.members.cache.get(id))!.nickname || await (await client.users.fetch(id)).username
+    if (!message.member!.roles.cache.has('719936221572235295')) {
+        for (let i = 0; i < signup.users.length; i++) {
 
-
-    for (let i = 0; i < signup.users.length; i++) {
-
-        if (signup.users[i].includes(id)) {
-            return await message.reply(`This person is in <#${message.guild!.channels.cache.find(channel => channel.name === `group-${i + 1}`)!.id}>`)
+            if (signup.users[i].includes(id)) {
+                return await message.reply(`This person is in <#${message.guild!.channels.cache.find(channel => channel.name === `group-${i + 1}`)!.id}>`)
+            }
         }
+        return message.reply("They are not in a group")
     }
 
-    return message.reply("they are not in a group")
-
+    else{
+        if(id !== message.author.id) return message.reply("You don't have those premissions");
+        else{
+            if (!message.member!.roles.cache.has('719936221572235295')) {
+                for (let i = 0; i < signup.users.length; i++) {
+        
+                    if (signup.users[i].includes(id)) {
+                        return await message.reply(`You are in <#${message.guild!.channels.cache.find(channel => channel.name === `group-${i + 1}`)!.id}>`)
+                    }
+                }
+                return message.reply("They are not in a group")
+            }
+        }
+    }
 }
 
 export async function declarequalwinner(message: Discord.Message, client: Discord.Client) {
