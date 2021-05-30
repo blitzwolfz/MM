@@ -7,7 +7,7 @@ export declare function QualChannelCreation(message: Discord.Message, args: stri
 export declare function CreateQualGroups(message: Discord.Message, args: string[]): Promise<Discord.Message | undefined>;
 export declare function CreateCustomQualGroups(message: Discord.Message, args: string[]): Promise<Discord.Message | undefined>;
 export declare function matchwinner(args: string[]): Promise<void>;
-export declare function GroupSearch(message: Discord.Message, args: string[]): Promise<Discord.Message | undefined>;
+export declare function GroupSearch(message: Discord.Message, args: string[]): Promise<Discord.Message>;
 export declare function declarequalwinner(message: Discord.Message, client: Discord.Client): Promise<Discord.Message | undefined>;
 export declare function removequalwinner(message: Discord.Message, client: Discord.Client): Promise<Discord.Message | undefined>;
 export declare function matchlistmaker(): Promise<void>;
