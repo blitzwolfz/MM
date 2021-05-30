@@ -441,7 +441,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
     }
 });
 client.on("message", async (message) => {
-    var _a, _b, _c, _d, _e, _f, _g;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
     if (message.content.indexOf(process.env.PREFIX) !== 0 || message.author.bot) {
         if (message.author.id !== "688558229646475344")
             return;
@@ -527,7 +527,7 @@ client.on("message", async (message) => {
         await utils_1.deletechannels(message, args);
     }
     else if (command === "test") {
-        await utils_1.saveDatatofile(message);
+        message.channel.send((((_d = (_c = (_b = message.mentions) === null || _b === void 0 ? void 0 : _b.users) === null || _c === void 0 ? void 0 : _c.first()) === null || _d === void 0 ? void 0 : _d.id) || args[0] || message.author.id));
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))
@@ -551,8 +551,6 @@ client.on("message", async (message) => {
         message.channel.send({ embed: await lbs_1.quallistGroups(message, client, args) });
     }
     else if (command === "search") {
-        if (!message.member.roles.cache.has('719936221572235295'))
-            return message.reply("You don't have those premissions");
         await challonge_1.GroupSearch(message, args);
     }
     else if (command === "qrd") {
@@ -761,7 +759,7 @@ client.on("message", async (message) => {
             return message.reply("You are not cock rating master.");
         }
         else {
-            let id = (((_d = (_c = (_b = message.mentions) === null || _b === void 0 ? void 0 : _b.users) === null || _c === void 0 ? void 0 : _c.first()) === null || _d === void 0 ? void 0 : _d.id) || message.author.id);
+            let id = (((_g = (_f = (_e = message.mentions) === null || _e === void 0 ? void 0 : _e.users) === null || _f === void 0 ? void 0 : _f.first()) === null || _g === void 0 ? void 0 : _g.id) || message.author.id);
             let form = await db_1.getCockrating(id);
             let max = 100;
             let min = (id === "239516219445608449" ? Math.floor(Math.random() * ((max - 35) - 35) + 1) : Math.floor(Math.random() * ((max - 1) - 1) + 1));
@@ -790,7 +788,7 @@ client.on("message", async (message) => {
             return message.reply("You are not cock rating master.");
         }
         else {
-            let id = (((_g = (_f = (_e = message.mentions) === null || _e === void 0 ? void 0 : _e.users) === null || _f === void 0 ? void 0 : _f.first()) === null || _g === void 0 ? void 0 : _g.id) || message.author.id);
+            let id = (((_k = (_j = (_h = message.mentions) === null || _h === void 0 ? void 0 : _h.users) === null || _j === void 0 ? void 0 : _j.first()) === null || _k === void 0 ? void 0 : _k.id) || message.author.id);
             let form = await db_1.getCockrating(id);
             let max = 100;
             let min = parseInt(args[1] || args[0]);

@@ -24,7 +24,7 @@ import {
 import { cooldownremove, deleteExhibitionchannels, duelcheck, exhibition } from "./commands/exhibitions"
 import { qualend, end, cancelmatch } from "./commands/winner";
 import { vs } from "./commands/card";
-import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, createrole, clearstats, qualifierresultadd, SeasonRestart, toHHMMSS, aaautoreminders, CycleRestart, resultadd, delay, saveDatatofile } from "./misc/utils";
+import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, createrole, clearstats, qualifierresultadd, SeasonRestart, toHHMMSS, aaautoreminders, CycleRestart, resultadd, delay } from "./misc/utils";
 import { ModHelp, UserHelp, ModSignupHelp, ModChallongeHelp, DuelHelp } from "./commands/help";
 
 import {
@@ -789,7 +789,7 @@ client.on("message", async message => {
 
 
 
-    await saveDatatofile(message)
+    message.channel.send((message.mentions?.users?.first()?.id || args[0] || message.author.id))
 
   }
 
@@ -817,7 +817,6 @@ client.on("message", async message => {
   }
 
   else if (command === "search") {
-    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await GroupSearch(message, args)
   }
 

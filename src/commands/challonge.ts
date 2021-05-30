@@ -661,7 +661,7 @@ export async function matchwinner(args: string[]) {
 
 export async function GroupSearch(message: Discord.Message, args: string[]) {
     let signup = await getQuallist()
-    let id = (message.mentions?.users?.first()?.id || args[0])
+    let id = (message.mentions?.users?.first()?.id || args[0] || message.author.id)
     if (!id) return message.reply("invaild input. Please use User ID or a User mention")
 
     //let name = await (await message.guild!.members.cache.get(id))!.nickname || await (await client.users.fetch(id)).username
