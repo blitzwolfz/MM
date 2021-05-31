@@ -179,7 +179,15 @@ async function aaautoreminders(client) {
         if (Math.floor(Date.now() / 1000) - r.timestamp >= r.time[r.time.length - 1]) {
             if (r.type === "match") {
                 if (r.basetime !== r.time[r.time.length - 1]) {
-                    (await client.channels.fetch(r.channel)).send(`${r.mention} you have ${(r.basetime - r.time[r.time.length - 1]) / 3600}h left to do your match`);
+                    for (let xx of r.mention.match(/\d+/g)) {
+                        try {
+                            (await client.users.fetch(xx)).send(`You have ${(r.basetime - r.time[r.time.length - 1]) / 3600}h left to do your match`);
+                        }
+                        catch (error) {
+                            console.log(error.message);
+                            (await client.channels.fetch(r.channel)).send(`${xx} you have ${(r.basetime - r.time[r.time.length - 1]) / 3600}h left to do your match`);
+                        }
+                    }
                 }
                 if (r.basetime === r.time[r.time.length - 1]) {
                     let c = client.channels.cache.get(r.channel);
