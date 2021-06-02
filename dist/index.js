@@ -582,6 +582,15 @@ client.on("message", async (message) => {
             await exhibitions_1.exhibition(message, client, args);
         }
     }
+    else if (command === "mqw") {
+        if (!message.member.roles.cache.has('719936221572235295'))
+            return message.reply("You don't have those premissions");
+        let t = [];
+        t.push(args[0]);
+        t.push(args[1]);
+        t.push(args[2]);
+        await challonge_1.matchwinner(t);
+    }
     else if (command === "dqw" || command === "declarequalwinner") {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");

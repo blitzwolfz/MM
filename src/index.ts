@@ -79,6 +79,7 @@ import {
   QualChannelCreation,
   CreateCustomQualGroups,
   dirtyChannelcreate,
+  matchwinner,
 } from "./commands/challonge";
 import { manuallyverify, verify } from "./misc/verify";
 import { cockratingLB, winningLB, quallistGroups } from "./misc/lbs";
@@ -855,6 +856,15 @@ client.on("message", async message => {
       await exhibition(message, client, args)
     }
 
+  }
+
+  else if (command === "mqw"){
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
+    let t = []
+    t.push(args[0])
+    t.push(args[1])
+    t.push(args[2])
+    await matchwinner(t)
   }
 
   else if (command === "dqw" || command === "declarequalwinner") {
