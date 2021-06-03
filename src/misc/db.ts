@@ -78,7 +78,7 @@ export async function updateQuals(Qual: qualmatch): Promise<void> {
 export async function getActive(): Promise<activematch[]>{
     console.log("Getting ActiveMatches")
     // return await client.db(process.env.DBNAME).collection("activematch").find({}, {projection:{ _id: 0 }}).select(['activematch']).toArray();
-    return await client.db(process.env.DBNAME).collection("activematch").find({}, {projection:{_id:0}}).toArray();
+    return await client.db(process.env.DBNAME).collection("activematch").find({}).toArray();
 }
 
 export async function getMatch(_id:string, q?:string): Promise<activematch>{

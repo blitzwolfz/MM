@@ -181,6 +181,14 @@ async function submit(message, client, args) {
                     console.log("");
                 }
             }
+            if (match.exhibition) {
+                match.p1.donesplit = true;
+                match.p1.memedone = true;
+                match.p2.memedone = true;
+                match.p2.donesplit = true;
+                match.split === false;
+                match.votingperiod === false;
+            }
             await db_1.updateActive(match);
             return await message.channel.send("Your meme has been attached!");
         }
@@ -229,6 +237,14 @@ async function submit(message, client, args) {
                 catch {
                     console.log("");
                 }
+            }
+            if (match.exhibition) {
+                match.p1.donesplit = true;
+                match.p1.memedone = true;
+                match.p2.memedone = true;
+                match.p2.donesplit = true;
+                match.split === false;
+                match.votingperiod === false;
             }
             await db_1.updateActive(match);
             return await message.channel.send("Your meme has been attached!");

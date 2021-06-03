@@ -92,7 +92,7 @@ async function updateQuals(Qual) {
 exports.updateQuals = updateQuals;
 async function getActive() {
     console.log("Getting ActiveMatches");
-    return await client.db(process.env.DBNAME).collection("activematch").find({}, { projection: { _id: 0 } }).toArray();
+    return await client.db(process.env.DBNAME).collection("activematch").find({}).toArray();
 }
 exports.getActive = getActive;
 async function getMatch(_id, q) {

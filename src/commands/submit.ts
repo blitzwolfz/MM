@@ -252,6 +252,7 @@ export async function submit(message: Discord.Message, client: Discord.Client, a
                 match.p1.time = Math.floor(Date.now() / 1000) - 3200
                 match.p2.time = Math.floor(Date.now() / 1000) - 3200
 
+
                 try {
                     await deleteReminder(await getReminder(match.channelid))
                 }
@@ -261,6 +262,15 @@ export async function submit(message: Discord.Message, client: Discord.Client, a
 
                 // match.votingperiod = true
                 // match.votetime = Math.floor(Date.now() / 1000)
+            }
+
+            if(match.exhibition){
+                match.p1.donesplit = true
+                match.p1.memedone = true
+                match.p2.memedone = true
+                match.p2.donesplit = true
+                match.split === false 
+                match.votingperiod === false
             }
 
             await updateActive(match)
@@ -317,12 +327,22 @@ export async function submit(message: Discord.Message, client: Discord.Client, a
                 match.p1.time = Math.floor(Date.now() / 1000) - 3200
                 match.p2.time = Math.floor(Date.now() / 1000) - 3200
 
+
                 try {
                     await deleteReminder(await getReminder(match.channelid))
                 }
                 catch {
                     console.log("")
                 }
+            }
+
+            if(match.exhibition){
+                match.p1.donesplit = true
+                match.p1.memedone = true
+                match.p2.memedone = true
+                match.p2.donesplit = true
+                match.split === false 
+                match.votingperiod === false
             }
 
             await updateActive(match)

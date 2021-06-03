@@ -110,7 +110,7 @@ export async function exhibition(message: Discord.Message, client: Discord.Clien
     
         ex = await getExhibition()
 
-        let guild = client.guilds.cache.get("719406444109103117")
+        let guild = client.guilds.cache.get(message.guild!.id)
         let category = await guild!.channels.cache.find(c => c.name == "duels" && c.type == "category")!;
 
 

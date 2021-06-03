@@ -20,6 +20,7 @@ import {
   reload,
   matchstats,
   qualstats,
+  duelrunning,
 } from "./commands/start";
 import { cooldownremove, deleteExhibitionchannels, duelcheck, exhibition } from "./commands/exhibitions"
 import { qualend, end, cancelmatch } from "./commands/winner";
@@ -98,7 +99,7 @@ app.use(express.static('public'));
 const http = require('http');
 //@ts-ignore
 var _server = http.createServer(app);
-const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
+const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'], ws: { intents: new Discord.Intents(Discord.Intents.ALL) }});
 
 app.get('/', (_request: any, response: any) => {
   response.sendFile(__dirname + "/index.html");
@@ -163,6 +164,19 @@ client.on('ready', async () => {
     });
     
   }, 15000);
+
+  setInterval(async function () {
+    // console.log("A Second Kiss every 5 seconds");
+    console.log("EEE")
+    await duelrunning(client).catch((error) => {
+      console.log("it's in duel running");
+      console.log(error.message)
+      console.log(error.stack)
+    });
+    console.log("EEE2")
+    
+  }, 15000);
+
 
   setInterval(async function () {
     // console.log("A Third Kiss every 5 seconds");
@@ -788,10 +802,19 @@ client.on("message", async message => {
     //   await updateReminder(r)
     // }
 
+    let e = new Discord.MessageEmbed()
+            .setTitle("Interested in more?")
+            .setDescription(
+              "Come join us in the "+
+              "In the Meme Royale Server.\n"+
+              "You can play more duels, and participate in our tournament\n"+
+              "and you could have a chance to win Cash Prizes."
+            )
+            .setURL("https://discord.gg/GK3R5Vt3tz")
+            .setColor("#d7be26")
 
 
-    message.channel.send((message.mentions?.users?.first()?.id || args[0] || message.author.id))
-
+    message.channel.send(e)
   }
 
   else if (command === "createqualgroup") {
@@ -888,6 +911,7 @@ client.on("message", async message => {
   }
 
   if (command === "verify" || command === "code") {
+    if (message.guild?.name.toLowerCase() !== "MemeRoyale".toLowerCase())
     await verify(message, client)
   }
 
@@ -1164,7 +1188,7 @@ client.on("message", async message => {
   }
 
   else if (command === "matchstats") {
-    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
+    if (!message.member!.roles.cache.find(x => x.name.toLowerCase() === "referee")) return message.reply("You don't have those premissions")
     await matchstats(message, client)
   }
 
@@ -1192,8 +1216,15 @@ client.on("message", async message => {
   }
 
   else if (command === "end") {
-    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
-    await end(client, message.channel.id)
+    if (!message.member!.roles.cache.find(x => x.name.toLowerCase() === "referee")) return message.reply("You don't have those premissions")
+    if(await (await getMatch(message.channel.id)).exhibition){
+      let m = await getMatch(message.channel.id)
+      m.votetime -= 7200
+      await updateActive(m)
+    }
+    else{
+      await end(client, message.channel.id)
+    }
   }
 
   else if (command === "cancel") {

@@ -43,7 +43,7 @@ const app = express();
 app.use(express.static('public'));
 const http = require('http');
 var _server = http.createServer(app);
-const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
+const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'], ws: { intents: new Discord.Intents(Discord.Intents.ALL) } });
 app.get('/', (_request, response) => {
     response.sendFile(__dirname + "/index.html");
     console.log(Date.now() + " Ping Received");
@@ -84,6 +84,15 @@ client.on('ready', async () => {
             console.log(error.message);
             console.log(error.stack);
         });
+    }, 15000);
+    setInterval(async function () {
+        console.log("EEE");
+        await start_1.duelrunning(client).catch((error) => {
+            console.log("it's in duel running");
+            console.log(error.message);
+            console.log(error.stack);
+        });
+        console.log("EEE2");
     }, 15000);
     setInterval(async function () {
         await exhibitions_1.deleteExhibitionchannels(client);
@@ -441,7 +450,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
     }
 });
 client.on("message", async (message) => {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
+    var _a, _b, _c, _d, _e, _f, _g, _h;
     if (message.content.indexOf(process.env.PREFIX) !== 0 || message.author.bot) {
         if (message.author.id !== "688558229646475344")
             return;
@@ -527,7 +536,15 @@ client.on("message", async (message) => {
         await utils_1.deletechannels(message, args);
     }
     else if (command === "test") {
-        message.channel.send((((_d = (_c = (_b = message.mentions) === null || _b === void 0 ? void 0 : _b.users) === null || _c === void 0 ? void 0 : _c.first()) === null || _d === void 0 ? void 0 : _d.id) || args[0] || message.author.id));
+        let e = new Discord.MessageEmbed()
+            .setTitle("Interested in more?")
+            .setDescription("Come join us in the " +
+            "In the Meme Royale Server.\n" +
+            "You can play more duels, and participate in our tournament\n" +
+            "and you could have a chance to win Cash Prizes.")
+            .setURL("https://discord.gg/GK3R5Vt3tz")
+            .setColor("#d7be26");
+        message.channel.send(e);
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))
@@ -608,7 +625,8 @@ client.on("message", async (message) => {
         await challonge_1.removequalwinner(message, client);
     }
     if (command === "verify" || command === "code") {
-        await verify_1.verify(message, client);
+        if (((_b = message.guild) === null || _b === void 0 ? void 0 : _b.name.toLowerCase()) !== "MemeRoyale".toLowerCase())
+            await verify_1.verify(message, client);
     }
     if (command === "manualverify") {
         if (!message.member.roles.cache.has('724818272922501190'))
@@ -768,7 +786,7 @@ client.on("message", async (message) => {
             return message.reply("You are not cock rating master.");
         }
         else {
-            let id = (((_g = (_f = (_e = message.mentions) === null || _e === void 0 ? void 0 : _e.users) === null || _f === void 0 ? void 0 : _f.first()) === null || _g === void 0 ? void 0 : _g.id) || message.author.id);
+            let id = (((_e = (_d = (_c = message.mentions) === null || _c === void 0 ? void 0 : _c.users) === null || _d === void 0 ? void 0 : _d.first()) === null || _e === void 0 ? void 0 : _e.id) || message.author.id);
             let form = await db_1.getCockrating(id);
             let max = 100;
             let min = (id === "239516219445608449" ? Math.floor(Math.random() * ((max - 35) - 35) + 1) : Math.floor(Math.random() * ((max - 1) - 1) + 1));
@@ -797,7 +815,7 @@ client.on("message", async (message) => {
             return message.reply("You are not cock rating master.");
         }
         else {
-            let id = (((_k = (_j = (_h = message.mentions) === null || _h === void 0 ? void 0 : _h.users) === null || _j === void 0 ? void 0 : _j.first()) === null || _k === void 0 ? void 0 : _k.id) || message.author.id);
+            let id = (((_h = (_g = (_f = message.mentions) === null || _f === void 0 ? void 0 : _f.users) === null || _g === void 0 ? void 0 : _g.first()) === null || _h === void 0 ? void 0 : _h.id) || message.author.id);
             let form = await db_1.getCockrating(id);
             let max = 100;
             let min = parseInt(args[1] || args[0]);
@@ -839,7 +857,7 @@ client.on("message", async (message) => {
         await db_1.updateModProfile(message.author.id, "matchportionsstarted", 1);
     }
     else if (command === "matchstats") {
-        if (!message.member.roles.cache.has('719936221572235295'))
+        if (!message.member.roles.cache.find(x => x.name.toLowerCase() === "referee"))
             return message.reply("You don't have those premissions");
         await start_1.matchstats(message, client);
     }
@@ -866,9 +884,16 @@ client.on("message", async (message) => {
         await winner_1.qualend(client, message.channel.id);
     }
     else if (command === "end") {
-        if (!message.member.roles.cache.has('719936221572235295'))
+        if (!message.member.roles.cache.find(x => x.name.toLowerCase() === "referee"))
             return message.reply("You don't have those premissions");
-        await winner_1.end(client, message.channel.id);
+        if (await (await db_1.getMatch(message.channel.id)).exhibition) {
+            let m = await db_1.getMatch(message.channel.id);
+            m.votetime -= 7200;
+            await db_1.updateActive(m);
+        }
+        else {
+            await winner_1.end(client, message.channel.id);
+        }
     }
     else if (command === "cancel") {
         if (!message.member.roles.cache.has('719936221572235295'))
