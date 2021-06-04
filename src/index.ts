@@ -876,7 +876,25 @@ client.on("message", async message => {
     }
 
     else {
-      await exhibition(message, client, args)
+
+      try {
+        await exhibition(message, client, args)
+
+      } catch (error) {
+        console.log(error)
+        await message.channel.send(new Discord.MessageEmbed()
+          .setFooter("blitzwolfz#9338", "https://cdn.discordapp.com/avatars/239516219445608449/12fa541557ca2635a34a5af5e8c65d26.webp?size=512")
+          .setColor("RED")
+          .setTitle("ERROR")
+          .addFields(
+            { name: 'Channel Name', value: `${(<Discord.TextChannel>await client.channels.fetch(message.channel.id)).name}`, inline: true },
+            { name: 'Channel Id', value: `${message.channel.id}`, inline: true },
+            { name: 'User', value: `${message.author.tag}`, inline: true },
+            { name: 'User Id', value: `${message.author.id}`, inline: true },
+          )
+          .setDescription(`\`\`\`${error.message}\n${error.stack}\`\`\``)
+        )
+      }
     }
 
   }
