@@ -149,11 +149,11 @@ async function exhibition(message, client, args) {
                     .setColor("#d7be26")
                     .setTimestamp());
             }
+            ex.activematches.push(channel.id);
+            await db_1.updateExhibition(ex);
             await user1.send(`You have 30 mins to complete your meme\nUse \`!submit\` to submit each image`);
             await user2.send(`You have 30 mins to complete your meme\nUse \`!submit\` to submit each image`);
             await db_1.insertActive(newmatch);
-            ex.activematches.push(channel.id);
-            await db_1.updateExhibition(ex);
         }));
     }
 }

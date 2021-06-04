@@ -358,6 +358,24 @@ async function running(client) {
                     .setDescription(`<@${user1.id}> & <@${user2.id}> have lost\n for not submitting meme on time`)
                     .setTimestamp();
                 channelid.send(embed);
+                try {
+                    await db_1.deleteReminder(await db_1.getReminder(match._id));
+                    try {
+                        await db_1.deleteReminder(await db_1.getReminder(match.p1.userid));
+                    }
+                    catch {
+                        console.log(`Couldn't delete reminder for ${match.p1.userid}`);
+                    }
+                    try {
+                        await db_1.deleteReminder(await db_1.getReminder(match.p2.userid));
+                    }
+                    catch {
+                        console.log(`Couldn't delete reminder for ${match.p2.userid}`);
+                    }
+                }
+                catch {
+                    console.log("Couldn't delete reminders");
+                }
                 await db_1.deleteActive(match);
             }
             else if ((Math.floor(Date.now() / 1000) - match.p1.time > 3600)
@@ -369,6 +387,24 @@ async function running(client) {
                     .setDescription(`<@${user2.id}> has won!`)
                     .setTimestamp();
                 channelid.send(embed);
+                try {
+                    await db_1.deleteReminder(await db_1.getReminder(match._id));
+                    try {
+                        await db_1.deleteReminder(await db_1.getReminder(match.p1.userid));
+                    }
+                    catch {
+                        console.log(`Couldn't delete reminder for ${match.p1.userid}`);
+                    }
+                    try {
+                        await db_1.deleteReminder(await db_1.getReminder(match.p2.userid));
+                    }
+                    catch {
+                        console.log(`Couldn't delete reminder for ${match.p2.userid}`);
+                    }
+                }
+                catch {
+                    console.log("Couldn't delete reminders");
+                }
                 await db_1.deleteActive(match);
             }
             else if ((Math.floor(Date.now() / 1000) - match.p2.time > 3600)
@@ -381,6 +417,24 @@ async function running(client) {
                     .setColor("#d7be26")
                     .setTimestamp();
                 channelid.send(embed);
+                try {
+                    await db_1.deleteReminder(await db_1.getReminder(match._id));
+                    try {
+                        await db_1.deleteReminder(await db_1.getReminder(match.p1.userid));
+                    }
+                    catch {
+                        console.log(`Couldn't delete reminder for ${match.p1.userid}`);
+                    }
+                    try {
+                        await db_1.deleteReminder(await db_1.getReminder(match.p2.userid));
+                    }
+                    catch {
+                        console.log(`Couldn't delete reminder for ${match.p2.userid}`);
+                    }
+                }
+                catch {
+                    console.log("Couldn't delete reminders");
+                }
                 await db_1.deleteActive(match);
             }
             else if ((!(match.split) && ((Math.floor(Date.now() / 1000) - match.p2.time <= 3600) && match.p2.memedone === true)
@@ -467,7 +521,7 @@ async function running(client) {
 }
 exports.running = running;
 async function duelrunning(client) {
-    var _a, _b, _c, _d, _e;
+    var _a, _b, _c, _d;
     console.log("FFF");
     let matches = await db_1.getActive();
     var ex = await db_1.getExhibition();
@@ -498,21 +552,22 @@ async function duelrunning(client) {
         }
     }
     for (let ii = 0; ii < ex.activematches.length; ii++) {
-        let guild = await client.guilds.cache.get((await client.channels.cache.get(ex.activematches[ii])).guild.id);
-        if (!(guild === null || guild === void 0 ? void 0 : guild.channels.cache.has(ex.activematches[ii]))) {
+        if (await client.channels.cache.get(ex.activematches[ii]) === undefined) {
+            console.log("Cum 3");
             ex.activematches.splice(ii, 1);
-            ii++;
             continue;
         }
-        let ch = await ((_e = client.channels) === null || _e === void 0 ? void 0 : _e.fetch(ex.activematches[ii]));
+        let ch = await client.channels.cache.get(ex.activematches[ii]);
+        if (!ch || ch === undefined) {
+            console.log("Cum 3");
+            ex.activematches.splice(ii, 1);
+            continue;
+        }
         if (Math.floor(Date.now() / 1000) - Math.floor(ch.createdTimestamp / 1000) > 7200) {
+            (await client.channels.cache.get(ex.activematches[ii])).send("Cum 2");
             await ch.delete();
             ex.activematches.splice(ii, 1);
-            ii++;
-        }
-        if (!ch || ch === undefined) {
-            ex.activematches.splice(ii, 1);
-            ii++;
+            continue;
         }
     }
     for (let i = 0; i < ex.cooldowns.length; i++) {
@@ -597,15 +652,17 @@ async function exhibitionResults(client, m) {
             .setColor("#d7be26"));
     }
     console.log("GGG2");
-    let e = new discord.MessageEmbed()
-        .setTitle("Interested in more?")
-        .setDescription("Come join us in the " +
-        "In the Meme Royale Server.\n" +
-        "You can play more duels, and participate in our tournament\n" +
-        "and you could have a chance to win Cash Prizes.")
-        .setURL("https://discord.gg/GK3R5Vt3tz")
-        .setColor("#d7be26");
-    await channel.send(e);
+    if (guild.name.toLowerCase() !== "MemeRoyale".toLowerCase()) {
+        let e = new discord.MessageEmbed()
+            .setTitle("Interested in more?")
+            .setDescription("Come join us in the " +
+            "in the Meme Royale Server.\n" +
+            "You can play more duels, and participate in our tournament\n" +
+            "with a chance of winning our Cash Prizes.")
+            .setURL("https://discord.gg/GK3R5Vt3tz")
+            .setColor("#d7be26");
+        await channel.send(e);
+    }
     return await db_1.deleteActive(m);
 }
 async function exhibitionVotingLogic(client, m) {
@@ -655,7 +712,7 @@ async function exhibitionVotingLogic(client, m) {
         m.messageID = (msg.id);
     });
     let id = guild.roles.cache.find(x => x.name.toLowerCase().includes("duel"));
-    await channel.send(`${id}>`);
+    await channel.send(`${id}`);
     m.votingperiod = true;
     m.votetime = ((Math.floor(Date.now() / 1000)) - 5400);
     await db_1.updateActive(m);

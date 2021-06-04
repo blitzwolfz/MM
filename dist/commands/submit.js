@@ -181,7 +181,7 @@ async function submit(message, client, args) {
                     console.log("");
                 }
             }
-            if (match.exhibition) {
+            if (match.exhibition && match.p1.memedone && match.p2.memedone) {
                 match.p1.donesplit = true;
                 match.p1.memedone = true;
                 match.p2.memedone = true;
@@ -238,7 +238,7 @@ async function submit(message, client, args) {
                     console.log("");
                 }
             }
-            if (match.exhibition) {
+            if (match.exhibition && match.p1.memedone && match.p2.memedone) {
                 match.p1.donesplit = true;
                 match.p1.memedone = true;
                 match.p2.memedone = true;

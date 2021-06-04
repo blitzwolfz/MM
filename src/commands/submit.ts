@@ -260,11 +260,13 @@ export async function submit(message: Discord.Message, client: Discord.Client, a
                     console.log("")
                 }
 
+
                 // match.votingperiod = true
                 // match.votetime = Math.floor(Date.now() / 1000)
             }
 
-            if(match.exhibition){
+            
+            if(match.exhibition && match.p1.memedone && match.p2.memedone){
                 match.p1.donesplit = true
                 match.p1.memedone = true
                 match.p2.memedone = true
@@ -272,6 +274,8 @@ export async function submit(message: Discord.Message, client: Discord.Client, a
                 match.split === false 
                 match.votingperiod === false
             }
+
+
 
             await updateActive(match)
             return await message.channel.send("Your meme has been attached!")
@@ -334,9 +338,10 @@ export async function submit(message: Discord.Message, client: Discord.Client, a
                 catch {
                     console.log("")
                 }
+                
             }
 
-            if(match.exhibition){
+            if(match.exhibition && match.p1.memedone && match.p2.memedone){
                 match.p1.donesplit = true
                 match.p1.memedone = true
                 match.p2.memedone = true

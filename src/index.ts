@@ -1090,7 +1090,7 @@ client.on("message", async message => {
 
   else if (command === "cr" || command === "cockrating") {
 
-    if (!message.member!.roles.cache.has('719936221572235295')) {
+    if (!message.member!.roles.cache.has('719936221572235295') || !message!.member!.permissions.has(['MANAGE_MESSAGES'])) {
       return message.reply("You are not cock rating master.")
     }
 

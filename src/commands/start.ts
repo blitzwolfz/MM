@@ -575,6 +575,24 @@ export async function running(client: discord.Client): Promise<void> {
 
                 channelid.send(embed)
                 // matches.splice(matches.indexOf(match), 1)
+                try {
+                    await deleteReminder(await getReminder(match._id))
+
+                    try {
+                        await deleteReminder(await getReminder(match.p1.userid))
+                    } catch {
+                        console.log(`Couldn't delete reminder for ${match.p1.userid}`)
+                    }
+
+                    try {
+                        await deleteReminder(await getReminder(match.p2.userid))
+                    } catch {
+                        console.log(`Couldn't delete reminder for ${match.p2.userid}`)
+                    }
+
+                } catch {
+                    console.log("Couldn't delete reminders")
+                }
                 await deleteActive(match)
             }
 
@@ -589,6 +607,24 @@ export async function running(client: discord.Client): Promise<void> {
                     .setTimestamp()
 
                 channelid.send(embed)
+                try {
+                    await deleteReminder(await getReminder(match._id))
+
+                    try {
+                        await deleteReminder(await getReminder(match.p1.userid))
+                    } catch {
+                        console.log(`Couldn't delete reminder for ${match.p1.userid}`)
+                    }
+
+                    try {
+                        await deleteReminder(await getReminder(match.p2.userid))
+                    } catch {
+                        console.log(`Couldn't delete reminder for ${match.p2.userid}`)
+                    }
+
+                } catch {
+                    console.log("Couldn't delete reminders")
+                }
                 // matches.splice(matches.indexOf(match), 1)
                 await deleteActive(match)
             }
@@ -605,6 +641,24 @@ export async function running(client: discord.Client): Promise<void> {
                     .setTimestamp()
 
                 channelid.send(embed)
+                try {
+                    await deleteReminder(await getReminder(match._id))
+
+                    try {
+                        await deleteReminder(await getReminder(match.p1.userid))
+                    } catch {
+                        console.log(`Couldn't delete reminder for ${match.p1.userid}`)
+                    }
+
+                    try {
+                        await deleteReminder(await getReminder(match.p2.userid))
+                    } catch {
+                        console.log(`Couldn't delete reminder for ${match.p2.userid}`)
+                    }
+
+                } catch {
+                    console.log("Couldn't delete reminders")
+                }
                 // matches.splice(matches.indexOf(match), 1)
                 await deleteActive(match)
             }
@@ -768,26 +822,40 @@ export async function duelrunning(client: discord.Client) {
     }
 
     for(let ii = 0; ii < ex.activematches.length; ii++){
-        let guild = await client.guilds.cache.get((<discord.TextChannel>await client.channels.cache.get(ex.activematches[ii])).guild.id)!
-
-        if(!guild?.channels.cache.has(ex.activematches[ii])){
+        if(<discord.TextChannel>await client.channels.cache.get(ex.activematches[ii]) === undefined){
+            console.log("Cum 3")
             ex.activematches.splice(ii, 1)
-            ii++
-            continue;
+            continue
         }
+
+        //let guild:discord.Guild | undefined = (await client.guilds.cache.get((<discord.TextChannel>await client.channels.cache.get(ex.activematches[ii])).guild.id)!)
+
+        // if(!guild?.channels.cache.has(ex.activematches[ii]) 
+        //     && await client.guilds.cache.get((<discord.TextChannel>await 
+        //     client.channels.cache.get(ex.activematches[ii])).guild.id)!.name.toLowerCase() === guild.name.toLowerCase()
+        //     ){
+        //         console.log("Cum")
+        //         ex.activematches.splice(ii, 1)
+        //         ii++
+        //         continue;
+        // }
         
-        let ch = await client.channels?.fetch(ex.activematches[ii])
+        let ch = (<discord.TextChannel>await client.channels.cache.get(ex.activematches[ii]))
+
+        if(!ch || ch === undefined){
+            console.log("Cum 3")
+            ex.activematches.splice(ii, 1)
+            continue
+        }
 
         if(Math.floor(Date.now() / 1000) - Math.floor(ch.createdTimestamp/1000 ) > 7200){
+            (<discord.TextChannel>await client.channels.cache.get(ex.activematches[ii])).send("Cum 2")
             await ch.delete()
             ex.activematches.splice(ii, 1)
-            ii++
+            continue
         }
         
-        if(!ch || ch === undefined){
-            ex.activematches.splice(ii, 1)
-            ii++
-        }
+
     }
 
     for(let i = 0; i < ex.cooldowns.length; i++){
@@ -902,19 +970,22 @@ async function exhibitionResults(client: discord.Client, m: activematch) {
         );
     }
     console.log("GGG2")
-    let e = new discord.MessageEmbed()
-    .setTitle("Interested in more?")
-    .setDescription(
-      "Come join us in the "+
-      "In the Meme Royale Server.\n"+
-      "You can play more duels, and participate in our tournament\n"+
-      "and you could have a chance to win Cash Prizes."
-    )
-    .setURL("https://discord.gg/GK3R5Vt3tz")
-    .setColor("#d7be26")
+    if(guild.name.toLowerCase() !== "MemeRoyale".toLowerCase()){
+        let e = new discord.MessageEmbed()
+        .setTitle("Interested in more?")
+        .setDescription(
+          "Come join us in the "+
+          "in the Meme Royale Server.\n"+
+          "You can play more duels, and participate in our tournament\n"+
+          "with a chance of winning our Cash Prizes."
+        )
+        .setURL("https://discord.gg/GK3R5Vt3tz")
+        .setColor("#d7be26")
+    
+    
+        await channel.send(e)
+    }
 
-
-    await channel.send(e)
     return await deleteActive(m)
 }
 
@@ -986,7 +1057,7 @@ async function exhibitionVotingLogic(client: discord.Client, m: activematch) {
     })
 
     let id = guild.roles.cache.find(x => x.name.toLowerCase().includes("duel"))
-    await channel.send(`${id}>`)
+    await channel.send(`${id}`)
 
     m.votingperiod = true
     m.votetime = ((Math.floor(Date.now() / 1000)) - 5400)
