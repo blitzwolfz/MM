@@ -118,7 +118,7 @@ export async function exhibition(message: Discord.Message, client: Discord.Clien
         .create(`${message.author.username}-vs-${message.mentions.users.first()?.username}`, { type: 'text', topic: `Exhibition Match`, parent: category!.id})
         .then(async channel => {
             // if (!category) throw new Error("Category channel does not exist");
-            await channel.lockPermissions()
+            //await channel.lockPermissions()
             //console.log(`Channel made on: ${channel.createdTimestamp}, ${channel.createdAt}`)
             // await channel.createOverwrite(message.author.id, {"READ_MESSAGE_HISTORY": true, "SEND_MESSAGES":true})
             // await channel.createOverwrite(message.mentions.users.first()!.id, {"READ_MESSAGE_HISTORY": true, "SEND_MESSAGES":true})
