@@ -22,7 +22,7 @@ import {
   qualstats,
   duelrunning,
 } from "./commands/start";
-import { cooldownremove, deleteExhibitionchannels, duelcheck, exhibition } from "./commands/exhibitions"
+import { cooldownremove, duelcheck, exhibition } from "./commands/exhibitions"
 import { qualend, end, cancelmatch } from "./commands/winner";
 import { vs } from "./commands/card";
 import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, createrole, clearstats, qualifierresultadd, SeasonRestart, toHHMMSS, aaautoreminders, CycleRestart, resultadd, delay } from "./misc/utils";
@@ -178,12 +178,12 @@ client.on('ready', async () => {
   }, 15000);
 
 
-  setInterval(async function () {
-    // console.log("A Third Kiss every 5 seconds");
+  // setInterval(async function () {
+  //   // console.log("A Third Kiss every 5 seconds");
     
-    await deleteExhibitionchannels(client)
+  //   await deleteExhibitionchannels(client)
     
-  }, 1000);
+  // }, 1000);
 
   setInterval(async function () {
     // console.log("A Third Kiss every 5 seconds");
@@ -1207,6 +1207,17 @@ client.on("message", async message => {
   else if (command === "reload") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await reload(message, client)
+  }
+
+  else if (command === "reload2"){
+    let match = await getMatch(message.channel.id)
+
+    match.split = false
+    match.votingperiod = false
+    match.p1.time = Math.floor(Date.now() / 1000) - 3200
+    match.p2.time = Math.floor(Date.now() / 1000) - 3200
+
+    await updateActive(match)
   }
 
   else if (command === "qualend") {

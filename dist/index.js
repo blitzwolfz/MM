@@ -95,9 +95,6 @@ client.on('ready', async () => {
         console.log("EEE2");
     }, 15000);
     setInterval(async function () {
-        await exhibitions_1.deleteExhibitionchannels(client);
-    }, 1000);
-    setInterval(async function () {
         await utils_1.aaautoreminders(client);
     }, 1000);
     if (process.env.DBNAME === "mememania")
@@ -877,6 +874,14 @@ client.on("message", async (message) => {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
         await start_1.reload(message, client);
+    }
+    else if (command === "reload2") {
+        let match = await db_1.getMatch(message.channel.id);
+        match.split = false;
+        match.votingperiod = false;
+        match.p1.time = Math.floor(Date.now() / 1000) - 3200;
+        match.p2.time = Math.floor(Date.now() / 1000) - 3200;
+        await db_1.updateActive(match);
     }
     else if (command === "qualend") {
         if (!message.member.roles.cache.has('719936221572235295'))
