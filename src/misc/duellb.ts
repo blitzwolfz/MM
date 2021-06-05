@@ -8,9 +8,9 @@ export async function duelLB(message: Message, client: Client, args: string[]) {
 
     let symbol: "wins" | "points" | "loss" | "votetally" | "ratio" = "wins"
     //@ts-ignore
-    let page: number = typeof args[1] == "undefined" ? isNaN(parseInt(args[0])) ? 1 : parseInt(args[0]) : args[1];;
+    let page: number = typeof args[2] == "undefined" ? isNaN(parseInt(args[1])) ? 1 : parseInt(args[1]) : args[2];;
 
-    switch (args[0]?.[0]) {
+    switch (args[1]?.[0]) {
         case "p": symbol = "points"; break;
         case "r": symbol = "ratio"; break;
         case "l": symbol = "loss"; break;

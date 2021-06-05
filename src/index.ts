@@ -914,17 +914,16 @@ client.on("message", async message => {
     }
 
     else if (args[0].toLowerCase() === "lb") {
-      args.slice(1)
       await duelLB(message, client, args)
     }
 
     else if (args[0].toLowerCase() === "stats") {
-      args.slice(1)
+      args = args.slice(0, 1)
       await duelstats(message, client, args)
     }
 
     else if (args[0].toLowerCase() === "create") {
-      args.slice(1)
+      args = args.slice(0, 1)
       await duelprofilecreate(message, client, args)
     }
 

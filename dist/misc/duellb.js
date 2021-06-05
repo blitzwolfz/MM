@@ -8,9 +8,9 @@ async function duelLB(message, client, args) {
     var _a;
     let profiles = await db_1.getAllDuelProfiles(message.guild.id);
     let symbol = "wins";
-    let page = typeof args[1] == "undefined" ? isNaN(parseInt(args[0])) ? 1 : parseInt(args[0]) : args[1];
+    let page = typeof args[2] == "undefined" ? isNaN(parseInt(args[1])) ? 1 : parseInt(args[1]) : args[2];
     ;
-    switch ((_a = args[0]) === null || _a === void 0 ? void 0 : _a[0]) {
+    switch ((_a = args[1]) === null || _a === void 0 ? void 0 : _a[0]) {
         case "p":
             symbol = "points";
             break;

@@ -620,15 +620,14 @@ client.on("message", async (message) => {
             await exhibitions_1.duelcheck(message);
         }
         else if (args[0].toLowerCase() === "lb") {
-            args.slice(1);
             await duellb_1.duelLB(message, client, args);
         }
         else if (args[0].toLowerCase() === "stats") {
-            args.slice(1);
+            args = args.slice(0, 1);
             await duellb_1.duelstats(message, client, args);
         }
         else if (args[0].toLowerCase() === "create") {
-            args.slice(1);
+            args = args.slice(0, 1);
             await duellb_1.duelprofilecreate(message, client, args);
         }
         else if (args[0].toLowerCase() === "resetcd") {

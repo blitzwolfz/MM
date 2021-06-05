@@ -211,6 +211,8 @@ export async function exhibition(message: Discord.Message, client: Discord.Clien
         
             await user1.send(`You have 30 mins to complete your meme\nUse \`!submit\` to submit each image`)
             await user2.send(`You have 30 mins to complete your meme\nUse \`!submit\` to submit each image`)
+            await user1.send(`Image link if embed doesn't show:\`${newmatch.template[0]}\``)
+            await user2.send(`Image link if embed doesn't show:\`${newmatch.template[0]}\``)
 
             await insertActive(newmatch)
             await createDuelProfileatMatch(user1.id, guild!.id)
