@@ -575,7 +575,7 @@ async function duelrunning(client) {
         if (!ex.cooldowns[i]) {
             continue;
         }
-        if (Math.floor(Date.now() / 1000) - Math.floor(ex.cooldowns[i].time) >= 3600) {
+        if (Math.floor(Date.now() / 1000) - Math.floor(ex.cooldowns[i].time) >= 1800) {
             try {
                 await us.send("You can start another exhibition match!");
             }

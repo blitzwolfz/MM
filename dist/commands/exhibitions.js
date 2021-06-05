@@ -209,7 +209,7 @@ async function duelcheck(message) {
     }
     else if (ex.cooldowns.some(x => x.user === message.author.id)) {
         let i = ex.cooldowns.findIndex(x => x.user === message.author.id);
-        await message.reply(`Time till you can start another duel: ${await utils_1.toHHMMSS(ex.cooldowns[i].time, 3600)}`);
+        await message.reply(`Time till you can start another duel: ${await utils_1.toHHMMSS(ex.cooldowns[i].time, 1800)}`);
     }
 }
 exports.duelcheck = duelcheck;
