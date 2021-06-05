@@ -124,6 +124,13 @@ export async function exhibition(message: Discord.Message, client: Discord.Clien
             // await channel.createOverwrite(message.author.id, {"READ_MESSAGE_HISTORY": true, "SEND_MESSAGES":true})
             // await channel.createOverwrite(message.mentions.users.first()!.id, {"READ_MESSAGE_HISTORY": true, "SEND_MESSAGES":true})
 
+            try {
+                await channel.lockPermissions()
+            } catch (error) {
+                console.log(error)
+                console.log("Can't lock channel")
+            }
+
             let newmatch: activematch = {
                 _id: channel.id,
                 channelid: channel.id,
