@@ -5,6 +5,7 @@ import {
   activematch,
   cockratingInterface,
   configDB,
+  qualmatch,
   randomtempstruct
 } from "./misc/struct";
 import { submit, qualsubmit, modsubmit, modqualsubmit } from "./commands/submit";
@@ -690,9 +691,51 @@ client.on("message", async message => {
     return
   };
 
-
+  
 
   const command: string | undefined = args?.shift()?.toLowerCase();
+
+  if(message.mentions.roles.first()!.id === "719936221572235295"){
+    let q = function (x: activematch) {
+      return ((x.p1.userid === message.author.id || x.p2.userid === message.author.id) && x.exhibition === false)
+    }
+
+    let qqq = function (x: qualmatch) {
+      return ((x.players.find(y => y.userid === message.author.id)))
+    }
+
+    let m = await (await getActive()).find(q)
+    let qu = await (await getQuals()).find(qqq)
+
+    if(!m && !q){
+      return;
+    }
+
+    else if(m){
+      if(m.p1.userid === message.author.id){
+        return await message.reply("Hey your match has already started. Click on 🅰️ to begin your match.")
+      }
+  
+      if(m.p2.userid === message.author.id){
+        return await message.reply("Hey your match has already started. Click on 🅱️ to begin your match.")
+      }
+    }
+
+    else if(!qu){
+      return;
+    }
+
+    else if(qu){
+      let emmojis = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫']
+
+      return await message.reply(`Hey your match has already started. Click on ${emmojis[qu.players.findIndex(x => x.userid === message.author.id)]} to begin your match.`)
+    }
+
+    else{
+      return;
+    }
+
+  }
 
   if (!command) {
     return
@@ -871,7 +914,7 @@ client.on("message", async message => {
     }
 
     else if(args[0].toLowerCase() === "resetcd"){
-      if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
+      if (!message.member!.roles.cache.has('719936221572235295') || !message!.member!.permissions.has(['MANAGE_MESSAGES'])) return message.reply("You don't have those premissions")
       await cooldownremove(message)
     }
 

@@ -911,7 +911,7 @@ async function exhibitionResults(client: discord.Client, m: activematch) {
         channel.send(
             new discord.MessageEmbed()
                 .setTitle(`${client.users.cache.get(m.p1.userid)?.username} has won!`)
-                .setDescription(`${client.users.cache.get(m.p1.userid)?.username} beat ${client.users.cache.get(m.p1.userid)?.username}\n` +
+                .setDescription(`${client.users.cache.get(m.p1.userid)?.username} beat ${client.users.cache.get(m.p2.userid)?.username}\n` +
                     `by a score of ${m.p1.votes} to ${m.p2.votes} with Meme 1`)
                 .setColor("#d7be26")
         );
@@ -926,7 +926,7 @@ async function exhibitionResults(client: discord.Client, m: activematch) {
                 new discord.MessageEmbed()
                 .setColor("#d7be26")
                 .setImage(m.p1.memelink)
-                .setDescription(`${client.users.cache.get(m.p1.userid)?.username} beat ${client.users.cache.get(m.p1.userid)?.username}\n` +
+                .setDescription(`${client.users.cache.get(m.p1.userid)?.username} beat ${client.users.cache.get(m.p2.userid)?.username}\n` +
                 `by a score of ${m.p1.votes} to ${m.p2.votes} with Meme 1`)
                 .setFooter(dateBuilder())
             )
@@ -1353,7 +1353,7 @@ export async function startregularsplit(message: discord.Message, client: discor
 
     message.channel.send(templook)
 
-    if (["th", "theme", "settheme"].includes(args[3])) {
+    if (["th", "theme"].includes(args[3])) {
 
         await RandomTemplateFunc(message, client, message.channel.id, true)
 
@@ -1399,6 +1399,27 @@ export async function startregularsplit(message: discord.Message, client: discor
         })
 
             
+    }
+
+    if(args[3] === "quick"){
+
+        newmatch.theme = args[3]
+        await insertActive(newmatch)
+
+        //await vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[1].id])
+
+        let embed = new discord.MessageEmbed()
+            .setTitle(`Match between ${user1.username ? user1.username : (await message.guild!.members.fetch(user1.id)).nickname} and ${user2.username ? user2.username : (await message.guild!.members.fetch(user2.id)).nickname}`)
+            .setColor("#d7be26")
+            .setDescription(`<@${user1.id}> and <@${user2.id}> both have 1 hours to complete your meme.\n Contact admins if you have an issue.`)
+            .setTimestamp()
+
+
+
+        await message.channel.send({ embed }).then(async message => {
+            await message.react('🅰️')
+            await message.react('🅱️')
+        })
     }
 
     else {

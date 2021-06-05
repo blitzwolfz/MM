@@ -613,7 +613,7 @@ async function exhibitionResults(client, m) {
     if (m.p1.votes > m.p2.votes) {
         channel.send(new discord.MessageEmbed()
             .setTitle(`${(_g = client.users.cache.get(m.p1.userid)) === null || _g === void 0 ? void 0 : _g.username} has won!`)
-            .setDescription(`${(_h = client.users.cache.get(m.p1.userid)) === null || _h === void 0 ? void 0 : _h.username} beat ${(_j = client.users.cache.get(m.p1.userid)) === null || _j === void 0 ? void 0 : _j.username}\n` +
+            .setDescription(`${(_h = client.users.cache.get(m.p1.userid)) === null || _h === void 0 ? void 0 : _h.username} beat ${(_j = client.users.cache.get(m.p2.userid)) === null || _j === void 0 ? void 0 : _j.username}\n` +
             `by a score of ${m.p1.votes} to ${m.p2.votes} with Meme 1`)
             .setColor("#d7be26"));
         channel.send(await card_1.winner(client, m.p1.userid));
@@ -622,7 +622,7 @@ async function exhibitionResults(client, m) {
                 .channels.cache.find(x => x.name === "winning-duel-memes").id)).send(new discord.MessageEmbed()
                 .setColor("#d7be26")
                 .setImage(m.p1.memelink)
-                .setDescription(`${(_k = client.users.cache.get(m.p1.userid)) === null || _k === void 0 ? void 0 : _k.username} beat ${(_l = client.users.cache.get(m.p1.userid)) === null || _l === void 0 ? void 0 : _l.username}\n` +
+                .setDescription(`${(_k = client.users.cache.get(m.p1.userid)) === null || _k === void 0 ? void 0 : _k.username} beat ${(_l = client.users.cache.get(m.p2.userid)) === null || _l === void 0 ? void 0 : _l.username}\n` +
                 `by a score of ${m.p1.votes} to ${m.p2.votes} with Meme 1`)
                 .setFooter(utils_1.dateBuilder()));
         }
@@ -916,7 +916,7 @@ async function startregularsplit(message, client) {
         .setColor("#d7be26")
         .setTimestamp();
     message.channel.send(templook);
-    if (["th", "theme", "settheme"].includes(args[3])) {
+    if (["th", "theme"].includes(args[3])) {
         await randomtemp_1.RandomTemplateFunc(message, client, message.channel.id, true);
         let rantemp = await db_1.gettempStruct(message.channel.id);
         rantemp.time = rantemp.time - 2.5;
@@ -934,6 +934,19 @@ async function startregularsplit(message, client) {
         }
         newmatch.theme = rantemp.url;
         await db_1.deletetempStruct(rantemp._id);
+        await db_1.insertActive(newmatch);
+        let embed = new discord.MessageEmbed()
+            .setTitle(`Match between ${user1.username ? user1.username : (await message.guild.members.fetch(user1.id)).nickname} and ${user2.username ? user2.username : (await message.guild.members.fetch(user2.id)).nickname}`)
+            .setColor("#d7be26")
+            .setDescription(`<@${user1.id}> and <@${user2.id}> both have 1 hours to complete your meme.\n Contact admins if you have an issue.`)
+            .setTimestamp();
+        await message.channel.send({ embed }).then(async (message) => {
+            await message.react('🅰️');
+            await message.react('🅱️');
+        });
+    }
+    if (args[3] === "quick") {
+        newmatch.theme = args[3];
         await db_1.insertActive(newmatch);
         let embed = new discord.MessageEmbed()
             .setTitle(`Match between ${user1.username ? user1.username : (await message.guild.members.fetch(user1.id)).nickname} and ${user2.username ? user2.username : (await message.guild.members.fetch(user2.id)).nickname}`)

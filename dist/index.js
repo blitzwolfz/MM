@@ -458,6 +458,37 @@ client.on("message", async (message) => {
     }
     ;
     const command = (_a = args === null || args === void 0 ? void 0 : args.shift()) === null || _a === void 0 ? void 0 : _a.toLowerCase();
+    if (message.mentions.roles.first().id === "719936221572235295") {
+        let q = function (x) {
+            return ((x.p1.userid === message.author.id || x.p2.userid === message.author.id) && x.exhibition === false);
+        };
+        let qqq = function (x) {
+            return ((x.players.find(y => y.userid === message.author.id)));
+        };
+        let m = await (await db_1.getActive()).find(q);
+        let qu = await (await db_1.getQuals()).find(qqq);
+        if (!m && !q) {
+            return;
+        }
+        else if (m) {
+            if (m.p1.userid === message.author.id) {
+                return await message.reply("Hey your match has already started. Click on 🅰️ to begin your match.");
+            }
+            if (m.p2.userid === message.author.id) {
+                return await message.reply("Hey your match has already started. Click on 🅱️ to begin your match.");
+            }
+        }
+        else if (!qu) {
+            return;
+        }
+        else if (qu) {
+            let emmojis = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫'];
+            return await message.reply(`Hey your match has already started. Click on ${emmojis[qu.players.findIndex(x => x.userid === message.author.id)]} to begin your match.`);
+        }
+        else {
+            return;
+        }
+    }
     if (!command) {
         return;
     }
@@ -588,7 +619,7 @@ client.on("message", async (message) => {
             await exhibitions_1.duelcheck(message);
         }
         else if (args[0].toLowerCase() === "resetcd") {
-            if (!message.member.roles.cache.has('719936221572235295'))
+            if (!message.member.roles.cache.has('719936221572235295') || !message.member.permissions.has(['MANAGE_MESSAGES']))
                 return message.reply("You don't have those premissions");
             await exhibitions_1.cooldownremove(message);
         }
