@@ -76,7 +76,7 @@ async function makeProfileEmbed(page = 1, client, profiles, symbol, userid) {
                         strr += `Losses: ${obj.loss}`;
                         break;
                     case "votetally":
-                        strr += `Total matches voted: ${obj.votetally}`;
+                        strr += `Total votes recieved: ${obj.votetally}`;
                         break;
                     default:
                         strr += `Wins: ${obj.wins}`;
@@ -100,7 +100,7 @@ async function makeProfileEmbed(page = 1, client, profiles, symbol, userid) {
             strrr += `Losses.`;
             break;
         case "votetally":
-            strrr += `Total votes recieved in.`;
+            strrr += `Total Votes Recieved.`;
             break;
         default:
             strrr += `Wins.`;

@@ -19,15 +19,15 @@ export async function exhibition(message: Discord.Message, client: Discord.Clien
 
 
     if (args.length < 2){
-        return message.reply("Please use flag theme or template")
+        return message.reply("Please use flag theme flag or template flag")
     }
 
     if (args.length >= 3){
-        return message.reply("No too many arguments. Use either theme or template")
+        return message.reply("No too many arguments. Use either theme flag or template flag")
     }
 
     else if(!["template", "theme"].includes(args[1].toLowerCase())){
-        return message.reply("Please use flag theme or template")
+        return message.reply("Please use theme flag  or template flag")
     }
 
     let ex = await getExhibition()
