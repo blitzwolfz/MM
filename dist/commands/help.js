@@ -186,8 +186,16 @@ exports.DuelHelp = {
             value: `Pass an theme or template flag, and you will get a random theme or template from our inventory.`,
         },
         {
-            name: '`!duel check`',
-            value: `Tells you how long till you can start another duel`,
+            name: '`!duel create`',
+            value: `Create your duelist profile. If you played in a duel, this profile has already been made for you.`,
+        },
+        {
+            name: '`!duel stats <@mention>`',
+            value: `Check out your duel statistics. Mention another user and you can see their stats.`,
+        },
+        {
+            name: '`!duel lb <points | ratio | loss | votes>`',
+            value: `See how you rank with other duelist in your server. If no flag is passed, the lb sorts by wins.`,
         },
         {
             name: '`!duel resetcd`',

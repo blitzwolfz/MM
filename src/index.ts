@@ -87,6 +87,7 @@ import { manuallyverify, verify } from "./misc/verify";
 import { cockratingLB, winningLB, quallistGroups } from "./misc/lbs";
 import { createmodprofile, viewmodprofile, modLB, clearmodstats } from "./misc/modprofiles";
 import { getRandomThemeList } from "./misc/randomtemp";
+import { duelLB, duelprofilecreate, duelstats } from "./misc/duellb";
 
 
 console.log("Hello World, bot has begun life");
@@ -910,6 +911,21 @@ client.on("message", async message => {
 
     else if (args[0].toLowerCase() === "check") {
       await duelcheck(message)
+    }
+
+    else if (args[0].toLowerCase() === "lb") {
+      args.slice(1)
+      await duelLB(message, client, args)
+    }
+
+    else if (args[0].toLowerCase() === "stats") {
+      args.slice(1)
+      await duelstats(message, client, args)
+    }
+
+    else if (args[0].toLowerCase() === "create") {
+      args.slice(1)
+      await duelprofilecreate(message, client, args)
     }
 
     else if(args[0].toLowerCase() === "resetcd"){

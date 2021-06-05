@@ -37,6 +37,7 @@ const verify_1 = require("./misc/verify");
 const lbs_1 = require("./misc/lbs");
 const modprofiles_1 = require("./misc/modprofiles");
 const randomtemp_1 = require("./misc/randomtemp");
+const duellb_1 = require("./misc/duellb");
 console.log("Hello World, bot has begun life");
 const express = require('express');
 const app = express();
@@ -617,6 +618,18 @@ client.on("message", async (message) => {
         }
         else if (args[0].toLowerCase() === "check") {
             await exhibitions_1.duelcheck(message);
+        }
+        else if (args[0].toLowerCase() === "lb") {
+            args.slice(1);
+            await duellb_1.duelLB(message, client, args);
+        }
+        else if (args[0].toLowerCase() === "stats") {
+            args.slice(1);
+            await duellb_1.duelstats(message, client, args);
+        }
+        else if (args[0].toLowerCase() === "create") {
+            args.slice(1);
+            await duellb_1.duelprofilecreate(message, client, args);
         }
         else if (args[0].toLowerCase() === "resetcd") {
             if (!message.member.roles.cache.has('719936221572235295') || !message.member.permissions.has(['MANAGE_MESSAGES']))

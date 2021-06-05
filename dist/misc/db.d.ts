@@ -1,5 +1,5 @@
 import * as mongo from "mongodb";
-import { activematch, qualmatch, user, signups, matchlist, verificationform, quallist, cockratingInterface, modprofile, randomtempstruct, groupmatch, exhibition, configDB, reminder } from "./struct";
+import { activematch, qualmatch, user, signups, matchlist, verificationform, quallist, cockratingInterface, modprofile, randomtempstruct, groupmatch, exhibition, configDB, reminder, duelprofile } from "./struct";
 export declare function connectToDB(): Promise<void>;
 export declare function updater(coll: string, filter: object, update: object): Promise<void>;
 export declare function insertDoc(coll: string, upd: object): Promise<void>;
@@ -82,3 +82,7 @@ export declare function getReminder(id: string): Promise<reminder>;
 export declare function getReminders(q?: object): Promise<reminder[]>;
 export declare function updateReminder(r: reminder): Promise<void>;
 export declare function deleteReminder(r: reminder): Promise<void>;
+export declare function addDuelProfile(User: duelprofile, guild: string): Promise<void>;
+export declare function getAllDuelProfiles(guild: string): Promise<duelprofile[]>;
+export declare function getDuelProfile(_id: string, guild: string): Promise<duelprofile>;
+export declare function updateDuelProfile(_id: string, u: duelprofile, guild: string): Promise<void>;

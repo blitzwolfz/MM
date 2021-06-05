@@ -88,6 +88,14 @@ export interface user{
     img: string;
 }
 
+export interface duelprofile{
+    _id:string;
+    votetally:number;
+    points:number;
+    wins: number;
+    loss: number;
+}
+
 export interface signups{
     _id:1;
     open: boolean;

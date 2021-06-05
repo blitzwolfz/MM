@@ -22,6 +22,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.cooldownremove = exports.duelcheck = exports.deleteExhibitionchannels = exports.exhibition = void 0;
 const Discord = __importStar(require("discord.js"));
 const db_1 = require("../misc/db");
+const duellb_1 = require("../misc/duellb");
 const randomtemp_1 = require("../misc/randomtemp");
 const utils_1 = require("../misc/utils");
 async function exhibition(message, client, args) {
@@ -153,6 +154,8 @@ async function exhibition(message, client, args) {
             await user1.send(`You have 30 mins to complete your meme\nUse \`!submit\` to submit each image`);
             await user2.send(`You have 30 mins to complete your meme\nUse \`!submit\` to submit each image`);
             await db_1.insertActive(newmatch);
+            await duellb_1.createDuelProfileatMatch(user1.id, guild.id);
+            await duellb_1.createDuelProfileatMatch(user2.id, guild.id);
         }));
     }
 }

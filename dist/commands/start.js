@@ -595,6 +595,8 @@ async function exhibitionResults(client, m) {
     console.log("GGG");
     let channel = await client.channels.cache.get(m._id);
     let guild = await client.guilds.cache.get((await client.channels.cache.get(m._id)).guild.id);
+    let d1 = await db_1.getDuelProfile(m.p1.userid, guild.id);
+    let d2 = await db_1.getDuelProfile(m.p2.userid, guild.id);
     if (m.p1.memedone === true && m.p2.memedone === false || m.p1.memedone === false && m.p2.memedone === true) {
         if (m.p1.memedone) {
             channel.send(new discord.MessageEmbed()
@@ -611,6 +613,12 @@ async function exhibitionResults(client, m) {
         return;
     }
     if (m.p1.votes > m.p2.votes) {
+        d1.wins += 1;
+        d1.votetally = m.p1.votes;
+        d1.points += (25 + (m.p1.votes * 5));
+        d2.loss += 1;
+        d2.votetally = m.p2.votes;
+        d2.points += (m.p2.votes * 5);
         channel.send(new discord.MessageEmbed()
             .setTitle(`${(_g = client.users.cache.get(m.p1.userid)) === null || _g === void 0 ? void 0 : _g.username} has won!`)
             .setDescription(`${(_h = client.users.cache.get(m.p1.userid)) === null || _h === void 0 ? void 0 : _h.username} beat ${(_j = client.users.cache.get(m.p2.userid)) === null || _j === void 0 ? void 0 : _j.username}\n` +
@@ -628,6 +636,12 @@ async function exhibitionResults(client, m) {
         }
     }
     else if (m.p1.votes < m.p2.votes) {
+        d1.loss += 1;
+        d1.votetally = m.p1.votes;
+        d1.points += (m.p2.votes * 5);
+        d2.wins += 1;
+        d2.votetally = m.p2.votes;
+        d1.points += (25 + (m.p1.votes * 5));
         channel.send(new discord.MessageEmbed()
             .setTitle(`${(_m = client.users.cache.get(m.p2.userid)) === null || _m === void 0 ? void 0 : _m.username} has won!`)
             .setDescription(`${(_o = client.users.cache.get(m.p2.userid)) === null || _o === void 0 ? void 0 : _o.username} beat ${(_p = client.users.cache.get(m.p1.userid)) === null || _p === void 0 ? void 0 : _p.username}\n` +
@@ -663,6 +677,8 @@ async function exhibitionResults(client, m) {
             .setColor("#d7be26");
         await channel.send(e);
     }
+    await db_1.updateDuelProfile(d1._id, d1, guild.id);
+    await db_1.updateDuelProfile(d2._id, d2, guild.id);
     return await db_1.deleteActive(m);
 }
 async function exhibitionVotingLogic(client, m) {

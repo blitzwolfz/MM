@@ -7,7 +7,7 @@ import { end, qualend } from "./winner"
 import {
     updateActive, deleteActive, insertActive, insertQuals,
     updateQuals, getActive, getQuals, getSingularQuals,
-    getMatch, gettempStruct, deletetempStruct, getQual, insertReminder, deleteReminder, getReminder, getExhibition, updateExhibition
+    getMatch, gettempStruct, deletetempStruct, getQual, insertReminder, deleteReminder, getReminder, getExhibition, updateExhibition, getDuelProfile, updateDuelProfile
 } from "../misc/db"
 import { createAtUsermatch } from "./user"
 import { qualrunn } from "./qualrunn"
@@ -885,6 +885,8 @@ async function exhibitionResults(client: discord.Client, m: activematch) {
     console.log("GGG")
     let channel = <discord.TextChannel>await client.channels.cache.get(m._id)
     let guild = await client.guilds.cache.get((<discord.TextChannel>await client.channels.cache.get(m._id)).guild.id)!
+    let d1 = await getDuelProfile(m.p1.userid, guild.id)
+    let d2 = await getDuelProfile(m.p2.userid, guild.id)
 
     if(m.p1.memedone === true && m.p2.memedone === false || m.p1.memedone === false && m.p2.memedone === true){
         if(m.p1.memedone){
@@ -908,6 +910,14 @@ async function exhibitionResults(client: discord.Client, m: activematch) {
     }
 
     if (m.p1.votes > m.p2.votes) {
+        d1.wins += 1
+        d1.votetally = m.p1.votes
+        d1.points += (25 + (m.p1.votes * 5))
+        d2.loss += 1
+        d2.votetally = m.p2.votes
+        d2.points += (m.p2.votes * 5) 
+
+
         channel.send(
             new discord.MessageEmbed()
                 .setTitle(`${client.users.cache.get(m.p1.userid)?.username} has won!`)
@@ -934,6 +944,12 @@ async function exhibitionResults(client: discord.Client, m: activematch) {
     }
 
     else if (m.p1.votes < m.p2.votes) {
+        d1.loss += 1
+        d1.votetally = m.p1.votes
+        d1.points += (m.p2.votes * 5) 
+        d2.wins += 1
+        d2.votetally = m.p2.votes
+        d1.points += (25 + (m.p1.votes * 5))
 
         channel.send(
             new discord.MessageEmbed()
@@ -986,6 +1002,8 @@ async function exhibitionResults(client: discord.Client, m: activematch) {
         await channel.send(e)
     }
 
+    await updateDuelProfile(d1._id, d1, guild.id)
+    await updateDuelProfile(d2._id, d2, guild.id)
     return await deleteActive(m)
 }
 

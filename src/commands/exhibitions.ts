@@ -1,5 +1,6 @@
 import * as Discord from "discord.js"
 import { getExhibition, insertActive, updateExhibition } from "../misc/db"
+import { createDuelProfileatMatch } from "../misc/duellb"
 import { getRandomTemplateList, getRandomThemeList } from "../misc/randomtemp"
 import { activematch } from "../misc/struct"
 import { toHHMMSS } from "../misc/utils"
@@ -212,7 +213,8 @@ export async function exhibition(message: Discord.Message, client: Discord.Clien
             await user2.send(`You have 30 mins to complete your meme\nUse \`!submit\` to submit each image`)
 
             await insertActive(newmatch)
-
+            await createDuelProfileatMatch(user1.id, guild!.id)
+            await createDuelProfileatMatch(user2.id, guild!.id)
             
         });
     }

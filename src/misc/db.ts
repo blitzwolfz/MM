@@ -4,7 +4,7 @@ require("dotenv").config();
 
 import { activematch, qualmatch, user, signups, matchlist, 
     verificationform, quallist, cockratingInterface, 
-    modprofile, randomtempstruct, groupmatch, exhibition, configDB, reminder } from "./struct";
+    modprofile, randomtempstruct, groupmatch, exhibition, configDB, reminder, duelprofile } from "./struct";
 
 const MongoClient = mongo.MongoClient
 //const assert = require("assert")
@@ -22,6 +22,8 @@ export async function connectToDB(): Promise<void> {
             await client.db(process.env.DBNAME).createCollection("signup")
             await client.db(process.env.DBNAME).createCollection("cockrating")
             await client.db(process.env.DBNAME).createCollection("modprofiles")
+            await client.db(process.env.DBNAME).createCollection("719406444109103117")
+            await client.db(process.env.DBNAME).createCollection("819167358828281876")
             await resolve();
         });
     });
@@ -442,4 +444,22 @@ export async function updateReminder(r:reminder) {
 
 export async function deleteReminder(r:reminder) {
     await client.db(process.env.DBNAME).collection("reminders").deleteOne({_id:r._id})  
+}
+
+export async function addDuelProfile(User:duelprofile, guild:string): Promise<void> {
+    await client.db(process.env.DBNAME).collection(guild).insertOne(User)!;
+}
+
+export async function getAllDuelProfiles(guild:string): Promise<duelprofile[]> {
+    return client.db(process.env.DBNAME).collection(guild).find({}).toArray()
+}
+
+export async function getDuelProfile(_id: string, guild:string): Promise<duelprofile> {
+    //@ts-ignore
+    return client.db(process.env.DBNAME)!.collection(guild)!.findOne({_id:_id})!;
+}
+
+export async function updateDuelProfile(_id:string, u:duelprofile, guild:string): Promise<void> {
+    //await client.db(process.env.DBNAME).collection("modprofiles").updateOne({_id:_id}, {$inc:{[field]:num}})!
+    await client.db(process.env.DBNAME).collection(guild).updateOne({_id:_id}, {$set: u})!;
 }
