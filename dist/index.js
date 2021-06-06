@@ -945,8 +945,8 @@ client.on("message", async (message) => {
     else if (command === "end") {
         if (!message.member.roles.cache.find(x => x.name.toLowerCase() === "referee") || !message.member.permissions.has(['MANAGE_MESSAGES']))
             return message.reply("You don't have those premissions");
-        if (await (await db_1.getMatch(message.channel.id)).exhibition) {
-            let m = await db_1.getMatch(message.channel.id);
+        if (await (await db_1.getMatch((message.mentions.channels.first().id || message.channel.id))).exhibition) {
+            let m = await db_1.getMatch(message.mentions.channels.first().id || message.channel.id);
             m.votetime -= 7200;
             await db_1.updateActive(m);
         }
