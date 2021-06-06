@@ -943,7 +943,7 @@ client.on("message", async (message) => {
         await winner_1.qualend(client, message.channel.id);
     }
     else if (command === "end") {
-        if (!message.member.roles.cache.find(x => x.name.toLowerCase() === "referee"))
+        if (!message.member.roles.cache.find(x => x.name.toLowerCase() === "referee") || !message.member.permissions.has(['MANAGE_MESSAGES']))
             return message.reply("You don't have those premissions");
         if (await (await db_1.getMatch(message.channel.id)).exhibition) {
             let m = await db_1.getMatch(message.channel.id);

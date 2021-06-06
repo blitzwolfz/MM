@@ -1302,7 +1302,7 @@ client.on("message", async message => {
   }
 
   else if (command === "end") {
-    if (!message.member!.roles.cache.find(x => x.name.toLowerCase() === "referee")) return message.reply("You don't have those premissions")
+    if (!message.member!.roles.cache.find(x => x.name.toLowerCase() === "referee") || !message!.member!.permissions.has(['MANAGE_MESSAGES'])) return message.reply("You don't have those premissions")
     if(await (await getMatch(message.channel.id)).exhibition){
       let m = await getMatch(message.channel.id)
       m.votetime -= 7200
