@@ -631,7 +631,7 @@ client.on("message", async (message) => {
             await duellb_1.duelprofilecreate(message, client, args);
         }
         else if (args[0].toLowerCase() === "resetcd") {
-            if (!message.member.roles.cache.has('719936221572235295') || !message.member.permissions.has(['MANAGE_MESSAGES']))
+            if (!message.member.roles.cache.has('719936221572235295') && !message.member.permissions.has(['MANAGE_MESSAGES']))
                 return message.reply("You don't have those premissions");
             await exhibitions_1.cooldownremove(message);
         }
@@ -943,7 +943,7 @@ client.on("message", async (message) => {
         await winner_1.qualend(client, message.channel.id);
     }
     else if (command === "end") {
-        if (!message.member.roles.cache.find(x => x.name.toLowerCase() === "referee") || !message.member.permissions.has(['MANAGE_MESSAGES']))
+        if (!message.member.roles.cache.find(x => x.name.toLowerCase() === "referee") && !message.member.permissions.has(['MANAGE_MESSAGES']))
             return message.reply("You don't have those premissions");
         if (await (await db_1.getMatch((message.mentions.channels.first().id || message.channel.id))).exhibition) {
             let m = await db_1.getMatch(message.mentions.channels.first().id || message.channel.id);
