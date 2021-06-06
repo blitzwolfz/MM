@@ -997,7 +997,7 @@ async function exhibitionResults(client: discord.Client, m: activematch) {
           "Come join us in the "+
           "in the Meme Royale Server.\n"+
           "You can play more duels, and participate in our tournament\n"+
-          "with a chance of winning our Cash Prizes.\nClick on the link the title to join."
+          "with a chance of winning our Cash Prizes.\nClick on the link in the title to join."
         )
         .setURL("https://discord.gg/GK3R5Vt3tz")
         .setColor("#d7be26")
