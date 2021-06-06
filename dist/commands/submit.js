@@ -131,7 +131,7 @@ async function submit(message, client, args) {
     else {
         console.log("Args is", args);
         let q = function (x) {
-            return ((x.p1.userid === message.author.id || x.p2.userid === message.author.id));
+            return ((x.p1.userid === message.author.id || x.p2.userid === message.author.id) && x.votingperiod === false);
         };
         let match = await (await db_1.getActive()).find(q);
         console.log(match);

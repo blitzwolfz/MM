@@ -193,7 +193,7 @@ export async function submit(message: Discord.Message, client: Discord.Client, a
         // }
 
         let q = function (x: activematch) {
-            return ((x.p1.userid === message.author.id || x.p2.userid === message.author.id))
+            return ((x.p1.userid === message.author.id || x.p2.userid === message.author.id) && x.votingperiod === false)
         }
 
         //let match:activematch = await (await getActive()).find(x => (x.p1.userid === message.author.id || x.p2.userid === message.author.id))!;
