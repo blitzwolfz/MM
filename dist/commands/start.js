@@ -530,11 +530,12 @@ async function duelrunning(client) {
             if (m.exhibition === false)
                 continue;
             console.log(m._id);
-            if (m.p1.donesplit === true && m.p1.memedone === false && (Math.floor(Date.now()) / 1000 - m.p1.time > 1800) ||
-                m.p2.donesplit === true && m.p2.memedone === false && (Math.floor(Date.now()) / 1000 - m.p2.time > 1800)) {
+            if (m.p1.donesplit === false && m.p1.memedone === false && (Math.floor(Date.now()) / 1000 - m.p1.time > 1800) ||
+                m.p2.donesplit === false && m.p2.memedone === false && (Math.floor(Date.now()) / 1000 - m.p2.time > 1800)) {
+                let winner = (m.p1.memedone ? `${(_a = client.users.cache.get(m.p1.userid)) === null || _a === void 0 ? void 0 : _a.username}` : `${(_b = client.users.cache.get(m.p2.userid)) === null || _b === void 0 ? void 0 : _b.username}`);
                 (await client.channels.cache.get(m._id)).send(new discord.MessageEmbed()
-                    .setTitle(`${(_a = client.users.cache.get(m.p1.userid)) === null || _a === void 0 ? void 0 : _a.username}-vs-${(_b = client.users.cache.get(m.p1.userid)) === null || _b === void 0 ? void 0 : _b.username}`)
-                    .setDescription(`${m.p1.memedone ? `${(_c = client.users.cache.get(m.p1.userid)) === null || _c === void 0 ? void 0 : _c.username}` : `${(_d = client.users.cache.get(m.p2.userid)) === null || _d === void 0 ? void 0 : _d.username}`} has won!`)
+                    .setTitle(`${(_c = client.users.cache.get(m.p1.userid)) === null || _c === void 0 ? void 0 : _c.username}-vs-${(_d = client.users.cache.get(m.p2.userid)) === null || _d === void 0 ? void 0 : _d.username}`)
+                    .setDescription(`${winner} has won!`)
                     .setColor("#d7be26"));
                 await db_1.deleteActive(m);
             }
