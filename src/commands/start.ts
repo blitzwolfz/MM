@@ -946,10 +946,10 @@ async function exhibitionResults(client: discord.Client, m: activematch) {
     else if (m.p1.votes < m.p2.votes) {
         d1.loss += 1
         d1.votetally = m.p1.votes
-        d1.points += (m.p2.votes * 5) 
+        d1.points += (m.p1.votes * 5) 
         d2.wins += 1
         d2.votetally = m.p2.votes
-        d1.points += (25 + (m.p1.votes * 5))
+        d2.points += (25 + (m.p2.votes * 5))
 
         channel.send(
             new discord.MessageEmbed()
@@ -979,6 +979,8 @@ async function exhibitionResults(client: discord.Client, m: activematch) {
     else if (m.p1.votes === m.p2.votes) {
         d1.votetally = m.p1.votes
         d2.votetally = m.p2.votes
+        d1.points += (m.p1.votes * 5)
+        d2.points += (m.p2.votes * 5)  
         channel.send(
             new discord.MessageEmbed()
                 .setTitle(`Both users come to a draw`)
