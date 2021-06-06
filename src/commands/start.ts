@@ -977,6 +977,8 @@ async function exhibitionResults(client: discord.Client, m: activematch) {
     }
 
     else if (m.p1.votes === m.p2.votes) {
+        d1.votetally = m.p1.votes
+        d2.votetally = m.p2.votes
         channel.send(
             new discord.MessageEmbed()
                 .setTitle(`Both users come to a draw`)

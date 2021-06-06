@@ -659,6 +659,8 @@ async function exhibitionResults(client, m) {
         }
     }
     else if (m.p1.votes === m.p2.votes) {
+        d1.votetally = m.p1.votes;
+        d2.votetally = m.p2.votes;
         channel.send(new discord.MessageEmbed()
             .setTitle(`Both users come to a draw`)
             .setDescription(`${(_s = client.users.cache.get(m.p2.userid)) === null || _s === void 0 ? void 0 : _s.username} and ${(_t = client.users.cache.get(m.p1.userid)) === null || _t === void 0 ? void 0 : _t.username}\n` +
