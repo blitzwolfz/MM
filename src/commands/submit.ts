@@ -179,13 +179,24 @@ export async function submit(message: Discord.Message, client: Discord.Client, a
 
         // let q:any;
         console.log("Args is", args)
-
-
         let q = function (x: activematch) {
             return ((x.p1.userid === message.author.id || x.p2.userid === message.author.id) 
             && (x.p1.memedone === false || x.p2.memedone === false) 
-            && x.votingperiod === false)
+            && x.votingperiod === false 
+            )
         }
+
+        if(args.includes("-duel")) {
+            q = function (x: activematch) {
+                return ((x.p1.userid === message.author.id || x.p2.userid === message.author.id) 
+                && (x.p1.memedone === false || x.p2.memedone === false) 
+                && x.votingperiod === false 
+                && x.exhibition === true
+                )
+            }
+        };
+
+
 
         //let match:activematch = await (await getActive()).find(x => (x.p1.userid === message.author.id || x.p2.userid === message.author.id))!;
         let match: activematch = await (await getActive()).find(q)!;

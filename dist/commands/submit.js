@@ -135,6 +135,15 @@ async function submit(message, client, args) {
                 && (x.p1.memedone === false || x.p2.memedone === false)
                 && x.votingperiod === false);
         };
+        if (args.includes("-duel")) {
+            q = function (x) {
+                return ((x.p1.userid === message.author.id || x.p2.userid === message.author.id)
+                    && (x.p1.memedone === false || x.p2.memedone === false)
+                    && x.votingperiod === false
+                    && x.exhibition === true);
+            };
+        }
+        ;
         let match = await (await db_1.getActive()).find(q);
         console.log(match);
         if (match.p1.memedone === false && match.p1.userid === message.author.id) {
