@@ -33,7 +33,7 @@ export async function exhibition(message: Discord.Message, client: Discord.Clien
     let ex = await getExhibition()
 
     if(ex.cooldowns.some(x => x.user === message.author.id)){
-        return message.reply("It hasn't been 1h yet")
+        return message.reply("It hasn't been 5 mins yet")
     }
 
     let m = message
@@ -275,7 +275,7 @@ export async function deleteExhibitionchannels(client: Discord.Client) {
             continue
         }
 
-        if(Math.floor(Date.now() / 1000) - Math.floor(ex.cooldowns[i].time) >= 3600){
+        if(Math.floor(Date.now() / 1000) - Math.floor(ex.cooldowns[i].time) >= 300){
             try{
                 await us.send("You can start another exhibition match!")
             } catch {
@@ -299,7 +299,7 @@ export async function duelcheck(message: Discord.Message){
     else if(ex.cooldowns.some(x => x.user === message.author.id)){
         let i = ex.cooldowns.findIndex(x => x.user === message.author.id)
 
-        await message.reply(`Time till you can start another duel: ${await toHHMMSS(ex.cooldowns[i].time, 1800)}`)
+        await message.reply(`Time till you can start another duel: ${await toHHMMSS(ex.cooldowns[i].time, 300)}`)
     }
 
 }

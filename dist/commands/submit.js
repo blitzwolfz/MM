@@ -135,16 +135,17 @@ async function submit(message, client, args) {
                 && (x.p1.memedone === false || x.p2.memedone === false)
                 && x.votingperiod === false);
         };
-        if (args.includes("-duel")) {
-            q = function (x) {
-                return ((x.p1.userid === message.author.id || x.p2.userid === message.author.id)
-                    && (x.p1.memedone === false || x.p2.memedone === false)
-                    && x.votingperiod === false
-                    && x.exhibition === true);
-            };
+        let allmatches = await (await db_1.getActive()).filter(q);
+        if (allmatches.length > 1 && !args[0]) {
+            message.channel.send("You are in multiply matches. Please mention the corresponding number to submit. For example `!submit 1`");
+            let i = 0;
+            for (let m of allmatches) {
+                await message.channel.send(`${i + 1}) <#${m._id}>`);
+                i += 1;
+            }
+            return;
         }
-        ;
-        let match = await (await db_1.getActive()).find(q);
+        let match = args[0] ? allmatches[parseInt(args[0]) - 1] : allmatches[0];
         console.log(match);
         if (match.p1.memedone === false && match.p1.userid === message.author.id) {
             match.p1.memelink = (message.attachments.array()[0].url);
@@ -201,7 +202,7 @@ async function submit(message, client, args) {
                 match.votingperiod === false;
             }
             await db_1.updateActive(match);
-            return await message.channel.send("Your meme has been attached!");
+            return await message.channel.send(`Your meme has been attached for match in <#${match._id}>`);
         }
         if (match.p2.memedone === false && match.p2.userid === message.author.id) {
             match.p2.memelink = (message.attachments.array()[0].url);
@@ -258,7 +259,7 @@ async function submit(message, client, args) {
                 match.votingperiod === false;
             }
             await db_1.updateActive(match);
-            return await message.channel.send("Your meme has been attached!");
+            return await message.channel.send(`Your meme has been attached for match in <#${match._id}>`);
         }
     }
 }

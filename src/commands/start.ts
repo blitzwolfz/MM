@@ -867,7 +867,7 @@ export async function duelrunning(client: discord.Client) {
             continue
         }
 
-        if(Math.floor(Date.now() / 1000) - Math.floor(ex.cooldowns[i].time) >= 1800){
+        if(Math.floor(Date.now() / 1000) - Math.floor(ex.cooldowns[i].time) >= 300){
             try{
                 await us.send("You can start another exhibition match!")
             } catch {
@@ -888,6 +888,8 @@ async function exhibitionResults(client: discord.Client, m: activematch) {
     let guild = await client.guilds.cache.get((<discord.TextChannel>await client.channels.cache.get(m._id)).guild.id)!
     let d1 = await getDuelProfile(m.p1.userid, guild.id)
     let d2 = await getDuelProfile(m.p2.userid, guild.id)
+    let u1 = await client.users.fetch(d1._id)
+    let u2 = await client.users.fetch(d1._id)
 
     if(m.p1.memedone === true && m.p2.memedone === false || m.p1.memedone === false && m.p2.memedone === true){
         if(m.p1.memedone){
@@ -926,8 +928,28 @@ async function exhibitionResults(client: discord.Client, m: activematch) {
                     `by a score of ${m.p1.votes} to ${m.p2.votes} with Meme 1`)
                 .setColor("#d7be26")
         );
+
+        u1.send(
+            new discord.MessageEmbed()
+                .setTitle(`${client.users.cache.get(m.p1.userid)?.username} has won!`)
+                .setDescription(`${client.users.cache.get(m.p1.userid)?.username} beat ${client.users.cache.get(m.p2.userid)?.username}\n` +
+                    `by a score of ${m.p1.votes} to ${m.p2.votes} with Meme 1`)
+                .setColor("#d7be26")
+        );
+
+        u2.send(
+            new discord.MessageEmbed()
+                .setTitle(`${client.users.cache.get(m.p1.userid)?.username} has won!`)
+                .setDescription(`${client.users.cache.get(m.p1.userid)?.username} beat ${client.users.cache.get(m.p2.userid)?.username}\n` +
+                    `by a score of ${m.p1.votes} to ${m.p2.votes} with Meme 1`)
+                .setColor("#d7be26")
+        );
       
         channel.send(
+            await winner(client, m.p1.userid)
+        )
+
+        u1.send(
             await winner(client, m.p1.userid)
         )
 
@@ -960,7 +982,27 @@ async function exhibitionResults(client: discord.Client, m: activematch) {
                 .setColor("#d7be26")
         );
 
+        u1.send(
+            new discord.MessageEmbed()
+                .setTitle(`${client.users.cache.get(m.p2.userid)?.username} has won!`)
+                .setDescription(`${client.users.cache.get(m.p2.userid)?.username} beat ${client.users.cache.get(m.p1.userid)?.username}\n` +
+                    `by a score of ${m.p2.votes} to ${m.p1.votes} with Meme 2`)
+                .setColor("#d7be26")
+        );
+
+        u2.send(
+            new discord.MessageEmbed()
+                .setTitle(`${client.users.cache.get(m.p2.userid)?.username} has won!`)
+                .setDescription(`${client.users.cache.get(m.p2.userid)?.username} beat ${client.users.cache.get(m.p1.userid)?.username}\n` +
+                    `by a score of ${m.p2.votes} to ${m.p1.votes} with Meme 2`)
+                .setColor("#d7be26")
+        );
+
         channel.send(
+            await winner(client, m.p2.userid)
+        )
+
+        u2.send(
             await winner(client, m.p2.userid)
         )
         
@@ -983,6 +1025,22 @@ async function exhibitionResults(client: discord.Client, m: activematch) {
         d1.points += (m.p1.votes * 5)
         d2.points += (m.p2.votes * 5)  
         channel.send(
+            new discord.MessageEmbed()
+                .setTitle(`Both users come to a draw`)
+                .setDescription(`${client.users.cache.get(m.p2.userid)?.username} and ${client.users.cache.get(m.p1.userid)?.username}\n` +
+                    `both got a score of ${m.p2.votes}`)
+                .setColor("#d7be26")
+        );
+
+        u1.send(
+            new discord.MessageEmbed()
+                .setTitle(`Both users come to a draw`)
+                .setDescription(`${client.users.cache.get(m.p2.userid)?.username} and ${client.users.cache.get(m.p1.userid)?.username}\n` +
+                    `both got a score of ${m.p2.votes}`)
+                .setColor("#d7be26")
+        );
+
+        u2.send(
             new discord.MessageEmbed()
                 .setTitle(`Both users come to a draw`)
                 .setDescription(`${client.users.cache.get(m.p2.userid)?.username} and ${client.users.cache.get(m.p1.userid)?.username}\n` +

@@ -44,7 +44,7 @@ async function exhibition(message, client, args) {
     }
     let ex = await db_1.getExhibition();
     if (ex.cooldowns.some(x => x.user === message.author.id)) {
-        return message.reply("It hasn't been 1h yet");
+        return message.reply("It hasn't been 5 mins yet");
     }
     let m = message;
     const filter = (response) => {
@@ -197,7 +197,7 @@ async function deleteExhibitionchannels(client) {
         if (!ex.cooldowns[i]) {
             continue;
         }
-        if (Math.floor(Date.now() / 1000) - Math.floor(ex.cooldowns[i].time) >= 3600) {
+        if (Math.floor(Date.now() / 1000) - Math.floor(ex.cooldowns[i].time) >= 300) {
             try {
                 await us.send("You can start another exhibition match!");
             }
@@ -218,7 +218,7 @@ async function duelcheck(message) {
     }
     else if (ex.cooldowns.some(x => x.user === message.author.id)) {
         let i = ex.cooldowns.findIndex(x => x.user === message.author.id);
-        await message.reply(`Time till you can start another duel: ${await utils_1.toHHMMSS(ex.cooldowns[i].time, 1800)}`);
+        await message.reply(`Time till you can start another duel: ${await utils_1.toHHMMSS(ex.cooldowns[i].time, 300)}`);
     }
 }
 exports.duelcheck = duelcheck;
