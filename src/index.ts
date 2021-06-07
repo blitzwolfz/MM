@@ -882,7 +882,8 @@ client.on("message", async message => {
 
     // await message.channel.send({ embed:em.embeds[0]})
     // await message.channel.send({ embed:em2.embeds[0]})
-    message.channel.send(`${`Got 34 in total | UserID:629852963497705491`.match(/\d+/g)![1]}`)
+    // await dbTester()
+    // message.channel.send(`${`Got 34 in total | UserID:629852963497705491`.match(/\d+/g)![1]}`)
 
     // let emm = await resultadd(await (<Discord.TextChannel>client.channels.cache.get(message.channel.id)), client, [args[0], args[1]])
 

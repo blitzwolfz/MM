@@ -1,6 +1,7 @@
 import * as mongo from "mongodb";
 import { activematch, qualmatch, user, signups, matchlist, verificationform, quallist, cockratingInterface, modprofile, randomtempstruct, groupmatch, exhibition, configDB, reminder, duelprofile } from "./struct";
 export declare function connectToDB(): Promise<void>;
+export declare function dbTester(): Promise<void>;
 export declare function updater(coll: string, filter: object, update: object): Promise<void>;
 export declare function insertDoc(coll: string, upd: object): Promise<void>;
 export declare function getDoc(coll: string, id: string): Promise<any>;

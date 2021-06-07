@@ -564,7 +564,7 @@ async function duelrunning(client) {
             ex.activematches.splice(ii, 1);
             continue;
         }
-        if (Math.floor(Date.now() / 1000) - Math.floor(ch.createdTimestamp / 1000) > 3600) {
+        if (Math.floor(Date.now() / 1000) - Math.floor(ch.createdTimestamp / 1000) > 3600 && !db_1.getMatch(ex.activematches[ii])) {
             (await client.channels.cache.get(ex.activematches[ii])).send("Cum 2");
             await ch.delete();
             ex.activematches.splice(ii, 1);

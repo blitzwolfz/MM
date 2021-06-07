@@ -6,7 +6,7 @@ import { backwardsFilter, forwardsFilter } from "./utils";
 export async function duelLB(message: Message, client: Client, args: string[]) {
     let profiles = await getAllDuelProfiles(message.guild!.id)
 
-    let symbol: "wins" | "points" | "loss" | "votetally" | "ratio" = "wins"
+    let symbol: "wins" | "points" | "loss" | "votetally" | "ratio"| "all" = "wins"
     //@ts-ignore
     let page: number = typeof args[2] == "undefined" ? isNaN(parseInt(args[1])) ? 1 : parseInt(args[1]) : args[2];;
 
@@ -15,6 +15,7 @@ export async function duelLB(message: Message, client: Client, args: string[]) {
         case "r": symbol = "ratio"; break;
         case "l": symbol = "loss"; break;
         case "v": symbol = "votetally"; break;
+        case "a": symbol = "all"; break;
         default: symbol = "wins";
     }
 
@@ -38,7 +39,7 @@ export async function duelLB(message: Message, client: Client, args: string[]) {
 }
 
 async function makeProfileEmbed(page: number = 1, client: Client, profiles: duelprofile[],
-    symbol: "wins" | "points" | "loss" | "votetally" | "ratio", userid: string) {
+    symbol: "wins" | "points" | "loss" | "votetally" | "ratio" | "all", userid: string) {
 
     page = page < 1 ? 1 : page;
 
@@ -60,8 +61,17 @@ async function makeProfileEmbed(page: number = 1, client: Client, profiles: duel
         });
     }
 
+    if (symbol === "all") {
+
+        profiles.sort(function (a, b) {
+            return b.wins - a.wins
+        });
+    }
+
     else {
         profiles.sort(function (a, b) {
+            //Ez tricks yk yk
+            //@ts-ignore
             return b[symbol] - a[symbol]
         });
     }
@@ -77,6 +87,10 @@ async function makeProfileEmbed(page: number = 1, client: Client, profiles: duel
                 if (obj.wins + obj.loss === 0) mat = 0;
 
                 strr += "Win Ratio: " + `${mat}`
+            }
+
+            if (symbol === "all") {
+                strr += `Wins: ${obj.wins}\nLosses: ${obj.loss}\nTotal votes recieved: ${obj.votetally}\nPoints gained: ${obj.points}`
             }
 
             else {
@@ -120,6 +134,9 @@ async function makeProfileEmbed(page: number = 1, client: Client, profiles: duel
             break;
         case "votetally":
             strrr += `Total Votes Recieved.`;
+            break;
+        case "all":
+            strrr += `Wins but displaying all stats.`;
             break;
         default:
             strrr += `Wins.`;

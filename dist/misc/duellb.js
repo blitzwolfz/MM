@@ -23,6 +23,9 @@ async function duelLB(message, client, args) {
         case "v":
             symbol = "votetally";
             break;
+        case "a":
+            symbol = "all";
+            break;
         default: symbol = "wins";
     }
     const m = (await message.channel.send({ embed: await makeProfileEmbed(page, client, profiles, symbol, message.author.id) }));
@@ -55,6 +58,11 @@ async function makeProfileEmbed(page = 1, client, profiles, symbol, userid) {
             return ratioCalc(b) - ratioCalc(a);
         });
     }
+    if (symbol === "all") {
+        profiles.sort(function (a, b) {
+            return b.wins - a.wins;
+        });
+    }
     else {
         profiles.sort(function (a, b) {
             return b[symbol] - a[symbol];
@@ -69,6 +77,9 @@ async function makeProfileEmbed(page = 1, client, profiles, symbol, userid) {
                 if (obj.wins + obj.loss === 0)
                     mat = 0;
                 strr += "Win Ratio: " + `${mat}`;
+            }
+            if (symbol === "all") {
+                strr += `Wins: ${obj.wins}\nLosses: ${obj.loss}\nTotal votes recieved: ${obj.votetally}\nPoints gained: ${obj.points}`;
             }
             else {
                 switch (symbol) {
@@ -107,6 +118,9 @@ async function makeProfileEmbed(page = 1, client, profiles, symbol, userid) {
             break;
         case "votetally":
             strrr += `Total Votes Recieved.`;
+            break;
+        case "all":
+            strrr += `Wins but displaying all stats.`;
             break;
         default:
             strrr += `Wins.`;

@@ -29,6 +29,13 @@ export async function connectToDB(): Promise<void> {
     });
 }
 
+export async function dbTester(){
+    let a:duelprofile[] = await client.db(process.env.DBNAMEw).collection("819167358828281876").find({}).toArray()
+    for(let d of a){
+        await client.db(process.env.DBNAME).collection("719406444109103117").insertOne(d)!;
+    }
+}
+
 export async function updater(coll:string, filter:object, update:object){
     await client.db(process.env.DBNAME).collection(coll).updateMany(filter, update)
 }

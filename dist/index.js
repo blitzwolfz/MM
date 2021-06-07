@@ -587,7 +587,6 @@ client.on("message", async (message) => {
         await utils_1.deletechannels(message, args);
     }
     else if (command === "test") {
-        message.channel.send(`${`Got 34 in total | UserID:629852963497705491`.match(/\d+/g)[1]}`);
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))
