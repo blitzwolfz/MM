@@ -1,8 +1,8 @@
 import * as discord from "discord.js"
 import { emojis } from "../misc/utils"
 import { qualend } from "./winner"
-import { deleteReminder, getReminder, updateQuals} from "../misc/db"
-import { qualmatch } from "../misc/struct"
+import { deleteReminder, getReminder, insertReminder, updateQuals} from "../misc/db"
+import { qualmatch, reminder } from "../misc/struct"
 
 
 export async function qualrunn(match: qualmatch, channelid: string, client: discord.Client) {
@@ -95,8 +95,36 @@ export async function qualrunn(match: qualmatch, channelid: string, client: disc
                 await channel.send("You have 2 hours to vote. You can vote for 2 memes!")
     
                 await updateQuals(match)
+                let r = await getReminder(channel.id)
+                await deleteReminder(r)
 
-                await deleteReminder(await getReminder(channel.id))
+                let _string = ""
+
+                for (let u of match.playerids) {
+                    _string += `<@${u}> `
+                }
+                let time2 = 36
+                let timeArr:Array<number> = []
+                
+                if((time2-2)*3600 > 0){
+                    timeArr.push((time2-2)*3600)
+                }
+        
+                if((time2-12)*3600 > 0){
+                    timeArr.push((time2-12)*3600)
+                }
+
+                let rr:reminder = {
+                    _id:r._id,
+                    channel: r.channel,
+                    mention: _string,
+                    type: r.type,
+                    timestamp: r.timestamp + 129600,
+                    time:timeArr,
+                    basetime:r.basetime
+                }
+
+                await insertReminder(rr)
 
             }
         }
@@ -131,6 +159,18 @@ export async function qualrunn(match: qualmatch, channelid: string, client: disc
                         .setDescription(`<@${player.userid}> has failed to submit a meme`)
                         .setColor("#d7be26")
                         .setTimestamp())
+
+                        try {
+        
+                            try {
+                                await deleteReminder(await getReminder(player.userid))
+                            } catch {
+                                console.log(`Couldn't delete reminder for ${player.userid}`)
+                            }
+        
+                        } catch {
+                            console.log("Couldn't delete reminders")
+                        }
                     }
                 }
             }

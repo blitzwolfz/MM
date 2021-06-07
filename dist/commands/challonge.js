@@ -451,13 +451,13 @@ async function GroupSearch(message, args) {
     }
 }
 exports.GroupSearch = GroupSearch;
-async function declarequalwinner(message, client) {
-    var _a, _b;
+async function declarequalwinner(message, client, args) {
+    var _a, _b, _c, _d, _e;
     if (message.member.roles.cache.has('724818272922501190')
         || message.member.roles.cache.has('724818272922501190')
         || message.member.roles.cache.has('724832462286356590') || !message.member.roles.cache.has('719936221572235295')) {
         try {
-            let id = message.mentions.users.first().id;
+            let id = (((_c = (_b = (_a = message.mentions) === null || _a === void 0 ? void 0 : _a.users) === null || _b === void 0 ? void 0 : _b.first()) === null || _c === void 0 ? void 0 : _c.id) || args[0]);
             let match = await db_1.getMatchlist();
             if (match) {
                 if (match.users.includes(id)) {
@@ -468,7 +468,7 @@ async function declarequalwinner(message, client) {
                     await db_1.updateMatchlist(match);
                     db_1.updateProfile(id, "wins", 1);
                     db_1.updateProfile(id, "points", 25);
-                    await ((_a = message.mentions.users.first()) === null || _a === void 0 ? void 0 : _a.send("Congrats on winning your qualifer. Now get ready for the bracket portion"));
+                    await ((_d = message.mentions.users.first()) === null || _d === void 0 ? void 0 : _d.send("Congrats on winning your qualifer. Now get ready for the bracket portion"));
                     return message.reply("added user.");
                 }
             }
@@ -481,7 +481,7 @@ async function declarequalwinner(message, client) {
                 };
                 newmatch.users.push(id);
                 await db_1.insertMatchlist(newmatch);
-                await ((_b = message.mentions.users.first()) === null || _b === void 0 ? void 0 : _b.send("Congrats on winning your qualifer. Now get ready for the bracket portion"));
+                await ((_e = message.mentions.users.first()) === null || _e === void 0 ? void 0 : _e.send("Congrats on winning your qualifer. Now get ready for the bracket portion"));
                 return message.reply("added user.");
             }
         }

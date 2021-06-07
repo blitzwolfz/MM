@@ -338,6 +338,28 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
         await messageReaction.users.remove(user.id);
         await messageReaction.message.react('🗳️');
     }
+    if (messageReaction.emoji.name === '👌') {
+        if (user.client.guilds.cache
+            .get(messageReaction.message.guild.id)
+            .members.cache.get(user.id)
+            .roles.cache.has("719936221572235295")
+            === false) {
+            return;
+        }
+        console.log(messageReaction.message.embeds);
+        let c = await messageReaction.message.channel.fetch();
+        let em = (await c.messages.fetch(messageReaction.message.id)).embeds[0];
+        let iter = 0;
+        for (let f of em.fields) {
+            let key = `${f.value.match(/\d+/g)[1]}`;
+            await challonge_1.declarequalwinner(messageReaction.message, client, [key]);
+            iter += 1;
+            if (iter === 2) {
+                await messageReaction.remove();
+                return;
+            }
+        }
+    }
     if (!utils_1.emojis.includes(messageReaction.emoji.name))
         return;
     console.log(`a reaction is added to a message`);
@@ -565,15 +587,7 @@ client.on("message", async (message) => {
         await utils_1.deletechannels(message, args);
     }
     else if (command === "test") {
-        let e = new Discord.MessageEmbed()
-            .setTitle("Interested in more?")
-            .setDescription("Come join us in the " +
-            "In the Meme Royale Server.\n" +
-            "You can play more duels, and participate in our tournament\n" +
-            "and you could have a chance to win Cash Prizes.")
-            .setURL("https://discord.gg/GK3R5Vt3tz")
-            .setColor("#d7be26");
-        message.channel.send(e);
+        message.channel.send(`${`Got 34 in total | UserID:629852963497705491`.match(/\d+/g)[1]}`);
     }
     else if (command === "createqualgroup") {
         if (!message.member.roles.cache.has('719936221572235295'))
@@ -662,7 +676,7 @@ client.on("message", async (message) => {
     else if (command === "dqw" || command === "declarequalwinner") {
         if (!message.member.roles.cache.has('719936221572235295'))
             return message.reply("You don't have those premissions");
-        await challonge_1.declarequalwinner(message, client);
+        await challonge_1.declarequalwinner(message, client, args);
     }
     else if (command === "mdqw") {
         let match = await db_1.getMatchlist();

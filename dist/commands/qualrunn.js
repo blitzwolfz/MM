@@ -87,7 +87,30 @@ async function qualrunn(match, channelid, client) {
                 await channel.send(`<@&719936221572235295>`);
                 await channel.send("You have 2 hours to vote. You can vote for 2 memes!");
                 await db_1.updateQuals(match);
-                await db_1.deleteReminder(await db_1.getReminder(channel.id));
+                let r = await db_1.getReminder(channel.id);
+                await db_1.deleteReminder(r);
+                let _string = "";
+                for (let u of match.playerids) {
+                    _string += `<@${u}> `;
+                }
+                let time2 = 36;
+                let timeArr = [];
+                if ((time2 - 2) * 3600 > 0) {
+                    timeArr.push((time2 - 2) * 3600);
+                }
+                if ((time2 - 12) * 3600 > 0) {
+                    timeArr.push((time2 - 12) * 3600);
+                }
+                let rr = {
+                    _id: r._id,
+                    channel: r.channel,
+                    mention: _string,
+                    type: r.type,
+                    timestamp: r.timestamp + 129600,
+                    time: timeArr,
+                    basetime: r.basetime
+                };
+                await db_1.insertReminder(rr);
             }
         }
         else if (match.split) {
@@ -113,6 +136,17 @@ async function qualrunn(match, channelid, client) {
                             .setDescription(`<@${player.userid}> has failed to submit a meme`)
                             .setColor("#d7be26")
                             .setTimestamp());
+                        try {
+                            try {
+                                await db_1.deleteReminder(await db_1.getReminder(player.userid));
+                            }
+                            catch {
+                                console.log(`Couldn't delete reminder for ${player.userid}`);
+                            }
+                        }
+                        catch {
+                            console.log("Couldn't delete reminders");
+                        }
                     }
                 }
             }

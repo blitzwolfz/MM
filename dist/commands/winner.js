@@ -338,7 +338,7 @@ async function qualend(client, id) {
                     await channel.setTopic(message.id);
                 else if (t.length === 1) {
                     let emm = await utils_1.resultadd(channel, client, [channel.topic.split(" ")[0], message.id]);
-                    await channel.send({ embed: emm });
+                    await channel.send({ embed: emm }).then(m => m.react(`👌`));
                     return await (await client.channels.cache.get("722291182461386804"))
                         .send({ embed: emm });
                 }
@@ -362,7 +362,7 @@ async function qualend(client, id) {
                     channel: channel.id,
                     type: "match",
                     time: timeArr,
-                    timestamp: Math.floor(Date.now() / 1000) + Math.abs(time - 36),
+                    timestamp: Math.floor(Date.now() / 1000),
                     basetime: time2 * 3600
                 });
             }

@@ -530,14 +530,53 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
     await messageReaction.message.react('🗳️')
   }
 
+  if (messageReaction.emoji.name === '👌') {
+    if (user.client.guilds.cache
+      .get(messageReaction.message.guild!.id)!
+      .members.cache.get(user.id)!
+      .roles.cache.has("719936221572235295")
+      === false) {
+      return;
+    }
+    console.log(messageReaction.message.embeds)
+    let c = <Discord.TextChannel>await messageReaction.message.channel.fetch()
+    let em = (await c.messages.fetch(messageReaction.message.id)).embeds[0]!
+    let iter = 0
+    for (let f of em.fields) {
+      let key = `${f.value.match(/\d+/g)![1]}`
+      await declarequalwinner(messageReaction.message, client, [key])
+      iter += 1
+
+      if (iter === 2) {
+        await messageReaction.remove()
+        return;
+      }
+    }
+  }
+
+  // if (messageReaction.emoji.name === '🖖'){
+  //   if (user.client.guilds.cache
+  //     .get(messageReaction.message.guild!.id)!
+  //     .members.cache.get(user.id)!
+  //     .roles.cache.has("719936221572235295")
+  //     === false) {
+  //     return;
+  //   }
+  //   let category = await messageReaction.message.guild!.channels.cache.find(c => c.id === messageReaction.message.channel.id)?.parent?.name;
+  //   if(category?.toLowerCase() === "test"){
+  //     await startregularsplit(messageReaction.message, client, ["", "", ""])
+  //     await updateModProfile(user.id, "modactions", 1)
+  //     await updateModProfile(user.id, "matchesstarted", 1)
+  //     messageReaction.remove()
+  //   }
+
+  // }
+
   if (!emojis.includes(messageReaction.emoji.name)) return;
 
   console.log(`a reaction is added to a message`);
   //console.log(messageReaction, user)
   // let quals: qualmatch[] = await getQuals()
-
-
-
 
   if ((messageReaction.emoji.name === emojis[1] || messageReaction.emoji.name === emojis[0])
     && await getMatch(messageReaction.message.channel.id)) {
@@ -836,28 +875,19 @@ client.on("message", async message => {
   }
 
   else if (command === "test") {
-	
-    // let reminders = await getReminders();
+    // let c = (<Discord.TextChannel>client.channels.cache.get(args[3]))!
+    // let em = await c.messages.fetch(args[0])
+    // let em2 = await c.messages.fetch(args[0])
+    // console.log(em)
 
-    // for(let r of reminders){
-    //   if (r.type !== "match") continue;
-    //   r.time.unshift(r.basetime)
-    //   await updateReminder(r)
-    // }
+    // await message.channel.send({ embed:em.embeds[0]})
+    // await message.channel.send({ embed:em2.embeds[0]})
+    message.channel.send(`${`Got 34 in total | UserID:629852963497705491`.match(/\d+/g)![1]}`)
 
-    let e = new Discord.MessageEmbed()
-            .setTitle("Interested in more?")
-            .setDescription(
-              "Come join us in the "+
-              "In the Meme Royale Server.\n"+
-              "You can play more duels, and participate in our tournament\n"+
-              "and you could have a chance to win Cash Prizes."
-            )
-            .setURL("https://discord.gg/GK3R5Vt3tz")
-            .setColor("#d7be26")
+    // let emm = await resultadd(await (<Discord.TextChannel>client.channels.cache.get(message.channel.id)), client, [args[0], args[1]])
 
+    // await message.channel.send({ embed:emm })
 
-    message.channel.send(e)
   }
 
   else if (command === "createqualgroup") {
@@ -968,7 +998,7 @@ client.on("message", async message => {
   else if (command === "dqw" || command === "declarequalwinner") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
 
-    await declarequalwinner(message, client)
+    await declarequalwinner(message, client, args)
   }
 
   else if (command === "mdqw"){

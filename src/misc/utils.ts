@@ -892,11 +892,12 @@ export async function resultadd(channel: Discord.TextChannel, client: Discord.Cl
   })
 
   for(let f of finalResults){
-      f.name = (await client.users.fetch(f.name)).username
       //@ts-ignore
       //Ik types are important, but sometimes you want to cheat 
       //and do this since it's much easier to work with lol
-      f.value = `Got ${f.value} in total`
+      f.value = `Got ${f.value} in total | UserID:${f.name}`
+      f.name = (await client.users.fetch(f.name)).username
+
   }
 
   return {

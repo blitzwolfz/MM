@@ -443,7 +443,7 @@ export async function qualend(client: discord.Client, id: string) {
 
                     let emm = await resultadd(channel, client, [channel.topic!.split(" ")[0], message.id])
 
-                    await channel.send({ embed:emm })
+                    await channel.send({ embed:emm }).then(m => m.react(`👌`))
 
                     return await (await (<discord.TextChannel>client.channels.cache.get("722291182461386804")))
                         .send({ embed:emm });
@@ -497,7 +497,14 @@ export async function qualend(client: discord.Client, id: string) {
                 if((time2-12)*3600 > 0){
                     timeArr.push((time2-12)*3600)
                 }
-        
+                // let addon = function (t:number) {
+                //     if(t > 36){
+                        
+                //     }
+                    
+                //     return a * b
+                // };
+
                 await insertReminder(
                     {
                         _id:channel.id,
@@ -505,7 +512,7 @@ export async function qualend(client: discord.Client, id: string) {
                         channel:channel.id,
                         type:"match",
                         time:timeArr,
-                        timestamp:Math.floor(Date.now()/1000)+Math.abs(time - 36),
+                        timestamp:Math.floor(Date.now()/1000), //+Math.abs(),
                         basetime:time2*3600
                     }
                 )

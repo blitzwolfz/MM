@@ -534,8 +534,8 @@ async function resultadd(channel, client, ids) {
         return b.value - a.value;
     });
     for (let f of finalResults) {
+        f.value = `Got ${f.value} in total | UserID:${f.name}`;
         f.name = (await client.users.fetch(f.name)).username;
-        f.value = `Got ${f.value} in total`;
     }
     return {
         title: `Final Results for Group ${channel.name}`,

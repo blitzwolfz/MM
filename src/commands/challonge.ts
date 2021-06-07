@@ -689,7 +689,7 @@ export async function GroupSearch(message: Discord.Message, args: string[]) {
     }
 }
 
-export async function declarequalwinner(message: Discord.Message, client: Discord.Client) {
+export async function declarequalwinner(message: Discord.Message, client: Discord.Client, args:string[]) {
 
     if (message.member!.roles.cache.has('724818272922501190')
         || message.member!.roles.cache.has('724818272922501190')
@@ -697,7 +697,7 @@ export async function declarequalwinner(message: Discord.Message, client: Discor
 
         try {
 
-            let id = message.mentions!.users!.first()!.id
+            let id = (message.mentions?.users?.first()?.id || args[0])
             let match = await getMatchlist()
 
 
