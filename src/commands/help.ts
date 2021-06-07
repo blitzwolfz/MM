@@ -198,7 +198,7 @@ export const DuelHelp = {
             value: `Check out your duel statistics. Mention another user and you can see their stats.`,
         },
         {
-            name: '`!duel lb <points | ratio | loss | votes>`',
+            name: '`!duel lb <points | ratio | loss | votes | all>`',
             value: `See how you rank with other duelist in your server. If no flag is passed, the lb sorts by wins.`,
         },
         {
