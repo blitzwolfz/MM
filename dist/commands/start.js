@@ -544,7 +544,7 @@ async function duelrunning(client) {
                 && m.split === false && m.votingperiod === false) {
                 await exhibitionVotingLogic(client, m);
             }
-            if (m.votingperiod === true && (Math.floor(Date.now() / 1000) - m.votetime > 7200)) {
+            if (m.votingperiod === true && (Math.floor(Date.now() / 1000) - m.votetime > 2400)) {
                 await exhibitionResults(client, m);
             }
         }
