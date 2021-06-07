@@ -948,7 +948,7 @@ client.on("message", async message => {
     }
 
     else if (args[0].toLowerCase() === "stats") {
-      args = args.slice(0, 1)
+      //args = args.slice(0, 1)
       await duelstats(message, client, args)
     }
 

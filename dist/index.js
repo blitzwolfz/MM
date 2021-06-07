@@ -637,7 +637,6 @@ client.on("message", async (message) => {
             await duellb_1.duelLB(message, client, args);
         }
         else if (args[0].toLowerCase() === "stats") {
-            args = args.slice(0, 1);
             await duellb_1.duelstats(message, client, args);
         }
         else if (args[0].toLowerCase() === "create") {
