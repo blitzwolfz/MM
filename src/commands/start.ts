@@ -912,10 +912,10 @@ async function exhibitionResults(client: discord.Client, m: activematch) {
 
     if (m.p1.votes > m.p2.votes) {
         d1.wins += 1
-        d1.votetally = m.p1.votes
+        d1.votetally += m.p1.votes
         d1.points += (25 + (m.p1.votes * 5))
         d2.loss += 1
-        d2.votetally = m.p2.votes
+        d2.votetally += m.p2.votes
         d2.points += (m.p2.votes * 5) 
 
 
@@ -946,10 +946,10 @@ async function exhibitionResults(client: discord.Client, m: activematch) {
 
     else if (m.p1.votes < m.p2.votes) {
         d1.loss += 1
-        d1.votetally = m.p1.votes
+        d1.votetally += m.p1.votes
         d1.points += (m.p1.votes * 5) 
         d2.wins += 1
-        d2.votetally = m.p2.votes
+        d2.votetally += m.p2.votes
         d2.points += (25 + (m.p2.votes * 5))
 
         channel.send(
@@ -978,8 +978,8 @@ async function exhibitionResults(client: discord.Client, m: activematch) {
     }
 
     else if (m.p1.votes === m.p2.votes) {
-        d1.votetally = m.p1.votes
-        d2.votetally = m.p2.votes
+        d1.votetally += m.p1.votes
+        d2.votetally += m.p2.votes
         d1.points += (m.p1.votes * 5)
         d2.points += (m.p2.votes * 5)  
         channel.send(
@@ -1312,6 +1312,8 @@ export async function startregularsplit(message: discord.Message, client: discor
     //let users: string[] = []
     var args: Array<string> = message.content.slice(prefix.length).trim().split(/ +/g)
 
+    // if(rargs) args = rargs;
+
     if (args.length < 3) {
         return message.reply("invalid response. Command is `!start @user1 @user2 template link`\n or `!start @user1 @user2 theme description`")
     }
@@ -1325,8 +1327,8 @@ export async function startregularsplit(message: discord.Message, client: discor
     //     }
     // }
 
-    let user1 = message.mentions.users.array()[0]
-    let user2 = message.mentions.users.array()[1]
+    let user1 = (message.mentions.users.array()[0])
+    let user2 = (message.mentions.users.array()[1])
 
     createAtUsermatch(user1)
     createAtUsermatch(user2)

@@ -615,10 +615,10 @@ async function exhibitionResults(client, m) {
     }
     if (m.p1.votes > m.p2.votes) {
         d1.wins += 1;
-        d1.votetally = m.p1.votes;
+        d1.votetally += m.p1.votes;
         d1.points += (25 + (m.p1.votes * 5));
         d2.loss += 1;
-        d2.votetally = m.p2.votes;
+        d2.votetally += m.p2.votes;
         d2.points += (m.p2.votes * 5);
         channel.send(new discord.MessageEmbed()
             .setTitle(`${(_g = client.users.cache.get(m.p1.userid)) === null || _g === void 0 ? void 0 : _g.username} has won!`)
@@ -638,10 +638,10 @@ async function exhibitionResults(client, m) {
     }
     else if (m.p1.votes < m.p2.votes) {
         d1.loss += 1;
-        d1.votetally = m.p1.votes;
+        d1.votetally += m.p1.votes;
         d1.points += (m.p1.votes * 5);
         d2.wins += 1;
-        d2.votetally = m.p2.votes;
+        d2.votetally += m.p2.votes;
         d2.points += (25 + (m.p2.votes * 5));
         channel.send(new discord.MessageEmbed()
             .setTitle(`${(_m = client.users.cache.get(m.p2.userid)) === null || _m === void 0 ? void 0 : _m.username} has won!`)
@@ -660,8 +660,8 @@ async function exhibitionResults(client, m) {
         }
     }
     else if (m.p1.votes === m.p2.votes) {
-        d1.votetally = m.p1.votes;
-        d2.votetally = m.p2.votes;
+        d1.votetally += m.p1.votes;
+        d2.votetally += m.p2.votes;
         d1.points += (m.p1.votes * 5);
         d2.points += (m.p2.votes * 5);
         channel.send(new discord.MessageEmbed()
@@ -894,8 +894,8 @@ async function startregularsplit(message, client) {
     if (args.length < 3) {
         return message.reply("invalid response. Command is `!start @user1 @user2 template link`\n or `!start @user1 @user2 theme description`");
     }
-    let user1 = message.mentions.users.array()[0];
-    let user2 = message.mentions.users.array()[1];
+    let user1 = (message.mentions.users.array()[0]);
+    let user2 = (message.mentions.users.array()[1]);
     user_1.createAtUsermatch(user1);
     user_1.createAtUsermatch(user2);
     let newmatch = {
