@@ -544,7 +544,7 @@ async function duelrunning(client) {
                 && m.split === false && m.votingperiod === false) {
                 await exhibitionVotingLogic(client, m);
             }
-            if (m.votingperiod === true && (Math.floor(Date.now() / 1000) - m.votetime > 2400)) {
+            if (m.votingperiod === true && (Math.floor(Date.now() / 1000) - m.votetime > 7200)) {
                 await exhibitionResults(client, m);
             }
         }
@@ -564,7 +564,7 @@ async function duelrunning(client) {
             ex.activematches.splice(ii, 1);
             continue;
         }
-        if (Math.floor(Date.now() / 1000) - Math.floor(ch.createdTimestamp / 1000) > 7200) {
+        if (Math.floor(Date.now() / 1000) - Math.floor(ch.createdTimestamp / 1000) > 4800) {
             (await client.channels.cache.get(ex.activematches[ii])).send("Cum 2");
             await ch.delete();
             ex.activematches.splice(ii, 1);
