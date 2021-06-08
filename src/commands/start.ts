@@ -814,7 +814,7 @@ export async function duelrunning(client: discord.Client) {
             if (m.votingperiod === true && (Math.floor(Date.now() / 1000) - m.votetime > 7200) 
             || m.votingperiod === true && (m.p1.votes >= 5 || m.p2.votes >= 5)) {
                 await exhibitionResults(client, m)
-            }1623117790
+            }
             
         } catch (error) {
             console.log(error.message)

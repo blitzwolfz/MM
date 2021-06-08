@@ -532,7 +532,6 @@ async function duelrunning(client) {
                 || m.votingperiod === true && (m.p1.votes >= 5 || m.p2.votes >= 5)) {
                 await exhibitionResults(client, m);
             }
-            1623117790;
         }
         catch (error) {
             console.log(error.message);
