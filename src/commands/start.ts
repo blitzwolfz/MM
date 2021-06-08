@@ -882,6 +882,7 @@ export async function duelrunning(client: discord.Client) {
 }
 
 async function exhibitionResults(client: discord.Client, m: activematch) {
+    console.log(m)
     let channel = <discord.TextChannel>await client.channels.cache.get(m._id)
     let guild = await client.guilds.cache.get((<discord.TextChannel>await client.channels.cache.get(m._id)).guild.id)!
     let ex = await getExhibition()

@@ -574,6 +574,7 @@ async function duelrunning(client) {
 exports.duelrunning = duelrunning;
 async function exhibitionResults(client, m) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9;
+    console.log(m);
     let channel = await client.channels.cache.get(m._id);
     let guild = await client.guilds.cache.get((await client.channels.cache.get(m._id)).guild.id);
     let ex = await db_1.getExhibition();
