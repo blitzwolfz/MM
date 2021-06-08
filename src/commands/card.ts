@@ -49,7 +49,7 @@ export async function vs(channelid: Discord.TextChannel, client: Discord.Client,
 export async function winner(client: Discord.Client, userid: string){
 	let user = await client.users.fetch(userid)
 	const avatar = await Canvas.loadImage(user.displayAvatarURL({ format: 'png', size: 512}));
-	//console.log(avatar.data)
+	
 
     const canvas = Canvas.createCanvas(1095, 597);
 	const ctx = canvas.getContext('2d');
@@ -85,7 +85,7 @@ export async function winner(client: Discord.Client, userid: string){
 export async function grandwinner(client: Discord.Client, userid: string){
 	let user = await client.users.fetch(userid)
 	const avatar = await Canvas.loadImage(user.displayAvatarURL({ format: 'png', size: 512}));
-	//console.log(avatar.data)
+	
 
     const canvas = Canvas.createCanvas(1032, 648);
 	const ctx = canvas.getContext('2d');
@@ -151,9 +151,9 @@ export async function grandwinner(client: Discord.Client, userid: string){
 
     
     
-//     // console.log(args)
+//     
 
-//     // console.log(users)
+//     
 //     let user1 = (await client.users.fetch(users[0]))
 //     let user2 = (await client.users.fetch(users[1]))
 
