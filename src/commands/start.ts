@@ -892,6 +892,13 @@ async function exhibitionResults(client: discord.Client, m: activematch) {
     let d2 = await getDuelProfile(m.p2.userid, guild.id)
     let u1 = await client.users.fetch(d1._id)
     let u2 = await client.users.fetch(d1._id)
+    console.log(channel)
+    console.log(guild)
+    console.log(ex)
+    console.log(d1)
+    console.log(d2)
+    console.log(u1)
+    console.log(u2)
 
     if(m.p1.memedone === true && m.p2.memedone === false || m.p1.memedone === false && m.p2.memedone === true){
         if(m.p1.memedone){
