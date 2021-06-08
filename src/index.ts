@@ -172,7 +172,7 @@ client.on('ready', async () => {
     
     await duelrunning(client).catch((error) => {
       console.log("it's in duel running");
-      console.log(error.message)
+      //console.log(error.message)
       console.log(error.stack)
     });
     

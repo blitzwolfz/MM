@@ -953,7 +953,8 @@ async function exhibitionResults(client: discord.Client, m: activematch) {
             await winner(client, m.p1.userid)
         )
 
-            await (<discord.TextChannel>client.channels.cache.get((await guild.channels.cache.find(x => x.name === "winning-duel-memes")!.id))).send(
+        try {
+            await (<discord.TextChannel>client.channels.cache.get((await guild.channels.cache.find(x => x.name.toLowerCase() === "winning-duel-memes")!.id))).send(
                 new discord.MessageEmbed()
                 .setColor("#d7be26")
                 .setImage(m.p1.memelink)
@@ -961,6 +962,10 @@ async function exhibitionResults(client: discord.Client, m: activematch) {
                 `by a score of ${m.p1.votes} to ${m.p2.votes} with Meme 1`)
                 .setFooter(dateBuilder())
             )
+        } catch (error) {
+            console.log(error.message)
+            console.log("No winning duel channel")
+        }
     }
 
     else if (m.p1.votes < m.p2.votes) {
@@ -1002,15 +1007,20 @@ async function exhibitionResults(client: discord.Client, m: activematch) {
         u2.send(
             await winner(client, m.p2.userid)
         )
-        
-        await (<discord.TextChannel>client.channels.cache.get((await guild.channels.cache.find(x => x.name === "winning-duel-memes")!.id))).send(
-            new discord.MessageEmbed()
-            .setColor("#d7be26")
-            .setImage(m.p2.memelink)
-            .setDescription(`${client.users.cache.get(m.p2.userid)?.username} beat ${client.users.cache.get(m.p1.userid)?.username}\n` +
-            `by a score of ${m.p2.votes} to ${m.p1.votes} with Meme 2`)
-            .setFooter(dateBuilder())
-        )
+
+        try {
+            await (<discord.TextChannel>client.channels.cache.get((await guild.channels.cache.find(x => x.name.toLowerCase() === "winning-duel-memes")!.id))).send(
+                new discord.MessageEmbed()
+                .setColor("#d7be26")
+                .setImage(m.p2.memelink)
+                .setDescription(`${client.users.cache.get(m.p2.userid)?.username} beat ${client.users.cache.get(m.p1.userid)?.username}\n` +
+                `by a score of ${m.p2.votes} to ${m.p1.votes} with Meme 2`)
+                .setFooter(dateBuilder())
+            )
+        } catch (error) {
+            console.log(error.message)
+            console.log("No winning duel channel")
+        }
     }
 
     else if (m.p1.votes === m.p2.votes) {

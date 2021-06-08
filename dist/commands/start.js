@@ -621,12 +621,18 @@ async function exhibitionResults(client, m) {
             .setColor("#d7be26"));
         channel.send(await card_1.winner(client, m.p1.userid));
         u1.send(await card_1.winner(client, m.p1.userid));
-        await client.channels.cache.get((await guild.channels.cache.find(x => x.name === "winning-duel-memes").id)).send(new discord.MessageEmbed()
-            .setColor("#d7be26")
-            .setImage(m.p1.memelink)
-            .setDescription(`${(_r = client.users.cache.get(m.p1.userid)) === null || _r === void 0 ? void 0 : _r.username} beat ${(_s = client.users.cache.get(m.p2.userid)) === null || _s === void 0 ? void 0 : _s.username}\n` +
-            `by a score of ${m.p1.votes} to ${m.p2.votes} with Meme 1`)
-            .setFooter(utils_1.dateBuilder()));
+        try {
+            await client.channels.cache.get((await guild.channels.cache.find(x => x.name.toLowerCase() === "winning-duel-memes").id)).send(new discord.MessageEmbed()
+                .setColor("#d7be26")
+                .setImage(m.p1.memelink)
+                .setDescription(`${(_r = client.users.cache.get(m.p1.userid)) === null || _r === void 0 ? void 0 : _r.username} beat ${(_s = client.users.cache.get(m.p2.userid)) === null || _s === void 0 ? void 0 : _s.username}\n` +
+                `by a score of ${m.p1.votes} to ${m.p2.votes} with Meme 1`)
+                .setFooter(utils_1.dateBuilder()));
+        }
+        catch (error) {
+            console.log(error.message);
+            console.log("No winning duel channel");
+        }
     }
     else if (m.p1.votes < m.p2.votes) {
         d1.loss += 1;
@@ -652,12 +658,18 @@ async function exhibitionResults(client, m) {
             .setColor("#d7be26"));
         channel.send(await card_1.winner(client, m.p2.userid));
         u2.send(await card_1.winner(client, m.p2.userid));
-        await client.channels.cache.get((await guild.channels.cache.find(x => x.name === "winning-duel-memes").id)).send(new discord.MessageEmbed()
-            .setColor("#d7be26")
-            .setImage(m.p2.memelink)
-            .setDescription(`${(_2 = client.users.cache.get(m.p2.userid)) === null || _2 === void 0 ? void 0 : _2.username} beat ${(_3 = client.users.cache.get(m.p1.userid)) === null || _3 === void 0 ? void 0 : _3.username}\n` +
-            `by a score of ${m.p2.votes} to ${m.p1.votes} with Meme 2`)
-            .setFooter(utils_1.dateBuilder()));
+        try {
+            await client.channels.cache.get((await guild.channels.cache.find(x => x.name.toLowerCase() === "winning-duel-memes").id)).send(new discord.MessageEmbed()
+                .setColor("#d7be26")
+                .setImage(m.p2.memelink)
+                .setDescription(`${(_2 = client.users.cache.get(m.p2.userid)) === null || _2 === void 0 ? void 0 : _2.username} beat ${(_3 = client.users.cache.get(m.p1.userid)) === null || _3 === void 0 ? void 0 : _3.username}\n` +
+                `by a score of ${m.p2.votes} to ${m.p1.votes} with Meme 2`)
+                .setFooter(utils_1.dateBuilder()));
+        }
+        catch (error) {
+            console.log(error.message);
+            console.log("No winning duel channel");
+        }
     }
     else if (m.p1.votes === m.p2.votes) {
         d1.votetally += m.p1.votes;

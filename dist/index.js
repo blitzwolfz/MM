@@ -89,7 +89,6 @@ client.on('ready', async () => {
     setInterval(async function () {
         await start_1.duelrunning(client).catch((error) => {
             console.log("it's in duel running");
-            console.log(error.message);
             console.log(error.stack);
         });
     }, 15000);
