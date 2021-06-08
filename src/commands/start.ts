@@ -884,10 +884,11 @@ export async function duelrunning(client: discord.Client) {
 }
 
 async function exhibitionResults(client: discord.Client, m: activematch) {
-    console.log("GGG")
-    let ex = await getExhibition()
     let channel = <discord.TextChannel>await client.channels.cache.get(m._id)
     let guild = await client.guilds.cache.get((<discord.TextChannel>await client.channels.cache.get(m._id)).guild.id)!
+    let ex = await getExhibition()
+    ex.activematches.push(channel.id)
+    await updateExhibition(ex)
     let d1 = await getDuelProfile(m.p1.userid, guild.id)
     let d2 = await getDuelProfile(m.p2.userid, guild.id)
     let u1 = await client.users.fetch(d1._id)
@@ -1059,9 +1060,6 @@ async function exhibitionResults(client: discord.Client, m: activematch) {
     
         await channel.send(e)
     }
-
-    ex.activematches.push(channel.id)
-    await updateExhibition(ex)
 
     await updateDuelProfile(d1._id, d1, guild.id)
     await updateDuelProfile(d2._id, d2, guild.id)
