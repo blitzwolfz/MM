@@ -547,7 +547,7 @@ async function duelrunning(client) {
             ex.activematches.splice(ii, 1);
             continue;
         }
-        if (Math.floor(Date.now() / 1000) - Math.floor(ch.createdTimestamp / 1000) > 1800) {
+        if (Math.floor(Date.now() / 1000) - Math.floor(ch.createdTimestamp / 1000) > 4500) {
             (await client.channels.cache.get(ex.activematches[ii])).send("Cum 2");
             await ch.delete();
             ex.activematches.splice(ii, 1);
@@ -580,9 +580,6 @@ async function exhibitionResults(client, m) {
     let d2 = await db_1.getDuelProfile(m.p2.userid, guild.id);
     let u1 = await client.users.fetch(d1._id);
     let u2 = await client.users.fetch(d2._id);
-    let ex = await db_1.getExhibition();
-    ex.activematches.push(m._id);
-    await db_1.updateExhibition(ex);
     if (m.p1.memedone === true && m.p2.memedone === false || m.p1.memedone === false && m.p2.memedone === true) {
         if (m.p1.memedone) {
             channel.send(new discord.MessageEmbed()
