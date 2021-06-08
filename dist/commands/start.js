@@ -545,7 +545,7 @@ async function duelrunning(client) {
                 await exhibitionVotingLogic(client, m);
             }
             if (m.votingperiod === true && (Math.floor(Date.now() / 1000) - m.votetime > 6300)
-                || (m.p1.votes >= 5 || m.p2.votes >= 5)) {
+                || m.votingperiod === true && (m.p1.votes >= 5 || m.p2.votes >= 5)) {
                 await exhibitionResults(client, m);
             }
         }
@@ -615,7 +615,6 @@ async function exhibitionResults(client, m) {
                 .setDescription(`${(_e = client.users.cache.get(m.p2.userid)) === null || _e === void 0 ? void 0 : _e.username} beat ${(_f = client.users.cache.get(m.p1.userid)) === null || _f === void 0 ? void 0 : _f.username}`)
                 .setColor("#d7be26"));
         }
-        return;
     }
     if (m.p1.votes > m.p2.votes) {
         d1.wins += 1;

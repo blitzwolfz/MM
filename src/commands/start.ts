@@ -814,7 +814,7 @@ export async function duelrunning(client: discord.Client) {
             }
 
             if (m.votingperiod === true && (Math.floor(Date.now() / 1000) - m.votetime > 6300) 
-            || (m.p1.votes >= 5 || m.p2.votes >= 5)) {
+            || m.votingperiod === true && (m.p1.votes >= 5 || m.p2.votes >= 5)) {
                 await exhibitionResults(client, m)
             }
             
@@ -911,7 +911,6 @@ async function exhibitionResults(client: discord.Client, m: activematch) {
                     .setColor("#d7be26")
             );
         }
-        return;
     }
 
     if (m.p1.votes > m.p2.votes) {
