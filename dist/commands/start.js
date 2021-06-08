@@ -125,7 +125,6 @@ async function start(message, client) {
         await randomtemp_1.RandomTemplateFunc(message, client, message.channel.id, false);
         let rantemp = await db_1.gettempStruct(message.channel.id);
         rantemp.time = rantemp.time - 2.5;
-        console.log(rantemp);
         while (rantemp.found === false) {
             if (Math.floor(Date.now() / 1000) - rantemp.time > 120) {
                 await db_1.deletetempStruct(rantemp._id);
@@ -169,7 +168,6 @@ async function startqual(message, client) {
     let x = 0;
     let plyerids = [];
     let votearray = [];
-    console.log(args);
     if (args.length < 4) {
         return message.reply("Invalid response. Command is `!startqual @user1 @user2 @user3 @user4 <@user5 @user6> template link`\n or `!startqual @user1 @user2 theme description`");
     }
@@ -233,10 +231,8 @@ exports.startqual = startqual;
 async function startmodqual(message, client) {
     let users = [];
     var args = message.content.slice(prefix.length).trim().split(/ +/g);
-    let x = 0;
     let plyerids = [];
     let votearray = [];
-    console.log(args);
     if (args.length < 4) {
         return message.reply("invalid response. Command is `!splitqual @user1 @user2 @user3 @user4 <@user5 @user6> template link`\n or `!splitqual @user1 @user2 @user3 @user4 <@user5 @user6> theme description`");
     }
@@ -254,10 +250,8 @@ async function startmodqual(message, client) {
             users.push(player);
             plyerids.push(userid);
             votearray.push([]);
-            x += i;
         }
     }
-    console.log(x);
     for (const u of users) {
         user_1.createAtUsermatch(await client.users.fetch(u.userid));
     }
@@ -279,7 +273,6 @@ async function startmodqual(message, client) {
         await randomtemp_1.RandomTemplateFunc(message, client, message.channel.id, false);
         let rantemp = await db_1.gettempStruct(message.channel.id);
         rantemp.time = rantemp.time - 2.5;
-        console.log(rantemp);
         while (rantemp.found === false) {
             if (Math.floor(Date.now() / 1000) - rantemp.time > 120) {
                 await db_1.deletetempStruct(rantemp._id);
@@ -328,7 +321,6 @@ async function startmodqual(message, client) {
     await message.channel.send({ embed }).then(async (message) => {
         let emmojis = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫'];
         for (let i = 0; i < users.length; i++) {
-            console.log(emmojis[i]);
             await message.react(emmojis[i]);
         }
     });
@@ -340,13 +332,9 @@ async function running(client) {
     for (const match of matches) {
         if (match.exhibition === true)
             continue;
-        console.log(Math.floor(Date.now() / 1000) - match.p1.time, "time");
-        console.log(Math.floor(Date.now() / 1000) - match.p1.time <= 1260 && Math.floor(Date.now() / 1000) - match.p1.time >= 1200);
         let channelid = client.channels.cache.get(match.channelid);
         let user1 = (await client.users.fetch(match.p1.userid));
         let user2 = (await client.users.fetch(match.p2.userid));
-        console.log(user1.id);
-        console.log(user2.id);
         if (match.votingperiod === false) {
             if (!(match.split) && ((Math.floor(Date.now() / 1000) - match.p2.time > 3600) && match.p2.memedone === false)
                 && ((Math.floor(Date.now() / 1000) - match.p1.time > 3600) && match.p1.memedone === false)) {
@@ -409,7 +397,6 @@ async function running(client) {
             }
             else if ((Math.floor(Date.now() / 1000) - match.p2.time > 3600)
                 && match.p2.memedone === false && match.p2.donesplit) {
-                console.log(Date.now() - match.p2.time);
                 user2.send("You have failed to submit your meme, your opponent  is the winner.");
                 let embed = new discord.MessageEmbed()
                     .setTitle(`Match between ${user1.username} and ${user2.username}`)
@@ -463,7 +450,6 @@ async function running(client) {
                     .setImage(match.p1.memelink)
                     .setColor("#d7be26")
                     .setTimestamp();
-                console.log("Player 1 embed done");
                 let embed2 = new discord.MessageEmbed()
                     .setDescription("Player 2")
                     .setImage(match.p2.memelink)
@@ -522,14 +508,12 @@ async function running(client) {
 exports.running = running;
 async function duelrunning(client) {
     var _a, _b, _c, _d;
-    console.log("FFF");
     let matches = await db_1.getActive();
     var ex = await db_1.getExhibition();
     for (let m of matches) {
         try {
             if (m.exhibition === false)
                 continue;
-            console.log(m._id);
             if (m.p1.donesplit === false && m.p1.memedone === false && (Math.floor(Date.now()) / 1000 - m.p1.time > 1800) ||
                 m.p2.donesplit === false && m.p2.memedone === false && (Math.floor(Date.now()) / 1000 - m.p2.time > 1800)) {
                 let winner = (m.p1.memedone ? `${(_a = client.users.cache.get(m.p1.userid)) === null || _a === void 0 ? void 0 : _a.username}` : `${(_b = client.users.cache.get(m.p2.userid)) === null || _b === void 0 ? void 0 : _b.username}`);
@@ -556,13 +540,11 @@ async function duelrunning(client) {
     }
     for (let ii = 0; ii < ex.activematches.length; ii++) {
         if (await client.channels.cache.get(ex.activematches[ii]) === undefined) {
-            console.log("Cum 3");
             ex.activematches.splice(ii, 1);
             continue;
         }
         let ch = await client.channels.cache.get(ex.activematches[ii]);
         if (!ch || ch === undefined) {
-            console.log("Cum 3");
             ex.activematches.splice(ii, 1);
             continue;
         }
@@ -583,14 +565,12 @@ async function duelrunning(client) {
                 await us.send("You can start another exhibition match!");
             }
             catch {
-                console.log("Could not dm user that cooldown is over");
             }
             ex.cooldowns.splice(i, 1);
             i++;
         }
     }
     await db_1.updateExhibition(ex);
-    console.log("FFF2");
 }
 exports.duelrunning = duelrunning;
 async function exhibitionResults(client, m) {
@@ -701,7 +681,6 @@ async function exhibitionResults(client, m) {
             `both got a score of ${m.p2.votes}`)
             .setColor("#d7be26"));
     }
-    console.log("GGG2");
     if (guild.name.toLowerCase() !== "MemeRoyale".toLowerCase()) {
         let e = new discord.MessageEmbed()
             .setTitle("Interested in more?")
@@ -718,10 +697,8 @@ async function exhibitionResults(client, m) {
     return await db_1.deleteActive(m);
 }
 async function exhibitionVotingLogic(client, m) {
-    console.log("HHH");
     let channel = client.channels.cache.get(m._id);
     let guild = await client.guilds.cache.get((await client.channels.cache.get(m._id)).guild.id);
-    console.log(m._id);
     if (Math.floor(Math.random() * (5 - 1) + 1) % 2 === 1) {
         let temp = m.p1;
         m.p1 = m.p2;
@@ -768,7 +745,6 @@ async function exhibitionVotingLogic(client, m) {
     m.votingperiod = true;
     m.votetime = ((Math.floor(Date.now() / 1000)) - 6300);
     await db_1.updateActive(m);
-    console.log("HHH2");
 }
 async function qualrunning(client) {
     let qualmatches = await db_1.getQuals();
@@ -784,7 +760,6 @@ async function splitqual(client, message, ...userid) {
         let channelid = client.channels.cache.get(match.channelid);
         if (match.channelid === message.channel.id) {
             for (let u of match.players) {
-                console.log(u);
                 if (u.userid === user.id && u.memedone === false && u.split === false) {
                     u.time = Math.floor(Date.now() / 1000);
                     await channelid.send(new discord.MessageEmbed()
@@ -1014,7 +989,6 @@ async function startregularsplit(message, client) {
         await randomtemp_1.RandomTemplateFunc(message, client, message.channel.id, false);
         let rantemp = await db_1.gettempStruct(message.channel.id);
         rantemp.time = rantemp.time - 2.5;
-        console.log(rantemp);
         while (rantemp.found === false) {
             if (Math.floor(Date.now() / 1000) - rantemp.time > 120) {
                 await db_1.deletetempStruct(rantemp._id);
@@ -1129,7 +1103,6 @@ async function reload(message, client) {
         }
         else if ((Math.floor(Date.now() / 1000) - match.p2.time > 3600)
             && match.p2.memedone === false && match.p2.donesplit) {
-            console.log(Date.now() - match.p2.time);
             user2.send("You have failed to submit your meme, your opponent  is the winner.");
             let embed = new discord.MessageEmbed()
                 .setTitle(`Match between ${user1.username} and ${user2.username}`)
@@ -1170,7 +1143,6 @@ async function reload(message, client) {
                 .setImage(match.p1.memelink)
                 .setColor("#d7be26")
                 .setTimestamp();
-            console.log("Player 1 embed done");
             let embed2 = new discord.MessageEmbed()
                 .setDescription("Player 2")
                 .setImage(match.p2.memelink)

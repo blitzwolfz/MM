@@ -29,12 +29,9 @@ require("dotenv").config();
 async function end(client, id) {
     let match = await db_1.getMatch(id);
     await db_1.deleteActive(match);
-    console.log(match);
     let channelid = client.channels.cache.get(match.channelid);
     let user1 = (await client.users.fetch(match.p1.userid));
     let user2 = (await client.users.fetch(match.p2.userid));
-    console.log(Math.floor(Date.now() / 1000) - match.votetime);
-    console.log((Math.floor(Date.now() / 1000) - match.votetime) >= 35);
     if ((Math.floor(Date.now() / 1000) - match.p1.time > 1800) && match.p1.memedone === false) {
         user1.send("You have failed to submit your meme, your opponet is the winner.");
         let embed = new discord.MessageEmbed()
@@ -55,7 +52,6 @@ async function end(client, id) {
         }
     }
     else if ((Math.floor(Date.now() / 1000) - match.p2.time > 1800) && match.p2.memedone === false) {
-        console.log(Date.now() - match.p2.time);
         user2.send("You have failed to submit your meme, your opponet is the winner.");
         let embed = new discord.MessageEmbed()
             .setTitle(`Match between ${user1.username} and ${user2.username}`)
@@ -200,7 +196,6 @@ async function end(client, id) {
         await db_1.deleteReminder(await db_1.getReminder(match.p2.userid));
     }
     catch {
-        console.log("fuck");
     }
     return;
 }
@@ -217,7 +212,6 @@ async function qualend(client, id) {
         await db_1.deleteReminder(await db_1.getReminder(channel.id));
     }
     catch {
-        console.log("Reminder has already been deleted");
     }
     if (match.votingperiod) {
         if (match.playersdone.length <= 2 && match.playersdone.length >= 1) {
@@ -317,7 +311,6 @@ async function qualend(client, id) {
                 await db_1.deleteReminder(await db_1.getReminder(match._id));
             }
             catch {
-                console.log("fuck");
             }
             channel.send({
                 embed: {
@@ -329,7 +322,6 @@ async function qualend(client, id) {
                 }
             }).then(async (message) => {
                 var _a;
-                console.log("This is msg id:", message);
                 let t = (_a = channel.topic) === null || _a === void 0 ? void 0 : _a.split(" ");
                 if (!t) {
                     await channel.setTopic(message.id);
@@ -374,7 +366,6 @@ async function qualend(client, id) {
             await db_1.deleteReminder(await db_1.getReminder(match._id));
         }
         catch {
-            console.log("fuck");
         }
         return channel.send({
             embed: {
@@ -394,7 +385,6 @@ async function cancelmatch(message) {
             await db_1.deleteReminder(await db_1.getReminder(message.channel.id));
         }
         catch (error) {
-            console.log("");
         }
         return await message.reply("this match has been cancelled");
     }
@@ -404,7 +394,6 @@ async function cancelmatch(message) {
             await db_1.deleteReminder(await db_1.getReminder(message.channel.id));
         }
         catch (error) {
-            console.log("");
         }
         return await message.reply("this qualifier has been cancelled");
     }

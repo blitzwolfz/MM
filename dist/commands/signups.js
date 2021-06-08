@@ -98,7 +98,6 @@ async function removesignup(message) {
     }
     else {
         signup.users.splice(signup.users.indexOf(message.author.id), 1);
-        console.log(signup.users);
         await db_1.updateSignup(signup);
         return message.reply("Your signup has been removed!");
     }

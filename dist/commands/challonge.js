@@ -84,7 +84,6 @@ async function CreateChallongeMatchBracket(message, disclient, args, guild) {
         matchlist.users = await shuffle(matchlist.users);
         matchlist.users = await shuffle(matchlist.users);
         for (let i = 0; i < matchlist.users.length; i++) {
-            console.log("ok");
             let name = (await (await guild.members.fetch(matchlist.users[i])).nickname) || await (await disclient.users.fetch(matchlist.users[i])).username;
             client.participants.create({
                 id: matchid,

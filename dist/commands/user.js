@@ -87,7 +87,6 @@ async function createAtUsermatch(User) {
             loss: 0,
             img: User.displayAvatarURL({ format: 'png', dynamic: true, size: 1024 })
         };
-        console.log("Added a new user profile");
         await db_1.addProfile(NewUser);
     }
 }

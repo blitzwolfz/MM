@@ -26,8 +26,6 @@ const winner_1 = require("./winner");
 const db_1 = require("../misc/db");
 async function qualrunn(match, channelid, client) {
     let channel = client.channels.cache.get(channelid);
-    console.log((Math.floor(Date.now() / 1000) - match.votetime > 7200));
-    console.log((Math.floor(Date.now() / 1000) - match.votetime));
     if (!match) {
         return;
     }
@@ -175,7 +173,6 @@ exports.qualrunn = qualrunn;
 function qualplayershuffle(source) {
     let sourceArray = source.players;
     let source2 = source.playerids;
-    console.log(sourceArray);
     for (var i = 0; i < sourceArray.length - 1; i++) {
         var j = i + Math.floor(Math.random() * (sourceArray.length - i));
         var temp = sourceArray[j];
@@ -185,6 +182,5 @@ function qualplayershuffle(source) {
         source2[j] = source2[i];
         source2[i] = temp2;
     }
-    console.log(sourceArray);
     return source;
 }

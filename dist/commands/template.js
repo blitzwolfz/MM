@@ -92,12 +92,9 @@ async function addTheme(message, client, args) {
     }
     else {
         let obj = await db_1.getthemes();
-        console.log(obj);
         await message.channel.send(args.join(" "));
         let list = obj.list;
-        console.log(list);
         list.push(args.join(" "));
-        console.log(list);
         list.sort();
         await db_1.updateThemedb({
             _id: "themelist",
@@ -116,7 +113,6 @@ async function removeTheme(message, client, args) {
         let list = obj.list;
         let word = list[parseInt(args[0]) - 1];
         list.splice(parseInt(args[0]) - 1, 1);
-        console.log(list);
         list.sort();
         await db_1.updateThemedb({
             _id: "themelist",
@@ -279,10 +275,8 @@ async function templatecheck(message, client, args) {
             reaction.users.remove(message.author.id);
             if (reaction.count >= 2) {
                 let pos = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"].indexOf(reaction.emoji.name);
-                console.log(pos);
                 if (pos >= 0) {
                     removelinks.push(struct[pos].tempstring);
-                    console.log(removelinks);
                 }
             }
         });

@@ -47,7 +47,6 @@ async function ssubmit(message, client) {
                 }
                 message.reply("Your meme has been attached!");
                 if (match.p1.donesplit && match.p2.donesplit && match.split) {
-                    console.log("not a split match");
                     match.split = false;
                     match.p1.time = Math.floor(Date.now() / 1000) - 3200;
                     match.p2.time = Math.floor(Date.now() / 1000) - 3200;
@@ -61,7 +60,6 @@ async function ssubmit(message, client) {
                     await db_1.updateReminder(r);
                 }
                 catch (error) {
-                    console.log("");
                 }
                 return;
             }
@@ -93,7 +91,6 @@ async function ssubmit(message, client) {
                 }
                 message.reply("Your meme has been attached!");
                 if (match.p1.donesplit && match.p2.donesplit && match.split) {
-                    console.log("not a split match");
                     match.split = false;
                     match.p1.time = Math.floor(Date.now() / 1000) - 3200;
                     match.p2.time = Math.floor(Date.now() / 1000) - 3200;
@@ -107,7 +104,6 @@ async function ssubmit(message, client) {
                     await db_1.updateReminder(r);
                 }
                 catch (error) {
-                    console.log("");
                 }
                 return;
             }
@@ -129,7 +125,6 @@ async function submit(message, client, args) {
         return message.reply("You didn't not submit this in the DM with the bot.\nPlease delete and try again.");
     }
     else {
-        console.log("Args is", args);
         let q = function (x) {
             return ((x.p1.userid === message.author.id || x.p2.userid === message.author.id)
                 && (x.p1.memedone === false || x.p2.memedone === false)
@@ -146,7 +141,6 @@ async function submit(message, client, args) {
             return;
         }
         let match = args[0] ? allmatches[parseInt(args[0]) - 1] : allmatches[0];
-        console.log(match);
         if (match.p1.memedone === false && match.p1.userid === message.author.id) {
             match.p1.memelink = (message.attachments.array()[0].url);
             match.p1.memedone = true;
@@ -178,11 +172,9 @@ async function submit(message, client, args) {
                     await db_1.updateReminder(r);
                 }
                 catch (error) {
-                    console.log("");
                 }
             }
             if (match.p1.donesplit && match.p1.memedone && match.p2.donesplit && match.p2.memedone && match.split) {
-                console.log("not a split match");
                 match.split = false;
                 match.p1.time = Math.floor(Date.now() / 1000) - 3200;
                 match.p2.time = Math.floor(Date.now() / 1000) - 3200;
@@ -190,7 +182,6 @@ async function submit(message, client, args) {
                     await db_1.deleteReminder(await db_1.getReminder(match.channelid));
                 }
                 catch {
-                    console.log("");
                 }
             }
             if (match.exhibition && match.p1.memedone && match.p2.memedone) {
@@ -235,11 +226,9 @@ async function submit(message, client, args) {
                     await db_1.updateReminder(r);
                 }
                 catch (error) {
-                    console.log("");
                 }
             }
             if (match.p1.donesplit && match.p1.memedone && match.p2.donesplit && match.p2.memedone && match.split) {
-                console.log("not a split match");
                 match.split = false;
                 match.p1.time = Math.floor(Date.now() / 1000) - 3200;
                 match.p2.time = Math.floor(Date.now() / 1000) - 3200;
@@ -247,7 +236,6 @@ async function submit(message, client, args) {
                     await db_1.deleteReminder(await db_1.getReminder(match.channelid));
                 }
                 catch {
-                    console.log("");
                 }
             }
             if (match.exhibition && match.p1.memedone && match.p2.memedone) {
@@ -317,7 +305,6 @@ async function qualsubmit(message, client) {
                                 await db_1.updateReminder(r);
                             }
                             catch (error) {
-                                console.log("");
                             }
                             try {
                                 await db_1.deleteReminder(await db_1.getReminder(message.author.id));
@@ -335,7 +322,6 @@ async function qualsubmit(message, client) {
 }
 exports.qualsubmit = qualsubmit;
 async function modsubmit(message, client, args) {
-    console.log("Args is", args);
     let match = await db_1.getMatch(message.mentions.channels.first().id);
     let user = message.mentions.users.first();
     if (args.includes("1")) {
@@ -371,11 +357,9 @@ async function modsubmit(message, client, args) {
                     await db_1.updateReminder(r);
                 }
                 catch (error) {
-                    console.log("");
                 }
             }
             if (match.p1.donesplit && match.p1.memedone && match.p2.donesplit && match.p2.memedone && match.split) {
-                console.log("not a split match");
                 match.split = false;
                 match.p1.time = Math.floor(Date.now() / 1000) - 3200;
                 match.p2.time = Math.floor(Date.now() / 1000) - 3200;
@@ -383,7 +367,6 @@ async function modsubmit(message, client, args) {
                     await db_1.deleteReminder(await db_1.getReminder(match.channelid));
                 }
                 catch {
-                    console.log("");
                 }
             }
             await db_1.updateActive(match);
@@ -423,11 +406,9 @@ async function modsubmit(message, client, args) {
                     await db_1.updateReminder(r);
                 }
                 catch (error) {
-                    console.log("");
                 }
             }
             if (match.p1.donesplit && match.p1.memedone && match.p2.donesplit && match.p2.memedone && match.split) {
-                console.log("not a split match");
                 match.split = false;
                 match.p1.time = Math.floor(Date.now() / 1000) - 3200;
                 match.p2.time = Math.floor(Date.now() / 1000) - 3200;
@@ -435,7 +416,6 @@ async function modsubmit(message, client, args) {
                     await db_1.deleteReminder(await db_1.getReminder(match.channelid));
                 }
                 catch {
-                    console.log("");
                 }
             }
             await db_1.updateActive(match);
@@ -477,13 +457,11 @@ async function modqualsubmit(message, client, args) {
         await db_1.updateReminder(r);
     }
     catch (error) {
-        console.log("");
     }
     try {
         await db_1.deleteReminder(await db_1.getReminder(u.userid));
     }
     catch (error) {
-        console.log("");
     }
     return message.reply(`The meme has been attached for <@${u.userid}>.`);
 }
