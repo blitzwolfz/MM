@@ -574,23 +574,15 @@ async function duelrunning(client) {
 exports.duelrunning = duelrunning;
 async function exhibitionResults(client, m) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9;
-    console.log(m);
     let channel = await client.channels.cache.get(m._id);
     let guild = await client.guilds.cache.get((await client.channels.cache.get(m._id)).guild.id);
-    let ex = await db_1.getExhibition();
-    ex.activematches.push(m._id);
-    await db_1.updateExhibition(ex);
     let d1 = await db_1.getDuelProfile(m.p1.userid, guild.id);
     let d2 = await db_1.getDuelProfile(m.p2.userid, guild.id);
     let u1 = await client.users.fetch(d1._id);
     let u2 = await client.users.fetch(d2._id);
-    console.log(channel);
-    console.log(guild);
-    console.log(ex);
-    console.log(d1);
-    console.log(d2);
-    console.log(u1);
-    console.log(u2);
+    let ex = await db_1.getExhibition();
+    ex.activematches.push(m._id);
+    await db_1.updateExhibition(ex);
     if (m.p1.memedone === true && m.p2.memedone === false || m.p1.memedone === false && m.p2.memedone === true) {
         if (m.p1.memedone) {
             channel.send(new discord.MessageEmbed()

@@ -75,6 +75,7 @@ client.on('ready', async () => {
             await start_1.running(client);
         }
         catch (err) {
+            console.log("It's in running");
             console.log(err.name + ": " + err.message);
         }
     }, 15000);
@@ -93,7 +94,11 @@ client.on('ready', async () => {
         });
     }, 15000);
     setInterval(async function () {
-        await utils_1.aaautoreminders(client);
+        await utils_1.aaautoreminders(client).catch((error) => {
+            console.log("it's in reminders");
+            console.log(error.message);
+            console.log(error.stack);
+        });
     }, 1000);
     if (process.env.DBNAME === "mememania")
         await client.channels.cache.get("722616679280148504").send("<@239516219445608449>", {

@@ -149,6 +149,7 @@ client.on('ready', async () => {
       await running(client)
       
     } catch (err) {
+      console.log("It's in running")
       console.log(err.name + ": " + err.message)
     }
 
@@ -181,7 +182,11 @@ client.on('ready', async () => {
   setInterval(async function () {
     
     
-    await aaautoreminders(client)
+    await aaautoreminders(client).catch((error) => {
+      console.log("it's in reminders");
+      console.log(error.message)
+      console.log(error.stack)
+    });
     
   }, 1000);
 
