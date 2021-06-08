@@ -73,7 +73,6 @@ async function deleteDoc(coll, id) {
 exports.deleteDoc = deleteDoc;
 async function insertActive(activematch) {
     await client.db(process.env.DBNAME).collection("activematch").insertOne(activematch);
-    console.log("Inserted ActiveMatches!");
 }
 exports.insertActive = insertActive;
 async function dbSoftReset() {
@@ -85,22 +84,18 @@ exports.dbSoftReset = dbSoftReset;
 async function updateActive(activematch) {
     let _id = activematch.channelid;
     await client.db(process.env.DBNAME).collection("activematch").updateOne({ _id }, { $set: activematch });
-    console.log("Updated Match!");
 }
 exports.updateActive = updateActive;
 async function insertQuals(Qual) {
     await client.db(process.env.DBNAME).collection("quals").insertOne(Qual);
-    console.log("Updated Match!");
 }
 exports.insertQuals = insertQuals;
 async function updateQuals(Qual) {
     let _id = Qual.channelid;
     await client.db(process.env.DBNAME).collection("quals").updateOne({ _id }, { $set: Qual });
-    console.log("Inserted Quals!");
 }
 exports.updateQuals = updateQuals;
 async function getActive() {
-    console.log("Getting ActiveMatches");
     return await client.db(process.env.DBNAME).collection("activematch").find({}).toArray();
 }
 exports.getActive = getActive;
@@ -113,12 +108,10 @@ async function getQual(channelid) {
 }
 exports.getQual = getQual;
 async function getQuals() {
-    console.log("Getting Quals!");
     return await client.db(process.env.DBNAME).collection("quals").find({}, { projection: { _id: 0 } }).toArray();
 }
 exports.getQuals = getQuals;
 async function getSingularQuals(_id) {
-    console.log("Getting Quals!");
     return await client.db(process.env.DBNAME).collection("quals").findOne({ _id }, { projection: { _id: 0 } });
 }
 exports.getSingularQuals = getSingularQuals;
@@ -132,17 +125,6 @@ async function getAllProfiles(field) {
     }
     else {
         let arr = await client.db(process.env.DBNAME).collection("users").find({}).sort({ [field]: -1 }).toArray();
-        console.log(await arr.sort(function (a, b) {
-            let sum1 = 0;
-            if (b.wins + b.loss !== 0) {
-                sum1 = (Math.floor(b.wins / (b.wins + b.loss) * 100));
-            }
-            let sum2 = 0;
-            if (a.wins + a.loss !== 0) {
-                sum2 = (Math.floor(a.wins / (a.wins + a.loss) * 100));
-            }
-            return sum1 - sum2;
-        }));
         return await arr.sort(function (a, b) {
             let sum1 = 0;
             if (b.wins + b.loss !== 0) {
@@ -181,12 +163,10 @@ exports.addUser = addUser;
 async function deleteActive(match) {
     let _id = match.channelid;
     await client.db(process.env.DBNAME).collection("activematch").deleteOne({ _id });
-    console.log("deleted active match");
 }
 exports.deleteActive = deleteActive;
 async function deleteQuals(match) {
     await client.db(process.env.DBNAME).collection("quals").deleteOne({ _id: match.channelid });
-    console.log("deleted quals");
 }
 exports.deleteQuals = deleteQuals;
 async function insertSignups(signup) {
@@ -312,7 +292,6 @@ async function inserttemplate(lists) {
         _id: "templatelist",
         list: lists
     };
-    console.log(e);
     await client.db(process.env.DBNAME).collection("tempstruct").insertOne(e);
 }
 exports.inserttemplate = inserttemplate;
@@ -325,7 +304,6 @@ async function updatetemplatedb(lists) {
         _id: "templatelist",
         list: lists
     };
-    console.log(e);
     await client.db(process.env.DBNAME).collection("tempstruct").updateOne({ _id: "templatelist" }, { $set: e });
 }
 exports.updatetemplatedb = updatetemplatedb;
@@ -357,17 +335,14 @@ async function getalltempStructs() {
 exports.getalltempStructs = getalltempStructs;
 async function insertGroupmatch(match) {
     await client.db(process.env.DBNAME).collection("groupmatch").insertOne(match);
-    console.log("Inserted ActiveMatches!");
 }
 exports.insertGroupmatch = insertGroupmatch;
 async function updateGroupmatch(activematch) {
     let _id = activematch._id;
     await client.db(process.env.DBNAME).collection("groupmatch").updateOne({ _id }, { $set: activematch });
-    console.log("Updated Group Match!");
 }
 exports.updateGroupmatch = updateGroupmatch;
 async function getGroupmatches() {
-    console.log("Getting groupmatches");
     return await client.db(process.env.DBNAME).collection("groupmatch").find({}, { projection: { _id: 0 } }).toArray();
 }
 exports.getGroupmatches = getGroupmatches;
@@ -378,7 +353,6 @@ exports.getGroupmatch = getGroupmatch;
 async function deleteGroupmatch(match) {
     let _id = match._id;
     await client.db(process.env.DBNAME).collection("groupmatch").deleteOne({ _id });
-    console.log("deleted group match");
 }
 exports.deleteGroupmatch = deleteGroupmatch;
 async function getExhibition() {

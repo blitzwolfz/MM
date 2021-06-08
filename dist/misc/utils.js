@@ -75,10 +75,7 @@ const forwardsFilter = (reaction, user) => reaction.emoji.name === '➡' && !use
 exports.forwardsFilter = forwardsFilter;
 function indexOf2d(arr, item, searchpos, returnpos) {
     for (let i = 0; i < arr.length; i++) {
-        console.log(arr[i][searchpos]);
-        console.log(arr[i][returnpos]);
         if (arr[i][searchpos] == item) {
-            console.log(arr[i][returnpos]);
             return arr[i][returnpos];
         }
     }
@@ -91,7 +88,6 @@ function dateBuilder() {
     let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     let day = days[d.getDay()];
     let date = d.getDate();
-    console.log(d.getMonth());
     let month = months[d.getMonth()];
     let year = d.getFullYear();
     return `${day}, ${month} ${date} ${year}`;
@@ -102,13 +98,10 @@ async function reminders(client, args) {
     let catchannels = guild.channels.cache.array();
     let pp = 0;
     for (let channel of catchannels) {
-        console.log(catchannels.length);
         try {
             if (channel.parent && channel.parent.name === "matches") {
-                console.log("We are in");
                 if (await db_1.getMatch(channel.id)) {
                     let match = await db_1.getMatch(channel.id);
-                    console.log("We are in #2");
                     if (match.split) {
                         if (!match.p1.memedone && !match.p2.memedone) {
                             await client.channels.cache.get(channel.id)
@@ -127,7 +120,6 @@ async function reminders(client, args) {
                 else {
                     let all = (await (await client.channels.fetch(channel.id))
                         .messages.fetch({ limit: 100 }));
-                    console.log(`The length is: ${all.array().length}`);
                     let m = all.first();
                     await m.channel
                         .send(`<@${m.mentions.users.first().id}> and <@${m.mentions.users.array()[1].id}>, you have ${args[0]}h left to complete your match`);
@@ -418,8 +410,6 @@ async function oldqualifierresultadd(channel, client, msg1, msg2) {
     const fields = [];
     let i = 0;
     while (i < em.length) {
-        console.log(`${em[i].value.toLowerCase().includes("earned") ? (em[i].value.split(" ")[5].substr(0, 2) + " ") : "0"}`);
-        console.log(`${em1[i].value.toLowerCase().includes("earned") ? (em1[i].value.split(" ")[5].substr(0, 2) + " ") : "0"}`);
         for (let p = 0; p < em1.length; p++) {
             if (em[i].value.split(" ")[10] === em1[p].value.split(" ")[10]) {
                 fields.push({
@@ -514,7 +504,6 @@ async function resultadd(channel, client, ids) {
         msgArr.push(await channel.messages.fetch(i));
     }
     let finalResults = [];
-    console.log(finalResults);
     for (let msg of msgArr) {
         let embed = msg.embeds[0];
         for (let f of embed.fields) {
@@ -594,17 +583,14 @@ async function saveDatatofile(message) {
     let e = await fs.writeFile('user.json', json, 'utf8', function (err) {
         if (err)
             return console.log(err);
-        console.log('Hello World > helloworld.txt');
     });
     let e2 = await fs.writeFile('mods.json', json2, 'utf8', function (err) {
         if (err)
             return console.log(err);
-        console.log('Hello World > helloworld.txt');
     });
     let e3 = await fs.writeFile('cr.json', json3, 'utf8', function (err) {
         if (err)
             return console.log(err);
-        console.log('Hello World > helloworld.txt');
     });
     const buffer = fs.readFileSync("./user.json");
     const attachment = new Discord.MessageAttachment(buffer, 'u.json');

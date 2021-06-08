@@ -73,7 +73,6 @@ async function modLB(message, client, args) {
         return message.reply("Please enter a category for lb: modactions or 1 , matchesstarted or 2, matchportionsstarted or 3 ");
     }
     let ratings = await db_1.getAllModProfiles(args[0]);
-    console.log(ratings);
     const m = (await message.channel.send({ embed: await modLb(page, client, ratings, args[0], message.author.id) }));
     await m.react("⬅");
     await m.react("➡");
@@ -91,7 +90,6 @@ async function modLB(message, client, args) {
 exports.modLB = modLB;
 async function modLb(page = 1, client, ratings, args, rest) {
     let guild = client.guilds.cache.get("719406444109103117");
-    console.log(rest);
     page = page < 1 ? 1 : page;
     const fields = [];
     let index = (0 + page - 1) * 10;
