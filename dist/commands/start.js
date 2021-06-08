@@ -583,7 +583,7 @@ async function exhibitionResults(client, m) {
     let d1 = await db_1.getDuelProfile(m.p1.userid, guild.id);
     let d2 = await db_1.getDuelProfile(m.p2.userid, guild.id);
     let u1 = await client.users.fetch(d1._id);
-    let u2 = await client.users.fetch(d1._id);
+    let u2 = await client.users.fetch(d2._id);
     console.log(channel);
     console.log(guild);
     console.log(ex);
