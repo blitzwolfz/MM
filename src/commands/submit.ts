@@ -62,7 +62,7 @@ export async function ssubmit(message: Discord.Message, client: Discord.Client) 
                 message.reply("Your meme has been attached!")
 
                 if (match.p1.donesplit && match.p2.donesplit && match.split) {
-                    console.log("not a split match")
+                    
                     match.split = false
                     match.p1.time = Math.floor(Date.now() / 1000) - 3200
                     match.p2.time = Math.floor(Date.now() / 1000) - 3200
@@ -84,7 +84,7 @@ export async function ssubmit(message: Discord.Message, client: Discord.Client) 
 
                     await updateReminder(r)
                 } catch (error) {
-                    console.log("")
+                    
                 }
 
                 return;
@@ -126,7 +126,7 @@ export async function ssubmit(message: Discord.Message, client: Discord.Client) 
                 message.reply("Your meme has been attached!")
 
                 if (match.p1.donesplit && match.p2.donesplit && match.split) {
-                    console.log("not a split match")
+                    
                     match.split = false
                     match.p1.time = Math.floor(Date.now() / 1000) - 3200
                     match.p2.time = Math.floor(Date.now() / 1000) - 3200
@@ -148,7 +148,7 @@ export async function ssubmit(message: Discord.Message, client: Discord.Client) 
 
                     await updateReminder(r)
                 } catch (error) {
-                    console.log("")
+                    
                 }
 
 
@@ -178,7 +178,7 @@ export async function submit(message: Discord.Message, client: Discord.Client, a
     else {
 
         // let q:any;
-        console.log("Args is", args)
+        
         let q = function (x: activematch) {
             return ((x.p1.userid === message.author.id || x.p2.userid === message.author.id) 
             && (x.p1.memedone === false || x.p2.memedone === false) 
@@ -213,7 +213,7 @@ export async function submit(message: Discord.Message, client: Discord.Client, a
         let match = args[0] ? allmatches[parseInt(args[0])-1] : allmatches[0];
 
 
-        console.log(match)
+        
 
         if (match.p1.memedone === false && match.p1.userid === message.author.id) {
             match.p1.memelink = (message.attachments.array()[0].url)
@@ -252,7 +252,7 @@ export async function submit(message: Discord.Message, client: Discord.Client, a
 
                     await updateReminder(r)
                 } catch (error) {
-                    console.log("")
+                    
                 }
 
 
@@ -260,7 +260,7 @@ export async function submit(message: Discord.Message, client: Discord.Client, a
             }
 
             if (match.p1.donesplit && match.p1.memedone && match.p2.donesplit && match.p2.memedone && match.split) {
-                console.log("not a split match")
+                
                 match.split = false
                 match.p1.time = Math.floor(Date.now() / 1000) - 3200
                 match.p2.time = Math.floor(Date.now() / 1000) - 3200
@@ -270,7 +270,7 @@ export async function submit(message: Discord.Message, client: Discord.Client, a
                     await deleteReminder(await getReminder(match.channelid))
                 }
                 catch {
-                    console.log("")
+                    
                 }
 
 
@@ -331,7 +331,7 @@ export async function submit(message: Discord.Message, client: Discord.Client, a
 
                     await updateReminder(r)
                 } catch (error) {
-                    console.log("")
+                    
                 }
 
 
@@ -339,7 +339,7 @@ export async function submit(message: Discord.Message, client: Discord.Client, a
             }
 
             if (match.p1.donesplit && match.p1.memedone && match.p2.donesplit && match.p2.memedone && match.split) {
-                console.log("not a split match")
+                
                 match.split = false
                 match.p1.time = Math.floor(Date.now() / 1000) - 3200
                 match.p2.time = Math.floor(Date.now() / 1000) - 3200
@@ -349,7 +349,7 @@ export async function submit(message: Discord.Message, client: Discord.Client, a
                     await deleteReminder(await getReminder(match.channelid))
                 }
                 catch {
-                    console.log("")
+                    
                 }
                 
             }
@@ -445,7 +445,7 @@ export async function qualsubmit(message: Discord.Message, client: Discord.Clien
 
                                 await updateReminder(r)
                             } catch (error) {
-                                console.log("")
+                                
                             }
 
                             try {
@@ -471,7 +471,7 @@ export async function qualsubmit(message: Discord.Message, client: Discord.Clien
 export async function modsubmit(message: Discord.Message, client: Discord.Client, args: string[]) {
 
     // let q:any;
-    console.log("Args is", args)
+    
 
     // if(args.includes("duel")){
     //     q = function(x:activematch) {
@@ -533,7 +533,7 @@ export async function modsubmit(message: Discord.Message, client: Discord.Client
     
                     await updateReminder(r)
                 } catch (error) {
-                    console.log("")
+                    
                 }
     
     
@@ -541,7 +541,7 @@ export async function modsubmit(message: Discord.Message, client: Discord.Client
             }
     
             if (match.p1.donesplit && match.p1.memedone && match.p2.donesplit && match.p2.memedone && match.split) {
-                console.log("not a split match")
+                
                 match.split = false
                 match.p1.time = Math.floor(Date.now() / 1000) - 3200
                 match.p2.time = Math.floor(Date.now() / 1000) - 3200
@@ -550,7 +550,7 @@ export async function modsubmit(message: Discord.Message, client: Discord.Client
                     await deleteReminder(await getReminder(match.channelid))
                 }
                 catch {
-                    console.log("")
+                    
                 }
     
                 // match.votingperiod = true
@@ -601,7 +601,7 @@ export async function modsubmit(message: Discord.Message, client: Discord.Client
     
                     await updateReminder(r)
                 } catch (error) {
-                    console.log("")
+                    
                 }
     
     
@@ -609,7 +609,7 @@ export async function modsubmit(message: Discord.Message, client: Discord.Client
             }
     
             if (match.p1.donesplit && match.p1.memedone && match.p2.donesplit && match.p2.memedone && match.split) {
-                console.log("not a split match")
+                
                 match.split = false
                 match.p1.time = Math.floor(Date.now() / 1000) - 3200
                 match.p2.time = Math.floor(Date.now() / 1000) - 3200
@@ -618,7 +618,7 @@ export async function modsubmit(message: Discord.Message, client: Discord.Client
                     await deleteReminder(await getReminder(match.channelid))
                 }
                 catch {
-                    console.log("")
+                    
                 }
             }
     
@@ -671,13 +671,13 @@ export async function modqualsubmit(message: Discord.Message, client: Discord.Cl
 
         await updateReminder(r)
     } catch (error) {
-        console.log("")
+        
     }
 
     try {
         await deleteReminder(await getReminder(u.userid))
     } catch (error) {
-        console.log("")
+        
     }
     
     return message.reply(`The meme has been attached for <@${u.userid}>.`)

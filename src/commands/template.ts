@@ -98,15 +98,9 @@ export async function addTheme(message: Discord.Message, client: Discord.Client,
 
     else {
         let obj = await getthemes()
-        console.log(obj)
         await message.channel.send(args.join(" "))
-
         let list: string[] = obj.list
-        console.log(list)
-        //await message.channel.send(list)
-
         list.push(args.join(" "))
-        console.log(list)
 
         list.sort()
 
@@ -130,7 +124,7 @@ export async function removeTheme(message: Discord.Message, client: Discord.Clie
         let list: string[] = obj.list
         let word = list[parseInt(args[0])-1]
         list.splice(parseInt(args[0])-1, 1)
-        console.log(list)
+        
         list.sort()
         await updateThemedb({
             _id: "themelist",
@@ -354,11 +348,11 @@ export async function templatecheck(message: Discord.Message, client: Discord.Cl
             
             if(reaction.count! >= 2 ){
                 let pos = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"].indexOf(reaction.emoji.name)
-                console.log(pos)
+                
     
                 if(pos >= 0){
                     removelinks.push(struct[pos].tempstring)
-                    console.log(removelinks)
+                    
                 }
             }
         })

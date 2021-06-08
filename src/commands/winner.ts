@@ -24,14 +24,14 @@ export async function end(client: discord.Client, id: string) {
 
     await deleteActive(match)
 
-    console.log(match)
+    
 
     let channelid = <discord.TextChannel>client.channels.cache.get(match.channelid)
     let user1 = (await client.users.fetch(match.p1.userid))
     let user2 = (await client.users.fetch(match.p2.userid))
 
-    console.log(Math.floor(Date.now() / 1000) - match.votetime)
-    console.log((Math.floor(Date.now() / 1000) - match.votetime) >= 35)
+    
+    
     if ((Math.floor(Date.now() / 1000) - match.p1.time > 1800) && match.p1.memedone === false) {
         user1.send("You have failed to submit your meme, your opponet is the winner.")
 
@@ -59,7 +59,7 @@ export async function end(client: discord.Client, id: string) {
     }
 
     else if ((Math.floor(Date.now() / 1000) - match.p2.time > 1800) && match.p2.memedone === false) {
-        console.log(Date.now() - match.p2.time)
+        
         user2.send("You have failed to submit your meme, your opponet is the winner.")
 
 
@@ -257,7 +257,7 @@ export async function end(client: discord.Client, id: string) {
         await deleteReminder(await getReminder(match.p1.userid))
         await deleteReminder(await getReminder(match.p2.userid))
     } catch {
-        console.log("fuck")
+        
     }
 
     // matches.splice(matches.indexOf(match), 1)
@@ -279,7 +279,7 @@ export async function qualend(client: discord.Client, id: string) {
     try{
         await deleteReminder(await getReminder(channel.id))
     } catch {
-        console.log("Reminder has already been deleted")
+        
     }
 
     if (match.votingperiod) {
@@ -412,7 +412,7 @@ export async function qualend(client: discord.Client, id: string) {
                 try{
                     await deleteReminder(await getReminder(match._id))
                 } catch {
-                    console.log("fuck")
+                    
                 }
             channel.send({
                 embed: {
@@ -424,7 +424,7 @@ export async function qualend(client: discord.Client, id: string) {
                 }
             }).then(async message => {
 
-                console.log("This is msg id:", message)
+                
 
                 let t = channel.topic?.split(" ")
 
@@ -533,7 +533,7 @@ export async function qualend(client: discord.Client, id: string) {
         try{
             await deleteReminder(await getReminder(match._id))
         } catch {
-            console.log("fuck")
+            
         }
 
         return channel.send({
@@ -560,7 +560,7 @@ export async function cancelmatch(message: discord.Message) {
         try {
             await deleteReminder(await getReminder(message.channel.id))   
         } catch (error) {
-            console.log("")
+            
         }
         return await message.reply("this match has been cancelled")
 
@@ -571,7 +571,7 @@ export async function cancelmatch(message: discord.Message) {
         try {
             await deleteReminder(await getReminder(message.channel.id))   
         } catch (error) {
-            console.log("")
+            
         }
         return await message.reply("this qualifier has been cancelled")
     }

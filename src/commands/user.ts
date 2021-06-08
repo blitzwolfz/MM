@@ -94,7 +94,7 @@ export async function createAtUsermatch(User: discord.User){
             loss: 0,
             img:User.displayAvatarURL({ format: 'png', dynamic: true, size: 1024 })
         }
-        console.log("Added a new user profile")
+        
         await addProfile(NewUser)
     }
 }

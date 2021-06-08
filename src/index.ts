@@ -140,7 +140,7 @@ client.on('ready', async () => {
 
   setInterval(async function () {
     // await running(client).catch((error) => {
-    //   console.log("it's in running");
+    //   
     // });
 
 
@@ -157,7 +157,7 @@ client.on('ready', async () => {
   }, 15000);
 
   setInterval(async function () {
-    // console.log("A Second Kiss every 5 seconds");
+    // 
 
     await qualrunning(client).catch((error) => {
       console.log("it's in qualrunning");
@@ -168,27 +168,18 @@ client.on('ready', async () => {
   }, 15000);
 
   setInterval(async function () {
-    // console.log("A Second Kiss every 5 seconds");
-    console.log("EEE")
+    
     await duelrunning(client).catch((error) => {
       console.log("it's in duel running");
       console.log(error.message)
       console.log(error.stack)
     });
-    console.log("EEE2")
     
   }, 15000);
 
 
-  // setInterval(async function () {
-  //   // console.log("A Third Kiss every 5 seconds");
-    
-  //   await deleteExhibitionchannels(client)
-    
-  // }, 1000);
-
   setInterval(async function () {
-    // console.log("A Third Kiss every 5 seconds");
+    
     
     await aaautoreminders(client)
     
@@ -215,13 +206,13 @@ client.on("guildMemberAdd", async function (member) {
 
   await member.user?.send("Please start verification with `!verify <reddit username>` in the verification channel.")
 
-  console.log(`a user joins a guild: ${member.user?.username}`);
+  
 });
 
 client.on("error", (e) => console.error(e));
 
 client.on("messageReactionAdd", async function (messageReaction, user) {
-  //console.log(messageReaction.message.member!.roles.cache.has('719936221572235295'))
+  
   if (user.bot) return;
 
   // if(messageReaction.emoji.name === '🤏' && user.id !== "722303830368190485") {
@@ -236,7 +227,6 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
   if (temps) {
 
     for (const temp of temps) {
-      //console.log(temp)
 
       if (messageReaction.emoji.name === '🌀' && user.id !== "722303830368190485") {
 
@@ -249,7 +239,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             .setImage(random)
             .setColor("#d7be26")
             .setTimestamp()
-          //console.log(await messageReaction.message.id)
+          
 
           temp.url = random
           //temp.time = temp.time - (110 * 1000) 
@@ -272,7 +262,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             .setDescription(`Theme is: ${random}`)
             .setColor("#d7be26")
             .setTimestamp()
-          //console.log(await messageReaction.message.id)
+          
 
           temp.url = random
           //temp.time = temp.time - (110 * 1000) 
@@ -398,8 +388,8 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
         await messageReaction.message.channel.messages.fetch(messageReaction.message.id).then(msg => voteCollection = msg.reactions.cache);
 
         let l = voteCollection!.first()!.count!
-        // console.log(l)
-        // console.log(messageReaction.message.embeds[0].image)
+        
+        
 
         if (l >= 3) {
           let id:string | undefined;          
@@ -454,8 +444,8 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
         await messageReaction.message.channel.messages.fetch(messageReaction.message.id).then(msg => voteCollection = msg.reactions.cache);
 
         let l = voteCollection!.array()[1]!.count!
-        // console.log(l)
-        // console.log(messageReaction.message.embeds[0].image)
+        
+        
 
         if (l === 3) {
           //await tempccc.send(await messageReaction.message.embeds[0].image?.url)
@@ -538,7 +528,6 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
       === false) {
       return;
     }
-    console.log(messageReaction.message.embeds)
     let c = <Discord.TextChannel>await messageReaction.message.channel.fetch()
     let em = (await c.messages.fetch(messageReaction.message.id)).embeds[0]!
     let iter = 0
@@ -574,8 +563,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
 
   if (!emojis.includes(messageReaction.emoji.name)) return;
 
-  console.log(`a reaction is added to a message`);
-  //console.log(messageReaction, user)
+  
   // let quals: qualmatch[] = await getQuals()
 
   if ((messageReaction.emoji.name === emojis[1] || messageReaction.emoji.name === emojis[0])
@@ -587,9 +575,9 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
     if (!match) return;
 
     if (user.id !== match.p1.userid && user.id !== match.p2.userid) { // != match.p1.userid || user.id != match.p2.userid
-      //console.log("checkq1")
+      
       if (messageReaction.emoji.name === emojis[0]) {
-        //console.log("checkq2")
+        
         if (match.p1.voters.includes(user.id)) {
           await user.send("You can't vote on the same meme twice")
           await messageReaction.users.remove(user.id)
@@ -613,13 +601,13 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
           else {
             await user.send(`Vote counted for Player 1's memes in <#${match.channelid}>.`)
           }
-          //console.log("checkq3")
+          
 
         }
       }
 
       else if (messageReaction.emoji.name === emojis[1]) {
-        //console.log("checkq4")
+        
 
         if (match.p2.voters.includes(user.id)) {
           await user.send("You can't vote on the same meme twice")
@@ -645,7 +633,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
           else {
             await user.send(`Vote counted for Player 2's memes in <#${match.channelid}>.`)
           }
-          //console.log("checkq5")
+          
         }
       }
 
@@ -718,7 +706,7 @@ client.on("message", async message => {
   // if(message.content.includes("!speedrun")){
   //   await qualrunning(client);
   //   await running(client);
-  //   console.log("Ran!")
+  //   
   // }
 
   if (message.content.indexOf(process.env.PREFIX!) !== 0 || message.author.bot) {
@@ -792,7 +780,7 @@ client.on("message", async message => {
   if (command === "!speedrun") {
     await qualrunning(client);
     await running(client);
-    console.log("Ran!")
+    
   }
 
   if (command === "forcepoll") {
@@ -878,7 +866,7 @@ client.on("message", async message => {
     // let c = (<Discord.TextChannel>client.channels.cache.get(args[3]))!
     // let em = await c.messages.fetch(args[0])
     // let em2 = await c.messages.fetch(args[0])
-    // console.log(em)
+    
 
     // await message.channel.send({ embed:em.embeds[0]})
     // await message.channel.send({ embed:em2.embeds[0]})
