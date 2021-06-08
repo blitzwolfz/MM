@@ -105,7 +105,7 @@ const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION']
 
 app.get('/', (_request: any, response: any) => {
   response.sendFile(__dirname + "/index.html");
-  console.log(Date.now() + " Ping Received");
+  //console.log(Date.now() + " Ping Received");
   response.sendStatus(200);
 });
 

@@ -47,7 +47,6 @@ var _server = http.createServer(app);
 const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'], ws: { intents: new Discord.Intents(Discord.Intents.ALL) } });
 app.get('/', (_request, response) => {
     response.sendFile(__dirname + "/index.html");
-    console.log(Date.now() + " Ping Received");
     response.sendStatus(200);
 });
 const listener = app.listen(process.env.PORT, () => {
