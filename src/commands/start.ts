@@ -813,10 +813,10 @@ export async function duelrunning(client: discord.Client) {
                 await exhibitionVotingLogic(client, m)
             }
 
-            if (m.votingperiod === true && (Math.floor(Date.now() / 1000) - m.votetime > 6300) 
+            if (m.votingperiod === true && (Math.floor(Date.now() / 1000) - m.votetime > 7200) 
             || m.votingperiod === true && (m.p1.votes >= 5 || m.p2.votes >= 5)) {
                 await exhibitionResults(client, m)
-            }
+            }1623117790
             
         } catch (error) {
             console.log(error.message)
@@ -850,7 +850,7 @@ export async function duelrunning(client: discord.Client) {
             continue
         }
 
-        if(Math.floor(Date.now() / 1000) - Math.floor(ch.createdTimestamp/1000 ) > 4510){
+        if(Math.floor(Date.now() / 1000) - Math.floor(ch.createdTimestamp/1000 ) > 1800){
             (<discord.TextChannel>await client.channels.cache.get(ex.activematches[ii])).send("Cum 2")
             await ch.delete()
             ex.activematches.splice(ii, 1)
