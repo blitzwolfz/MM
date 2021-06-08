@@ -87,13 +87,11 @@ client.on('ready', async () => {
         });
     }, 15000);
     setInterval(async function () {
-        console.log("EEE");
         await start_1.duelrunning(client).catch((error) => {
             console.log("it's in duel running");
             console.log(error.message);
             console.log(error.stack);
         });
-        console.log("EEE2");
     }, 15000);
     setInterval(async function () {
         await utils_1.aaautoreminders(client);
@@ -109,10 +107,9 @@ client.on('ready', async () => {
     client.user.setActivity(`${process.env.STATUS}`);
 });
 client.on("guildMemberAdd", async function (member) {
-    var _a, _b;
+    var _a;
     await member.roles.add("730650583413030953");
     await ((_a = member.user) === null || _a === void 0 ? void 0 : _a.send("Please start verification with `!verify <reddit username>` in the verification channel."));
-    console.log(`a user joins a guild: ${(_b = member.user) === null || _b === void 0 ? void 0 : _b.username}`);
 });
 client.on("error", (e) => console.error(e));
 client.on("messageReactionAdd", async function (messageReaction, user) {
@@ -346,7 +343,6 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
             === false) {
             return;
         }
-        console.log(messageReaction.message.embeds);
         let c = await messageReaction.message.channel.fetch();
         let em = (await c.messages.fetch(messageReaction.message.id)).embeds[0];
         let iter = 0;
@@ -362,7 +358,6 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
     }
     if (!utils_1.emojis.includes(messageReaction.emoji.name))
         return;
-    console.log(`a reaction is added to a message`);
     if ((messageReaction.emoji.name === utils_1.emojis[1] || messageReaction.emoji.name === utils_1.emojis[0])
         && await db_1.getMatch(messageReaction.message.channel.id)) {
         let match = await db_1.getMatch(messageReaction.message.channel.id);
@@ -519,7 +514,6 @@ client.on("message", async (message) => {
     if (command === "!speedrun") {
         await start_1.qualrunning(client);
         await start_1.running(client);
-        console.log("Ran!");
     }
     if (command === "forcepoll") {
         let match = await db_1.getMatch(message.channel.id);

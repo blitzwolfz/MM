@@ -87,7 +87,6 @@ export async function verify(message: Discord.Message, client: Discord.Client){
                     //await message.reply("Code has been sent to your reddit dm. Please do `!code <your code>` to verify! You only get one chance at it!")
                     
                     await message.author.send("Code has been sent to your reddit dm. Please send that to this dm! You only get one chance at it!").then(async (userdm:Discord.Message) => {
-                        //console.log(userdm.channel.id)
                         await userdm.channel.awaitMessages(filter, { max: 1, time: 90000, errors: ['time'] })
                             .then(async collected => {
                                 await message.member?.roles.remove("730650583413030953")

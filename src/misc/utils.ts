@@ -74,12 +74,11 @@ export const forwardsFilter = (reaction: { emoji: { name: string; }; }, user: Di
 export function indexOf2d(arr: any[][], item: any, searchpos: number, returnpos: number) {
 
   for (let i = 0; i < arr.length; i++) {
-    console.log(arr[i][searchpos])
-    console.log(arr[i][returnpos])
+
 
     if (arr[i][searchpos] == item) {
 
-      console.log(arr[i][returnpos])
+      
 
       return arr[i][returnpos]
     }
@@ -95,7 +94,7 @@ export function dateBuilder() {
   let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   let day = days[d.getDay()];
   let date = d.getDate();
-  console.log(d.getMonth())
+  
   let month = months[d.getMonth()];
   let year = d.getFullYear();
   return `${day}, ${month} ${date} ${year}`;
@@ -111,13 +110,13 @@ export async function reminders(client: Discord.Client, args: string[]) {
 
   for (let channel of catchannels) {
 
-    console.log(catchannels.length)
+    
     try {
       if (channel.parent && channel.parent!.name === "matches") {
-        console.log("We are in")
+        
         if (await getMatch(channel.id)) {
           let match = await getMatch(channel.id)
-          console.log("We are in #2")
+          
           if (match.split) {
             if (!match.p1.memedone && !match.p2.memedone) {
               await (<Discord.TextChannel>client.channels.cache.get(channel.id))
@@ -140,7 +139,7 @@ export async function reminders(client: Discord.Client, args: string[]) {
           let all = (await (<Discord.TextChannel>await client.channels.fetch(channel.id))!
             .messages.fetch({ limit: 100 }))
 
-          console.log(`The length is: ${all.array().length}`)
+          
           let m = all.first()!
 
           await m.channel
@@ -178,7 +177,7 @@ export async function reminders(client: Discord.Client, args: string[]) {
           // let all = (await (<Discord.TextChannel>await client.channels.fetch(channel.id)!)
           //   .messages.fetch({ limit: 100 }))
 
-          // console.log(`The length is: ${all.array().length}`)
+          
 
           // let m = all.last()!
 
@@ -387,7 +386,7 @@ export async function delay(message:Discord.Message, client:Discord.Client, args
 //       } catch (
 //         error
 //       ) {
-//          console.log("User will not let bot dm")
+//          
 //       }
 
 //       await deleteReminder(i)
@@ -432,7 +431,7 @@ export async function aautoreminders(client: Discord.Client, ...st: string[]) {
       let all = (await (<Discord.TextChannel>await client.channels.fetch(channel.id))!
         .messages.fetch({ limit: 100 }))
 
-      //console.log("CHN:", channel.createdTimestamp)
+      
 
 
       if (channel.parent && channel.parent!.name === "matches") {
@@ -553,17 +552,12 @@ export async function autoreminders(client: Discord.Client) {
   }
 
   else if (Math.floor((Date.now()) - parseInt(await (await getMatchlist()).qualurl)) < 129601 * 1000 && Math.floor((Date.now()) - parseInt(await (await getMatchlist()).qualurl)) > 129600 * 1000) {
-    //time = "12"
-    //console.log("t diff", t)
     await reminders(client, ["12"])
 
   }
 
   else if (Math.floor((Date.now()) - parseInt(await (await getMatchlist()).qualurl)) < 86401 * 1000 && Math.floor((Date.now()) - parseInt(await (await getMatchlist()).qualurl)) > 86400 * 1000) {
-    //time = "24"
-    //console.log("t diff", t)
     await reminders(client, ["24"])
-
   }
 }
 
@@ -703,8 +697,6 @@ export async function oldqualifierresultadd(channel: Discord.TextChannel, client
   // for (let i = 0; i < em1.length; i++) {
 
   //   //parseInt(em[i].value[em[i].value.split(" ").findIndex(x => x === "Earned") + 1].substr(0, 2)) + parseInt(em1[i].value[em[i].value.split(" ").findIndex(x => x === "Earned") + 1].substr(0, 2))
-  //   console.log(`${em[i].value.toLowerCase().includes("earned") ? (em[i].value.split(" ")[5].substr(0, 2) + " ") : "0"}`)
-  //   console.log(`${em1[i].value.toLowerCase().includes("earned") ? (em1[i].value.split(" ")[5].substr(0, 2) + " ") : "0"}`)
   //   fields.push({
   //     name: `${em1[i].name.substr(0, em1[1].name.indexOf("|") - 1)}`,
   //     //value: `${match.votes[i].length > 0 ? `Came in with ${match.votes[i].length} vote(s)` : `Failed to submit meme`}`
@@ -714,8 +706,6 @@ export async function oldqualifierresultadd(channel: Discord.TextChannel, client
 
   let i = 0
   while (i < em.length) {
-    console.log(`${em[i].value.toLowerCase().includes("earned") ? (em[i].value.split(" ")[5].substr(0, 2) + " ") : "0"}`)
-    console.log(`${em1[i].value.toLowerCase().includes("earned") ? (em1[i].value.split(" ")[5].substr(0, 2) + " ") : "0"}`)
 
     for (let p = 0; p < em1.length; p++) {
       if (em[i].value.split(" ")[10] === em1[p].value.split(" ")[10]) {
@@ -786,16 +776,9 @@ export async function qualifierresultadd(c: Discord.TextChannel, client: Discord
 
   for(let ii = 0; ii < em.length; ii++){
 
-    //console.log(em2[ii].value.split(/[^0-9.]+/g))
     em2[ii].name = (em2[ii].value.split(/[^0-9.]+/g))[3]
     em2[ii].value = (em2[ii].value.split(/[^0-9.]+/g))[2]
   }
-
-  //console.log(em)
-  //console.log(em2)
-  
-  
-
   em.sort(function (a, b) {
     //ratings.sort((a: modprofile, b: modprofile) => (b.modactions) - (a.modactions));
     return (parseInt(b.name) - parseInt(a.name));
@@ -827,7 +810,6 @@ export async function qualifierresultadd(c: Discord.TextChannel, client: Discord
 
   em3.sort((a, b) => b.value.length - a.value.length)
 
-  //console.log(em3)
 
   fields = em3
   c.send({
@@ -866,7 +848,6 @@ export async function resultadd(channel: Discord.TextChannel, client: Discord.Cl
       value:number
   }> = []
 
-  console.log(finalResults)
 
   for(let msg of msgArr){
       let embed = msg.embeds[0]!
@@ -976,19 +957,16 @@ export async function saveDatatofile(message: Discord.Message){
   //@ts-ignore
   let e = await fs.writeFile('user.json', json, 'utf8', function (err:Error) {
     if (err) return console.log(err);
-    console.log('Hello World > helloworld.txt');
   })
 
   //@ts-ignore
   let e2 = await fs.writeFile('mods.json', json2, 'utf8', function (err:Error) {
     if (err) return console.log(err);
-    console.log('Hello World > helloworld.txt');
   })
 
   //@ts-ignore
   let e3 = await fs.writeFile('cr.json', json3, 'utf8', function (err:Error) {
     if (err) return console.log(err);
-    console.log('Hello World > helloworld.txt');
   })
 
   const buffer = fs.readFileSync("./user.json");

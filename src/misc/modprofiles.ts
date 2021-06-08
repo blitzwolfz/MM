@@ -80,7 +80,7 @@ export async function modLB(message: Discord.Message, client: Discord.Client, ar
 
     let ratings = await getAllModProfiles(args[0])
 
-    console.log(ratings)
+    
     
     const m = <Discord.Message>(await message.channel.send({ embed: await modLb(page!, client, ratings, args[0], message.author.id) }));
     await m.react("⬅")
@@ -103,7 +103,7 @@ async function modLb(page: number = 1, client: Discord.Client, ratings: modprofi
 
     //let signup = await getSignups()
     let guild = client.guilds.cache.get("719406444109103117")
-    console.log(rest)
+    
 
     page = page < 1 ? 1 : page;
     const fields = [];

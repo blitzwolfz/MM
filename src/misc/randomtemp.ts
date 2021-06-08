@@ -17,11 +17,11 @@ export async function getRandomTemplateList(client: Discord.Client): Promise<str
   
   // await (<Discord.TextChannel>client.channels.cache.get("724827952390340648")).messages.fetch({ limit: 100 }).then(async msg => {
   //   msg.map(async m => {
-  //     // console.log(m.url)
+  //     
   //     // await message.reply(m.id)
   //     await (<Discord.TextChannel>client.channels.cache.get("724827952390340648")).messages.fetch(m.id).then(async (m2: Discord.Message) => {
   //       if (m2.attachments.size >= 1) {
-  //         // console.log(m2.attachments.array()[0].url)
+  //         
   //         for(let x = 0; x < m2.attachments.array().length; x++){
   //           if(!m2.attachments.array()[x].url.includes("gif") || !m2.attachments.array()[0].url.includes("mp4")){
   //             templatelist.push(m2.attachments.array()[x].url)
@@ -37,11 +37,11 @@ export async function getRandomTemplateList(client: Discord.Client): Promise<str
   // for(let i = 0; i < 4; i++){
   //   await (<Discord.TextChannel>client.channels.cache.get("724827952390340648")).messages.fetch({ before:lastmsg[0], limit:100 }).then(async msg => {
   //     msg.map(async m => {
-  //       // console.log(m.url)
+  //       
   //       // await message.reply(m.id)
   //       await (<Discord.TextChannel>client.channels.cache.get("724827952390340648")).messages.fetch(m.id).then(async (m2: Discord.Message) => {
   //         if (m2.attachments.size >= 1) {
-  //           // console.log(m2.attachments.array()[0].url)
+  //           
   //           for(let x = 0; x < m2.attachments.array().length; x++){
   //             if(!m2.attachments.array()[x].url.includes("gif") || !m2.attachments.array()[0].url.includes("mp4")){
   //               templatelist.push(m2.attachments.array()[x].url)
@@ -200,12 +200,12 @@ export async function RandomTemplateFunc(message: Discord.Message, client: Disco
 //   console.time("start")
   
 //   await (<Discord.TextChannel>client.channels.cache.get("724837977838059560")).messages.fetch({ limit: 100 }).then(async msg => {
-//     console.log(msg.map(async m => {
-//       // console.log(m.url)
+//     
+//       
 //       // await message.reply(m.id)
 //       await (<Discord.TextChannel>client.channels.cache.get("724837977838059560")).messages.fetch(m.id).then(async (m2: Discord.Message) => {
 
-//           // console.log(m2.attachments.array()[0].url)
+//           
 //           for(let x = 0; x < m2.content.length; x++){
 //               templatelist.push(m2.content)
 //             }
@@ -218,10 +218,10 @@ export async function RandomTemplateFunc(message: Discord.Message, client: Disco
 //   for(let i = 0; i < 4; i++){
 //     await (<Discord.TextChannel>client.channels.cache.get("724837977838059560")).messages.fetch({ before:lastmsg[0], limit:100 }).then(async msg => {
 //       msg.map(async m => {
-//         // console.log(m.url)
+//         
 //         // await message.reply(m.id)
 //         await (<Discord.TextChannel>client.channels.cache.get("724837977838059560")).messages.fetch(m.id).then(async (m2: Discord.Message) => {
-//             // console.log(m2.attachments.array()[0].url)
+//             
 //             for(let x = 0; x < m2.content.length; x++){
 //               templatelist.push(m2.content)
 //             }
