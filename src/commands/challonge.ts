@@ -23,14 +23,14 @@ export async function CreateChallongeQualBracket(message: Discord.Message, discl
 
         let matchlist = await getMatchlist()
 
-        //console.log(id)
+        
 
         //message.reply(id)
 
 
         let Signups = await getSignups()
 
-        //console.log(id)
+        
 
         if (Signups) {
             if (Signups.open === false) {
@@ -91,12 +91,12 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
 
         let matchlist = await getMatchlist();
 
-        // console.log(matchid)
+        
 
         // let qualid = (matchlist.qualurl)
         // qualid = qualid.replace("https://challonge.com/", "")
 
-        // console.log(qualid)
+        
 
 
 
@@ -107,14 +107,14 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
         matchlist.users = await shuffle(matchlist.users)
 
         for (let i = 0; i < matchlist.users.length; i++) {
-            console.log("ok")
+            
             let name = (await (await guild!.members.fetch(matchlist.users[i])).nickname) || await (await disclient.users.fetch(matchlist.users[i])).username
             //let name = matchlist.users[i]
 
 
 
-            // console.log("ok")
-            // console.log(name)
+            
+            
 
 
             client.participants.create({
@@ -151,7 +151,7 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
 }
 
 export async function ChannelCreation(message: Discord.Message, disclient: Discord.Client, args: string[]) {
-    //console.log("OK")
+    
     if (!args) return message.reply("Please input round number!")
 
     else {
@@ -162,7 +162,7 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
         let match = await getMatchlist()
 
         for (let i = 0; i < match.users.length; i++) {
-            //console.log(match.users[i])
+            
             try {
                 let name = ((await (await guild!.members.fetch(match.users[i])).nickname) || await (await disclient.users.fetch(match.users[i])).username)
                 names.push([name, match.users[i]])
@@ -176,19 +176,19 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
 
         let matchlist = await getMatchlist()
 
-        // console.log(disclient.ws.ping)
+        
 
-        // console.log("OK")
-        //console.log(client)
+        
+        
 
         await client.matches.index({
             id: matchlist.url,
             callback: async (err: any, data: any) => {
-                //console.log(data);
+                
                 if (err) console.log(err)
 
 
-                //console.log(data)
+                
 
                 for (let i = 0; i < data.length; i++) {
                     //var channelstringname = ""
@@ -196,7 +196,7 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
                     if (data[i].match.round === parseInt(args[0])) {
                         //await message.reply(`\`\`\` ${data[i]}\`\`\``)
 
-                        //console.log(data[i])
+                        
 
 
                         if (data[i].match.winnerId === null && data[i].match.loserId === null) {
@@ -246,14 +246,14 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
                                         //     names.push([(await (await guild!.members.fetch(i)!).nickname || (await disclient.users.fetch(i)!).username), i])
                                         // }
 
-                                        // console.log(names)
+                                        
 
                                         await message.guild!.channels.create(channelstringname, { type: 'text', topic: `${matchid},${oneid},${twoid}` })
                                             .then(async channel => {
                                                 let category = await message.guild!.channels.cache.find(c => c.name == "matches" && c.type == "category");
 
-                                                // console.log(name1)
-                                                // console.log(name1)
+                                                
+                                                
                                                 if (!category) throw new Error("Category channel does not exist");
                                                 await channel.setParent(category.id);
                                                 await channel.lockPermissions()
@@ -318,8 +318,8 @@ export async function dirtyChannelcreate(message: Discord.Message, disclient: Di
         .then(async channel => {
             let category = await message.guild!.channels.cache.find(c => c.name == "matches" && c.type == "category");
 
-            // console.log(name1)
-            // console.log(name1)
+            
+            
 
             await channel.send(`<@${ids[i]}> <@${ids[i+1]}> You have ${args[1]}h to complete this match. Contact a ref to begin, you may also split your match`)
             if (!category) throw new Error("Category channel does not exist");
@@ -367,7 +367,7 @@ export async function dirtyChannelcreate(message: Discord.Message, disclient: Di
 export async function QualChannelCreation(message: Discord.Message, args: string[]) {
 
     let groups = await getQuallist()
-    //console.log(groups.users)
+    
 
     let time = args[1]
     let qlist = await getMatchlist()

@@ -100,7 +100,7 @@ export async function removesignup(message: Discord.Message){
 
     else{
         signup.users.splice(signup.users.indexOf(message.author.id), 1)
-        console.log(signup.users)
+        
 
         await updateSignup(signup)
 

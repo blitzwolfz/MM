@@ -9,10 +9,10 @@ export async function qualrunn(match: qualmatch, channelid: string, client: disc
     // let match = await getSingularQuals(channelid)
 
     let channel = <discord.TextChannel>client.channels.cache.get(channelid)
-    console.log((Math.floor(Date.now() / 1000) - match.votetime > 7200))
-    console.log((Math.floor(Date.now() / 1000) - match.votetime))
     
-    // console.log(qual)
+    
+    
+    
     if(!match) {
         
         return;
@@ -216,7 +216,7 @@ function qualplayershuffle(source: qualmatch) {
     let sourceArray = source.players
     let source2 = source.playerids
 
-    console.log(sourceArray)
+    
 
 
     for (var i = 0; i < sourceArray.length - 1; i++) {
@@ -233,7 +233,7 @@ function qualplayershuffle(source: qualmatch) {
         source2[i] = temp2
     }
 
-    console.log(sourceArray)
+    
 
 
     return source
@@ -305,8 +305,8 @@ function qualplayershuffle(source: qualmatch) {
 //                     await updateQuals(match)
 //                 }
 
-//                 console.log(u)
-//                 console.log(match.players.length)
+//                 
+//                 
 
 
 //                 if (Math.floor(Date.now() / 1000) - match.octime > 1800  || match.playersdone.length === match.players.length && match.split === false) {
