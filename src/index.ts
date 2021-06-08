@@ -933,6 +933,11 @@ client.on("message", async message => {
         .send({ embed:emm });
   }
 
+  else if(command === "paypal" || command === "donation"){
+    return await message.channel.send("Wait I get paid? - blitz")
+  }
+
+
   else if (command === "exhibition" || command === "duel") {
     //if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
 

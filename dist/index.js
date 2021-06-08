@@ -625,6 +625,9 @@ client.on("message", async (message) => {
         await (await client.channels.cache.get("722291182461386804"))
             .send({ embed: emm });
     }
+    else if (command === "paypal" || command === "donation") {
+        return await message.channel.send("Wait I get paid? - blitz");
+    }
     else if (command === "exhibition" || command === "duel") {
         if (args[0].toLowerCase() === "help") {
             await message.channel.send({ embed: help_1.DuelHelp });
