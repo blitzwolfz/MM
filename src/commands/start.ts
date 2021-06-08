@@ -885,7 +885,7 @@ async function exhibitionResults(client: discord.Client, m: activematch) {
     let channel = <discord.TextChannel>await client.channels.cache.get(m._id)
     let guild = await client.guilds.cache.get((<discord.TextChannel>await client.channels.cache.get(m._id)).guild.id)!
     let ex = await getExhibition()
-    ex.activematches.push(channel.id)
+    ex.activematches.push(m._id)
     await updateExhibition(ex)
     let d1 = await getDuelProfile(m.p1.userid, guild.id)
     let d2 = await getDuelProfile(m.p2.userid, guild.id)

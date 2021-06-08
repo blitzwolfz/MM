@@ -578,7 +578,7 @@ async function exhibitionResults(client, m) {
     let channel = await client.channels.cache.get(m._id);
     let guild = await client.guilds.cache.get((await client.channels.cache.get(m._id)).guild.id);
     let ex = await db_1.getExhibition();
-    ex.activematches.push(channel.id);
+    ex.activematches.push(m._id);
     await db_1.updateExhibition(ex);
     let d1 = await db_1.getDuelProfile(m.p1.userid, guild.id);
     let d2 = await db_1.getDuelProfile(m.p2.userid, guild.id);
