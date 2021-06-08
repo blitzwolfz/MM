@@ -213,8 +213,8 @@ export async function exhibition(message: Discord.Message, client: Discord.Clien
 
         
         
-            ex.activematches.push(channel.id)
-            await updateExhibition(ex)
+            // ex.activematches.push(channel.id)
+            // await updateExhibition(ex)
         
             await user1.send(`You have 30 mins to complete your meme\nUse \`!submit\` to submit each image. If you have an active match in MemeRoyale, please use \`!submit -duel\``)
             await user2.send(`You have 30 mins to complete your meme\nUse \`!submit\` to submit each image. If you have an active match in MemeRoyale, please use \`!submit -duel\``)

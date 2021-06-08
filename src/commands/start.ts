@@ -813,7 +813,8 @@ export async function duelrunning(client: discord.Client) {
                 await exhibitionVotingLogic(client, m)
             }
 
-            if (m.votingperiod === true && (Math.floor(Date.now() / 1000) - m.votetime > 7200)) {
+            if (m.votingperiod === true && (Math.floor(Date.now() / 1000) - m.votetime > 6300) 
+            || (m.p1.votes >= 5 || m.p2.votes >= 5)) {
                 await exhibitionResults(client, m)
             }
             
@@ -884,6 +885,7 @@ export async function duelrunning(client: discord.Client) {
 
 async function exhibitionResults(client: discord.Client, m: activematch) {
     console.log("GGG")
+    let ex = await getExhibition()
     let channel = <discord.TextChannel>await client.channels.cache.get(m._id)
     let guild = await client.guilds.cache.get((<discord.TextChannel>await client.channels.cache.get(m._id)).guild.id)!
     let d1 = await getDuelProfile(m.p1.userid, guild.id)
@@ -1059,6 +1061,9 @@ async function exhibitionResults(client: discord.Client, m: activematch) {
         await channel.send(e)
     }
 
+    ex.activematches.push(channel.id)
+    await updateExhibition(ex)
+
     await updateDuelProfile(d1._id, d1, guild.id)
     await updateDuelProfile(d2._id, d2, guild.id)
     return await deleteActive(m)
@@ -1123,7 +1128,7 @@ async function exhibitionVotingLogic(client: discord.Client, m: activematch) {
     await channel.send(
         new discord.MessageEmbed()
             .setTitle("Voting time")
-            .setDescription(`Vote for Meme 1 by reacting with 1️⃣\nVote for Meme 2 by reacting with 2️⃣\nYou have **30 mins** to vote`)
+            .setDescription(`Vote for Meme 1 by reacting with 1️⃣\nVote for Meme 2 by reacting with 2️⃣\nYou have **15 mins or first person to 5 votes** to vote`)
             .setColor("#d7be26")
     ).then(async (msg) => {
         msg.react('1️⃣')
@@ -1135,7 +1140,7 @@ async function exhibitionVotingLogic(client: discord.Client, m: activematch) {
     await channel.send(`${id}`)
 
     m.votingperiod = true
-    m.votetime = ((Math.floor(Date.now() / 1000)) - 5400)
+    m.votetime = ((Math.floor(Date.now() / 1000)) - 6300)
 
     await updateActive(m)
     console.log("HHH2")

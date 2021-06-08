@@ -544,7 +544,8 @@ async function duelrunning(client) {
                 && m.split === false && m.votingperiod === false) {
                 await exhibitionVotingLogic(client, m);
             }
-            if (m.votingperiod === true && (Math.floor(Date.now() / 1000) - m.votetime > 7200)) {
+            if (m.votingperiod === true && (Math.floor(Date.now() / 1000) - m.votetime > 6300)
+                || (m.p1.votes >= 5 || m.p2.votes >= 5)) {
                 await exhibitionResults(client, m);
             }
         }
@@ -594,6 +595,7 @@ exports.duelrunning = duelrunning;
 async function exhibitionResults(client, m) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9;
     console.log("GGG");
+    let ex = await db_1.getExhibition();
     let channel = await client.channels.cache.get(m._id);
     let guild = await client.guilds.cache.get((await client.channels.cache.get(m._id)).guild.id);
     let d1 = await db_1.getDuelProfile(m.p1.userid, guild.id);
@@ -710,6 +712,8 @@ async function exhibitionResults(client, m) {
             .setColor("#d7be26");
         await channel.send(e);
     }
+    ex.activematches.push(channel.id);
+    await db_1.updateExhibition(ex);
     await db_1.updateDuelProfile(d1._id, d1, guild.id);
     await db_1.updateDuelProfile(d2._id, d2, guild.id);
     return await db_1.deleteActive(m);
@@ -754,7 +758,7 @@ async function exhibitionVotingLogic(client, m) {
     });
     await channel.send(new discord.MessageEmbed()
         .setTitle("Voting time")
-        .setDescription(`Vote for Meme 1 by reacting with 1️⃣\nVote for Meme 2 by reacting with 2️⃣\nYou have **30 mins** to vote`)
+        .setDescription(`Vote for Meme 1 by reacting with 1️⃣\nVote for Meme 2 by reacting with 2️⃣\nYou have **15 mins or first person to 5 votes** to vote`)
         .setColor("#d7be26")).then(async (msg) => {
         msg.react('1️⃣');
         msg.react('2️⃣');
@@ -763,7 +767,7 @@ async function exhibitionVotingLogic(client, m) {
     let id = guild.roles.cache.find(x => x.name.toLowerCase().includes("duel"));
     await channel.send(`${id}`);
     m.votingperiod = true;
-    m.votetime = ((Math.floor(Date.now() / 1000)) - 5400);
+    m.votetime = ((Math.floor(Date.now() / 1000)) - 6300);
     await db_1.updateActive(m);
     console.log("HHH2");
 }
