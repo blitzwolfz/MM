@@ -99,7 +99,7 @@ client.on('ready', async () => {
             console.log(error.stack);
         });
     }, 1000);
-    if (process.env.DBNAME === "mememania")
+    if (process.env.DBNAME === "mememania" && process.env.update)
         await client.channels.cache.get("722616679280148504").send("<@239516219445608449>", {
             embed: {
                 description: `Updates/Restart has worked`,

@@ -194,7 +194,7 @@ client.on('ready', async () => {
 
   //await running(client)
   //await qualrunning(client)
-  if(process.env.DBNAME === "mememania")
+  if(process.env.DBNAME === "mememania" && process.env.update)
   await (<Discord.TextChannel>client.channels.cache.get("722616679280148504")).send("<@239516219445608449>", {
     embed: {
       description: `Updates/Restart has worked`,
