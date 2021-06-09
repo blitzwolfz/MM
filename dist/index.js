@@ -691,7 +691,7 @@ client.on("message", async (message) => {
         if (((_b = message.guild) === null || _b === void 0 ? void 0 : _b.name.toLowerCase()) !== "MemeRoyale".toLowerCase())
             await verify_1.verify(message, client);
     }
-    if (command === "manualverify") {
+    if (command === "manualverify" || command === "mv") {
         if (!message.member.roles.cache.has('724818272922501190'))
             return message.reply("You don't have those premissions");
         await verify_1.manuallyverify(message, client, args);

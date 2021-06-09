@@ -1019,7 +1019,7 @@ client.on("message", async message => {
     await verify(message, client)
   }
 
-  if (command === "manualverify") {
+  if (command === "manualverify" || command === "mv") {
     if (!message.member!.roles.cache.has('724818272922501190')) return message.reply("You don't have those premissions")
     await manuallyverify(message, client, args)
   }
