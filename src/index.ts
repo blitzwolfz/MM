@@ -930,7 +930,6 @@ client.on("message", async message => {
     return await message.channel.send("Wait I get paid? - blitz")
   }
 
-
   else if (command === "exhibition" || command === "duel") {
     //if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
 
@@ -1370,7 +1369,6 @@ client.on("message", async message => {
     if (message.author.id !== "239516219445608449") return message.reply("You don't have those premissions")
     await CycleRestart(message, client)
   }
-  
 
   else if (command === "votereset") {
     if (message.author.id !== "239516219445608449") return message.reply("You don't have those premissions")
@@ -1507,8 +1505,6 @@ client.on("message", async message => {
 
   }
 
-  //CqtzrpLVF0GOnJXcFwLwyLbYoAwSQ1jH5QkGnpUJ
-
   else if (command === "reopensignup") {
     if (message.member!.roles.cache.has('724818272922501190')
       || message.member!.roles.cache.has('724832462286356590'))
@@ -1554,7 +1550,7 @@ client.on("message", async message => {
         users.push(userid)
       }
     }
-    await vs(<Discord.TextChannel>message.channel, client, (await client.users.fetch(users[0])), await client.users.fetch(users[1]))
+    await vs(<Discord.TextChannel>message.channel, client, await client.users.fetch(users[0]), await client.users.fetch(users[1]))
   }
 });
 

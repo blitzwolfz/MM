@@ -821,42 +821,62 @@ export async function duelrunning(client: discord.Client) {
         }
     }
 
-    for(let ii = 0; ii < ex.activematches.length; ii++){
-        if(<discord.TextChannel>await client.channels.cache.get(ex.activematches[ii]) === undefined){
-            
+    let ii = ex.activematches.length;
+
+    while (ii--) {
+        let ch = <discord.TextChannel>await client.channels.cache.get(ex.activematches[ii]);
+        let guild = await client.guilds.cache.get((<discord.TextChannel>await client.channels.cache.get(ch.id)).guild.id)!;
+
+        if(!guild?.channels.cache.has(ex.activematches[ii])){
             ex.activematches.splice(ii, 1)
-            continue
         }
-
-        //let guild:discord.Guild | undefined = (await client.guilds.cache.get((<discord.TextChannel>await client.channels.cache.get(ex.activematches[ii])).guild.id)!)
-
-        // if(!guild?.channels.cache.has(ex.activematches[ii]) 
-        //     && await client.guilds.cache.get((<discord.TextChannel>await 
-        //     client.channels.cache.get(ex.activematches[ii])).guild.id)!.name.toLowerCase() === guild.name.toLowerCase()
-        //     ){
-        //         
-        //         ex.activematches.splice(ii, 1)
-        //         ii++
-        //         continue;
-        // }
         
-        let ch = (<discord.TextChannel>await client.channels.cache.get(ex.activematches[ii]))
-
-        if(!ch || ch === undefined){
-            
-            ex.activematches.splice(ii, 1)
-            continue
-        }
-
         if(Math.floor(Date.now() / 1000) - Math.floor(ch.createdTimestamp/1000 ) > 4500){
-            (<discord.TextChannel>await client.channels.cache.get(ex.activematches[ii])).send("Cum 2")
             await ch.delete()
             ex.activematches.splice(ii, 1)
-            continue
         }
         
-
+        if(!ch || ch === undefined){
+            ex.activematches.splice(ii, 1)
+        }
     }
+
+    // for(let ii = 0; ii < ex.activematches.length; ii++){
+    //     if(<discord.TextChannel>await client.channels.cache.get(ex.activematches[ii]) === undefined){
+            
+    //         ex.activematches.splice(ii, 1)
+    //         continue
+    //     }
+
+    //     //let guild:discord.Guild | undefined = (await client.guilds.cache.get((<discord.TextChannel>await client.channels.cache.get(ex.activematches[ii])).guild.id)!)
+
+    //     // if(!guild?.channels.cache.has(ex.activematches[ii]) 
+    //     //     && await client.guilds.cache.get((<discord.TextChannel>await 
+    //     //     client.channels.cache.get(ex.activematches[ii])).guild.id)!.name.toLowerCase() === guild.name.toLowerCase()
+    //     //     ){
+    //     //         
+    //     //         ex.activematches.splice(ii, 1)
+    //     //         ii++
+    //     //         continue;
+    //     // }
+        
+    //     let ch = (<discord.TextChannel>await client.channels.cache.get(ex.activematches[ii]))
+
+    //     if(!ch || ch === undefined){
+            
+    //         ex.activematches.splice(ii, 1)
+    //         continue
+    //     }
+
+    //     if(Math.floor(Date.now() / 1000) - Math.floor(ch.createdTimestamp/1000 ) > 4500){
+    //         (<discord.TextChannel>await client.channels.cache.get(ex.activematches[ii])).send("Cum 2")
+    //         await ch.delete()
+    //         ex.activematches.splice(ii, 1)
+    //         continue
+    //     }
+        
+
+    // }
 
     for(let i = 0; i < ex.cooldowns.length; i++){
 

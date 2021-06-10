@@ -217,6 +217,8 @@ async function aaautoreminders(client) {
 }
 exports.aaautoreminders = aaautoreminders;
 async function delay(message, client, args) {
+    if (!args)
+        return message.reply("`!delay @mention-channel <h | m | h & m>");
     let reminder = await db_1.getReminder(await message.mentions.channels.first().id);
     if (message.mentions.channels.array().length === 0) {
         return message.reply("Please mention a channel");

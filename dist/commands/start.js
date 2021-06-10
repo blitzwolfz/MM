@@ -537,21 +537,19 @@ async function duelrunning(client) {
             console.log(error.message);
         }
     }
-    for (let ii = 0; ii < ex.activematches.length; ii++) {
-        if (await client.channels.cache.get(ex.activematches[ii]) === undefined) {
-            ex.activematches.splice(ii, 1);
-            continue;
-        }
+    let ii = ex.activematches.length;
+    while (ii--) {
         let ch = await client.channels.cache.get(ex.activematches[ii]);
-        if (!ch || ch === undefined) {
+        let guild = await client.guilds.cache.get((await client.channels.cache.get(ch.id)).guild.id);
+        if (!(guild === null || guild === void 0 ? void 0 : guild.channels.cache.has(ex.activematches[ii]))) {
             ex.activematches.splice(ii, 1);
-            continue;
         }
         if (Math.floor(Date.now() / 1000) - Math.floor(ch.createdTimestamp / 1000) > 4500) {
-            (await client.channels.cache.get(ex.activematches[ii])).send("Cum 2");
             await ch.delete();
             ex.activematches.splice(ii, 1);
-            continue;
+        }
+        if (!ch || ch === undefined) {
+            ex.activematches.splice(ii, 1);
         }
     }
     for (let i = 0; i < ex.cooldowns.length; i++) {

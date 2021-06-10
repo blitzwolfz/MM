@@ -1127,7 +1127,7 @@ client.on("message", async (message) => {
                 users.push(userid);
             }
         }
-        await card_1.vs(message.channel, client, (await client.users.fetch(users[0])), await client.users.fetch(users[1]));
+        await card_1.vs(message.channel, client, await client.users.fetch(users[0]), await client.users.fetch(users[1]));
     }
 });
 client.login(process.env.TOKEN);

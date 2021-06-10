@@ -289,6 +289,7 @@ export async function aaautoreminders(client: Discord.Client) {
 }
 
 export async function delay(message:Discord.Message, client:Discord.Client, args:string[]) {
+  if(!args) return message.reply("`!delay @mention-channel <h | m | h & m>")
   let reminder = await getReminder(await message.mentions.channels.first()!.id)
   if(message.mentions.channels.array().length === 0){
     return message.reply("Please mention a channel")
@@ -300,18 +301,13 @@ export async function delay(message:Discord.Message, client:Discord.Client, args
   for(let x of args){
     if(x.includes("h")){
       x.replace("h", "")
-
       time += (parseInt(x) * 3600)
-
     }
 
     if(x.includes("m")){
       x.replace("m", "")
-
       time += (parseInt(x) * 60) 
-
     }
-
   }
 
   if(time === 0){
