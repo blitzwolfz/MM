@@ -81,32 +81,38 @@ async function makeProfileEmbed(page: number = 1, client: Client, profiles: duel
         let obj = profiles[i]
         try {
             let strr = "";
-            if (symbol === "ratio") {
-                let mat = Math.floor(obj.wins / (obj.wins + obj.loss) * 100)
+            // if (symbol === "ratio") {
+            //     let mat = Math.floor(obj.wins / (obj.wins + obj.loss) * 100)
 
-                if (obj.wins + obj.loss === 0) mat = 0;
+            //     if (obj.wins + obj.loss === 0) mat = 0;
 
-                strr += "Win Ratio: " + `${mat}`
-            }
+            //     strr += "Win Ratio: " + `${mat}`
+            // }
 
-            if (symbol === "all") {
-                strr += `Wins: ${obj.wins}\nLosses: ${obj.loss}\nTotal votes recieved: ${obj.votetally}\nPoints gained: ${obj.points}`
-            }
+            // if (symbol === "all") {
+            //     strr += `Wins: ${obj.wins}\nLosses: ${obj.loss}\nTotal votes recieved: ${obj.votetally}\nPoints gained: ${obj.points}`
+            // }
 
-            else {
-                switch (symbol) {
-                    case "loss":
-                        strr += `Losses: ${obj.loss}`;
-                        break;
-                    case "votetally":
-                        strr += `Total votes recieved: ${obj.votetally}`;
-                        break;
-                    case "points":
-                        strr += `Points gained: ${obj.points}`;
-                        break;
-                    default:
-                        strr += `Wins: ${obj.wins}`;
-                }
+            switch (symbol) {
+                case "ratio":
+                    let mat = Math.floor(obj.wins / (obj.wins + obj.loss) * 100)
+                    if (obj.wins + obj.loss === 0) mat = 0;
+                    strr += "Win Ratio: " + `${mat}`;
+                    break;
+                case "all":
+                    strr += `Wins: ${obj.wins}\nLosses: ${obj.loss}\nTotal votes recieved: ${obj.votetally}\nPoints gained: ${obj.points}`
+                    break;
+                case "loss":
+                    strr += `Losses: ${obj.loss}`;
+                    break;
+                case "votetally":
+                    strr += `Total votes recieved: ${obj.votetally}`;
+                    break;
+                case "points":
+                    strr += `Points gained: ${obj.points}`;
+                    break;
+                default:
+                    strr += `Wins: ${obj.wins}`;
             }
 
             fields.push({
