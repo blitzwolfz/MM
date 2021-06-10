@@ -23,3 +23,5 @@ dist/testchallonge.d.ts
 src/testchallonge.ts
 
 .VSCodeCounter/
+
+dist/
