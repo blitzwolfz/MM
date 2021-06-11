@@ -215,9 +215,9 @@ export async function exhibition(message: Discord.Message, client: Discord.Clien
         
             ex.activematches.push(channel.id)
             await updateExhibition(ex)
-        
-            await user1.send(`You have 30 mins to complete your meme\nUse \`!submit\` to submit each image. If you have an active match in MemeRoyale, please use \`!submit -duel\``)
-            await user2.send(`You have 30 mins to complete your meme\nUse \`!submit\` to submit each image. If you have an active match in MemeRoyale, please use \`!submit -duel\``)
+            let st = `You have 30 mins to complete your meme\nUse \`!submit\` to submit each image. If you have an active match in MemeRoyale, you will have to submit based on channel. You can only submit an image or gif`
+            await user1.send(st)
+            await user2.send(st)
             if(newmatch.template){
                 await user1.send(`Image link if embed doesn't show:\`${newmatch.template[0]}\``)
                 await user2.send(`Image link if embed doesn't show:\`${newmatch.template[0]}\``)

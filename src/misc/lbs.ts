@@ -151,7 +151,7 @@ async function winlistEmbed(page: number = 1, client: Discord.Client, ratings: u
 
 
 export async function quallistGroups(message: Discord.Message, client: Discord.Client, args: string[]) {
-    let page: number = parseInt(args[0]) || 1
+    let page: number = parseInt(args[0])-1 || 0
     let ratings = await getQuallist()
     const m = <Discord.Message>(await message.channel.send({ embed: await quallistEmbed(page!, client, ratings) }));
     await m.react("⬅")
@@ -170,12 +170,12 @@ export async function quallistGroups(message: Discord.Message, client: Discord.C
     });
 }
 
-async function quallistEmbed(page: number = 1, client: Discord.Client, signup: quallist){
+async function quallistEmbed(page: number = 0, client: Discord.Client, signup: quallist){
 
     //let signup = await getSignups()
     //let guild = client.guilds.cache.get("719406444109103117")
-
-    page = page < 0 ? 0 : page - 1 ;
+    page = page < 0 ? 0 : page;
+    // page = page > signup.users[page].length ? 0 : page;
     const fields = [];    
     for (let i = 0; i < signup.users[page].length; i++){
 
@@ -197,7 +197,7 @@ async function quallistEmbed(page: number = 1, client: Discord.Client, signup: q
 
 
     return {
-        title: `Qualifier Groups ${page! || 1} of ${Math.floor(signup.users.length)}`,
+        title: `Qualifier Groups ${page!+1 || 1} of ${Math.floor(signup.users.length)}`,
         description: fields.length === 0 ?
             `There are no groups` :
             `there are ${signup.users.length} groups`,

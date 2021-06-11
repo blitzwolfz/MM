@@ -700,8 +700,6 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
       }
     }
   }
-
-
 });
 
 client.on("message", async message => {
