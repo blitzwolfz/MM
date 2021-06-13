@@ -712,7 +712,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
 client.on("message", async message => {
   //const gamemaster = message.guild.roles.get("719936221572235295");
 
-  if(["building", "warming up"].includes(client.user?.presence.activities[0].name.toLowerCase()!)) return message.reply("Building");
+  if(["building", "warming up"].includes(client.user?.presence.activities[0].name.toLowerCase()!)) return;
   // if(message.content.includes("!speedrun")){
   //   await qualrunning(client);
   //   await running(client);
