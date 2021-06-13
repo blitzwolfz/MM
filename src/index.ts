@@ -26,7 +26,7 @@ import {
 import { cooldownremove, duelcheck, exhibition } from "./commands/exhibitions"
 import { qualend, end, cancelmatch } from "./commands/winner";
 import { vs } from "./commands/card";
-import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, createrole, clearstats, qualifierresultadd, SeasonRestart, toHHMMSS, aaautoreminders, CycleRestart, resultadd, delay } from "./misc/utils";
+import { getUser, hasthreevotes, emojis, removethreevotes, reminders, deletechannels, createrole, clearstats, qualifierresultadd, SeasonRestart, toHHMMSS, aaautoreminders, CycleRestart, resultadd, delay, sleep } from "./misc/utils";
 import { ModHelp, UserHelp, ModSignupHelp, ModChallongeHelp, DuelHelp } from "./commands/help";
 
 import {
@@ -116,7 +116,6 @@ const listener = app.listen(process.env.PORT, () => {
 
 client.on('ready', async () => {
   await connectToDB()
-  client.user!.setActivity(`Warming up`);
   console.log(`Logged in as ${client.user?.tag}`);
   // for(let i = 0; i < 2; i++) console.log(i)
 
@@ -202,7 +201,12 @@ client.on('ready', async () => {
       timestamp: new Date()
     }
   });
-  client.user!.setActivity(`${process.env.STATUS}`);
+
+  await client.user!.setActivity(`Warming up`); 
+  await sleep(10)
+  await client.user!.setActivity(`Building`);
+  await sleep(150)
+  await client.user!.setActivity(`${process.env.STATUS}`);
 });
 
 client.on("guildMemberAdd", async function (member) {
@@ -533,6 +537,9 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
       === false) {
       return;
     }
+
+    if(messageReaction.message.author.id === "722303830368190485") return;
+
     let c = <Discord.TextChannel>await messageReaction.message.channel.fetch()
     let em = (await c.messages.fetch(messageReaction.message.id)).embeds[0]!
     let iter = 0
@@ -705,7 +712,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
 client.on("message", async message => {
   //const gamemaster = message.guild.roles.get("719936221572235295");
 
-
+  if(["building", "warming up"].includes(client.user?.presence.activities[0].name.toLowerCase()!)) return message.reply("Building");
   // if(message.content.includes("!speedrun")){
   //   await qualrunning(client);
   //   await running(client);
@@ -866,6 +873,7 @@ client.on("message", async message => {
   }
 
   else if (command === "test") {
+    let u = client.users.fetch(message.author.id)
     // let c = (<Discord.TextChannel>client.channels.cache.get(args[3]))!
     // let em = await c.messages.fetch(args[0])
     // let em2 = await c.messages.fetch(args[0])

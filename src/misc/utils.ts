@@ -323,6 +323,13 @@ export async function delay(message:Discord.Message, client:Discord.Client, args
 
 }
 
+export async function sleep(s:number) {
+
+  return new Promise((resolve) => {
+    setTimeout(resolve, (s*1000));
+  });
+}
+
 // async function  matchreminder(client:Discord.Client) {
 
 //   let r = await getReminders(
