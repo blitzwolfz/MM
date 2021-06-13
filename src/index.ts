@@ -873,7 +873,7 @@ client.on("message", async message => {
   }
 
   else if (command === "test") {
-    let u = client.users.fetch(message.author.id)
+    //let u = client.users.fetch(message.author.id)
     // let c = (<Discord.TextChannel>client.channels.cache.get(args[3]))!
     // let em = await c.messages.fetch(args[0])
     // let em2 = await c.messages.fetch(args[0])
