@@ -205,7 +205,7 @@ client.on('ready', async () => {
   await client.user!.setActivity(`Warming up`); 
   await sleep(10)
   await client.user!.setActivity(`Building`);
-  await sleep(150)
+  await sleep(90)
   await client.user!.setActivity(`${process.env.STATUS}`);
 });
 
