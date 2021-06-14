@@ -56,6 +56,8 @@ import {
   getReminders,
   getMatchlist,
   updateMatchlist,
+  getReminder,
+  insertReminder,
 } from "./misc/db";
 
 import { template, approvetemplate, addTheme, removeTheme, themelistLb, templatecheck } from "./commands/template";
@@ -1494,21 +1496,65 @@ client.on("message", async message => {
       for (let c of channels) {
 
         if (c.parent && c.parent!.name === "qualifiers") {
+          let q = await getReminder(c.id)
 
-          let n = parseInt(c.name.toLowerCase().replace("group-", "")) - 1
+          if(q){
+            let time2 = 36
 
-          let string = ""
-
-          for (let u of groups.users[n]) {
-            string += `<@${u}> `
+            let timeArr:Array<number> = []
+        
+            if((time2-2)*3600 > 0){
+                timeArr.push((time2-2)*3600)
+            }
+    
+            if((time2-12)*3600 > 0){
+                timeArr.push((time2-12)*3600)
+            }
+            q.basetime = time2*3600
+            q.timestamp = parseInt(args[0])
+            q.time = timeArr
           }
 
-          await (<Discord.TextChannel>client.channels.cache.get(c.id))
-            .send(`${string}, Portion ${args[0]} has begun, and you have ${args[1]}h to complete it. Contact a ref to begin your portion!`)
+          else{
+            let time2 = 36
+
+            let timeArr:Array<number> = []
+        
+            if((time2-2)*3600 > 0){
+                timeArr.push((time2-2)*3600)
+            }
+    
+            if((time2-12)*3600 > 0){
+                timeArr.push((time2-12)*3600)
+            }
+
+            let mentikon = ""
+
+            for (let u of groups.users[n]) {
+              mentikon += `<@${u}> `
+            }
+    
+            await insertReminder(
+                {
+                    _id:c.id,
+                    mention:mentikon,
+                    channel:c.id,
+                    type:"match",
+                    time:timeArr,
+                    timestamp:parseInt(args[0]),
+                    basetime:time2*3600
+                }
+            )
+          }
+
         }
       }
     }
 
+  }
+
+  else if (command === "timetest") {
+    return await message.reply(`${parseInt(args[0])*3600 + parseInt(args[1])}`)
   }
 
   else if (command === "reopensignup") {
