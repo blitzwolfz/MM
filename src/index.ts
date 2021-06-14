@@ -58,6 +58,7 @@ import {
   updateMatchlist,
   getReminder,
   insertReminder,
+  updateReminder,
 } from "./misc/db";
 
 import { template, approvetemplate, addTheme, removeTheme, themelistLb, templatecheck } from "./commands/template";
@@ -207,7 +208,7 @@ client.on('ready', async () => {
   await client.user!.setActivity(`Warming up`); 
   await sleep(10)
   await client.user!.setActivity(`Building`);
-  await sleep(90)
+  await sleep(5)
   await client.user!.setActivity(`${process.env.STATUS}`);
 });
 
@@ -1513,6 +1514,8 @@ client.on("message", async message => {
             q.basetime = time2*3600
             q.timestamp = parseInt(args[0])
             q.time = timeArr
+
+            await updateReminder(q)
           }
 
           else{
