@@ -1553,8 +1553,8 @@ client.on("message", async message => {
 
   }
 
-  else if (command === "timetest") {
-    return await message.reply(`${parseInt(args[0])*3600 + parseInt(args[1])}`)
+  else if (command === "timetester") {
+    return await message.reply(`It is ${(parseInt(args[0])*3600) + parseInt(args[1])}`)
   }
 
   else if (command === "reopensignup") {
