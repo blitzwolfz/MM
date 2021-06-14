@@ -1529,7 +1529,7 @@ client.on("message", async message => {
             }
 
             let mentikon = ""
-
+            let n = parseInt(c.name.toLowerCase().replace("group-", "")) - 1
             for (let u of groups.users[n]) {
               mentikon += `<@${u}> `
             }
