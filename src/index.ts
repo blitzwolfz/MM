@@ -1487,7 +1487,7 @@ client.on("message", async message => {
       await QualChannelCreation(message, args)
   }
 
-  else if (command === "seconqual") {
+  else if (command === "secondqual") {
     if (message.member!.roles.cache.has('724818272922501190')
       || message.member!.roles.cache.has('724832462286356590')) {
       let channels = await message.guild!.channels.cache.array()
