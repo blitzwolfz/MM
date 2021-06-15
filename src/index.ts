@@ -1544,11 +1544,11 @@ client.on("message", async message => {
 
             let timeArr: Array<number> = []
 
-            if ((time2 - 2) * 3600 > 0 && Math.floor(Date.now() / 1000) - time2 < ((time2 - 2) * 3600)) {
+            if ((time2 - 2) * 3600 > 0 && (Math.floor(Date.now() / 1000) - time2 < ((time2 - 2) * 3600))) {
               timeArr.push((time2 - 2) * 3600)
             }
 
-            if ((time2 - 12) * 3600 > 0 && Math.floor(Date.now() / 1000) - time2 < ((time2 - 12) * 3600)) {
+            if ((time2 - 12) * 3600 > 0 && (Math.floor(Date.now() / 1000) - time2 < ((time2 - 12) * 3600))) {
               timeArr.push((time2 - 12) * 3600)
             }
             q.basetime = time2 * 3600
@@ -1563,11 +1563,11 @@ client.on("message", async message => {
 
             let timeArr: Array<number> = []
 
-            if ((time2 - 2) * 3600 > 0 && Math.floor(Date.now() / 1000) - time2 < ((time2 - 2) * 3600)) {
+            if ((time2 - 2) * 3600 > 0 && (Math.floor(Date.now() / 1000) - time2 < ((time2 - 2) * 3600))) {
               timeArr.push((time2 - 2) * 3600)
             }
 
-            if ((time2 - 12) * 3600 > 0 && Math.floor(Date.now() / 1000) - time2 < ((time2 - 12) * 3600)) {
+            if ((time2 - 12) * 3600 > 0 && ((Math.floor(Date.now() / 1000) - time2) < ((time2 - 12) * 3600))) {
               timeArr.push((time2 - 12) * 3600)
             }
 
