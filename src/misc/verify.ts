@@ -59,7 +59,7 @@ export async function verify(message: Discord.Message, client: Discord.Client){
                 }
 
                 else{
-                    let id = makeid(5)
+                    let id = await makeid(5)
 
                     //message.author.send(`Please type \`!code\` and your verification code, \`${id}\` in the verification channel`)
         
