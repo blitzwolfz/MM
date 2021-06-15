@@ -1539,36 +1539,36 @@ client.on("message", async message => {
         if (c.parent && c.parent!.name === "qualifiers") {
           let q = await getReminder(c.id)
 
-          if(q){
+          if (q) {
             let time2 = 36
 
-            let timeArr:Array<number> = []
-        
-            if((time2-2)*3600 > 0){
-                timeArr.push((time2-2)*3600)
+            let timeArr: Array<number> = []
+
+            if ((time2 - 2) * 3600 > 0 && Math.floor(Date.now() / 1000) - time2 < ((time2 - 2) * 3600)) {
+              timeArr.push((time2 - 2) * 3600)
             }
-    
-            if((time2-12)*3600 > 0){
-                timeArr.push((time2-12)*3600)
+
+            if ((time2 - 12) * 3600 > 0 && Math.floor(Date.now() / 1000) - time2 < ((time2 - 12) * 3600)) {
+              timeArr.push((time2 - 12) * 3600)
             }
-            q.basetime = time2*3600
+            q.basetime = time2 * 3600
             q.timestamp = parseInt(args[0])
             q.time = timeArr
 
             await updateReminder(q)
           }
 
-          else{
+          else {
             let time2 = 36
 
-            let timeArr:Array<number> = []
-        
-            if((time2-2)*3600 > 0){
-                timeArr.push((time2-2)*3600)
+            let timeArr: Array<number> = []
+
+            if ((time2 - 2) * 3600 > 0 && Math.floor(Date.now() / 1000) - time2 < ((time2 - 2) * 3600)) {
+              timeArr.push((time2 - 2) * 3600)
             }
-    
-            if((time2-12)*3600 > 0){
-                timeArr.push((time2-12)*3600)
+
+            if ((time2 - 12) * 3600 > 0 && Math.floor(Date.now() / 1000) - time2 < ((time2 - 12) * 3600)) {
+              timeArr.push((time2 - 12) * 3600)
             }
 
             let mentikon = ""
@@ -1576,17 +1576,17 @@ client.on("message", async message => {
             for (let u of groups.users[n]) {
               mentikon += `<@${u}> `
             }
-    
+
             await insertReminder(
-                {
-                    _id:c.id,
-                    mention:mentikon,
-                    channel:c.id,
-                    type:"match",
-                    time:timeArr,
-                    timestamp:parseInt(args[0]),
-                    basetime:time2*3600
-                }
+              {
+                _id: c.id,
+                mention: mentikon,
+                channel: c.id,
+                type: "match",
+                time: timeArr,
+                timestamp: parseInt(args[0]),
+                basetime: time2 * 3600
+              }
             )
           }
 
