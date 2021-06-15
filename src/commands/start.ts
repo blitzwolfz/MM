@@ -44,9 +44,10 @@ export async function start(message: discord.Message, client: discord.Client) {
     let newmatch: activematch = {
         _id: message.channel.id,
         channelid: message.channel.id,
+        pause:false,
         split: false,
         exhibition: false,
-        messageID: "",
+        messageID: [],
         template: [],
         theme: "",
         tempfound: false,
@@ -253,6 +254,7 @@ export async function startqual(message: discord.Message, client: discord.Client
         _id: message.channel.id,
         split: false,
         channelid: message.channel.id,
+        messageID:[],
         players: users,
         playerids: plyerids,
         template: [],
@@ -342,6 +344,7 @@ export async function startmodqual(message: discord.Message, client: discord.Cli
     let newmatch: qualmatch = {
         _id: message.channel.id,
         split: true,
+        messageID: [],
         playerids: plyerids,
         channelid: message.channel.id,
         players: users,
@@ -457,8 +460,7 @@ export async function running(client: discord.Client): Promise<void> {
     let matches: activematch[] = await getActive()
     for (const match of matches) {
         if (match.exhibition === true) continue;
-        
-        
+        if(match.pause === true) continue;       
         
         let channelid = <discord.TextChannel>client.channels.cache.get(match.channelid)
         let user1 = (await client.users.fetch(match.p1.userid))
@@ -469,96 +471,6 @@ export async function running(client: discord.Client): Promise<void> {
 
         if (match.votingperiod === false) {
 
-            
-            // if (!match.exhibition && ((Math.floor(Date.now() / 1000) - match.p1.time <= 1860 && Math.floor(Date.now() / 1000) - match.p1.time >= 1800) 
-            // && match.p1.memedone === false && match.p1.donesplit && match.p1.halfreminder === false)) {
-
-            //     
-            //     match.p1.halfreminder = true
-
-            //     let embed = new discord.MessageEmbed()
-            //         .setColor("#d7be26")
-            //         .setTitle(`Match between ${user1.username} and ${user2.username}`)
-            //         .setDescription(`You have 30 mins left.\nUse \`!submit\` to submit`)
-            //         .setTimestamp()
-
-            //     try{
-            //         user1.send(embed)
-            //     } catch(err) { 
-            //         await (<discord.TextChannel>client.channels.cache.get("722616679280148504"))
-            //         .send("```" + err + "```")
-            //         await (<discord.TextChannel>client.channels.cache.get("722616679280148504"))
-            //         .send(`Can't send embed to <@${user1.id}>`)
-            //     }
-            //     // matches.splice(matches.indexOf(match), 1)
-            // }
-
-            // else if (!match.exhibition && (Math.floor(Date.now() / 1000) - match.p2.time <= 1860 && Math.floor(Date.now() / 1000) - match.p2.time >= 1800) 
-            // && match.p2.memedone === false && match.p2.donesplit && match.p2.halfreminder === false) {
-            //     
-            //     match.p2.halfreminder = true
-            //     let embed = new discord.MessageEmbed()
-            //         .setColor("#d7be26")
-            //         .setTitle(`Match between ${user1.username} and ${user2.username}`)
-            //         .setDescription(`You have 30 mins left.\nUse \`!submit\` to submit`)
-            //         .setTimestamp()
-
-
-            //     try{
-            //         user2.send(embed)
-            //     } catch(err) { 
-            //         await (<discord.TextChannel>client.channels.cache.get("722616679280148504"))
-            //         .send("```" + err + "```")
-            //         await (<discord.TextChannel>client.channels.cache.get("722616679280148504"))
-            //         .send(`Can't send embed to <@${user2.id}>`)
-            //     }
-            //     // matches.splice(matches.indexOf(match), 1)
-
-
-            // }
-
-            // else if (((Math.floor(Date.now() / 1000) - match.p1.time <= 2160 && Math.floor(Date.now() / 1000) - match.p1.time >= 2100) 
-            // && match.p1.memedone === false && match.p1.donesplit && match.p1.fivereminder === false)) {
-            //     match.p1.fivereminder = true
-            //     
-            //     let embed = new discord.MessageEmbed()
-            //         .setColor("#d7be26")
-            //         .setTitle(`Match between ${user1.username} and ${user2.username}`)
-            //         .setDescription(`You have 5 mins left.\nUse \`!submit\` to submit`)
-            //         .setTimestamp()
-
-            //     try{
-            //         user1.send(embed)
-            //     } catch(err) { 
-            //         await (<discord.TextChannel>client.channels.cache.get("722616679280148504"))
-            //         .send("```" + err + "```")
-            //         await (<discord.TextChannel>client.channels.cache.get("722616679280148504"))
-            //         .send(`Can't send embed to <@${user1.id}>`)
-            //     }
-            //     // matches.splice(matches.indexOf(match), 1)
-            // }
-
-            // else if (((Math.floor(Date.now() / 1000) - match.p2.time <= 2160 && Math.floor(Date.now() / 1000) - match.p2.time >= 2100) && match.p2.memedone === false 
-            // && match.p2.donesplit && match.p2.fivereminder === false)){
-
-            //     match.p2.fivereminder = true
-            //     
-            //     let embed = new discord.MessageEmbed()
-            //         .setColor("#d7be26")
-            //         .setTitle(`Match between ${user1.username} and ${user2.username}`)
-            //         .setDescription(`You have 5 mins left.\nUse \`!submit\` to submit`)
-            //         .setTimestamp()
-
-            //     try{
-            //         user2.send(embed)
-            //     } catch(err) { 
-            //         await (<discord.TextChannel>client.channels.cache.get("722616679280148504"))
-            //         .send("```" + err + "```")
-            //         await (<discord.TextChannel>client.channels.cache.get("722616679280148504"))
-            //         .send(`Can't send embed to <@${user2.id}>`)
-            //     }
-            //     // matches.splice(matches.indexOf(match), 1)
-            // }
 
             if (!(match.split) && ((Math.floor(Date.now() / 1000) - match.p2.time > 3600) && match.p2.memedone === false)
                 && ((Math.floor(Date.now() / 1000) - match.p1.time > 3600) && match.p1.memedone === false)) {
@@ -683,7 +595,9 @@ export async function running(client: discord.Client): Promise<void> {
                             .setImage(match.template[0])
                             .setColor("#07da63")
                             .setTimestamp()
-                    )
+                    ).then(async msg => {
+                        match.messageID.push(msg.id)
+                    })
                 }
 
                 if (match.theme) {
@@ -693,7 +607,9 @@ export async function running(client: discord.Client): Promise<void> {
                             .setDescription(`Theme is: ${match.theme}`)
                             .setColor("#07da63")
                             .setTimestamp()
-                    )
+                    ).then(async msg => {
+                        match.messageID.push(msg.id)
+                    })
                 }
 
 
@@ -721,11 +637,15 @@ export async function running(client: discord.Client): Promise<void> {
 
 
 
-                await channelid.send(embed1)
-                await channelid.send(embed2)
+                await channelid.send(embed1).then(async msg => {
+                    match.messageID.push(msg.id)
+                })
+                await channelid.send(embed2).then(async msg => {
+                    match.messageID.push(msg.id)
+                })
 
                 await channelid.send(embed3).then(async msg => {
-                    match.messageID = msg.id
+                    match.messageID.push(msg.id)
                     await (msg as discord.Message).react(emojis[0])
                     await (msg as discord.Message).react(emojis[1])
                 })
@@ -735,7 +655,7 @@ export async function running(client: discord.Client): Promise<void> {
                 match.votingperiod = true
                 match.votetime = (Math.floor(Date.now() / 1000))
 
-                if (!match.exhibition) {
+                if (!match.exhibition && process.env.DBNAME !== "aceroyale") {
                     await channelid.send(`<@&719936221572235295>`)
                     await channelid.send("You have 2 hours to vote!")
                 }
@@ -1117,7 +1037,7 @@ async function exhibitionVotingLogic(client: discord.Client, m: activematch) {
                 .setDescription(`The theme is ${m.theme}`)
                 .setColor("GREEN")
         ).then(async msg => {
-            m.messageID = (msg.id)
+            m.messageID.push(msg.id)
         })
     }
 
@@ -1128,7 +1048,7 @@ async function exhibitionVotingLogic(client: discord.Client, m: activematch) {
                 .setImage(m.template[0])
                 .setColor("GREEN")
         ).then(async msg => {
-            m.messageID = (msg.id)
+            m.messageID.push(msg.id)
         })
     }
 
@@ -1138,7 +1058,7 @@ async function exhibitionVotingLogic(client: discord.Client, m: activematch) {
             .setImage(m.p1.memelink)
             .setColor("#d7be26")
     ).then(async msg => {
-        m.messageID = (msg.id)
+        m.messageID.push(msg.id)
     })
 
     channel.send(
@@ -1147,7 +1067,7 @@ async function exhibitionVotingLogic(client: discord.Client, m: activematch) {
             .setImage(m.p2.memelink)
             .setColor("#d7be26")
     ).then(async msg => {
-        m.messageID = (msg.id)
+        m.messageID.push(msg.id)
     })
 
     await channel.send(
@@ -1158,7 +1078,7 @@ async function exhibitionVotingLogic(client: discord.Client, m: activematch) {
     ).then(async (msg) => {
         msg.react('1️⃣')
         msg.react('2️⃣')
-        m.messageID = (msg.id)
+        m.messageID.push(msg.id)
     })
 
     let id = guild.roles.cache.find(x => x.name.toLowerCase().includes("duel"))
@@ -1202,19 +1122,32 @@ export async function splitqual(client: discord.Client, message: discord.Message
 
                     await user.send(`<@${user.id}> your qualifier match has been split.\nYou have 30 mins to complete your meme\nUse \`!qualsubmit\` to submit`)
 
+                    try {
+                        if (match.template.length > 0 && match.istheme || match.template && match.istheme) {
+                            await user.send("\n\nHere is your theme(s): " + match.template[0])
+                            
+                            //await user.send({ files: [new discord.MessageAttachment(match.template)] })
+                            
+                        }
 
-                    if (match.template.length > 0 && match.istheme || match.template && match.istheme) {
-                        await user.send("\n\nHere is your theme(s): " + match.template[0])
+                        else if (match.istheme === false) {
+                            await user.send(new discord.MessageEmbed()
+                                .setTitle("Your template")
+                                .setImage(match.template[0])
+                                .setColor("#d7be26")
+                                .setTimestamp())
+                        }
+
+                        else if (u.split === true && u.userid === user.id) {
+                            await channelid.send(new discord.MessageEmbed()
+                                .setDescription(`<@${user.id}> has completed their portion`)
+                                .setColor("#d7be26")
+                                .setTimestamp())
+                            await updateQuals(match)
+                        }
+
+                    } catch (error) {
                         
-                        //await user.send({ files: [new discord.MessageAttachment(match.template)] })
-                    }
-
-                    else if (match.istheme === false) {
-                        await user.send(new discord.MessageEmbed()
-                            .setTitle("Your template")
-                            .setImage(match.template[0])
-                            .setColor("#d7be26")
-                            .setTimestamp())
                     }
 
                     await updateQuals(match)
@@ -1234,14 +1167,6 @@ export async function splitqual(client: discord.Client, message: discord.Message
                             basetime:3600
                         }
                     )
-                }
-
-                else if (u.split === true && u.userid === user.id) {
-                    await channelid.send(new discord.MessageEmbed()
-                        .setDescription(`<@${user.id}> has completed their portion`)
-                        .setColor("#d7be26")
-                        .setTimestamp())
-                    await updateQuals(match)
                 }
             }
 
@@ -1418,9 +1343,10 @@ export async function startregularsplit(message: discord.Message, client: discor
     let newmatch: activematch = {
         _id: message.channel.id,
         channelid: message.channel.id,
+        pause:false,
         split: true,
         exhibition: false,
-        messageID: "",
+        messageID: [],
         template: [],
         theme: "",
         tempfound: false,
@@ -1846,7 +1772,7 @@ export async function reload(message: discord.Message, client: discord.Client) {
             await channelid.send(embed2)
 
             await channelid.send(embed3).then(async msg => {
-                match.messageID = msg.id
+                match.messageID.push(msg.id)
                 await (msg as discord.Message).react(emojis[0])
                 await (msg as discord.Message).react(emojis[1])
             })

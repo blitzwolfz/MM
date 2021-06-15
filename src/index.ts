@@ -131,7 +131,7 @@ client.on('ready', async () => {
       if (match.votingperiod) {
         let channel = <Discord.TextChannel>client.channels.cache.get(match.channelid)
 
-        channel.messages.fetch(match.messageID).then(async msg => {
+        channel.messages.fetch(match.messageID[match.messageID.length-1]).then(async msg => {
           if (msg.partial) {
             await msg.fetch();
           }
@@ -857,6 +857,9 @@ client.on("message", async message => {
       await message.channel.send(`-mute <@${message.author.id}>`)
       return message.reply("YOU DARE PING EVERYONE!");
     }
+
+    if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("Bitch.")
+
     message.delete().catch(console.log);
     message.channel.send(sayMessage);
   }
@@ -1316,20 +1319,57 @@ client.on("message", async message => {
     await updateModProfile(message.author.id, "matchportionsstarted", 1)
   }
 
-  else if (command === "reload") {
+  else if (command === "reload2") {
     if (!message.member!.roles.cache.has('719936221572235295')) return message.reply("You don't have those premissions")
     await reload(message, client)
   }
 
-  else if (command === "reload2"){
+  else if (command === "reload") {
+
     let match = await getMatch(message.channel.id)
 
-    match.split = false
-    match.votingperiod = false
-    match.p1.time = Math.floor(Date.now() / 1000) - 3200
-    match.p2.time = Math.floor(Date.now() / 1000) - 3200
+    if (match) {
+      let match = await getMatch(message.channel.id)
+      let channel = <Discord.TextChannel>await client.channels.cache.get(message.channel.id)!
+      for (let ms of match.messageID) {
+        (await channel.messages.fetch(ms)).delete()
+      }
 
-    await updateActive(match)
+      match.split = false
+      match.votingperiod = false
+      match.p1.time = Math.floor(Date.now() / 1000) - 3200
+      match.p2.time = Math.floor(Date.now() / 1000) - 3200
+
+      await updateActive(match)
+      return message.reply("Reloading").then(m => {
+        m.delete({ timeout: 1500 })
+      })
+    }
+
+    else {
+      let match = await getQual(message.channel.id)
+      let channel = <Discord.TextChannel>await client.channels.cache.get(message.channel.id)!
+      for (let ms of match.messageID) {
+        (await channel.messages.fetch(ms)).delete()
+      }
+
+      match.split = false
+      match.octime = ((Math.floor(Date.now())) / 1000) - 1800
+
+      let temparr = []
+
+      for (let player of match.players) {
+        if (!player.failed) {
+          temparr.push(player.userid)
+        }
+      }
+      match.playersdone = temparr
+
+      await updateQuals(match)
+      return message.reply("Reloading").then(m => {
+        m.delete({ timeout: 1500 })
+      })
+    }
   }
 
   else if (command === "qualend") {
@@ -1582,6 +1622,34 @@ client.on("message", async message => {
 
   else if (command === "delay"){
     await delay(message, client, args)
+  }
+
+  else if (command === "pause"){
+    let id = message.mentions.channels.first()!.id || message.channel.id
+    let channel = <Discord.TextChannel>client.channels.cache.get(id)
+
+    let match = await getMatch(id)
+
+    if (match && channel.parent?.name.toLowerCase() === "matches") {
+
+      if(match.pause){
+        match.pause = true
+        await updateActive(match)
+
+        return message.reply("Unpaused match")
+      }
+
+      else{
+        match.pause = true
+        await updateActive(match)
+
+        return message.reply("Paused match")
+      }
+    }
+
+    else{
+      return message.reply("No match found")
+    }
   }
 
   else if (command === "deletesignup") {

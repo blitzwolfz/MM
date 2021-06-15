@@ -275,7 +275,7 @@ export async function aaautoreminders(client: Discord.Client) {
                   `${r.mention} you have ${(r.basetime - r.time[r.time.length-1])/60}m left to do your portion`
               )
 
-              r.time.pop()
+              r.time.splice(r.time.length-1, 1)
 
               if(r.time.length === 0){
                   await deleteReminder(r);

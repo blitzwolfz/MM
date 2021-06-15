@@ -1,7 +1,8 @@
 export interface activematch{
     _id: string;
+    pause:boolean,
     channelid:string;
-    messageID:string;
+    messageID:Array<string>;
     split:boolean;
     exhibition:boolean;
     template:Array<string>,
@@ -37,6 +38,7 @@ export interface activematch{
 export interface qualmatch{
     _id:string;
     channelid:string;
+    messageID:Array<string>;
     players: Array<players>;
     playerids:Array<string>
     octime: number;
