@@ -185,7 +185,7 @@ export async function test(){
 
 
 
-function makeid(length: number) {
+export async function makeid(length: number) {
     let result = '';
     let characters = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz123456789';
     let charactersLength = characters.length;
