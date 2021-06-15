@@ -3,7 +3,6 @@ import * as Discord from "discord.js";
 import { getSignups, getMatchlist, updateMatchlist, insertMatchlist, insertQuallist, getQuallist, updateQuallist, updateProfile, insertReminder } from "../misc/db";
 import { matchlist, quallist } from "../misc/struct";
 import { indexOf2d } from "../misc/utils";
-import { makeid } from "../misc/verify";
 import { vs } from "./card";
 //import { indexOf2d } from "../misc/utils";
 
@@ -88,25 +87,9 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
             apiKey: process.env.CHALLONGE
         });
 
-        //let matchid = (args.join("")).replace("https://challonge.com/", "");
+        let matchid = (args.join("")).replace("https://challonge.com/", "");
 
-        let matchlist = await getMatchlist();
-        let matchid = await makeid(7)
-
-        client.tournaments.create({
-            tournament: {
-              name: `${args.join(" ")}`,
-              url: matchid,
-              tournamentType: 'single elimination',
-            },
-            callback: (err: any, data: any) => {
-              console.log(err, data);
-            }
-        });
-
-        
-
-
+        let matchlist = await getMatchlist();      
 
         matchlist.users = await shuffle(matchlist.users)
         matchlist.users = await shuffle(matchlist.users)
@@ -144,7 +127,22 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
             .setColor("#d7be26")
             .setTitle(`MemeRoyale ${args.join(" ")}`)
             .setDescription(`Here's the link to the brackets\nhttps://www.challonge.com/${matchid}`)
-            .setTimestamp())
+            .setTimestamp()
+        ).then(async mssg => {
+            let msg = await message
+            .channel
+            .send(`Do you want to send to bracket channel? If so, click on the the ✔️ to continue.`)
+
+            await msg.react(`✔️`)
+            let emoteFilter = (reaction: { emoji: { name: string; }; }, user: Discord.User) => reaction.emoji.name === '✔️' && !user.bot;
+            const approve = msg.createReactionCollector(emoteFilter, { time: 50000 });
+
+            approve.on('collect', async () => {
+                let channel = <Discord.TextChannel>client.channels.cache.get("722291101977018389")
+                channel.send(`@here ${args.join(" ")} ——>`)
+            })
+
+        });
     }
 
     else {
