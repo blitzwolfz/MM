@@ -415,7 +415,7 @@ export async function qualsubmit(message: Discord.Message, client: Discord.Clien
                             //     match.votingperiod = true
                             //     match.votetime = Math.floor(Date.now() / 1000)
                             // }
-                            await message.reply("You meme has been attached!")
+                            await message.reply("Your meme has been attached!")
                             await (<Discord.TextChannel>client.channels.cache.get("722616679280148504")).send({
                                 embed: {
                                     description: `<@${message.author.id}> has submitted their meme\nChannel: <#${match.channelid}>`,
