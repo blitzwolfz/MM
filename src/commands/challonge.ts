@@ -3,6 +3,7 @@ import * as Discord from "discord.js";
 import { getSignups, getMatchlist, updateMatchlist, insertMatchlist, insertQuallist, getQuallist, updateQuallist, updateProfile, insertReminder } from "../misc/db";
 import { matchlist, quallist } from "../misc/struct";
 import { indexOf2d } from "../misc/utils";
+import { makeid } from "../misc/verify";
 import { vs } from "./card";
 //import { indexOf2d } from "../misc/utils";
 
@@ -87,14 +88,21 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
             apiKey: process.env.CHALLONGE
         });
 
-        let matchid = (args.join("")).replace("https://challonge.com/", "");
+        //let matchid = (args.join("")).replace("https://challonge.com/", "");
 
         let matchlist = await getMatchlist();
+        let matchid = await makeid(7)
 
-        
-
-        // let qualid = (matchlist.qualurl)
-        // qualid = qualid.replace("https://challonge.com/", "")
+        client.tournaments.create({
+            tournament: {
+              name: `${args.join(" ")}`,
+              url: matchid,
+              tournamentType: 'single elimination',
+            },
+            callback: (err: any, data: any) => {
+              console.log(err, data);
+            }
+        });
 
         
 
@@ -107,14 +115,9 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
         matchlist.users = await shuffle(matchlist.users)
 
         for (let i = 0; i < matchlist.users.length; i++) {
-            
+
             let name = (await (await guild!.members.fetch(matchlist.users[i])).nickname) || await (await disclient.users.fetch(matchlist.users[i])).username
             //let name = matchlist.users[i]
-
-
-
-            
-            
 
 
             client.participants.create({
@@ -139,7 +142,7 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
 
         await message.reply(new Discord.MessageEmbed()
             .setColor("#d7be26")
-            .setTitle(`Meme Mania ${args[0]}`)
+            .setTitle(`MemeRoyale ${args.join(" ")}`)
             .setDescription(`Here's the link to the brackets\nhttps://www.challonge.com/${matchid}`)
             .setTimestamp())
     }
@@ -330,7 +333,8 @@ export async function dirtyChannelcreate(message: Discord.Message, disclient: Di
             let time = 48
 
             let timeArr:Array<number> = []
-    
+            timeArr.push(time*3600)
+
             if((time-2)*3600 > 0){
                 timeArr.push((time-2)*3600)
             }
@@ -369,7 +373,7 @@ export async function QualChannelCreation(message: Discord.Message, args: string
     let groups = await getQuallist()
     
 
-    let time = args[1]
+    let time = parseInt(args[1])
     let qlist = await getMatchlist()
 
     for (let i = 0; i < groups.users.length; i++) {
@@ -390,16 +394,18 @@ export async function QualChannelCreation(message: Discord.Message, args: string
                         string += `<@${u}> `
                     }
 
-                    let time2 = 36
-
                     let timeArr:Array<number> = []
-                
-                    if((time2-2)*3600 > 0){
-                        timeArr.push((time2-2)*3600)
+            
+                    if((time-2)*3600 > 0){
+                        timeArr.push((time-2)*3600)
                     }
             
-                    if((time2-12)*3600 > 0){
-                        timeArr.push((time2-12)*3600)
+                    if((time-12)*3600 > 0){
+                        timeArr.push((time-12)*3600)
+                    }
+            
+                    if((time-24)*3600 > 0){
+                        timeArr.push((time-24)*3600)
                     }
             
                     await insertReminder(
@@ -410,7 +416,7 @@ export async function QualChannelCreation(message: Discord.Message, args: string
                             type:"match",
                             time:timeArr,
                             timestamp:Math.floor(Date.now()/1000),
-                            basetime:time2*3600
+                            basetime:time*3600
                         }
                     )
 
