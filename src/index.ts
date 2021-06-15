@@ -879,20 +879,18 @@ client.on("message", async message => {
   }
 
   else if (command === "test") {
-    //let u = client.users.fetch(message.author.id)
-    // let c = (<Discord.TextChannel>client.channels.cache.get(args[3]))!
-    // let em = await c.messages.fetch(args[0])
-    // let em2 = await c.messages.fetch(args[0])
-    
-
-    // await message.channel.send({ embed:em.embeds[0]})
-    // await message.channel.send({ embed:em2.embeds[0]})
-    // await dbTester()
-    // message.channel.send(`${`Got 34 in total | UserID:629852963497705491`.match(/\d+/g)![1]}`)
-
-    // let emm = await resultadd(await (<Discord.TextChannel>client.channels.cache.get(message.channel.id)), client, [args[0], args[1]])
-
-    // await message.channel.send({ embed:emm })
+    let reminders = await getReminders();
+    for (let r of reminders) {
+      if (Math.floor(Date.now() / 1000) - r.timestamp >= r.time[r.time.length - 1]) {
+        if (r.type === "match") {
+          if (r.basetime !== r.time[r.time.length - 1]) {
+            for (let xx of r.mention.match(/\d+/g)!) {
+              await message.channel.send(`${(await client.users.fetch(xx)).tag} has ${(r.basetime - r.time[r.time.length - 1]) / 3600}h left to do their match in <#${r.channel}>`)
+            }
+          }
+        }
+      }
+    }
 
   }
 
@@ -1544,11 +1542,13 @@ client.on("message", async message => {
 
             let timeArr: Array<number> = []
 
-            if ((time2 - 2) * 3600 > 0 && (Math.floor(Date.now() / 1000) - time2 < ((time2 - 2) * 3600))) {
+            timeArr.push(36*3600)
+
+            if ((time2 - 2) * 3600 > 0 && (Math.floor(Date.now() / 1000) - parseInt(args[0]) < ((time2 - 2) * 3600))) {
               timeArr.push((time2 - 2) * 3600)
             }
 
-            if ((time2 - 12) * 3600 > 0 && (Math.floor(Date.now() / 1000) - time2 < ((time2 - 12) * 3600))) {
+            if ((time2 - 12) * 3600 > 0 && (Math.floor(Date.now() / 1000) - parseInt(args[0]) < ((time2 - 12) * 3600))) {
               timeArr.push((time2 - 12) * 3600)
             }
             q.basetime = time2 * 3600
@@ -1563,11 +1563,13 @@ client.on("message", async message => {
 
             let timeArr: Array<number> = []
 
-            if ((time2 - 2) * 3600 > 0 && (Math.floor(Date.now() / 1000) - time2 < ((time2 - 2) * 3600))) {
+            timeArr.push(36*3600)
+
+            if ((time2 - 2) * 3600 > 0 && (Math.floor(Date.now() / 1000) - parseInt(args[0]) < ((time2 - 2) * 3600))) {
               timeArr.push((time2 - 2) * 3600)
             }
 
-            if ((time2 - 12) * 3600 > 0 && ((Math.floor(Date.now() / 1000) - time2) < ((time2 - 12) * 3600))) {
+            if ((time2 - 12) * 3600 > 0 && ((Math.floor(Date.now() / 1000) - parseInt(args[0])) < ((time2 - 12) * 3600))) {
               timeArr.push((time2 - 12) * 3600)
             }
 
