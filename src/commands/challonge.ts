@@ -89,7 +89,7 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
 
         let matchid = (args.join("")).replace("https://challonge.com/", "");
 
-        let matchlist = await getMatchlist();      
+        let matchlist = await getMatchlist();
 
         matchlist.users = await shuffle(matchlist.users)
         matchlist.users = await shuffle(matchlist.users)
@@ -98,10 +98,9 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
         matchlist.users = await shuffle(matchlist.users)
 
         for (let i = 0; i < matchlist.users.length; i++) {
-
+            
             let name = (await (await guild!.members.fetch(matchlist.users[i])).nickname) || await (await disclient.users.fetch(matchlist.users[i])).username
             //let name = matchlist.users[i]
-
 
             client.participants.create({
                 id: matchid,
@@ -125,24 +124,9 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
 
         await message.reply(new Discord.MessageEmbed()
             .setColor("#d7be26")
-            .setTitle(`MemeRoyale ${args.join(" ")}`)
+            .setTitle(`Meme Mania ${args[0]}`)
             .setDescription(`Here's the link to the brackets\nhttps://www.challonge.com/${matchid}`)
-            .setTimestamp()
-        ).then(async mssg => {
-            let msg = await message
-            .channel
-            .send(`Do you want to send to bracket channel? If so, click on the the ✔️ to continue.`)
-
-            await msg.react(`✔️`)
-            let emoteFilter = (reaction: { emoji: { name: string; }; }, user: Discord.User) => reaction.emoji.name === '✔️' && !user.bot;
-            const approve = msg.createReactionCollector(emoteFilter, { time: 50000 });
-
-            approve.on('collect', async () => {
-                let channel = <Discord.TextChannel>client.channels.cache.get("722291101977018389")
-                channel.send(`@here ${args.join(" ")} ——>`)
-            })
-
-        });
+            .setTimestamp())
     }
 
     else {
