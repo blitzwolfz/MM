@@ -205,10 +205,10 @@ client.on('ready', async () => {
     }
   });
 
-  await client.user!.setActivity(`Warming up`); 
-  await sleep(10)
-  await client.user!.setActivity(`Building`);
-  await sleep(5)
+  await client.user!.setActivity(`Building`); 
+  await sleep(2)
+  await client.user!.setActivity(`Warming up`);
+  await sleep(2)
   await client.user!.setActivity(`${process.env.STATUS}`);
 });
 
@@ -541,7 +541,7 @@ client.on("messageReactionAdd", async function (messageReaction, user) {
       return;
     }
 
-    if(messageReaction.message.author.id === "722303830368190485") return;
+    //if(messageReaction.message.author.id !== "722303830368190485") return;
 
     let c = <Discord.TextChannel>await messageReaction.message.channel.fetch()
     let em = (await c.messages.fetch(messageReaction.message.id)).embeds[0]!
