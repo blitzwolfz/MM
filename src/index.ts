@@ -1000,6 +1000,7 @@ client.on("message", async message => {
     t.push(args[0])
     t.push(args[1])
     t.push(args[2])
+    t.push(args[3])
     await matchwinner(t)
   }
 
