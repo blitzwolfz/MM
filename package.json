@@ -26,7 +26,6 @@
     "@types/ws": "^7.4.4",
     "canvas": "^2.6.1",
     "challonge-js": "^1.1.1",
-    "challonge-ts": "0.0.2",
     "discord.js": "^12.3.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",

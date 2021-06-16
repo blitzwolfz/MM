@@ -4,7 +4,6 @@ import { getSignups, getMatchlist, updateMatchlist, insertMatchlist, insertQuall
 import { matchlist, quallist } from "../misc/struct";
 import { indexOf2d } from "../misc/utils";
 import { vs } from "./card";
-import { Challonge } from 'challonge-ts';
 //import { indexOf2d } from "../misc/utils";
 
 
@@ -24,14 +23,14 @@ export async function CreateChallongeQualBracket(message: Discord.Message, discl
 
         let matchlist = await getMatchlist()
 
-        
+
 
         //message.reply(id)
 
 
         let Signups = await getSignups()
 
-        
+
 
         if (Signups) {
             if (Signups.open === false) {
@@ -99,7 +98,7 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
         matchlist.users = await shuffle(matchlist.users)
 
         for (let i = 0; i < matchlist.users.length; i++) {
-            
+
             let name = (await (await guild!.members.fetch(matchlist.users[i])).nickname) || await (await disclient.users.fetch(matchlist.users[i])).username
             //let name = matchlist.users[i]
 
@@ -137,7 +136,7 @@ export async function CreateChallongeMatchBracket(message: Discord.Message, disc
 }
 
 export async function ChannelCreation(message: Discord.Message, disclient: Discord.Client, args: string[]) {
-    
+
     if (!args) return message.reply("Please input round number!")
 
     else {
@@ -148,7 +147,7 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
         let match = await getMatchlist()
 
         for (let i = 0; i < match.users.length; i++) {
-            
+
             try {
                 let name = ((await (await guild!.members.fetch(match.users[i])).nickname) || await (await disclient.users.fetch(match.users[i])).username)
                 names.push([name, match.users[i]])
@@ -162,19 +161,19 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
 
         let matchlist = await getMatchlist()
 
-        
 
-        
-        
+
+
+
 
         await client.matches.index({
             id: matchlist.url,
             callback: async (err: any, data: any) => {
-                
+
                 if (err) console.log(err)
 
 
-                
+
 
                 for (let i = 0; i < data.length; i++) {
                     //var channelstringname = ""
@@ -182,7 +181,7 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
                     if (data[i].match.round === parseInt(args[0])) {
                         //await message.reply(`\`\`\` ${data[i]}\`\`\``)
 
-                        
+
 
 
                         if (data[i].match.winnerId === null && data[i].match.loserId === null) {
@@ -232,14 +231,14 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
                                         //     names.push([(await (await guild!.members.fetch(i)!).nickname || (await disclient.users.fetch(i)!).username), i])
                                         // }
 
-                                        
+
 
                                         await message.guild!.channels.create(channelstringname, { type: 'text', topic: `${matchid},${oneid},${twoid}` })
                                             .then(async channel => {
                                                 let category = await message.guild!.channels.cache.find(c => c.name == "matches" && c.type == "category");
 
-                                                
-                                                
+
+
                                                 if (!category) throw new Error("Category channel does not exist");
                                                 await channel.setParent(category.id);
                                                 await channel.lockPermissions()
@@ -249,37 +248,37 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
                                                 await vs(channel, disclient, await disclient.users.fetch(id1), await disclient.users.fetch(id2))
                                                 await channel.send(`<@${id1}> <@${id2}> You have ${args[1]}h to complete this match. Contact a ref to begin, you may also split your match`)
 
-                                                
-                                                
+
+
                                                 let time = 48
 
-                                                let timeArr:Array<number> = []
-                                                timeArr.push(time*3600)
-                                                
-                                                if((time-2)*3600 > 0){
-                                                    timeArr.push((time-2)*3600)
+                                                let timeArr: Array<number> = []
+                                                timeArr.push(time * 3600)
+
+                                                if ((time - 2) * 3600 > 0) {
+                                                    timeArr.push((time - 2) * 3600)
                                                 }
-                                        
-                                                if((time-12)*3600 > 0){
-                                                    timeArr.push((time-12)*3600)
+
+                                                if ((time - 12) * 3600 > 0) {
+                                                    timeArr.push((time - 12) * 3600)
                                                 }
-                                        
-                                                if((time-24)*3600 > 0){
-                                                    timeArr.push((time-24)*3600)
+
+                                                if ((time - 24) * 3600 > 0) {
+                                                    timeArr.push((time - 24) * 3600)
                                                 }
-                                        
+
                                                 await insertReminder(
                                                     {
-                                                        _id:channel.id,
-                                                        mention:`<@${id1}> <@${id2}>`,
-                                                        channel:channel.id,
-                                                        type:"match",
-                                                        time:timeArr,
-                                                        timestamp:Math.floor(Date.now()/1000),
-                                                        basetime:time*3600
+                                                        _id: channel.id,
+                                                        mention: `<@${id1}> <@${id2}>`,
+                                                        channel: channel.id,
+                                                        type: "match",
+                                                        time: timeArr,
+                                                        timestamp: Math.floor(Date.now() / 1000),
+                                                        basetime: time * 3600
                                                     }
                                                 )
-                                        });
+                                            });
                                     }
 
                                 }
@@ -298,63 +297,63 @@ export async function ChannelCreation(message: Discord.Message, disclient: Disco
 export async function dirtyChannelcreate(message: Discord.Message, disclient: Discord.Client, args: string[]) {
     let ids = args.slice(2)
 
-    for(let i = 0; i < ids.length; i++){
-        let channelstringname = await (await disclient.users.fetch(ids[i])).username.substring(0, 10) + "-vs-" + await (await disclient.users.fetch(ids[i+1])).username.substring(0, 10)
+    for (let i = 0; i < ids.length; i++) {
+        let channelstringname = await (await disclient.users.fetch(ids[i])).username.substring(0, 10) + "-vs-" + await (await disclient.users.fetch(ids[i + 1])).username.substring(0, 10)
         await message.guild!.channels.create(channelstringname, { type: 'text', topic: `` })
-        .then(async channel => {
-            let category = await message.guild!.channels.cache.find(c => c.name == "matches" && c.type == "category");
+            .then(async channel => {
+                let category = await message.guild!.channels.cache.find(c => c.name == "matches" && c.type == "category");
 
-            
-            
 
-            await channel.send(`<@${ids[i]}> <@${ids[i+1]}> You have ${args[1]}h to complete this match. Contact a ref to begin, you may also split your match`)
-            if (!category) throw new Error("Category channel does not exist");
-            await channel.setParent(category.id);
-            await channel.lockPermissions()
-            let t = await getMatchlist()
-            
-            let time = 48
 
-            let timeArr:Array<number> = []
-            timeArr.push(time*3600)
 
-            if((time-2)*3600 > 0){
-                timeArr.push((time-2)*3600)
-            }
-    
-            if((time-12)*3600 > 0){
-                timeArr.push((time-12)*3600)
-            }
-    
-            if((time-24)*3600 > 0){
-                timeArr.push((time-24)*3600)
-            }
-    
-            await insertReminder(
-                {
-                    _id:channel.id,
-                    mention:`<@${ids[i]}> <@${ids[i+1]}>`,
-                    channel:channel.id,
-                    type:"match",
-                    time:timeArr,
-                    timestamp:Math.floor(Date.now()/1000),
-                    basetime:time*3600
+                await channel.send(`<@${ids[i]}> <@${ids[i + 1]}> You have ${args[1]}h to complete this match. Contact a ref to begin, you may also split your match`)
+                if (!category) throw new Error("Category channel does not exist");
+                await channel.setParent(category.id);
+                await channel.lockPermissions()
+                let t = await getMatchlist()
+
+                let time = 48
+
+                let timeArr: Array<number> = []
+                timeArr.push(time * 3600)
+
+                if ((time - 2) * 3600 > 0) {
+                    timeArr.push((time - 2) * 3600)
                 }
-            )
+
+                if ((time - 12) * 3600 > 0) {
+                    timeArr.push((time - 12) * 3600)
+                }
+
+                if ((time - 24) * 3600 > 0) {
+                    timeArr.push((time - 24) * 3600)
+                }
+
+                await insertReminder(
+                    {
+                        _id: channel.id,
+                        mention: `<@${ids[i]}> <@${ids[i + 1]}>`,
+                        channel: channel.id,
+                        type: "match",
+                        time: timeArr,
+                        timestamp: Math.floor(Date.now() / 1000),
+                        basetime: time * 3600
+                    }
+                )
 
 
-            t.qualurl = Math.round(message.createdTimestamp / 1000).toString()
+                t.qualurl = Math.round(message.createdTimestamp / 1000).toString()
 
-            await updateMatchlist(t)
-        });
-        i+= 2
+                await updateMatchlist(t)
+            });
+        i += 2
     }
 }
 
 export async function QualChannelCreation(message: Discord.Message, args: string[]) {
 
     let groups = await getQuallist()
-    
+
 
     let time = parseInt(args[1])
     let qlist = await getMatchlist()
@@ -377,34 +376,34 @@ export async function QualChannelCreation(message: Discord.Message, args: string
                         string += `<@${u}> `
                     }
 
-                    let timeArr:Array<number> = []
-            
-                    if((time-2)*3600 > 0){
-                        timeArr.push((time-2)*3600)
+                    let timeArr: Array<number> = []
+
+                    if ((time - 2) * 3600 > 0) {
+                        timeArr.push((time - 2) * 3600)
                     }
-            
-                    if((time-12)*3600 > 0){
-                        timeArr.push((time-12)*3600)
+
+                    if ((time - 12) * 3600 > 0) {
+                        timeArr.push((time - 12) * 3600)
                     }
-            
-                    if((time-24)*3600 > 0){
-                        timeArr.push((time-24)*3600)
+
+                    if ((time - 24) * 3600 > 0) {
+                        timeArr.push((time - 24) * 3600)
                     }
-            
+
                     await insertReminder(
                         {
-                            _id:channel.id,
-                            mention:string,
-                            channel:channel.id,
-                            type:"match",
-                            time:timeArr,
-                            timestamp:Math.floor(Date.now()/1000),
-                            basetime:time*3600
+                            _id: channel.id,
+                            mention: string,
+                            channel: channel.id,
+                            type: "match",
+                            time: timeArr,
+                            timestamp: Math.floor(Date.now() / 1000),
+                            basetime: time * 3600
                         }
                     )
 
                     await channel.send(`${string}, Portion ${args[0]} has begun, and you have ${time}h to complete it. Contact a ref to begin your portion!`)
-                    
+
                     qlist.qualurl = channel.createdTimestamp.toString()
                 });
         }
@@ -431,7 +430,7 @@ export async function CreateQualGroups(message: Discord.Message, args: string[])
 
         if (Signups) {
             if (Signups.open === false) {
-                for(let x = 0; x < 5; x++){
+                for (let x = 0; x < 5; x++) {
                     Signups.users = await shuffle(Signups.users)
                 }
                 let groups = await makeGroup(gNum, Signups.users)
@@ -489,19 +488,19 @@ export async function CreateCustomQualGroups(message: Discord.Message, args: str
         if (Signups) {
             if (Signups.open === false) {
 
-                let groups:string[][] = [];
-                for(let x = 0; x < am2+gNum2+am+gNum; x++){
+                let groups: string[][] = [];
+                for (let x = 0; x < am2 + gNum2 + am + gNum; x++) {
                     Signups.users = await shuffle(Signups.users)
                 }
-                
 
 
-                groups = (await makeCustomGroup(gNum, Signups.users.slice(0, am+1)))
-                message.reply(await (await makeCustomGroup(gNum, Signups.users.slice(0, am+1))).length)
-                groups = groups.concat(await makeCustomGroup(gNum2, Signups.users.slice(am+1, am2)))
-                message.reply(await (await makeCustomGroup(gNum, Signups.users.slice(am+1, am2))).length)
 
-                
+                groups = (await makeCustomGroup(gNum, Signups.users.slice(0, am + 1)))
+                message.reply(await (await makeCustomGroup(gNum, Signups.users.slice(0, am + 1))).length)
+                groups = groups.concat(await makeCustomGroup(gNum2, Signups.users.slice(am + 1, am2)))
+                message.reply(await (await makeCustomGroup(gNum, Signups.users.slice(am + 1, am2))).length)
+
+
                 let qualgroups: quallist = await getQuallist()
                 if (qualgroups) {
                     qualgroups.users = groups
@@ -537,7 +536,7 @@ export async function CreateCustomQualGroups(message: Discord.Message, args: str
 }
 
 async function makeGroup(amount: number, list: string[]) {
-    
+
     // function splitArrayIntoChunksOfLen(arr, len) {
     //     var chunks = [], i = 0, n = arr.length;
     //     while (i < n) {
@@ -546,16 +545,16 @@ async function makeGroup(amount: number, list: string[]) {
     //     return chunks;
     //   }
 
-    let chunks:any[][] = [], i = 0, n = 63;
+    let chunks: any[][] = [], i = 0, n = 63;
 
-    while(i <= n){
+    while (i <= n) {
         chunks.push(list.slice(i, i += amount));
     }
 
     n = Math.abs(list.length - i)
 
-    if(n > 0){
-        for(let x = 0; x < n; x++){
+    if (n > 0) {
+        for (let x = 0; x < n; x++) {
             console.log(x)
             chunks[x].push(list[i])
             i += 1
@@ -567,7 +566,7 @@ async function makeGroup(amount: number, list: string[]) {
 }
 
 async function makeCustomGroup(amount: number, list: string[]) {
-    
+
     // function splitArrayIntoChunksOfLen(arr, len) {
     //     var chunks = [], i = 0, n = arr.length;
     //     while (i < n) {
@@ -576,9 +575,9 @@ async function makeCustomGroup(amount: number, list: string[]) {
     //     return chunks;
     //   }
 
-    let chunks:any[] = [], i = 0, n = list.length;
+    let chunks: any[] = [], i = 0, n = list.length;
 
-    while(i < n){
+    while (i < n) {
         chunks.push(list.slice(i, i += amount));
     }
 
@@ -626,40 +625,23 @@ async function shuffle(a: any[]) {
 
 export async function matchwinner(args: string[]) {
 
-    // const client = challonge.createClient({
-    //     apiKey: process.env.CHALLONGE
-    // });
+    const client = challonge.createClient({
+        apiKey: process.env.CHALLONGE
+    });
 
+    let score = `${args[1]}-${args[2]}`
 
-    // let score = `${args[1]}-${args[2]}`
-
-
-
-    // client.matches.update({
-    //     id: await (await getMatchlist()).url,
-    //     matchId: args[0],
-    //     match: {
-    //         scoresCsv: score,
-    //         winnerId: args[3]
-    //     },
-    //     callback: (err: any, data: any) => {
-    //         console.log(err, data);
-    //     }
-    // });
-
-    const challonge = new Challonge('api_key')
-
-
-    let t = await (await challonge.getTournaments())
-
-    let ms = await (await t[0].getMatches())
-
-    for(let mm of ms){
-        let m = await mm.get()
-        let e = JSON.stringify(m)
-        console.log(e)
-    }
-
+    client.matches.update({
+        id: await (await getMatchlist()).url,
+        matchId: args[0],
+        match: {
+            scoresCsv: score,
+            winnerId: args[3]
+        },
+        callback: (err: any, data: any) => {
+            console.log(err, data);
+        }
+    });
 }
 
 export async function GroupSearch(message: Discord.Message, args: string[]) {
@@ -678,11 +660,11 @@ export async function GroupSearch(message: Discord.Message, args: string[]) {
         return message.reply("They are not in a group")
     }
 
-    else{
-        if(id !== message.author.id) return message.reply("You don't have those premissions");
-        else{
+    else {
+        if (id !== message.author.id) return message.reply("You don't have those premissions");
+        else {
             for (let i = 0; i < signup.users.length; i++) {
-        
+
                 if (signup.users[i].includes(id)) {
                     return await message.reply(`You are in <#${message.guild!.channels.cache.find(channel => channel.name === `group-${i + 1}`)!.id}>`)
                 }
@@ -692,7 +674,7 @@ export async function GroupSearch(message: Discord.Message, args: string[]) {
     }
 }
 
-export async function declarequalwinner(message: Discord.Message, client: Discord.Client, args:string[]) {
+export async function declarequalwinner(message: Discord.Message, client: Discord.Client, args: string[]) {
 
     if (message.member!.roles.cache.has('724818272922501190')
         || message.member!.roles.cache.has('724818272922501190')
