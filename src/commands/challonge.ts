@@ -4,6 +4,7 @@ import { getSignups, getMatchlist, updateMatchlist, insertMatchlist, insertQuall
 import { matchlist, quallist } from "../misc/struct";
 import { indexOf2d } from "../misc/utils";
 import { vs } from "./card";
+import { Challonge } from 'challonge-ts';
 //import { indexOf2d } from "../misc/utils";
 
 
@@ -625,26 +626,40 @@ async function shuffle(a: any[]) {
 
 export async function matchwinner(args: string[]) {
 
-    const client = challonge.createClient({
-        apiKey: process.env.CHALLONGE
-    });
+    // const client = challonge.createClient({
+    //     apiKey: process.env.CHALLONGE
+    // });
 
 
-    let score = `${args[1]}-${args[2]}`
+    // let score = `${args[1]}-${args[2]}`
 
 
 
-    client.matches.update({
-        id: await (await getMatchlist()).url,
-        matchId: args[0],
-        match: {
-            scoresCsv: score,
-            winnerId: args[3]
-        },
-        callback: (err: any, data: any) => {
-            console.log(err, data);
-        }
-    });
+    // client.matches.update({
+    //     id: await (await getMatchlist()).url,
+    //     matchId: args[0],
+    //     match: {
+    //         scoresCsv: score,
+    //         winnerId: args[3]
+    //     },
+    //     callback: (err: any, data: any) => {
+    //         console.log(err, data);
+    //     }
+    // });
+
+    const challonge = new Challonge('api_key')
+
+
+    let t = await (await challonge.getTournaments())
+
+    let ms = await (await t[0].getMatches())
+
+    for(let mm of ms){
+        let m = await mm.get()
+        let e = JSON.stringify(m)
+        console.log(e)
+    }
+
 }
 
 export async function GroupSearch(message: Discord.Message, args: string[]) {
