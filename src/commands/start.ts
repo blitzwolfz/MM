@@ -168,7 +168,10 @@ export async function start(message: discord.Message, client: discord.Client) {
         newmatch.template.push(rantemp.url)
         await deletetempStruct(rantemp._id)
 
-        await insertActive(newmatch)
+        await insertActive(newmatch).then(async a => {
+            let c = await (<discord.TextChannel>client.channels.cache.get("854930976974700554"))
+            c.send(`<#${message.channel.id}>/${c.name} theme is ${newmatch.template[0]}`)
+        })
 
         //await vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[1].id])
 
@@ -1091,7 +1094,6 @@ async function exhibitionVotingLogic(client: discord.Client, m: activematch) {
     
 }
 
-
 export async function qualrunning(client: discord.Client) {
     let qualmatches: qualmatch[] = await getQuals()
 
@@ -1483,7 +1485,10 @@ export async function startregularsplit(message: discord.Message, client: discor
         newmatch.template.push(rantemp.url)
         await deletetempStruct(rantemp._id)
 
-        await insertActive(newmatch)
+        await insertActive(newmatch).then(async a => {
+            let c = await (<discord.TextChannel>client.channels.cache.get("854930976974700554"))
+            c.send(`<#${message.channel.id}>/${c.name} theme is ${newmatch.template[0]}`)
+        })
 
         //await vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[1].id])
 
