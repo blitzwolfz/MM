@@ -781,15 +781,6 @@ client.on("message", async message => {
     return
   };
 
-  //client.commands = new Discord.Collection();
-
-  //await message.channel.startTyping(100)
-
-  // if(command === "s"){
-  //   await qualrunning(client);
-  //   await running(client);
-  // }
-
   if (command === "!speedrun") {
     await qualrunning(client);
     await running(client);
@@ -973,7 +964,8 @@ client.on("message", async message => {
     else {
 
       try {
-        await exhibition(message, client, args)
+        if(["819167358828281876"].includes(message!.guild!.id)) return;
+        else await exhibition(message, client, args)
 
       } catch (error) {
         console.log(error)
