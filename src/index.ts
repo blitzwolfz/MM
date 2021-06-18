@@ -964,8 +964,25 @@ client.on("message", async message => {
     else {
 
       try {
-        if(["819167358828281876"].includes(message!.guild!.id)) return;
-        else await exhibition(message, client, args)
+        if(["819167358828281876"].includes(message!.guild!.id)) {
+          let e = new Discord.MessageEmbed()
+          .setTitle("Interested in more?")
+          .setDescription(
+            "Unfortunately the dueling event has ended here.\n"+
+            "Come join us in the "+
+            "in the Meme Royale Server.\n"+
+            "You can play more duels, and participate in our tournament\n"+
+            "with a chance of winning our Cash Prizes.\nClick on the link in the title to join."
+          )
+          .setURL("https://discord.gg/GK3R5Vt3tz")
+          .setColor("#d7be26")
+      
+      
+          await message.channel.send(e)
+        }
+        else {
+          await exhibition(message, client, args)
+        }
 
       } catch (error) {
         console.log(error)
