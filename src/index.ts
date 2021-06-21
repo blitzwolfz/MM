@@ -870,18 +870,22 @@ client.on("message", async message => {
   }
 
   else if (command === "test") {
-    let reminders = await getReminders();
-    for (let r of reminders) {
-      if (Math.floor(Date.now() / 1000) - r.timestamp >= r.time[r.time.length - 1]) {
-        if (r.type === "match") {
-          if (r.basetime !== r.time[r.time.length - 1]) {
-            for (let xx of r.mention.match(/\d+/g)!) {
-              await message.channel.send(`${(await client.users.fetch(xx)).tag} has ${(r.basetime - r.time[r.time.length - 1]) / 3600}h left to do their match in <#${r.channel}>`)
-            }
-          }
-        }
+    args.splice(0, 1)
+    let time = 0;
+    for(let x of args){
+      console.log(x)
+      if(x.includes("h")){
+        x.replace("h", "")
+        time += (parseInt(x) * 3600)
+      }
+  
+      if(x.includes("m")){
+        x.replace("m", "")
+        time += (parseInt(x) * 60) 
       }
     }
+
+    console.log(time)
 
   }
 
@@ -1645,7 +1649,7 @@ client.on("message", async message => {
     if (match && channel.parent?.name.toLowerCase() === "matches") {
 
       if(match.pause){
-        match.pause = true
+        match.pause = false
         await updateActive(match)
 
         return message.reply("Unpaused match")
