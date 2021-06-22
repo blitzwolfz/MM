@@ -76,7 +76,7 @@ export async function exhibition(message: Discord.Message, client: Discord.Clien
     ex = await getExhibition()
     
     
-    await message.mentions.users.first()?.send(`<@${m.author.id}> wants to duel you. Send Accept to continue, or don't reply to not`).then(async (userdm:Discord.Message) => {
+    await message.mentions.users.first()?.send(`<@${m.author.id}> wants to duel you. Send Accept to continue, or ignore if you wish to not duel.`).then(async (userdm:Discord.Message) => {
         
         await userdm.channel.awaitMessages(filter, { max: 1, time: 90000, errors: ['time'] })
             .then(async collected => {
@@ -85,7 +85,7 @@ export async function exhibition(message: Discord.Message, client: Discord.Clien
             })
 
             .catch(async collected => {
-                await m.author.send(`<@${m.author.id}> match has been declined`);
+                await m.author.send(`Match has been declined`);
                 res = false;
 
                 

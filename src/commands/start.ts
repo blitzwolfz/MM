@@ -170,9 +170,9 @@ export async function start(message: discord.Message, client: discord.Client) {
 
         await insertActive(newmatch).then(async a => {
             let c = await (<discord.TextChannel>client.channels.cache.get("854930976974700554"))
-            c.send(`<#${message.channel.id}>/${c.name} theme is ${newmatch.template[0]}`)
+            let cc = await (<discord.TextChannel>client.channels.cache.get(newmatch._id))
+            c.send(`<#${newmatch._id}>/${cc.name} template is ${newmatch.template[0]}`)
         })
-
         //await vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[1].id])
 
         let embed = new discord.MessageEmbed()
@@ -636,7 +636,7 @@ export async function running(client: discord.Client): Promise<void> {
                 let embed3 = new discord.MessageEmbed()
                     .setTitle("Vote for the best meme!")
                     .setColor("#d7be26")
-                    .setDescription(`Vote for User 1 reacting with ${emojis[0]}\nVote for User 2 by reacting with ${emojis[1]}`)
+                    .setDescription(`Vote for User 1 by reacting with ${emojis[0]}\nVote for User 2 by reacting with ${emojis[1]}`)
 
 
 
@@ -1487,7 +1487,8 @@ export async function startregularsplit(message: discord.Message, client: discor
 
         await insertActive(newmatch).then(async a => {
             let c = await (<discord.TextChannel>client.channels.cache.get("854930976974700554"))
-            c.send(`<#${message.channel.id}>/${c.name} theme is ${newmatch.template[0]}`)
+            let cc = await (<discord.TextChannel>client.channels.cache.get(newmatch._id))
+            c.send(`<#${newmatch._id}>/${cc.name} template is ${newmatch.template[0]}`)
         })
 
         //await vs(message.channel.id, client, [message.mentions.users.array()[0].id, message.mentions.users.array()[1].id])
@@ -1769,7 +1770,7 @@ export async function reload(message: discord.Message, client: discord.Client) {
             let embed3 = new discord.MessageEmbed()
                 .setTitle("Vote for the best meme!")
                 .setColor("#d7be26")
-                .setDescription(`Vote for User 1 reacting with ${emojis[0]}\nVote for User 2 by reacting with ${emojis[1]}`)
+                .setDescription(`Vote for User 1 by reacting with ${emojis[0]}\nVote for User 2 by reacting with ${emojis[1]}`)
 
 
 
