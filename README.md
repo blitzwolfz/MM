@@ -2,7 +2,7 @@
 
 [![Maintenance](https://img.shields.io/maintenance/yes/2021?style=for-the-badge)](https://GitHub.com/blitzwolfz/MM/graphs/commit-activity) [![GitHub issues](https://img.shields.io/github/issues/blitzwolfz/MM?style=for-the-badge)](https://GitHub.com/blitzwolfz/MM/issues/)
 
-  
+ # NOW LONGER MAINTAINED. [PLEASE CHECK OUT](https://github.com/blitzwolfz/MemeRoyale)  
   
 
 Hi! If you are reading this, then you found my a discord bot that I am working on. It's called Meme Royale.
