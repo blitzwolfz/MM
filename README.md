@@ -1,11 +1,11 @@
-# Meme Mania Bot
+# Meme Royale Bot
 
-[![Maintenance](https://img.shields.io/maintenance/yes/2020?style=for-the-badge)](https://GitHub.com/blitzwolfz/MM/graphs/commit-activity) [![GitHub issues](https://img.shields.io/github/issues/blitzwolfz/MM?style=for-the-badge)](https://GitHub.com/blitzwolfz/MM/issues/)
+[![Maintenance](https://img.shields.io/maintenance/yes/2021?style=for-the-badge)](https://GitHub.com/blitzwolfz/MM/graphs/commit-activity) [![GitHub issues](https://img.shields.io/github/issues/blitzwolfz/MM?style=for-the-badge)](https://GitHub.com/blitzwolfz/MM/issues/)
 
   
   
 
-Hi! If you are reading this, then you found my a discord bot that I am working on. It's called Meme Mania.
+Hi! If you are reading this, then you found my a discord bot that I am working on. It's called Meme Royale.
 
 
 # Table of Contents
